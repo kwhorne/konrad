@@ -58,6 +58,24 @@ Route::middleware('auth')->group(function () {
         Route::resource('work-orders', \App\Http\Controllers\WorkOrderController::class);
     });
 
+    // Sales routes (Quotes, Orders, Invoices)
+    Route::middleware(['feature:sales'])->group(function () {
+        Route::resource('quotes', \App\Http\Controllers\QuoteController::class);
+        Route::get('quotes/{quote}/pdf', [\App\Http\Controllers\QuoteController::class, 'pdf'])->name('quotes.pdf');
+        Route::get('quotes/{quote}/preview', [\App\Http\Controllers\QuoteController::class, 'preview'])->name('quotes.preview');
+        Route::post('quotes/{quote}/send', [\App\Http\Controllers\QuoteController::class, 'send'])->name('quotes.send');
+
+        Route::resource('orders', \App\Http\Controllers\OrderController::class);
+        Route::get('orders/{order}/pdf', [\App\Http\Controllers\OrderController::class, 'pdf'])->name('orders.pdf');
+        Route::get('orders/{order}/preview', [\App\Http\Controllers\OrderController::class, 'preview'])->name('orders.preview');
+        Route::post('orders/{order}/send', [\App\Http\Controllers\OrderController::class, 'send'])->name('orders.send');
+
+        Route::resource('invoices', \App\Http\Controllers\InvoiceController::class);
+        Route::get('invoices/{invoice}/pdf', [\App\Http\Controllers\InvoiceController::class, 'pdf'])->name('invoices.pdf');
+        Route::get('invoices/{invoice}/preview', [\App\Http\Controllers\InvoiceController::class, 'preview'])->name('invoices.preview');
+        Route::post('invoices/{invoice}/send', [\App\Http\Controllers\InvoiceController::class, 'send'])->name('invoices.send');
+    });
+
     // Admin routes - only accessible by admin users
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AuthController::class, 'adminUsers'])->name('users');

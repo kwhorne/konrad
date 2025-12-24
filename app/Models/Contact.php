@@ -109,6 +109,21 @@ class Contact extends Model
         return $this->hasMany(Activity::class);
     }
 
+    public function quotes()
+    {
+        return $this->hasMany(Quote::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     // Accessors
     public function getTypeLabel(): string
     {

@@ -106,6 +106,9 @@
                                         <flux:tab name="visit" icon="map-pin">Besøksadresse</flux:tab>
                                         <flux:tab name="billing" icon="document-text">Faktura</flux:tab>
                                         <flux:tab name="business" icon="banknotes">Forretning</flux:tab>
+                                        @if(in_array($contact->type, ['customer', 'prospect']))
+                                            <flux:tab name="documents" icon="document-duplicate">Dokumenter</flux:tab>
+                                        @endif
                                     </flux:tabs>
 
                                     <flux:tab.panel name="company" class="pt-6">
@@ -240,6 +243,12 @@
                                             </flux:field>
                                         </div>
                                     </flux:tab.panel>
+
+                                    @if(in_array($contact->type, ['customer', 'prospect']))
+                                        <flux:tab.panel name="documents" class="pt-6">
+                                            @livewire('contact-documents-manager', ['contactId' => $contact->id])
+                                        </flux:tab.panel>
+                                    @endif
                                 </flux:tab.group>
                             </div>
                         </flux:card>

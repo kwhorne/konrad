@@ -52,13 +52,27 @@
                     Arbeidsordrer
                 </flux:navlist.item>
             @endif
-
-            @if(!config('features.contracts') && !config('features.assets') && !config('features.contacts') && !config('features.products') && !config('features.projects') && !config('features.work_orders'))
-                <flux:text class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
-                    Funksjoner kommer snart...
-                </flux:text>
-            @endif
         </flux:navlist.group>
+
+        @if(config('features.sales'))
+            <flux:navlist.group expandable heading="Salg" class="grid">
+                <flux:navlist.item icon="document-text" href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
+                    Tilbud
+                </flux:navlist.item>
+                <flux:navlist.item icon="shopping-cart" href="{{ route('orders.index') }}" :current="$current === 'orders'">
+                    Ordrer
+                </flux:navlist.item>
+                <flux:navlist.item icon="banknotes" href="{{ route('invoices.index') }}" :current="$current === 'invoices'">
+                    Fakturaer
+                </flux:navlist.item>
+            </flux:navlist.group>
+        @endif
+
+        @if(!config('features.contracts') && !config('features.assets') && !config('features.contacts') && !config('features.products') && !config('features.projects') && !config('features.work_orders') && !config('features.sales'))
+            <flux:text class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
+                Ingen moduler aktivert enna.
+            </flux:text>
+        @endif
 
         @if(auth()->user()->is_admin)
             <flux:separator variant="subtle" class="my-4" />
