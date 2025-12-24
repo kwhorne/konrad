@@ -1,0 +1,207 @@
+<?php
+
+namespace App\Livewire;
+
+use App\Models\Product;
+use App\Models\ProductGroup;
+use App\Models\ProductType;
+use App\Models\Unit;
+use Livewire\Component;
+use Livewire\WithPagination;
+
+class ProductManager extends Component
+{
+    use WithPagination;
+
+    public $showModal = false;
+
+    public $editingId = null;
+
+    public $search = '';
+
+    public $filterGroup = '';
+
+    public $filterType = '';
+
+    // Form fields
+    public $name = '';
+
+    public $sku = '';
+
+    public $description = '';
+
+    public $product_group_id = '';
+
+    public $product_type_id = '';
+
+    public $unit_id = '';
+
+    public $price = '';
+
+    public $cost_price = '';
+
+    public $sort_order = 0;
+
+    public $is_active = true;
+
+    protected function rules(): array
+    {
+        $skuRule = 'required|string|max:100|unique:products,sku';
+        if ($this->editingId) {
+            $skuRule .= ','.$this->editingId;
+        }
+
+        return [
+            'name' => 'required|string|max:255',
+            'sku' => $skuRule,
+            'description' => 'nullable|string',
+            'product_group_id' => 'nullable|exists:product_groups,id',
+            'product_type_id' => 'required|exists:product_types,id',
+            'unit_id' => 'required|exists:units,id',
+            'price' => 'required|numeric|min:0',
+            'cost_price' => 'nullable|numeric|min:0',
+            'sort_order' => 'nullable|integer|min:0',
+            'is_active' => 'boolean',
+        ];
+    }
+
+    protected $messages = [
+        'name.required' => 'Navn er påkrevd.',
+        'sku.required' => 'SKU er påkrevd.',
+        'sku.unique' => 'Denne SKU-en er allerede i bruk.',
+        'product_type_id.required' => 'Varetype er påkrevd.',
+        'unit_id.required' => 'Enhet er påkrevd.',
+        'price.required' => 'Pris er påkrevd.',
+        'price.numeric' => 'Pris må være et tall.',
+    ];
+
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterGroup()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedFilterType()
+    {
+        $this->resetPage();
+    }
+
+    public function openModal($id = null)
+    {
+        $this->resetForm();
+
+        if ($id) {
+            $this->editingId = $id;
+            $product = Product::findOrFail($id);
+
+            $this->name = $product->name;
+            $this->sku = $product->sku;
+            $this->description = $product->description;
+            $this->product_group_id = $product->product_group_id ?? '';
+            $this->product_type_id = $product->product_type_id;
+            $this->unit_id = $product->unit_id;
+            $this->price = $product->price;
+            $this->cost_price = $product->cost_price;
+            $this->sort_order = $product->sort_order;
+            $this->is_active = $product->is_active;
+        }
+
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->showModal = false;
+        $this->resetForm();
+    }
+
+    public function save()
+    {
+        $this->validate();
+
+        $data = [
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'description' => $this->description,
+            'product_group_id' => $this->product_group_id ?: null,
+            'product_type_id' => $this->product_type_id,
+            'unit_id' => $this->unit_id,
+            'price' => $this->price,
+            'cost_price' => $this->cost_price ?: null,
+            'sort_order' => $this->sort_order ?? 0,
+            'is_active' => $this->is_active,
+        ];
+
+        if ($this->editingId) {
+            $product = Product::findOrFail($this->editingId);
+            $product->update($data);
+            session()->flash('success', 'Produktet ble oppdatert.');
+        } else {
+            Product::create($data);
+            session()->flash('success', 'Produktet ble opprettet.');
+        }
+
+        $this->closeModal();
+    }
+
+    public function delete($id)
+    {
+        Product::findOrFail($id)->delete();
+        session()->flash('success', 'Produktet ble slettet.');
+    }
+
+    public function toggleActive($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->update(['is_active' => ! $product->is_active]);
+    }
+
+    private function resetForm()
+    {
+        $this->editingId = null;
+        $this->name = '';
+        $this->sku = '';
+        $this->description = '';
+        $this->product_group_id = '';
+        $this->product_type_id = '';
+        $this->unit_id = '';
+        $this->price = '';
+        $this->cost_price = '';
+        $this->sort_order = 0;
+        $this->is_active = true;
+        $this->resetValidation();
+    }
+
+    public function render()
+    {
+        $query = Product::with(['productGroup', 'productType.vatRate', 'unit'])
+            ->ordered();
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('sku', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%');
+            });
+        }
+
+        if ($this->filterGroup) {
+            $query->where('product_group_id', $this->filterGroup);
+        }
+
+        if ($this->filterType) {
+            $query->where('product_type_id', $this->filterType);
+        }
+
+        return view('livewire.product-manager', [
+            'products' => $query->paginate(15),
+            'productGroups' => ProductGroup::active()->ordered()->get(),
+            'productTypes' => ProductType::active()->with('vatRate')->ordered()->get(),
+            'units' => Unit::active()->ordered()->get(),
+        ]);
+    }
+}
