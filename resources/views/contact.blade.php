@@ -1,4 +1,7 @@
-<x-layouts.public title="Kontakt oss - Konrad Office">
+<x-layouts.public
+    title="Kontakt oss - Konrad Office"
+    description="Ta kontakt med Konrad Office for sporsmal, demo eller support. Vi hjelper deg gjerne med a finne riktig losning for din bedrift."
+>
     <!-- Contact Header -->
     <section class="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

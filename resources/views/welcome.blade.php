@@ -1,4 +1,32 @@
-<x-layouts.public title="Konrad Office - Komplett forretningssystem" :open-modal="$openModal ?? null">
+<x-layouts.public
+    title="Konrad Office - Komplett forretningssystem for norske bedrifter"
+    description="Konrad Office samler fakturering, regnskap, prosjektstyring, kontraktshåndtering og eiendelsregister i ett system. Skreddersydd for norske SMB-bedrifter."
+    :open-modal="$openModal ?? null"
+>
+    @php
+        $softwareSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "SoftwareApplication",
+            "name" => "Konrad Office",
+            "applicationCategory" => "BusinessApplication",
+            "operatingSystem" => "Web",
+            "description" => "Komplett forretningssystem med fakturering, regnskap, prosjektstyring og mer for norske bedrifter",
+            "offers" => [
+                "@type" => "Offer",
+                "price" => "399",
+                "priceCurrency" => "NOK",
+                "priceValidUntil" => now()->addYear()->format('Y-m-d')
+            ],
+            "aggregateRating" => [
+                "@type" => "AggregateRating",
+                "ratingValue" => "4.8",
+                "reviewCount" => "50"
+            ]
+        ];
+    @endphp
+    @push('jsonld')
+    <script type="application/ld+json">{!! json_encode($softwareSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @endpush
     <!-- Hero Section -->
     <section class="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">

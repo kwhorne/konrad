@@ -6,8 +6,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TaxController;
 use Illuminate\Support\Facades\Route;
+
+// SEO routes
+Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 
 Route::get('/', function () {
     return view('welcome');

@@ -63,9 +63,9 @@
             <flux:menu.item disabled>
                 {{ auth()->user()->email }}
             </flux:menu.item>
-            
+
             <flux:menu.separator />
-            
+
             <flux:menu.item icon="cog-6-tooth" href="{{ route('settings') }}">
                 Innstillinger
             </flux:menu.item>
@@ -77,4 +77,8 @@
             </flux:menu.item>
         </flux:menu>
     </flux:dropdown>
+
+    <div class="px-3 py-2 text-xs text-zinc-400 dark:text-zinc-500">
+        Konrad Office v{{ config('app.version') }}
+    </div>
 </flux:sidebar>

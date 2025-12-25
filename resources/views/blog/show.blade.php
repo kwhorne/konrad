@@ -1,15 +1,45 @@
-<x-layouts.public title="{{ $post->meta_title ?? $post->title }} - Innsikt - Konrad Office">
-    @push('meta')
-        @if($post->meta_description)
-            <meta name="description" content="{{ $post->meta_description }}">
-        @elseif($post->excerpt)
-            <meta name="description" content="{{ $post->excerpt }}">
-        @endif
-        <meta property="og:title" content="{{ $post->meta_title ?? $post->title }}">
-        <meta property="og:type" content="article">
-        @if($post->featured_image)
-            <meta property="og:image" content="{{ Storage::url($post->featured_image) }}">
-        @endif
+<x-layouts.public
+    :title="($post->meta_title ?? $post->title) . ' - Innsikt - Konrad Office'"
+    :description="$post->meta_description ?? $post->excerpt ?? $post->excerpt_or_truncated_body"
+    :image="$post->featured_image ? Storage::url($post->featured_image) : null"
+    type="article"
+>
+    @php
+        $articleSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "BlogPosting",
+            "@id" => route('blog.show', $post->slug) . "#article",
+            "mainEntityOfPage" => [
+                "@type" => "WebPage",
+                "@id" => route('blog.show', $post->slug)
+            ],
+            "headline" => $post->title,
+            "description" => $post->meta_description ?? $post->excerpt_or_truncated_body,
+            "datePublished" => $post->published_at?->toISOString() ?? $post->created_at->toISOString(),
+            "dateModified" => $post->updated_at->toISOString(),
+            "publisher" => [
+                "@type" => "Organization",
+                "name" => "Konrad Office",
+                "logo" => [
+                    "@type" => "ImageObject",
+                    "url" => url('/images/konrad-logo.png')
+                ]
+            ],
+            "wordCount" => str_word_count(strip_tags($post->body ?? '')),
+            "inLanguage" => "nb-NO"
+        ];
+        if ($post->author) {
+            $articleSchema["author"] = [
+                "@type" => "Person",
+                "name" => $post->author->name
+            ];
+        }
+        if ($post->featured_image) {
+            $articleSchema["image"] = Storage::url($post->featured_image);
+        }
+    @endphp
+    @push('jsonld')
+    <script type="application/ld+json">{!! json_encode($articleSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endpush
 
     <section class="py-16 lg:py-24 bg-white dark:bg-zinc-900">

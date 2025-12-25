@@ -1,4 +1,29 @@
-<x-layouts.public title="{{ isset($category) ? $category->name . ' - Innsikt' : 'Innsikt' }} - Konrad Office">
+<x-layouts.public
+    :title="(isset($category) ? $category->name . ' - Innsikt' : 'Innsikt - Tips og guider for bedrifter') . ' - Konrad Office'"
+    :description="isset($category) && $category->description ? $category->description : 'Les artikler om regnskap, fakturering, prosjektstyring og andre tips for a drive bedrift i Norge. Innsikt fra Konrad Office.'"
+>
+    @php
+        $blogSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "Blog",
+            "@id" => route('blog.index') . "#blog",
+            "url" => route('blog.index'),
+            "name" => "Innsikt - Konrad Office",
+            "description" => "Tips, guider og nyheter for deg som driver bedrift i Norge",
+            "publisher" => [
+                "@type" => "Organization",
+                "name" => "Konrad Office",
+                "logo" => [
+                    "@type" => "ImageObject",
+                    "url" => url('/images/konrad-logo.png')
+                ]
+            ],
+            "inLanguage" => "nb-NO"
+        ];
+    @endphp
+    @push('jsonld')
+    <script type="application/ld+json">{!! json_encode($blogSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @endpush
     <!-- Hero Section -->
     <section class="bg-white dark:bg-zinc-800 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

@@ -169,4 +169,8 @@
             </flux:menu.item>
         </flux:menu>
     </flux:dropdown>
+
+    <div class="px-3 py-2 text-xs text-zinc-400 dark:text-zinc-500">
+        Konrad Office v{{ config('app.version') }}
+    </div>
 </flux:sidebar>

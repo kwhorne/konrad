@@ -1,4 +1,7 @@
-<x-layouts.public title="Priser - Konrad Office">
+<x-layouts.public
+    title="Priser - Konrad Office forretningssystem"
+    description="Se priser for Konrad Office. Velg mellom Start, Profesjonell og Enterprise. Fra 399 kr/mnd. Inkluderer support og oppdateringer."
+>
     <!-- Pricing Header -->
     <section class="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

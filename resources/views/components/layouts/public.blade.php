@@ -1,4 +1,11 @@
-@props(['title' => 'Konrad - Innovative digitale løsninger', 'openModal' => null])
+@props([
+    'title' => 'Konrad Office - Komplett forretningssystem for norske bedrifter',
+    'description' => 'Konrad Office er et moderne forretningssystem med fakturering, regnskap, prosjektstyring, kontraktshåndtering og mer. Skreddersydd for norske SMB-bedrifter.',
+    'image' => null,
+    'type' => 'website',
+    'openModal' => null,
+    'canonical' => null,
+])
 
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-flux-appearance>
@@ -6,11 +13,60 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title }}</title>
-    
+    <meta name="description" content="{{ $description }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ $canonical ?? request()->url() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{{ $type }}">
+    <meta property="og:url" content="{{ request()->url() }}">
+    <meta property="og:title" content="{{ $title }}">
+    <meta property="og:description" content="{{ $description }}">
+    <meta property="og:site_name" content="Konrad Office">
+    <meta property="og:locale" content="nb_NO">
+    @if($image)
+        <meta property="og:image" content="{{ $image }}">
+    @else
+        <meta property="og:image" content="{{ url('/images/og-default.png') }}">
+    @endif
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ request()->url() }}">
+    <meta name="twitter:title" content="{{ $title }}">
+    <meta name="twitter:description" content="{{ $description }}">
+    @if($image)
+        <meta name="twitter:image" content="{{ $image }}">
+    @else
+        <meta name="twitter:image" content="{{ url('/images/og-default.png') }}">
+    @endif
+
+    <!-- Additional meta tags from child views -->
+    @stack('meta')
+
+    <!-- JSON-LD Structured Data -->
+    @php
+        $organizationSchema = [
+            "@context" => "https://schema.org",
+            "@type" => "Organization",
+            "name" => "Konrad Office",
+            "url" => url('/'),
+            "logo" => url('/images/konrad-logo.png'),
+            "description" => "Komplett forretningssystem for norske bedrifter",
+            "address" => [
+                "@type" => "PostalAddress",
+                "addressCountry" => "NO"
+            ],
+            "sameAs" => []
+        ];
+    @endphp
+    <script type="application/ld+json">{!! json_encode($organizationSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @stack('jsonld')
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
-    
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
