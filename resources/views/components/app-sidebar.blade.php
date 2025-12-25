@@ -68,6 +68,27 @@
             </flux:navlist.group>
         @endif
 
+        <flux:navlist.group expandable heading="Økonomi" class="grid">
+            <flux:navlist.item icon="calculator" href="{{ route('accounting.index') }}" :current="$current === 'accounting'">
+                Oversikt
+            </flux:navlist.item>
+            <flux:navlist.item icon="document-text" href="{{ route('accounting.vouchers') }}" :current="$current === 'vouchers'">
+                Bilagsregistrering
+            </flux:navlist.item>
+            <flux:navlist.item icon="users" href="{{ route('accounting.customer-ledger') }}" :current="$current === 'customer-ledger'">
+                Kundereskontro
+            </flux:navlist.item>
+            <flux:navlist.item icon="building-office" href="{{ route('accounting.supplier-ledger') }}" :current="$current === 'supplier-ledger'">
+                Leverandørreskontro
+            </flux:navlist.item>
+            <flux:navlist.item icon="chart-bar" href="{{ route('reports.index') }}" :current="$current === 'reports'">
+                Rapporter
+            </flux:navlist.item>
+            <flux:navlist.item icon="table-cells" href="{{ route('accounts.index') }}" :current="$current === 'accounts'">
+                Kontoplan
+            </flux:navlist.item>
+        </flux:navlist.group>
+
         @if(!config('features.contracts') && !config('features.assets') && !config('features.contacts') && !config('features.products') && !config('features.projects') && !config('features.work_orders') && !config('features.sales'))
             <flux:text class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
                 Ingen moduler aktivert enna.

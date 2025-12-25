@@ -76,6 +76,25 @@ Route::middleware('auth')->group(function () {
         Route::post('invoices/{invoice}/send', [\App\Http\Controllers\InvoiceController::class, 'send'])->name('invoices.send');
     });
 
+    // Accounting routes
+    Route::prefix('accounting')->name('accounting.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\AccountingController::class, 'index'])->name('index');
+        Route::get('/vouchers', [\App\Http\Controllers\AccountingController::class, 'vouchers'])->name('vouchers');
+        Route::get('/customer-ledger', [\App\Http\Controllers\AccountingController::class, 'customerLedger'])->name('customer-ledger');
+        Route::get('/supplier-ledger', [\App\Http\Controllers\AccountingController::class, 'supplierLedger'])->name('supplier-ledger');
+    });
+    Route::resource('accounts', \App\Http\Controllers\AccountController::class);
+
+    // Report routes
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/general-ledger', [\App\Http\Controllers\ReportController::class, 'generalLedger'])->name('general-ledger');
+        Route::get('/voucher-journal', [\App\Http\Controllers\ReportController::class, 'voucherJournal'])->name('voucher-journal');
+        Route::get('/trial-balance', [\App\Http\Controllers\ReportController::class, 'trialBalance'])->name('trial-balance');
+        Route::get('/income-statement', [\App\Http\Controllers\ReportController::class, 'incomeStatement'])->name('income-statement');
+        Route::get('/balance-sheet', [\App\Http\Controllers\ReportController::class, 'balanceSheet'])->name('balance-sheet');
+    });
+
     // Admin routes - only accessible by admin users
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [AuthController::class, 'adminUsers'])->name('users');
