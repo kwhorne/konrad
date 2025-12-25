@@ -78,7 +78,7 @@
             </flux:navlist.group>
         @endif
 
-        <flux:navlist.group expandable heading="Økonomi" class="grid">
+        <flux:navlist.group expandable :expanded="false" heading="Økonomi" class="grid">
             <flux:navlist.item icon="calculator" href="{{ route('accounting.index') }}" :current="$current === 'accounting'">
                 Oversikt
             </flux:navlist.item>
@@ -111,7 +111,7 @@
             </flux:navlist.item>
         </flux:navlist.group>
 
-        <flux:navlist.group expandable heading="Årsoppgjør" class="grid">
+        <flux:navlist.group expandable :expanded="false" heading="Årsoppgjør" class="grid">
             @if(config('features.shareholders'))
                 <flux:navlist.item icon="users" href="{{ route('shareholders.index') }}" :current="$current === 'shareholders'">
                     Aksjonærregister
