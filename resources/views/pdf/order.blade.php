@@ -10,13 +10,16 @@
         <table class="header-table">
             <tr>
                 <td class="header-left">
+                    @if(!empty($company['logo_url']))
+                        <img src="{{ $company['logo_url'] }}" alt="{{ $company['name'] }}" class="company-logo">
+                    @endif
                     <div class="company-name">{{ $company['name'] }}</div>
                     <div class="company-info">
-                        {{ $company['address'] }}<br>
-                        {{ $company['postal_code'] }} {{ $company['city'] }}<br>
-                        Org.nr: {{ $company['org_number'] }}<br>
-                        {{ $company['email'] }}<br>
-                        {{ $company['phone'] }}
+                        @if($company['address']){{ $company['address'] }}<br>@endif
+                        @if($company['postal_code'] || $company['city']){{ $company['postal_code'] }} {{ $company['city'] }}<br>@endif
+                        @if($company['org_number'])Org.nr: {{ $company['org_number'] }}<br>@endif
+                        @if($company['email']){{ $company['email'] }}<br>@endif
+                        @if($company['phone']){{ $company['phone'] }}@endif
                     </div>
                 </td>
                 <td class="header-right">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InvitationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -13,6 +14,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
+
+    // Invitation routes
+    Route::get('/invitation/{token}', [InvitationController::class, 'show'])->name('invitation.accept');
+    Route::post('/invitation/{token}', [InvitationController::class, 'accept']);
 });
 
 Route::middleware('auth')->group(function () {
@@ -85,6 +90,14 @@ Route::middleware('auth')->group(function () {
     });
     Route::resource('accounts', \App\Http\Controllers\AccountController::class);
 
+    // VAT Reports
+    Route::get('/vat-reports', [\App\Http\Controllers\VatReportController::class, 'index'])->name('vat-reports.index');
+    Route::get('/vat-reports/{vatReport}', [\App\Http\Controllers\VatReportController::class, 'show'])->name('vat-reports.show');
+
+    // Help / Documentation
+    Route::get('/help', [\App\Http\Controllers\HelpController::class, 'index'])->name('help');
+    Route::get('/help/{section}', [\App\Http\Controllers\HelpController::class, 'section'])->name('help.section');
+
     // Report routes
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/', [\App\Http\Controllers\ReportController::class, 'index'])->name('index');
@@ -100,5 +113,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [AuthController::class, 'adminUsers'])->name('users');
         Route::get('/analytics', [AuthController::class, 'adminAnalytics'])->name('analytics');
         Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
+        Route::get('/company-settings', [AuthController::class, 'companySettings'])->name('company-settings');
     });
 });

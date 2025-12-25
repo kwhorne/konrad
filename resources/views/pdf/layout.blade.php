@@ -52,6 +52,11 @@
             width: 45%;
             text-align: right;
         }
+        .company-logo {
+            max-height: 60px;
+            max-width: 200px;
+            margin-bottom: 10px;
+        }
         .company-name {
             font-size: 20pt;
             font-weight: bold;

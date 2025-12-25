@@ -13,7 +13,7 @@
 
 ## Om Konrad
 
-Konrad er et komplett forretningssystem designet for norske bedrifter. Systemet tilbyr moduler for kontakthåndtering, vareregister, prosjektstyring og arbeidsordrer - alt i en moderne og brukervennlig pakke.
+Konrad er et komplett forretningssystem designet for norske bedrifter. Systemet tilbyr moduler for kontakthåndtering, vareregister, prosjektstyring, salg, regnskap og MVA-rapportering - alt i en moderne og brukervennlig pakke.
 
 ## Moduler
 
@@ -46,6 +46,42 @@ Konrad er et komplett forretningssystem designet for norske bedrifter. Systemet 
 - Kobling til kontakter og prosjekter
 - Tildeling til ansvarlig bruker
 
+### Salg
+- **Tilbud**: Opprett og send tilbud til kunder med PDF-generering
+- **Ordrer**: Konverter tilbud til ordrer, håndter ordrebekreftelser
+- **Fakturaer**: Fakturering med betalingssporing og purringer
+- Auto-nummerering (T-YYYY-NNNN, O-YYYY-NNNN, F-YYYY-NNNN)
+- Kreditnotaer
+- PDF-generering og e-postutsending
+
+### Økonomi
+- **Kontoplan**: Norsk standard NS 4102 med hierarkisk struktur
+- **Bilagsregistrering**: Manuell bilagsføring med debet/kredit
+- **Kundereskontro**: Oversikt over kundefordringer med aldersfordeling
+- **Leverandørreskontro**: Oversikt over leverandørgjeld med aldersfordeling
+- **Leverandørfakturaer**: Registrer og betal leverandørfakturaer
+- Automatisk bokføring fra fakturaer og betalinger
+
+### Rapporter
+- **Hovedbok**: Kontoutdrag for alle konti i en periode
+- **Bilagsjournal**: Kronologisk liste over alle bilag
+- **Saldobalanse**: Saldo per konto på en gitt dato
+- **Resultatregnskap**: Inntekter og kostnader for en periode
+- **Balanse**: Eiendeler, gjeld og egenkapital
+
+### MVA-meldinger
+- Opprett MVA-meldinger for tomånedlige perioder
+- Automatisk beregning fra fakturaer og leverandørfakturaer
+- Norske MVA-koder (Alminnelig næring):
+  - Salg i Norge: kode 3 (25%), 31 (15%), 33 (12%), 5, 6
+  - Kjøp i Norge: kode 1, 11, 13 (fradrag)
+  - Import: kode 86, 87, 88
+  - Eksport: kode 52
+- Manuell overstyring av beløp
+- Merknad og vedlegg
+- Workflow: Utkast → Beregnet → Sendt → Godkjent/Avvist
+- Altinn-referanse ved innsending
+
 ## Teknisk stack
 
 - **Backend**: Laravel 12, PHP 8.3
@@ -68,7 +104,7 @@ Konrad er et komplett forretningssystem designet for norske bedrifter. Systemet 
 1. **Klon repositoriet**
    ```bash
    git clone <repository-url>
-   cd konrad2
+   cd konrad
    ```
 
 2. **Installer avhengigheter**
@@ -108,6 +144,7 @@ CONTACTS_ENABLED=true
 PRODUCTS_ENABLED=true
 PROJECTS_ENABLED=true
 WORK_ORDERS_ENABLED=true
+SALES_ENABLED=true
 ```
 
 ## Ruter
@@ -120,6 +157,16 @@ WORK_ORDERS_ENABLED=true
 | `/products` | Vareregister |
 | `/projects` | Prosjekter |
 | `/work-orders` | Arbeidsordrer |
+| `/quotes` | Tilbud |
+| `/orders` | Ordrer |
+| `/invoices` | Fakturaer |
+| `/accounting` | Økonomi oversikt |
+| `/accounting/vouchers` | Bilagsregistrering |
+| `/accounting/customer-ledger` | Kundereskontro |
+| `/accounting/supplier-ledger` | Leverandørreskontro |
+| `/accounts` | Kontoplan |
+| `/reports` | Rapporter |
+| `/vat-reports` | MVA-meldinger |
 | `/app/settings` | Innstillinger |
 | `/admin/*` | Administrasjon (kun admin) |
 
@@ -132,21 +179,45 @@ app/
 │   ├── ContactManager.php
 │   ├── ProductManager.php
 │   ├── ProjectManager.php
-│   └── WorkOrderManager.php
-└── Models/                 # Eloquent-modeller
-    ├── Contact.php
-    ├── Product.php
-    ├── Project.php
-    ├── WorkOrder.php
-    └── ...
+│   ├── WorkOrderManager.php
+│   ├── QuoteManager.php
+│   ├── OrderManager.php
+│   ├── InvoiceManager.php
+│   ├── VoucherManager.php
+│   ├── CustomerLedger.php
+│   ├── SupplierLedger.php
+│   └── VatReportManager.php
+├── Models/                 # Eloquent-modeller
+│   ├── Contact.php
+│   ├── Product.php
+│   ├── Project.php
+│   ├── WorkOrder.php
+│   ├── Quote.php
+│   ├── Order.php
+│   ├── Invoice.php
+│   ├── Account.php
+│   ├── Voucher.php
+│   ├── VatCode.php
+│   ├── VatReport.php
+│   └── ...
+└── Services/              # Business logic
+    ├── AccountingService.php
+    ├── LedgerService.php
+    ├── ReportService.php
+    └── VatReportService.php
 
 database/
 ├── migrations/             # Database-migrasjoner
 └── seeders/               # Seeders for testdata
+    ├── AccountSeeder.php   # NS 4102 kontoplan
+    └── VatCodeSeeder.php   # MVA-koder
 
 resources/views/
 ├── components/            # Blade-komponenter
 ├── livewire/             # Livewire-views
+├── accounting/           # Økonomi-views
+├── reports/              # Rapport-views
+├── vat-reports/          # MVA-melding views
 └── ...
 ```
 

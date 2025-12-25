@@ -46,14 +46,26 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
+        // Check if user exists and is active
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && ! $user->is_active) {
+            return back()->withErrors([
+                'email' => 'Denne kontoen er deaktivert. Kontakt administrator.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
+            // Record last login
+            Auth::user()->recordLogin();
 
             return redirect()->intended('app');
         }
 
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'E-post eller passord er feil.',
         ])->onlyInput('email');
     }
 
@@ -83,6 +95,11 @@ class AuthController extends Controller
         return view('app.settings');
     }
 
+    public function companySettings()
+    {
+        return view('admin.company-settings');
+    }
+
     public function updatePassword(Request $request)
     {
         $request->validate([
@@ -106,9 +123,7 @@ class AuthController extends Controller
     // Admin methods
     public function adminUsers()
     {
-        $users = User::orderBy('created_at', 'desc')->paginate(10);
-
-        return view('admin.users', compact('users'));
+        return view('admin.users');
     }
 
     public function adminAnalytics()

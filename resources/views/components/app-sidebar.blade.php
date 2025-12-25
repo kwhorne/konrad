@@ -84,6 +84,9 @@
             <flux:navlist.item icon="chart-bar" href="{{ route('reports.index') }}" :current="$current === 'reports'">
                 Rapporter
             </flux:navlist.item>
+            <flux:navlist.item icon="document-chart-bar" href="{{ route('vat-reports.index') }}" :current="$current === 'vat-reports'">
+                MVA-meldinger
+            </flux:navlist.item>
             <flux:navlist.item icon="table-cells" href="{{ route('accounts.index') }}" :current="$current === 'accounts'">
                 Kontoplan
             </flux:navlist.item>
@@ -110,8 +113,8 @@
         <flux:navlist.item icon="cog-6-tooth" href="{{ route('settings') }}" :current="$current === 'settings'">
             Innstillinger
         </flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">
-            Hjelp
+        <flux:navlist.item icon="book-open" href="{{ route('help') }}" :current="$current === 'help'">
+            Brukerdokumentasjon
         </flux:navlist.item>
     </flux:navlist>
 
