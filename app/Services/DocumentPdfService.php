@@ -55,6 +55,7 @@ class DocumentPdfService
     private function getCompanyInfo(): array
     {
         $settings = CompanySetting::current();
+        $defaultLogoUrl = $this->getDefaultLogoUrl();
 
         if (! $settings) {
             // Fallback to config if no settings in database
@@ -70,8 +71,12 @@ class DocumentPdfService
                 'phone' => config('company.phone'),
                 'website' => config('company.website'),
                 'logo_path' => config('company.logo_path'),
+                'logo_url' => $defaultLogoUrl,
             ];
         }
+
+        // Get the logo URL - use company logo if available, otherwise fallback to default
+        $logoUrl = $settings->hasLogo() ? $this->getAbsoluteLogoUrl($settings) : $defaultLogoUrl;
 
         return [
             'name' => $settings->company_name,
@@ -89,12 +94,46 @@ class DocumentPdfService
             'phone' => $settings->phone,
             'website' => $settings->website,
             'logo_path' => $settings->logo_path,
-            'logo_url' => $settings->logo_url,
+            'logo_url' => $logoUrl,
             'invoice_terms' => $settings->invoice_terms,
             'quote_terms' => $settings->quote_terms,
             'order_terms' => $settings->order_terms,
             'document_footer' => $settings->document_footer,
         ];
+    }
+
+    /**
+     * Get the default Konrad Office logo URL for PDFs.
+     */
+    private function getDefaultLogoUrl(): string
+    {
+        $logoPath = public_path('images/logo/logo-light.png');
+
+        if (file_exists($logoPath)) {
+            return $logoPath;
+        }
+
+        return '';
+    }
+
+    /**
+     * Get the absolute logo URL for a company setting (for PDF rendering).
+     */
+    private function getAbsoluteLogoUrl(CompanySetting $settings): string
+    {
+        if (! $settings->logo_path) {
+            return '';
+        }
+
+        // For local storage, return the absolute file path for DomPDF
+        $storagePath = storage_path('app/public/'.$settings->logo_path);
+
+        if (file_exists($storagePath)) {
+            return $storagePath;
+        }
+
+        // Fallback to storage URL
+        return $settings->logo_url ?? '';
     }
 
     public function formatCurrency(float $amount): string

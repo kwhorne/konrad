@@ -1,12 +1,16 @@
-<x-layouts.app title="Register">
+<x-layouts.app title="Opprett konto">
     <div class="min-h-screen bg-white dark:bg-zinc-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
+                <a href="{{ route('welcome') }}" class="inline-block mb-6">
+                    <img src="{{ asset('images/logo/logo-light.png') }}" alt="Konrad Office" class="h-12 w-auto mx-auto dark:hidden">
+                    <img src="{{ asset('images/logo/logo-dark.png') }}" alt="Konrad Office" class="h-12 w-auto mx-auto hidden dark:block">
+                </a>
                 <flux:heading size="2xl" level="1" class="text-zinc-900 dark:text-white">
-                    Create your account
+                    Opprett konto
                 </flux:heading>
                 <flux:text class="mt-2 text-zinc-600 dark:text-zinc-400">
-                    Join us today and get started
+                    Kom i gang med Konrad i dag
                 </flux:text>
             </div>
 
@@ -16,15 +20,15 @@
 
                     <div>
                         <flux:field>
-                            <flux:label for="name">Full Name</flux:label>
-                            <flux:input 
-                                id="name" 
-                                name="name" 
-                                type="text" 
-                                value="{{ old('name') }}" 
-                                required 
+                            <flux:label for="name">Fullt navn</flux:label>
+                            <flux:input
+                                id="name"
+                                name="name"
+                                type="text"
+                                value="{{ old('name') }}"
+                                required
                                 autofocus
-                                placeholder="Enter your full name"
+                                placeholder="Ditt fulle navn"
                                 class="mt-1"
                             />
                             @error('name')
@@ -35,14 +39,14 @@
 
                     <div>
                         <flux:field>
-                            <flux:label for="email">Email Address</flux:label>
-                            <flux:input 
-                                id="email" 
-                                name="email" 
-                                type="email" 
-                                value="{{ old('email') }}" 
+                            <flux:label for="email">E-postadresse</flux:label>
+                            <flux:input
+                                id="email"
+                                name="email"
+                                type="email"
+                                value="{{ old('email') }}"
                                 required
-                                placeholder="Enter your email"
+                                placeholder="Din e-postadresse"
                                 class="mt-1"
                             />
                             @error('email')
@@ -53,13 +57,13 @@
 
                     <div>
                         <flux:field>
-                            <flux:label for="password">Password</flux:label>
-                            <flux:input 
-                                id="password" 
-                                name="password" 
-                                type="password" 
+                            <flux:label for="password">Passord</flux:label>
+                            <flux:input
+                                id="password"
+                                name="password"
+                                type="password"
                                 required
-                                placeholder="Create a secure password"
+                                placeholder="Velg et sterkt passord"
                                 class="mt-1"
                             />
                             @error('password')
@@ -70,13 +74,13 @@
 
                     <div>
                         <flux:field>
-                            <flux:label for="password_confirmation">Confirm Password</flux:label>
-                            <flux:input 
-                                id="password_confirmation" 
-                                name="password_confirmation" 
-                                type="password" 
+                            <flux:label for="password_confirmation">Bekreft passord</flux:label>
+                            <flux:input
+                                id="password_confirmation"
+                                name="password_confirmation"
+                                type="password"
                                 required
-                                placeholder="Confirm your password"
+                                placeholder="Gjenta passordet"
                                 class="mt-1"
                             />
                         </flux:field>
@@ -84,7 +88,7 @@
 
                     <div class="pt-4">
                         <flux:button type="submit" variant="primary" class="w-full">
-                            Create Account
+                            Opprett konto
                         </flux:button>
                     </div>
                 </form>
@@ -93,9 +97,9 @@
 
                 <div class="text-center">
                     <flux:text class="text-zinc-600 dark:text-zinc-400">
-                        Already have an account?
+                        Har du allerede en konto?
                         <flux:link href="{{ route('login') }}" class="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">
-                            Sign in
+                            Logg inn
                         </flux:link>
                     </flux:text>
                 </div>

@@ -2,20 +2,23 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\LegalController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+// Legal pages
+Route::get('/personvern', [LegalController::class, 'privacy'])->name('privacy');
+Route::get('/vilkar', [LegalController::class, 'terms'])->name('terms');
+
 // Authentication routes
 Route::middleware('guest')->group(function () {
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 
-    // Invitation routes
+    // Invitation routes (registration only via invitation)
     Route::get('/invitation/{token}', [InvitationController::class, 'show'])->name('invitation.accept');
     Route::post('/invitation/{token}', [InvitationController::class, 'accept']);
 });

@@ -2,6 +2,10 @@
     <div class="min-h-screen bg-white dark:bg-zinc-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div class="text-center">
+                <a href="{{ route('welcome') }}" class="inline-block mb-6">
+                    <img src="{{ asset('images/logo/logo-light.png') }}" alt="Konrad Office" class="h-12 w-auto mx-auto dark:hidden">
+                    <img src="{{ asset('images/logo/logo-dark.png') }}" alt="Konrad Office" class="h-12 w-auto mx-auto hidden dark:block">
+                </a>
                 <flux:heading size="2xl" level="1" class="text-zinc-900 dark:text-white">
                     Velkommen, {{ $user->name }}!
                 </flux:heading>
