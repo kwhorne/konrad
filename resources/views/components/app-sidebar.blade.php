@@ -82,6 +82,15 @@
             <flux:navlist.item icon="calculator" href="{{ route('accounting.index') }}" :current="$current === 'accounting'">
                 Oversikt
             </flux:navlist.item>
+            <flux:navlist.item icon="inbox-arrow-down" href="{{ route('accounting.incoming') }}" :current="$current === 'incoming'">
+                Innboks
+                @php
+                    $incomingCount = \App\Models\IncomingVoucher::whereIn('status', ['pending', 'parsing', 'parsed'])->count();
+                @endphp
+                @if($incomingCount > 0)
+                    <flux:badge size="sm" color="amber" class="ml-auto">{{ $incomingCount }}</flux:badge>
+                @endif
+            </flux:navlist.item>
             <flux:navlist.item icon="document-text" href="{{ route('accounting.vouchers') }}" :current="$current === 'vouchers'">
                 Bilagsregistrering
             </flux:navlist.item>

@@ -9,6 +9,18 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/priser', function () {
+    return view('pricing');
+})->name('pricing');
+
+Route::get('/kontakt', function () {
+    return view('contact');
+})->name('contact');
+
+Route::get('/bestill', function () {
+    return view('order');
+})->name('order');
+
 // Legal pages
 Route::get('/personvern', [LegalController::class, 'privacy'])->name('privacy');
 Route::get('/vilkar', [LegalController::class, 'terms'])->name('terms');
@@ -87,6 +99,7 @@ Route::middleware('auth')->group(function () {
     // Accounting routes
     Route::prefix('accounting')->name('accounting.')->group(function () {
         Route::get('/', [\App\Http\Controllers\AccountingController::class, 'index'])->name('index');
+        Route::get('/incoming', [\App\Http\Controllers\AccountingController::class, 'incoming'])->name('incoming');
         Route::get('/vouchers', [\App\Http\Controllers\AccountingController::class, 'vouchers'])->name('vouchers');
         Route::get('/customer-ledger', [\App\Http\Controllers\AccountingController::class, 'customerLedger'])->name('customer-ledger');
         Route::get('/supplier-ledger', [\App\Http\Controllers\AccountingController::class, 'supplierLedger'])->name('supplier-ledger');

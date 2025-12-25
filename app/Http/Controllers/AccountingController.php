@@ -35,4 +35,9 @@ class AccountingController extends Controller
     {
         return view('accounting.vouchers');
     }
+
+    public function incoming()
+    {
+        return view('accounting.incoming');
+    }
 }

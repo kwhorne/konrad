@@ -46,10 +46,16 @@
                     <a href="#features" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Funksjoner
                     </a>
+                    <a href="{{ route('pricing') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Priser
+                    </a>
+                    <a href="{{ route('contact') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        Kontakt
+                    </a>
                 </div>
 
                 <!-- Auth Links -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3">
                     <!-- Dark Mode Toggle -->
                     <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" variant="subtle" square class="group" aria-label="Toggle dark mode">
                         <flux:icon.sun x-show="$flux.dark" variant="mini" class="text-zinc-500 dark:text-white" />
@@ -61,8 +67,11 @@
                             Dashboard
                         </flux:button>
                     @else
-                        <flux:button href="{{ route('login') }}" variant="primary" size="sm">
+                        <flux:button href="{{ route('login') }}" variant="ghost" size="sm">
                             Logg inn
+                        </flux:button>
+                        <flux:button href="{{ route('order') }}" variant="primary" size="sm">
+                            Kom i gang
                         </flux:button>
                     @endauth
                 </div>
