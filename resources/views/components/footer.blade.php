@@ -57,6 +57,11 @@
                 <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-4">Selskap</h3>
                 <ul class="space-y-3">
                     <li>
+                        <a href="{{ route('about') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                            Om oss
+                        </a>
+                    </li>
+                    <li>
                         <a href="{{ route('contact') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             Kontakt oss
                         </a>

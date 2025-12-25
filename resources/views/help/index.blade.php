@@ -53,6 +53,10 @@
                                     <flux:icon.calculator class="w-4 h-4" />
                                     Okonomi
                                 </a>
+                                <a href="#innboks" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.inbox-arrow-down class="w-4 h-4" />
+                                    Innboks (AI-tolkning)
+                                </a>
                                 <a href="#rapporter" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.chart-bar class="w-4 h-4" />
                                     Rapporter
@@ -98,7 +102,7 @@
                                     <li><strong>Dashboard</strong> - Hovedoversikt</li>
                                     <li><strong>Funksjoner</strong> - Kontakter, Produkter, Prosjekter, Arbeidsordrer</li>
                                     <li><strong>Salg</strong> - Tilbud, Ordrer, Fakturaer</li>
-                                    <li><strong>Okonomi</strong> - Regnskap, Bilag, Reskontro, Rapporter, MVA</li>
+                                    <li><strong>Okonomi</strong> - Oversikt, Innboks (AI-tolkning), Bilag, Reskontro, Rapporter, MVA</li>
                                     <li><strong>Innstillinger</strong> - Personlige innstillinger</li>
                                 </ul>
 
@@ -445,6 +449,9 @@
                                 </ul>
 
                                 <h4>Leverandorfakturaer</h4>
+                                <p>Det finnes to mater a registrere leverandorfakturaer:</p>
+
+                                <p><strong>Manuell registrering:</strong></p>
                                 <ol>
                                     <li>Klikk <strong>Ny leverandorfaktura</strong></li>
                                     <li>Velg leverandor</li>
@@ -453,6 +460,147 @@
                                     <li>Godkjenn for bokforing</li>
                                     <li>Registrer betaling nar den er utfort</li>
                                 </ol>
+
+                                <flux:callout variant="info" icon="sparkles" class="not-prose my-4">
+                                    <flux:callout.heading>AI-tolkning i Innboks</flux:callout.heading>
+                                    <flux:callout.text>Last opp leverandorfakturaer som PDF eller bilde i <a href="#innboks" class="text-indigo-600 dark:text-indigo-400 underline">Innboksen</a>. Systemet tolker automatisk leverandor, belop og datoer med AI.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Innboks (AI-tolkning) --}}
+                    <flux:card id="innboks" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.inbox-arrow-down class="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Innboks - Inngaende bilag</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Innboksen bruker kunstig intelligens (AI) til a automatisk tolke leverandorfakturaer fra PDF-er og bilder. Systemet ekstraherer leverandor, fakturanummer, datoer, belop og MVA - og foreslår riktig kostnadskonto basert pa tidligere posteringer.</p>
+
+                                <h4>Laste opp bilag</h4>
+                                <ol>
+                                    <li>Ga til <strong>Okonomi > Innboks</strong></li>
+                                    <li>Klikk <strong>Last opp bilag</strong></li>
+                                    <li>Velg en eller flere filer (PDF, JPG, PNG)</li>
+                                    <li>Klikk <strong>Last opp</strong></li>
+                                    <li>Bilagene sendes automatisk til AI-tolkning</li>
+                                </ol>
+
+                                <flux:callout variant="info" icon="sparkles" class="not-prose my-4">
+                                    <flux:callout.heading>AI-tolkning</flux:callout.heading>
+                                    <flux:callout.text>Systemet bruker ChatGPT (GPT-4o) til a lese og forsta innholdet i fakturaene. Tolkningen tar vanligvis 5-30 sekunder per bilag.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Godkjenningsflyt</h4>
+                                <p>Inngaende bilag gar gjennom en to-trinns godkjenningsprosess:</p>
+                                <div class="not-prose my-4">
+                                    <div class="flex flex-wrap items-center gap-2 text-sm">
+                                        <flux:badge color="zinc">Venter</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="blue">Tolkes</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="purple">Tolket</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="yellow">Attestert</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="green">Godkjent</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="emerald">Bokfort</flux:badge>
+                                    </div>
+                                </div>
+
+                                <h4>Attestere bilag</h4>
+                                <ol>
+                                    <li>Klikk pa et tolket bilag for a apne detaljer</li>
+                                    <li>Kontroller at AI har tolket riktig:
+                                        <ul>
+                                            <li>Leverandor (kan sokes opp eller endres)</li>
+                                            <li>Fakturanummer og datoer</li>
+                                            <li>Belop og MVA</li>
+                                            <li>Kostnadskonto</li>
+                                        </ul>
+                                    </li>
+                                    <li>Gjor eventuelle korrigeringer</li>
+                                    <li>Klikk <strong>Attester</strong></li>
+                                </ol>
+
+                                <h4>Godkjenne og bokfore</h4>
+                                <ol>
+                                    <li>Nar bilaget er attestert, klikk <strong>Godkjenn</strong></li>
+                                    <li>Systemet oppretter automatisk:
+                                        <ul>
+                                            <li>Leverandorfaktura i leverandorreskontro</li>
+                                            <li>Regnskapsbilag med korrekt kontering</li>
+                                        </ul>
+                                    </li>
+                                    <li>Bilaget er na bokfort og klart for betaling</li>
+                                </ol>
+
+                                <h4>Smart kontoforslag</h4>
+                                <p>Systemet larer av tidligere posteringer:</p>
+                                <ul>
+                                    <li>Nar du godkjenner et bilag, husker systemet hvilken konto du brukte</li>
+                                    <li>Neste gang samme leverandor sender faktura, foreslås samme konto</li>
+                                    <li>Systemet ser ogsa pa nokkelord i beskrivelsen for a gi bedre forslag</li>
+                                </ul>
+
+                                <h4>Avvise bilag</h4>
+                                <p>Hvis et bilag ikke skal bokfores:</p>
+                                <ol>
+                                    <li>Apne bilaget</li>
+                                    <li>Klikk <strong>Avvis</strong></li>
+                                    <li>Oppgi en grunn for avvisningen</li>
+                                    <li>Bilaget flyttes til avviste</li>
+                                </ol>
+
+                                <h4>Tolke pa nytt</h4>
+                                <p>Hvis AI-tolkningen feilet eller ga darlig resultat:</p>
+                                <ol>
+                                    <li>Finn bilaget i listen</li>
+                                    <li>Klikk pa menyknappen</li>
+                                    <li>Velg <strong>Tolk pa nytt</strong></li>
+                                    <li>Bilaget sendes til ny AI-tolkning</li>
+                                </ol>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Tips</flux:callout.heading>
+                                    <flux:callout.text>For best resultat, last opp tydelige PDF-er eller bilder. Skanninger med hoy opplosning gir bedre AI-tolkning enn uskarpe bilder.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Statuser</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="zinc">Venter</flux:badge>
+                                            <span>Bilaget er lastet opp og venter pa tolkning</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="blue">Tolkes</flux:badge>
+                                            <span>AI analyserer bilaget</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="purple">Tolket</flux:badge>
+                                            <span>Klar for gjennomgang og attestering</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="yellow">Attestert</flux:badge>
+                                            <span>Kontrollert, venter pa endelig godkjenning</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="green">Godkjent</flux:badge>
+                                            <span>Godkjent og bokfort</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="red">Avvist</flux:badge>
+                                            <span>Avvist med begrunnelse</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </flux:card>

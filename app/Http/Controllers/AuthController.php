@@ -139,4 +139,9 @@ class AuthController extends Controller
     {
         return view('admin.system');
     }
+
+    public function adminHelp()
+    {
+        return view('admin.help');
+    }
 }

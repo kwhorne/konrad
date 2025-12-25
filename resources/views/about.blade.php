@@ -1,30 +1,143 @@
-@props(['title' => 'Konrad - Innovative digitale løsninger', 'openModal' => null])
-
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-flux-appearance>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $title }}</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
-    
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    @fluxAppearance
-</head>
-<body class="min-h-screen bg-white dark:bg-zinc-900 font-sans antialiased">
-    <!-- Navigation -->
-    <nav class="border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm sticky top-0 z-50">
+<x-layouts.public title="Om oss - Konrad Office">
+    <!-- Hero Section -->
+    <section class="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
-                    <a href="{{ route('welcome') }}" class="flex items-center gap-2">
-                        <svg class="h-8 w-8 shrink-0" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white mb-6">
+                    Om oss
+                </h1>
+                <p class="text-xl text-zinc-600 dark:text-zinc-400">
+                    Bak Konrad Office står mennesker som brenner for å gjøre hverdagen enklere for norske bedrifter.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="py-16 lg:py-24 bg-white dark:bg-zinc-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="prose prose-lg dark:prose-invert max-w-none">
+                <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-8">
+                    Vår historie
+                </h2>
+
+                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-6">
+                    Konrad Office ble født ut av en enkel observasjon: Altfor mange norske bedrifter bruker
+                    unødvendig mye tid på administrative oppgaver som burde gå av seg selv. Regneark som
+                    ikke snakker sammen, fakturaer som forsvinner i e-postboksen, og kontrakter som glemmes
+                    i en skuff.
+                </p>
+
+                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-6">
+                    Vi tror på at teknologi skal jobbe for deg, ikke mot deg. Derfor har vi bygget et system
+                    som samler alt du trenger på ett sted &ndash; fra det første tilbudet til den siste
+                    fakturaen, og alt imellom.
+                </p>
+
+                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-6">
+                    Navnet vårt er en hyllest til de som jobber hardt hver dag for å bygge noe verdifullt.
+                    Konrad er den pålitelige hjelperen som alltid er der når du trenger ham &ndash; stille,
+                    effektiv og grundig.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-16 lg:py-24 bg-zinc-50 dark:bg-zinc-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+                    Det vi tror på
+                </h2>
+                <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+                    Våre verdier styrer alt vi gjør &ndash; fra hvordan vi bygger produktet til hvordan vi møter kundene våre.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6">
+                        <flux:icon.heart class="w-7 h-7 text-white" />
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
+                        Enkelhet først
+                    </h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Et godt verktøy skal være intuitivt å bruke. Vi designer for mennesker, ikke maskiner.
+                        Hvis noe føles komplisert, har vi ikke gjort jobben vår godt nok.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6">
+                        <flux:icon.shield-check class="w-7 h-7 text-white" />
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
+                        Tillit og trygghet
+                    </h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Dine data er dine. Vi behandler dem med respekt og sikkerhet. Du skal alltid
+                        vite hvor dataene dine er og hvem som har tilgang.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-rose-500 rounded-2xl flex items-center justify-center mb-6">
+                        <flux:icon.users class="w-7 h-7 text-white" />
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
+                        Nærhet til kunden
+                    </h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Vi lytter til de som bruker produktet vårt. Mange av funksjonene i Konrad Office
+                        kommer direkte fra tilbakemeldinger fra kundene våre.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Norwegian Focus Section -->
+    <section class="py-16 lg:py-24 bg-white dark:bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-6">
+                        Laget for norske bedrifter
+                    </h2>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-lg mb-6">
+                        Vi vet at norske bedrifter har egne behov. NS 4102-kontoplan, norske MVA-regler,
+                        forfallsdatoer som passer med norsk praksis &ndash; alt dette er innebygd fra starten av.
+                    </p>
+                    <p class="text-zinc-600 dark:text-zinc-400 text-lg mb-6">
+                        Ingen oversatte grensesnitt som føles fremmed. Ingen funksjoner som ikke gir mening
+                        i en norsk kontekst. Bare et system som forstår hvordan du jobber.
+                    </p>
+
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
+                            <span>Norsk kontoplan (NS 4102)</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
+                            <span>Norske MVA-satser</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
+                            <span>Fullt norsk grensesnitt</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
+                            <span>Norsk support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="aspect-square bg-gradient-to-br from-indigo-100 to-orange-100 dark:from-indigo-900/30 dark:to-orange-900/30 rounded-3xl flex items-center justify-center">
+                        <svg class="h-48 w-auto opacity-80" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M 0.0,139.5 L 0.5,120.0 L 2.0,120.5 L 1.5,119.0 L 4.0,116.5 L 7.0,115.5 L 17.0,115.5 L 16.5,114.0 L 20.5,112.0 L 22.5,107.0 L 25.5,95.0 L 15.0,83.5 L 12.5,83.0 L 13.5,79.0 L 15.0,81.5 L 16.5,79.0 L 15.5,76.0 L 17.5,75.0 L 17.0,73.5 L 11.5,80.0 L 14.5,72.0 L 17.5,71.0 L 16.5,69.0 L 21.5,63.0 L 20.5,62.0 L 23.5,60.0 L 22.5,59.0 L 25.0,56.5 L 26.5,58.0 L 25.0,60.5 L 31.0,58.5 L 33.0,59.5 L 36.0,57.5 L 38.0,59.5 L 45.0,59.5 L 47.0,57.5 L 48.5,59.0 L 47.0,61.5 L 49.5,59.0 L 48.5,56.0 L 54.0,50.5 L 55.5,52.0 L 54.5,54.0 L 56.0,54.5 L 60.5,50.0 L 61.5,47.0 L 58.0,45.5 L 65.5,45.0 L 63.0,39.5 L 62.0,42.5 L 59.5,41.0 L 56.5,32.0 L 57.0,26.5 L 55.5,27.0 L 55.5,34.0 L 57.5,37.0 L 56.5,40.0 L 53.5,32.0 L 53.5,26.0 L 55.0,24.5 L 59.0,22.5 L 57.5,25.0 L 59.5,26.0 L 59.0,27.5 L 61.5,26.0 L 59.5,22.0 L 61.0,20.5 L 65.0,18.5 L 71.0,19.5 L 71.0,16.5 L 74.0,20.5 L 77.0,21.5 L 77.5,20.0 L 75.5,19.0 L 77.5,18.0 L 72.0,16.5 L 71.5,15.0 L 75.0,12.5 L 78.0,12.5 L 80.0,15.5 L 81.5,15.0 L 81.5,18.0 L 84.5,19.0 L 83.5,20.0 L 86.0,20.5 L 91.5,26.0 L 91.0,27.5 L 97.0,27.5 L 98.0,24.5 L 107.0,21.5 L 109.5,22.0 L 105.5,24.0 L 107.0,25.5 L 111.0,25.5 L 110.5,23.0 L 112.5,19.0 L 111.0,19.5 L 110.5,17.0 L 112.0,14.5 L 113.5,16.0 L 113.5,21.0 L 115.5,21.0 L 114.5,15.0 L 111.5,12.0 L 113.5,12.0 L 112.5,9.0 L 114.5,7.0 L 114.5,2.0 L 116.0,0.5 L 131.0,1.5 L 134.0,4.5 L 138.0,3.5 L 138.5,5.0 L 136.0,6.5 L 129.0,5.5 L 129.0,3.5 L 121.5,5.0 L 124.5,7.0 L 121.5,9.0 L 125.5,12.0 L 121.5,13.0 L 123.0,14.5 L 127.5,13.0 L 123.5,19.0 L 120.5,20.0 L 121.0,21.5 L 116.5,21.0 L 118.0,23.5 L 121.5,23.0 L 119.5,25.0 L 118.5,31.0 L 117.0,32.5 L 116.0,30.5 L 114.5,35.0 L 116.5,38.0 L 116.5,48.0 L 115.0,49.5 L 114.0,45.5 L 113.0,48.5 L 108.5,49.0 L 109.0,50.5 L 113.0,51.5 L 107.0,51.5 L 106.0,53.5 L 104.0,52.5 L 95.0,57.5 L 92.5,55.0 L 96.0,55.5 L 95.0,53.5 L 91.0,52.5 L 91.0,55.5 L 88.0,53.5 L 87.5,55.0 L 91.0,58.5 L 93.5,58.0 L 89.0,61.5 L 87.0,58.5 L 83.0,58.5 L 84.5,61.0 L 83.5,62.0 L 85.0,61.5 L 85.5,63.0 L 82.0,65.5 L 80.5,65.0 L 81.0,63.5 L 79.0,63.5 L 78.5,65.0 L 80.5,67.0 L 76.0,70.5 L 74.0,69.5 L 72.5,71.0 L 72.0,72.5 L 74.5,72.0 L 66.0,81.5 L 63.5,80.0 L 64.5,81.0 L 63.5,82.0 L 65.5,83.0 L 62.5,87.0 L 61.0,88.5 L 58.0,85.5 L 54.5,89.0 L 54.5,92.0 L 57.5,95.0 L 54.5,95.0 L 56.5,96.0 L 55.0,100.5 L 53.0,97.5 L 52.0,98.5 L 50.5,97.0 L 50.5,100.0 L 52.5,100.0 L 52.5,109.0 L 49.5,108.0 L 51.5,112.0 L 49.5,120.0 L 48.0,116.5 L 46.0,121.5 L 45.5,119.0 L 43.5,118.0 L 43.5,125.0 L 46.0,127.5 L 49.5,124.0 L 48.5,137.0 L 47.0,138.5 L 45.5,136.0 L 45.5,147.0 L 47.5,147.0 L 48.0,143.5 L 50.5,147.0 L 50.5,151.0 L 54.5,161.0 L 53.5,162.0 L 55.5,164.0 L 54.0,166.5 L 51.5,167.0 L 54.5,168.0 L 52.5,169.0 L 54.0,171.5 L 55.0,170.5 L 56.0,172.5 L 57.0,169.5 L 58.5,171.0 L 57.5,172.0 L 59.5,172.0 L 58.5,178.0 L 61.0,175.5 L 64.5,180.0 L 62.5,182.0 L 63.0,184.5 L 60.5,183.0 L 63.0,185.5 L 66.0,181.5 L 66.5,184.0 L 71.5,188.0 L 70.5,189.0 L 73.5,190.0 L 73.0,191.5 L 71.0,190.5 L 69.0,193.5 L 68.0,190.5 L 65.5,194.0 L 68.0,193.5 L 69.0,195.5 L 72.0,194.5 L 75.0,197.5 L 77.5,196.0 L 72.5,194.0 L 75.0,191.5 L 81.5,197.0 L 80.0,199.5 L 77.0,200.5 L 75.0,198.5 L 73.5,201.0 L 81.0,200.5 L 83.0,202.5 L 82.5,200.0 L 85.0,199.5 L 95.5,206.0 L 91.5,209.0 L 95.5,210.0 L 93.0,211.5 L 97.0,211.5 L 98.5,210.0 L 97.5,208.0 L 99.0,207.5 L 100.5,209.0 L 100.0,211.5 L 102.0,208.5 L 104.5,210.0 L 104.0,211.5 L 111.0,211.5 L 111.5,214.0 L 110.0,215.5 L 112.0,215.5 L 115.0,212.5 L 116.5,216.0 L 115.5,221.0 L 117.5,225.0 L 116.5,229.0 L 118.5,231.0 L 117.0,233.5 L 116.0,230.5 L 113.5,232.0 L 117.0,236.5 L 118.0,233.5 L 120.5,238.0 L 120.5,240.0 L 118.0,241.5 L 118.0,237.5 L 116.0,237.5 L 115.5,240.0 L 118.0,242.5 L 122.0,241.5 L 123.5,246.0 L 122.0,244.5 L 121.5,246.0 L 126.5,248.0 L 130.5,253.0 L 130.0,255.5 L 134.0,255.5 L 132.5,257.0 L 134.0,258.5 L 137.0,257.5 L 143.0,260.5 L 143.5,262.0 L 140.5,264.0 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
                             <path d="M 282.0,161.5 L 274.0,160.5 L 274.0,157.5 L 269.0,156.5 L 264.5,157.0 L 268.0,159.5 L 262.0,157.5 L 252.5,148.0 L 252.5,146.0 L 255.5,143.0 L 252.5,144.0 L 251.5,136.0 L 250.0,139.5 L 248.5,137.0 L 249.5,124.0 L 251.0,121.5 L 252.0,127.5 L 254.0,121.5 L 256.0,127.5 L 255.5,121.0 L 258.5,115.0 L 253.0,119.5 L 252.5,118.0 L 258.0,111.5 L 269.0,105.5 L 276.0,105.5 L 280.0,107.5 L 283.0,107.5 L 285.0,105.5 L 290.0,107.5 L 290.0,109.5 L 293.0,109.5 L 292.5,111.0 L 294.0,110.5 L 296.5,113.0 L 295.5,116.0 L 297.0,117.5 L 298.5,116.0 L 297.0,113.5 L 300.5,116.0 L 301.5,119.0 L 298.0,118.5 L 297.5,120.0 L 299.0,119.5 L 300.0,121.5 L 302.0,119.5 L 305.5,127.0 L 304.5,143.0 L 302.0,147.5 L 300.5,144.0 L 301.5,143.0 L 299.5,142.0 L 299.0,139.5 L 297.5,141.0 L 299.5,143.0 L 297.5,144.0 L 298.5,147.0 L 295.5,149.0 L 299.0,148.5 L 300.0,146.5 L 301.5,148.0 L 300.5,150.0 L 292.0,157.5 L 290.5,157.0 L 291.0,154.5 L 290.0,156.5 L 282.0,154.5 L 281.0,158.5 L 284.0,157.5 L 284.0,159.5 L 288.5,159.0 L 282.0,161.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
                             <path d="M 117.5,264.0 L 117.5,262.0 L 116.0,263.5 L 115.5,261.0 L 113.5,260.0 L 114.5,256.0 L 112.5,255.0 L 109.5,242.0 L 105.0,242.5 L 96.0,239.5 L 98.5,238.0 L 95.0,235.5 L 93.0,235.5 L 79.0,250.5 L 73.0,250.5 L 72.5,249.0 L 75.5,248.0 L 74.0,245.5 L 71.0,245.5 L 71.5,248.0 L 70.0,248.5 L 59.5,241.0 L 62.5,240.0 L 61.5,238.0 L 63.0,236.5 L 65.5,237.0 L 61.5,234.0 L 62.0,232.5 L 60.5,234.0 L 62.5,236.0 L 57.5,238.0 L 59.0,240.5 L 54.5,239.0 L 53.5,233.0 L 57.0,224.5 L 56.5,232.0 L 58.0,236.5 L 60.5,230.0 L 58.5,226.0 L 59.0,224.5 L 60.5,225.0 L 59.5,222.0 L 57.5,223.0 L 58.5,218.0 L 52.5,212.0 L 54.0,209.5 L 55.5,213.0 L 59.0,215.5 L 60.5,213.0 L 59.0,214.5 L 58.0,211.5 L 56.5,212.0 L 57.5,207.0 L 56.0,206.5 L 55.0,209.5 L 53.0,205.5 L 53.5,207.0 L 51.5,209.0 L 52.5,210.0 L 51.0,210.5 L 48.5,207.0 L 49.0,203.5 L 47.0,205.5 L 43.0,203.5 L 39.0,205.5 L 35.0,204.5 L 35.5,206.0 L 33.0,207.5 L 26.0,208.5 L 17.5,197.0 L 20.5,197.0 L 13.5,190.0 L 15.5,189.0 L 15.5,187.0 L 14.0,185.5 L 11.5,186.0 L 12.5,181.0 L 15.0,178.5 L 18.0,179.5 L 16.5,178.0 L 22.0,172.5 L 23.0,173.5 L 22.5,172.0 L 25.5,169.0 L 23.5,164.0 L 24.5,163.0 L 22.5,161.0 L 24.0,157.5 L 25.0,159.5 L 26.5,158.0 L 26.5,154.0 L 24.5,152.0 L 25.5,148.0 L 23.5,149.0 L 24.5,156.0 L 23.0,157.5 L 21.5,155.0 L 23.5,155.0 L 20.5,153.0 L 21.0,151.5 L 13.0,147.5 L 11.0,149.5 L 4.0,147.5 L 5.5,146.0 L 4.5,140.0 L 3.0,141.5 L 0.0,140.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
@@ -34,80 +147,29 @@
                             <path d="M 174.0,73.5 L 152.0,66.5 L 130.5,69.0 L 130.5,37.0 L 135.5,25.0 L 148.0,14.5 L 156.0,12.5 L 165.0,12.5 L 172.0,14.5 L 180.0,19.5 L 187.5,28.0 L 190.5,36.0 L 189.5,52.0 L 186.5,58.0 L 174.0,73.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
                             <path d="M 166.0,251.5 L 151.0,250.5 L 142.0,245.5 L 134.5,237.0 L 130.5,225.0 L 131.0,183.5 L 167.0,183.5 L 187.5,207.0 L 190.5,214.0 L 190.5,228.0 L 188.5,234.0 L 179.0,245.5 L 166.0,251.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
                         </svg>
-                        <span class="text-xl font-bold text-zinc-900 dark:text-white">Konrad Office</span>
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#modules" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                        Moduler
-                    </a>
-                    <a href="#features" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                        Funksjoner
-                    </a>
-                    <a href="{{ route('pricing') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                        Priser
-                    </a>
-                    <a href="{{ route('contact') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                        Kontakt
-                    </a>
-                    <a href="{{ route('about') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                        Om oss
-                    </a>
-                </div>
-
-                <!-- Auth Links -->
-                <div class="flex items-center space-x-3">
-                    <!-- Dark Mode Toggle -->
-                    <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" variant="subtle" square class="group" aria-label="Toggle dark mode">
-                        <flux:icon.sun x-show="$flux.dark" variant="mini" class="text-zinc-500 dark:text-white" />
-                        <flux:icon.moon x-show="! $flux.dark" variant="mini" class="text-zinc-500 dark:text-white" />
-                    </flux:button>
-
-                    @auth
-                        <flux:button href="{{ route('dashboard') }}" variant="primary" size="sm">
-                            Dashboard
-                        </flux:button>
-                    @else
-                        <flux:button href="{{ route('login') }}" variant="ghost" size="sm">
-                            Logg inn
-                        </flux:button>
-                        <flux:button href="{{ route('order') }}" variant="primary" size="sm">
-                            Kom i gang
-                        </flux:button>
-                    @endauth
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
-    
-    <!-- Main Content -->
-    <main>
-        {{ $slot }}
-    </main>
-    
-    <!-- Footer -->
-    @include('components.footer')
+    </section>
 
-    <!-- Legal Modals -->
-    <livewire:privacy-modal />
-    <livewire:terms-modal />
-
-    @if($openModal === 'privacy')
-        <script>
-            document.addEventListener('livewire:init', () => {
-                $flux.modal('privacy-modal').show();
-            });
-        </script>
-    @elseif($openModal === 'terms')
-        <script>
-            document.addEventListener('livewire:init', () => {
-                $flux.modal('terms-modal').show();
-            });
-        </script>
-    @endif
-
-    @fluxScripts
-</body>
-</html>
+    <!-- CTA Section -->
+    <section class="py-16 lg:py-24 bg-gradient-to-r from-indigo-600 to-orange-500">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+                Bli med på reisen
+            </h2>
+            <p class="text-xl text-indigo-100 mb-8">
+                Vi gleder oss til å hjelpe din bedrift med å jobbe smartere.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <flux:button href="{{ route('contact') }}" variant="primary" class="px-8 py-3 bg-white text-indigo-600 hover:bg-gray-50 border-white">
+                    Ta kontakt
+                </flux:button>
+                <flux:button href="{{ route('pricing') }}" variant="ghost" class="px-8 py-3 text-white border-white/30 hover:bg-white/10">
+                    Se priser
+                </flux:button>
+            </div>
+        </div>
+    </section>
+</x-layouts.public>

@@ -17,6 +17,10 @@ Route::get('/kontakt', function () {
     return view('contact');
 })->name('contact');
 
+Route::get('/om-oss', function () {
+    return view('about');
+})->name('about');
+
 Route::get('/bestill', function () {
     return view('order');
 })->name('order');
@@ -130,5 +134,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/analytics', [AuthController::class, 'adminAnalytics'])->name('analytics');
         Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
         Route::get('/company-settings', [AuthController::class, 'companySettings'])->name('company-settings');
+        Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
     });
 });
