@@ -20,5 +20,7 @@ return [
     'projects' => env('PROJECTS_ENABLED', false),
     'work_orders' => env('WORK_ORDERS_ENABLED', false),
     'sales' => env('SALES_ENABLED', false),
+    'shareholders' => env('SHAREHOLDERS_ENABLED', false),
+    'altinn' => env('ALTINN_ENABLED', false),
 
 ];

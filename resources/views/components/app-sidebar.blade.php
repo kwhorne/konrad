@@ -111,6 +111,23 @@
             </flux:navlist.item>
         </flux:navlist.group>
 
+        <flux:navlist.group expandable heading="Årsoppgjør" class="grid">
+            @if(config('features.shareholders'))
+                <flux:navlist.item icon="users" href="{{ route('shareholders.index') }}" :current="$current === 'shareholders'">
+                    Aksjonærregister
+                </flux:navlist.item>
+            @endif
+            <flux:navlist.item icon="document-text" href="{{ route('tax.returns') }}" :current="$current === 'tax'">
+                Skattemelding
+            </flux:navlist.item>
+            <flux:navlist.item icon="chart-bar" href="{{ route('annual-accounts.index') }}" :current="$current === 'annual-accounts'">
+                Årsregnskap
+            </flux:navlist.item>
+            <flux:navlist.item icon="cloud-arrow-up" href="{{ route('altinn.index') }}" :current="$current === 'altinn'">
+                Altinn
+            </flux:navlist.item>
+        </flux:navlist.group>
+
         @if(!config('features.contracts') && !config('features.assets') && !config('features.contacts') && !config('features.products') && !config('features.projects') && !config('features.work_orders') && !config('features.sales'))
             <flux:text class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
                 Ingen moduler aktivert enna.

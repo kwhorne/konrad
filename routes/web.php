@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\AltinnController;
+use App\Http\Controllers\AnnualAccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\TaxController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -127,6 +130,35 @@ Route::middleware('auth')->group(function () {
         Route::get('/income-statement', [\App\Http\Controllers\ReportController::class, 'incomeStatement'])->name('income-statement');
         Route::get('/balance-sheet', [\App\Http\Controllers\ReportController::class, 'balanceSheet'])->name('balance-sheet');
     });
+
+    // Shareholder routes
+    Route::middleware('feature:shareholders')->prefix('shareholders')->name('shareholders.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\ShareholderController::class, 'index'])->name('index');
+        Route::get('/register', [\App\Http\Controllers\ShareholderController::class, 'register'])->name('register');
+        Route::get('/classes', [\App\Http\Controllers\ShareholderController::class, 'classes'])->name('classes');
+        Route::get('/transactions', [\App\Http\Controllers\ShareholderController::class, 'transactions'])->name('transactions');
+        Route::get('/dividends', [\App\Http\Controllers\ShareholderController::class, 'dividends'])->name('dividends');
+        Route::get('/reports', [\App\Http\Controllers\ShareholderController::class, 'reports'])->name('reports');
+        Route::get('/capital-changes', [\App\Http\Controllers\ShareholderController::class, 'capitalChanges'])->name('capital-changes');
+    });
+
+    // Tax routes
+    Route::prefix('tax')->name('tax.')->group(function () {
+        Route::get('/', [TaxController::class, 'returns'])->name('returns');
+        Route::get('/adjustments', [TaxController::class, 'adjustments'])->name('adjustments');
+        Route::get('/deferred', [TaxController::class, 'deferred'])->name('deferred');
+        Route::get('/depreciation', [TaxController::class, 'depreciation'])->name('depreciation');
+    });
+
+    // Annual accounts routes
+    Route::prefix('annual-accounts')->name('annual-accounts.')->group(function () {
+        Route::get('/', [AnnualAccountController::class, 'index'])->name('index');
+        Route::get('/{annualAccount}/notes', [AnnualAccountController::class, 'notes'])->name('notes');
+        Route::get('/{annualAccount}/cash-flow', [AnnualAccountController::class, 'cashFlow'])->name('cash-flow');
+    });
+
+    // Altinn routes
+    Route::get('/altinn', [AltinnController::class, 'index'])->name('altinn.index');
 
     // Admin routes - only accessible by admin users
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
