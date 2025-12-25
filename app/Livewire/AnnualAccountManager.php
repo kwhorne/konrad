@@ -185,7 +185,7 @@ class AnnualAccountManager extends Component
 
         $viewingAccount = null;
         if ($this->viewingAccountId) {
-            $viewingAccount = AnnualAccount::with(['creator', 'notes', 'cashFlowStatement'])
+            $viewingAccount = AnnualAccount::with(['creator', 'accountNotes', 'cashFlowStatement'])
                 ->findOrFail($this->viewingAccountId);
         }
 

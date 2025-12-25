@@ -184,7 +184,7 @@ class AnnualAccountService
 
         // Check required notes
         $requiredNotes = $annualAccount->getRequiredNotes();
-        $existingNotes = $annualAccount->notes()
+        $existingNotes = $annualAccount->accountNotes()
             ->visible()
             ->pluck('note_type')
             ->toArray();
@@ -196,7 +196,7 @@ class AnnualAccountService
         }
 
         // Check for empty required notes
-        foreach ($annualAccount->notes()->visible()->get() as $note) {
+        foreach ($annualAccount->accountNotes()->visible()->get() as $note) {
             if ($note->is_required && empty(trim($note->content))) {
                 $errors[] = "Note {$note->note_number} ({$note->title}) har ingen innhold.";
             }
@@ -243,7 +243,7 @@ class AnnualAccountService
 
         return [
             'annual_account' => $annualAccount,
-            'notes_count' => $annualAccount->notes()->visible()->count(),
+            'notes_count' => $annualAccount->accountNotes()->visible()->count(),
             'has_cash_flow' => $annualAccount->cashFlowStatement !== null,
             'validation' => $this->validate($annualAccount),
             'deadline' => $annualAccount->getDeadline(),

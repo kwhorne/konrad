@@ -40,6 +40,12 @@
                 System
             </flux:navlist.item>
         </flux:navlist.group>
+
+        <flux:navlist.group expandable heading="Innhold" class="grid">
+            <flux:navlist.item icon="document-text" href="{{ route('admin.posts') }}" :current="$current === 'posts'">
+                Bloggartikler
+            </flux:navlist.item>
+        </flux:navlist.group>
     </flux:navlist>
 
     <flux:spacer />

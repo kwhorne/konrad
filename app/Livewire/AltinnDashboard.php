@@ -45,7 +45,7 @@ class AltinnDashboard extends Component
         $deadlines = [];
 
         // Aksjonærregisteroppgaven (RF-1086) - 31. januar
-        $shareholderReport = ShareholderReport::where('fiscal_year', $year - 1)->first();
+        $shareholderReport = ShareholderReport::where('year', $year - 1)->first();
         $deadlines[] = [
             'type' => 'aksjonaerregister',
             'name' => 'Aksjonærregisteroppgaven',

@@ -65,6 +65,22 @@
                                     <flux:icon.document-chart-bar class="w-4 h-4" />
                                     MVA-meldinger
                                 </a>
+                                <a href="#aksjonaerregister" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.user-group class="w-4 h-4" />
+                                    Aksjonaerregister
+                                </a>
+                                <a href="#skatt" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.receipt-percent class="w-4 h-4" />
+                                    Skatt
+                                </a>
+                                <a href="#arsregnskap" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.document-text class="w-4 h-4" />
+                                    Arsregnskap
+                                </a>
+                                <a href="#altinn" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.paper-airplane class="w-4 h-4" />
+                                    Altinn
+                                </a>
                                 <a href="#innstillinger" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.cog-6-tooth class="w-4 h-4" />
                                     Innstillinger
@@ -779,6 +795,446 @@
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Viktig</flux:callout.heading>
                                     <flux:callout.text>Systemet genererer kun MVA-oppgaven. Du ma fortsatt logge inn i Altinn for a sende den offisielt til Skatteetaten.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Aksjonaerregister --}}
+                    <flux:card id="aksjonaerregister" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.user-group class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Aksjonaerregister</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Aksjonaerregisteret holder oversikt over selskapets aksjonaerer, aksjeklasser, transaksjoner og utbytte. Data fra registeret brukes til a generere aksjonaerregisteroppgaven (RF-1086) som sendes til Skatteetaten.</p>
+
+                                <h4>Aksjonaerer</h4>
+                                <p>Registrer alle aksjonaerer i selskapet:</p>
+                                <ol>
+                                    <li>Ga til <strong>Arsoppgjor > Aksjonaerregister</strong></li>
+                                    <li>Klikk <strong>Ny aksjonaer</strong></li>
+                                    <li>Velg type: Person eller Selskap</li>
+                                    <li>Fyll inn identifikasjon (fodselsnummer eller org.nr)</li>
+                                    <li>Legg til navn og adresse</li>
+                                </ol>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Kobling til kontakter</flux:callout.heading>
+                                    <flux:callout.text>Aksjonaerer kan kobles til eksisterende kontakter i systemet for a gjenbruke adresseinformasjon.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Aksjeklasser</h4>
+                                <p>Definer selskapets aksjeklasser:</p>
+                                <ul>
+                                    <li><strong>Navn</strong> - F.eks. A-aksjer, B-aksjer</li>
+                                    <li><strong>ISIN</strong> - Internasjonal verdipapiridentifikator</li>
+                                    <li><strong>Palydende</strong> - Nominell verdi per aksje</li>
+                                    <li><strong>Totalt antall</strong> - Antall aksjer i klassen</li>
+                                    <li><strong>Stemmerett</strong> - Har aksjene stemmerett?</li>
+                                    <li><strong>Utbytterett</strong> - Har aksjene rett til utbytte?</li>
+                                </ul>
+
+                                <h4>Aksjeinnehav</h4>
+                                <p>Registrer eierandeler:</p>
+                                <ul>
+                                    <li>Velg aksjonaer og aksjeklasse</li>
+                                    <li>Angi antall aksjer</li>
+                                    <li>Registrer inngangsverdi (anskaffelseskost)</li>
+                                    <li>Sett ervervsdato og -mate (stiftelse, kjop, arv, gave)</li>
+                                </ul>
+
+                                <h4>Aksjetransaksjoner</h4>
+                                <p>Alle endringer i eierskap ma registreres:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="blue">Stiftelse</flux:badge>
+                                            <span>Tildeling ved selskapsstiftelse</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="green">Emisjon</flux:badge>
+                                            <span>Kapitalforhoyelse med nye aksjer</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="yellow">Overdragelse</flux:badge>
+                                            <span>Kjop/salg mellom aksjonaerer</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="purple">Splitt</flux:badge>
+                                            <span>Oppsplittes i flere aksjer</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="red">Innlosning</flux:badge>
+                                            <span>Selskapet kjoper tilbake aksjer</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Utbytte</h4>
+                                <p>Registrer utbyttevedtak:</p>
+                                <ol>
+                                    <li>Ga til <strong>Utbytte</strong>-fanen</li>
+                                    <li>Klikk <strong>Nytt utbytte</strong></li>
+                                    <li>Velg aksjeklasse</li>
+                                    <li>Angi belop per aksje</li>
+                                    <li>Sett vedtaksdato og utbetalingsdato</li>
+                                </ol>
+                                <p>Systemet beregner automatisk totalbelop og fordeling per aksjonaer.</p>
+
+                                <h4>Arsrapport (RF-1086)</h4>
+                                <p>Generer aksjonaerregisteroppgaven:</p>
+                                <ol>
+                                    <li>Ga til <strong>Rapporter</strong>-fanen</li>
+                                    <li>Velg ar</li>
+                                    <li>Klikk <strong>Opprett rapport</strong></li>
+                                    <li>Systemet samler data fra registeret</li>
+                                    <li>Generer XML for innsending via Altinn</li>
+                                </ol>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Frist</flux:callout.heading>
+                                    <flux:callout.text>Aksjonaerregisteroppgaven skal sendes til Skatteetaten innen 31. januar aret etter inntektsaret.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Skatt --}}
+                    <flux:card id="skatt" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-rose-100 dark:bg-rose-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.receipt-percent class="w-5 h-5 text-rose-600 dark:text-rose-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Skatt</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Skattemodulen hjelper deg med a beregne skattepliktig inntekt, handtere permanente og midlertidige forskjeller, og generere skattemeldingen (RF-1028).</p>
+
+                                <h4>Skattemessige justeringer</h4>
+                                <p>Forskjeller mellom regnskapsmessig og skattemessig behandling:</p>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-3">
+                                        <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                            <div class="font-medium text-red-800 dark:text-red-200 mb-1">Permanente forskjeller</div>
+                                            <div class="text-sm text-red-700 dark:text-red-300">Forskjeller som aldri reverseres skattemessig</div>
+                                            <ul class="text-sm text-red-600 dark:text-red-400 mt-2 space-y-1">
+                                                <li>Representasjonskostnader (ikke fradrag)</li>
+                                                <li>Boter og gebyrer (ikke fradrag)</li>
+                                                <li>Gaver over fradragsgrense</li>
+                                                <li>Ikke-fradragsberettigede kostnader</li>
+                                            </ul>
+                                        </div>
+                                        <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                                            <div class="font-medium text-yellow-800 dark:text-yellow-200 mb-1">Midlertidige forskjeller</div>
+                                            <div class="text-sm text-yellow-700 dark:text-yellow-300">Forskjeller som reverseres over tid</div>
+                                            <ul class="text-sm text-yellow-600 dark:text-yellow-400 mt-2 space-y-1">
+                                                <li>Avskrivningsforskjeller</li>
+                                                <li>Urealiserte gevinster/tap</li>
+                                                <li>Avsetninger (garantier, tap pa fordringer)</li>
+                                                <li>Underskudd til fremforing</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Utsatt skatt</h4>
+                                <p>Beregning av utsatt skattefordel og utsatt skatteforpliktelse:</p>
+                                <ol>
+                                    <li>Ga til <strong>Arsoppgjor > Skatt > Utsatt skatt</strong></li>
+                                    <li>Registrer midlertidige forskjeller per kategori</li>
+                                    <li>Systemet beregner utsatt skatt (22%)</li>
+                                    <li>Se netto utsatt skattefordel eller -forpliktelse</li>
+                                </ol>
+
+                                <div class="not-prose my-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                            <div class="font-medium text-green-800 dark:text-green-200">Utsatt skattefordel</div>
+                                            <div class="text-sm text-green-600 dark:text-green-400">Eiendel - fremtidig skattebesparelse</div>
+                                        </div>
+                                        <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                            <div class="font-medium text-red-800 dark:text-red-200">Utsatt skatteforpliktelse</div>
+                                            <div class="text-sm text-red-600 dark:text-red-400">Gjeld - fremtidig skattebelastning</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Saldoavskrivning</h4>
+                                <p>Skattemessige avskrivninger beregnes pa saldogrunnlag:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-1 text-sm">
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe a - Kontormaskiner</span>
+                                            <span class="font-mono">30%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe b - Ervervet goodwill</span>
+                                            <span class="font-mono">20%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe c - Varebiler, lastebiler</span>
+                                            <span class="font-mono">24%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe d - Personbiler, maskiner</span>
+                                            <span class="font-mono">20%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe e - Skip, fartoy</span>
+                                            <span class="font-mono">14%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe f - Fly, helikopter</span>
+                                            <span class="font-mono">12%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe h - Bygg og anlegg</span>
+                                            <span class="font-mono">4%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe i - Forretningsbygg</span>
+                                            <span class="font-mono">2%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe j - Tekniske installasjoner</span>
+                                            <span class="font-mono">10%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Skattemelding (RF-1028)</h4>
+                                <p>Generer skattemeldingen:</p>
+                                <ol>
+                                    <li>Ga til <strong>Arsoppgjor > Skatt > Skattemelding</strong></li>
+                                    <li>Velg regnskapsar</li>
+                                    <li>Klikk <strong>Opprett skattemelding</strong></li>
+                                    <li>Systemet henter data fra regnskap og justeringer</li>
+                                    <li>Kontroller beregningen</li>
+                                    <li>Generer XML for innsending</li>
+                                </ol>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Frist</flux:callout.heading>
+                                    <flux:callout.text>Skattemeldingen for aksjeselskaper skal sendes til Skatteetaten innen 31. mai aret etter inntektsaret.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Arsregnskap --}}
+                    <flux:card id="arsregnskap" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.document-text class="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Arsregnskap</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Arsregnskapsmodulen hjelper deg med a utarbeide arsregnskapet som skal sendes til Regnskapsregisteret. Modulen stotter XBRL-format for elektronisk innsending.</p>
+
+                                <h4>Opprette arsregnskap</h4>
+                                <ol>
+                                    <li>Ga til <strong>Arsoppgjor > Arsregnskap</strong></li>
+                                    <li>Klikk <strong>Nytt arsregnskap</strong></li>
+                                    <li>Velg regnskapsar</li>
+                                    <li>Systemet henter automatisk nokkeltall fra regnskapet</li>
+                                    <li>Standard noter opprettes automatisk</li>
+                                </ol>
+
+                                <h4>Selskapsstorrelse</h4>
+                                <p>Kravene til arsregnskapet avhenger av selskapets storrelse:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-3">
+                                        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                                            <div class="font-medium text-green-800 dark:text-green-200">Sma foretak</div>
+                                            <div class="text-sm text-green-700 dark:text-green-300">Forenklede krav til noter og oppstillinger</div>
+                                            <ul class="text-xs text-green-600 dark:text-green-400 mt-2 space-y-1">
+                                                <li>Salgsinntekt < 70 MNOK</li>
+                                                <li>Balansesum < 35 MNOK</li>
+                                                <li>Ansatte < 50 arsverk</li>
+                                            </ul>
+                                        </div>
+                                        <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                                            <div class="font-medium text-yellow-800 dark:text-yellow-200">Mellomstore foretak</div>
+                                            <div class="text-sm text-yellow-700 dark:text-yellow-300">Krever kontantstromoppstilling</div>
+                                        </div>
+                                        <div class="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                            <div class="font-medium text-red-800 dark:text-red-200">Store foretak</div>
+                                            <div class="text-sm text-red-700 dark:text-red-300">Fulle krav, revisjonsplikt</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Noter</h4>
+                                <p>Arsregnskapet skal inneholde noter som forklarer tallene:</p>
+                                <ul>
+                                    <li><strong>Regnskapsprinsipper</strong> - Anvendte prinsipper (pakrevd)</li>
+                                    <li><strong>Ansatte</strong> - Lonnkostnader og antall (pakrevd)</li>
+                                    <li><strong>Varige driftsmidler</strong> - Avskrivninger og bevegelser</li>
+                                    <li><strong>Aksjekapital</strong> - Eierstruktur</li>
+                                    <li><strong>Egenkapital</strong> - Bevegelser i perioden</li>
+                                    <li><strong>Gjeld</strong> - Langsiktig og kortsiktig</li>
+                                    <li><strong>Skatt</strong> - Betalbar og utsatt skatt</li>
+                                    <li><strong>Naerstaende parter</strong> - Transaksjoner</li>
+                                    <li><strong>Hendelser etter balansedagen</strong> - Vesentlige forhold</li>
+                                </ul>
+
+                                <h4>Redigere noter</h4>
+                                <ol>
+                                    <li>Apne arsregnskapet</li>
+                                    <li>Klikk pa <strong>Noter</strong>-knappen</li>
+                                    <li>Velg noten du vil redigere</li>
+                                    <li>Skriv eller rediger innholdet</li>
+                                    <li>Lagre endringene</li>
+                                </ol>
+
+                                <h4>Kontantstromoppstilling</h4>
+                                <p>For mellomstore og store foretak:</p>
+                                <ul>
+                                    <li><strong>Drift</strong> - Kontantstrom fra operasjonelle aktiviteter</li>
+                                    <li><strong>Investering</strong> - Kjop/salg av anleggsmidler</li>
+                                    <li><strong>Finansiering</strong> - Lan, utbytte, kapitalendringer</li>
+                                </ul>
+
+                                <h4>Arbeidsflyt</h4>
+                                <div class="not-prose my-4">
+                                    <div class="flex flex-wrap items-center gap-2 text-sm">
+                                        <flux:badge color="zinc">Utkast</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="blue">Godkjent</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="purple">Sendt inn</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="green">Akseptert</flux:badge>
+                                    </div>
+                                </div>
+
+                                <h4>XBRL-generering</h4>
+                                <p>Arsregnskapet sendes til Regnskapsregisteret i XBRL-format:</p>
+                                <ol>
+                                    <li>Fullfør alle noter</li>
+                                    <li>Klikk <strong>Valider</strong> for a sjekke at alt er komplett</li>
+                                    <li>Klikk <strong>Godkjenn</strong> for styregodkjenning</li>
+                                    <li>Klikk <strong>Send til Altinn</strong> for a generere XBRL</li>
+                                </ol>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Frist</flux:callout.heading>
+                                    <flux:callout.text>Arsregnskapet skal sendes til Regnskapsregisteret innen 31. juli aret etter regnskapsaret (for selskaper med kalenderaret som regnskapsar).</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Altinn --}}
+                    <flux:card id="altinn" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.paper-airplane class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Altinn-integrasjon</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Altinn-dashboardet gir deg oversikt over alle obligatoriske innsendinger og deres status. Herfra kan du folge med pa frister og sende inn elektronisk.</p>
+
+                                <h4>Oversikt over innsendinger</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-3">
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium text-zinc-900 dark:text-white">Aksjonaerregisteroppgaven (RF-1086)</span>
+                                                <span class="text-sm text-zinc-500">31. januar</span>
+                                            </div>
+                                            <div class="text-sm text-zinc-600 dark:text-zinc-400">Rapport til Skatteetaten om aksjonaerforhold</div>
+                                        </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium text-zinc-900 dark:text-white">Skattemelding (RF-1028)</span>
+                                                <span class="text-sm text-zinc-500">31. mai</span>
+                                            </div>
+                                            <div class="text-sm text-zinc-600 dark:text-zinc-400">Naringoppgave og skattemelding til Skatteetaten</div>
+                                        </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium text-zinc-900 dark:text-white">Arsregnskap (XBRL)</span>
+                                                <span class="text-sm text-zinc-500">31. juli</span>
+                                            </div>
+                                            <div class="text-sm text-zinc-600 dark:text-zinc-400">Arsregnskap til Regnskapsregisteret</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Dashboardet viser</h4>
+                                <ul>
+                                    <li><strong>Kommende frister</strong> - Innsendinger som ikke er fullfort</li>
+                                    <li><strong>Forfalte frister</strong> - Innsendinger som er pa overtid</li>
+                                    <li><strong>Statistikk</strong> - Antall sendt, godkjent, avvist</li>
+                                    <li><strong>Historikk</strong> - Tidligere innsendinger</li>
+                                </ul>
+
+                                <h4>Status pa innsending</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge variant="outline">Ikke startet</flux:badge>
+                                            <span>Ingen data er klargjort</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="yellow">Under arbeid</flux:badge>
+                                            <span>Data er under utarbeidelse</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="blue">Klar for innsending</flux:badge>
+                                            <span>Godkjent og klar til a sendes</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="purple">Sendt inn</flux:badge>
+                                            <span>Sendt til mottaker, venter pa svar</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="green">Akseptert</flux:badge>
+                                            <span>Godkjent av mottaker</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="red">Avvist</flux:badge>
+                                            <span>Feil i innsendingen, ma korrigeres</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Fristpaminnelser</h4>
+                                <p>Systemet varsler om kommende frister:</p>
+                                <ul>
+                                    <li><strong>30 dager for</strong> - Forste paminning</li>
+                                    <li><strong>14 dager for</strong> - Oppfolging</li>
+                                    <li><strong>7 dager for</strong> - Hastevarsel</li>
+                                    <li><strong>1 dag for</strong> - Kritisk frist</li>
+                                </ul>
+
+                                <h4>Innsendingshistorikk</h4>
+                                <p>Se alle tidligere innsendinger:</p>
+                                <ul>
+                                    <li>Dato og klokkeslett for innsending</li>
+                                    <li>Status (akseptert/avvist)</li>
+                                    <li>Altinn-referanse</li>
+                                    <li>Eventuelle feilmeldinger</li>
+                                </ul>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Elektronisk signering</flux:callout.heading>
+                                    <flux:callout.text>Innsending til Altinn krever virksomhetssertifikat eller annen godkjent autentiseringsmetode. Kontakt administrator for oppsett.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>

@@ -49,6 +49,14 @@
                                     <flux:icon.table-cells class="w-4 h-4" />
                                     Kontoplan
                                 </a>
+                                <a href="#arsoppgjor" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.document-check class="w-4 h-4" />
+                                    Arsoppgjor
+                                </a>
+                                <a href="#altinn-admin" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.paper-airplane class="w-4 h-4" />
+                                    Altinn-oppsett
+                                </a>
                                 <a href="#system" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.cog-6-tooth class="w-4 h-4" />
                                     System
@@ -364,6 +372,274 @@
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>OBS</flux:callout.heading>
                                     <flux:callout.text>Ikke slett konti som har posteringer. Deaktiver dem i stedet.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Arsoppgjor --}}
+                    <flux:card id="arsoppgjor" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.document-check class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Arsoppgjor</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Arsoppgjorsmodulen inneholder verktoy for a utarbeide obligatoriske rapporter til norske myndigheter. Her konfigurerer du oppsett og standardverdier.</p>
+
+                                <h4>Moduloversikt</h4>
+                                <div class="not-prose my-4">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-200 dark:border-indigo-800">
+                                            <div class="font-medium text-indigo-800 dark:text-indigo-200">Aksjonaerregister</div>
+                                            <div class="text-sm text-indigo-600 dark:text-indigo-400">Aksjonaerer, transaksjoner, utbytte</div>
+                                        </div>
+                                        <div class="p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg border border-rose-200 dark:border-rose-800">
+                                            <div class="font-medium text-rose-800 dark:text-rose-200">Skatt</div>
+                                            <div class="text-sm text-rose-600 dark:text-rose-400">Justeringer, utsatt skatt, saldoavskrivning</div>
+                                        </div>
+                                        <div class="p-3 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800">
+                                            <div class="font-medium text-sky-800 dark:text-sky-200">Arsregnskap</div>
+                                            <div class="text-sm text-sky-600 dark:text-sky-400">Noter, kontantstrom, XBRL</div>
+                                        </div>
+                                        <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                                            <div class="font-medium text-emerald-800 dark:text-emerald-200">Altinn-dashboard</div>
+                                            <div class="text-sm text-emerald-600 dark:text-emerald-400">Innsendinger og frister</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Aksjonaerregister - Administrasjon</h4>
+                                <p>Konfigurasjon av aksjeklasser og standardverdier:</p>
+                                <ul>
+                                    <li><strong>Aksjeklasser</strong> - Opprett og administrer A-, B-aksjer etc.</li>
+                                    <li><strong>Transaksjonstyper</strong> - Stiftelse, emisjon, overdragelse, splitt, innlosning</li>
+                                    <li><strong>Ervervsmater</strong> - Stiftelse, kjop, arv, gave, fusjon</li>
+                                    <li><strong>Standardverdier</strong> - Palydende per aksje, valuta</li>
+                                </ul>
+
+                                <h4>Skatt - Administrasjon</h4>
+                                <p>Oppsett av skattemessige parametere:</p>
+                                <ul>
+                                    <li><strong>Skattesats</strong> - Gjeldende sats (22%)</li>
+                                    <li><strong>Saldogrupper</strong> - Avskrivningssatser per gruppe (a-j)</li>
+                                    <li><strong>Justeringskategorier</strong> - Permanente og midlertidige forskjeller</li>
+                                    <li><strong>Standardkonti</strong> - Konti for betalbar og utsatt skatt</li>
+                                </ul>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-1 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Saldoavskrivningsgrupper</div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe a - Kontormaskiner</span>
+                                            <span class="font-mono">30%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe b - Goodwill</span>
+                                            <span class="font-mono">20%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe c - Varebiler</span>
+                                            <span class="font-mono">24%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe d - Maskiner</span>
+                                            <span class="font-mono">20%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe h - Bygg</span>
+                                            <span class="font-mono">4%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe i - Forretningsbygg</span>
+                                            <span class="font-mono">2%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Gruppe j - Tekniske inst.</span>
+                                            <span class="font-mono">10%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Arsregnskap - Administrasjon</h4>
+                                <p>Konfigurasjon av arsregnskap:</p>
+                                <ul>
+                                    <li><strong>Notemaler</strong> - Standardtekster for noter</li>
+                                    <li><strong>Regnskapsprinsipper</strong> - Mal for regnskapsprinsipp-note</li>
+                                    <li><strong>Storrelsesgrenser</strong> - Terskelverdier for sma/mellomstore/store</li>
+                                    <li><strong>Revisorinformasjon</strong> - Standardverdier for revisor</li>
+                                </ul>
+
+                                <h4>Storrelseskategorier</h4>
+                                <p>Selskaper klassifiseres basert pa to av tre kriterier:</p>
+                                <div class="not-prose my-4">
+                                    <div class="overflow-x-auto">
+                                        <table class="min-w-full text-sm">
+                                            <thead>
+                                                <tr class="border-b border-zinc-200 dark:border-zinc-700">
+                                                    <th class="text-left p-2">Kategori</th>
+                                                    <th class="text-right p-2">Salgsinntekt</th>
+                                                    <th class="text-right p-2">Balansesum</th>
+                                                    <th class="text-right p-2">Ansatte</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="border-b border-zinc-200 dark:border-zinc-700">
+                                                    <td class="p-2 font-medium">Sma</td>
+                                                    <td class="p-2 text-right">< 70 MNOK</td>
+                                                    <td class="p-2 text-right">< 35 MNOK</td>
+                                                    <td class="p-2 text-right">< 50</td>
+                                                </tr>
+                                                <tr class="border-b border-zinc-200 dark:border-zinc-700">
+                                                    <td class="p-2 font-medium">Mellomstore</td>
+                                                    <td class="p-2 text-right">< 350 MNOK</td>
+                                                    <td class="p-2 text-right">< 175 MNOK</td>
+                                                    <td class="p-2 text-right">< 250</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-2 font-medium">Store</td>
+                                                    <td class="p-2 text-right">>= 350 MNOK</td>
+                                                    <td class="p-2 text-right">>= 175 MNOK</td>
+                                                    <td class="p-2 text-right">>= 250</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Automatisk klassifisering</flux:callout.heading>
+                                    <flux:callout.text>Systemet beregner automatisk selskapsstorrelse basert pa regnskapstall og justerer kravene til arsregnskapet deretter.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Altinn-oppsett --}}
+                    <flux:card id="altinn-admin" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.paper-airplane class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Altinn-oppsett</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Konfigurer Altinn-integrasjonen for elektronisk innsending av arsoppgjorsdata til norske myndigheter.</p>
+
+                                <h4>Obligatoriske innsendinger</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-3">
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Aksjonaerregisteroppgaven (RF-1086)</div>
+                                                    <div class="text-sm text-zinc-500">Til Skatteetaten</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-medium text-zinc-900 dark:text-white">31. januar</div>
+                                                    <div class="text-sm text-zinc-500">Format: XML</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Skattemelding (RF-1028)</div>
+                                                    <div class="text-sm text-zinc-500">Til Skatteetaten</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-medium text-zinc-900 dark:text-white">31. mai</div>
+                                                    <div class="text-sm text-zinc-500">Format: XML</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Arsregnskap</div>
+                                                    <div class="text-sm text-zinc-500">Til Regnskapsregisteret</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-medium text-zinc-900 dark:text-white">31. juli</div>
+                                                    <div class="text-sm text-zinc-500">Format: XBRL</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Maskinporten-autentisering</h4>
+                                <p>For automatisk innsending til Altinn kreves Maskinporten-integrasjon:</p>
+                                <ol>
+                                    <li>Bestill virksomhetssertifikat fra godkjent utsteder</li>
+                                    <li>Registrer klienten i Maskinporten</li>
+                                    <li>Last opp sertifikat i Konrad</li>
+                                    <li>Konfigurer scopes for de ulike tjenestene</li>
+                                </ol>
+
+                                <h4>Sertifikathåndtering</h4>
+                                <p>Administrer virksomhetssertifikater:</p>
+                                <ul>
+                                    <li><strong>Last opp</strong> - Last opp nytt sertifikat (.p12 eller .pfx)</li>
+                                    <li><strong>Gyldighet</strong> - Se utlopsdato og status</li>
+                                    <li><strong>Forny</strong> - Erstatt utlopende sertifikat</li>
+                                    <li><strong>Slett</strong> - Fjern gammelt sertifikat</li>
+                                </ul>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Sertifikatgyldighet</flux:callout.heading>
+                                    <flux:callout.text>Sertifikater utloper typisk etter 2-3 ar. Systemet varsler 30 dager for utlop. Sorg for a fornye i god tid.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Miljoer</h4>
+                                <p>Altinn har to miljoer:</p>
+                                <div class="not-prose my-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                                            <div class="font-medium text-yellow-800 dark:text-yellow-200">Test (TT02)</div>
+                                            <div class="text-sm text-yellow-600 dark:text-yellow-400">For utvikling og testing. Innsendinger behandles ikke.</div>
+                                        </div>
+                                        <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                                            <div class="font-medium text-green-800 dark:text-green-200">Produksjon</div>
+                                            <div class="text-sm text-green-600 dark:text-green-400">For faktiske innsendinger til myndigheter.</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Konfigurasjon</h4>
+                                <p>Innstillinger som ma konfigureres:</p>
+                                <ul>
+                                    <li><strong>Miljo</strong> - Velg test eller produksjon</li>
+                                    <li><strong>Klient-ID</strong> - Fra Maskinporten-registrering</li>
+                                    <li><strong>Sertifikat</strong> - Virksomhetssertifikat</li>
+                                    <li><strong>Sertifikatpassord</strong> - Passord for sertifikatet (kryptert)</li>
+                                </ul>
+
+                                <h4>Fristpaminnelser</h4>
+                                <p>Konfigurer e-postvarsler for kommende frister:</p>
+                                <ul>
+                                    <li><strong>30 dager for</strong> - Forste paminning</li>
+                                    <li><strong>14 dager for</strong> - Oppfolgingspaminning</li>
+                                    <li><strong>7 dager for</strong> - Hastevarsel</li>
+                                    <li><strong>1 dag for</strong> - Kritisk frist</li>
+                                </ul>
+
+                                <h4>Mottakere av varsler</h4>
+                                <p>Velg hvem som skal motta fristpaminnelser:</p>
+                                <ul>
+                                    <li>Alle administratorer</li>
+                                    <li>Spesifikke brukere</li>
+                                    <li>Eksterne e-postadresser (f.eks. regnskapsforer)</li>
+                                </ul>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Testmodus</flux:callout.heading>
+                                    <flux:callout.text>Bruk alltid testmiljoet (TT02) for a verifisere at innsendinger fungerer for du bytter til produksjon. Testinnsendinger behandles ikke av myndighetene.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>

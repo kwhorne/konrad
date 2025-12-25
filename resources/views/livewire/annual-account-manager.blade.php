@@ -243,7 +243,7 @@
                     <div class="flex flex-wrap gap-2">
                         <flux:button href="{{ route('annual-accounts.notes', $viewingAccount) }}" variant="outline" size="sm">
                             <flux:icon.document-text class="w-4 h-4 mr-2" />
-                            Noter ({{ $viewingAccount->notes->where('is_visible', true)->count() }})
+                            Noter ({{ $viewingAccount->accountNotes->where('is_visible', true)->count() }})
                         </flux:button>
                         @if($viewingAccount->requiresCashFlowStatement())
                             <flux:button href="{{ route('annual-accounts.cash-flow', $viewingAccount) }}" variant="outline" size="sm">

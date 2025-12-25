@@ -3,6 +3,7 @@
 use App\Http\Controllers\AltinnController;
 use App\Http\Controllers\AnnualAccountController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\TaxController;
@@ -27,6 +28,11 @@ Route::get('/om-oss', function () {
 Route::get('/bestill', function () {
     return view('order');
 })->name('order');
+
+// Blog routes
+Route::get('/innsikt', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/innsikt/kategori/{slug}', [BlogController::class, 'category'])->name('blog.category');
+Route::get('/innsikt/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 // Legal pages
 Route::get('/personvern', [LegalController::class, 'privacy'])->name('privacy');
@@ -167,5 +173,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
         Route::get('/company-settings', [AuthController::class, 'companySettings'])->name('company-settings');
         Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
+        Route::get('/posts', fn () => view('admin.posts'))->name('posts');
     });
 });

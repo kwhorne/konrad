@@ -201,7 +201,7 @@ class ArsregnskapXbrlService
      */
     private function addNotes(AnnualAccount $annualAccount): void
     {
-        foreach ($annualAccount->notes()->visible()->ordered()->get() as $note) {
+        foreach ($annualAccount->accountNotes()->visible()->ordered()->get() as $note) {
             $conceptName = $this->getNoteConceptName($note->note_type);
             $this->addFact($conceptName, $note->content, 'ctx_duration');
         }

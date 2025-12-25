@@ -95,7 +95,7 @@ class AnnualAccount extends Model
         return $this->belongsTo(User::class, 'approved_by');
     }
 
-    public function notes(): HasMany
+    public function accountNotes(): HasMany
     {
         return $this->hasMany(AnnualAccountNote::class)->orderBy('sort_order');
     }
