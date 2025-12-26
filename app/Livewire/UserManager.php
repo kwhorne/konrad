@@ -42,6 +42,8 @@ class UserManager extends Component
 
     public bool $is_admin = false;
 
+    public bool $is_economy = false;
+
     public bool $is_active = true;
 
     public string $password = '';
@@ -58,6 +60,7 @@ class UserManager extends Component
             'phone' => 'nullable|string|max:50',
             'title' => 'nullable|string|max:100',
             'is_admin' => 'boolean',
+            'is_economy' => 'boolean',
             'is_active' => 'boolean',
         ];
 
@@ -100,6 +103,7 @@ class UserManager extends Component
         $this->phone = $user->phone ?? '';
         $this->title = $user->title ?? '';
         $this->is_admin = $user->is_admin;
+        $this->is_economy = $user->is_economy;
         $this->is_active = $user->is_active;
         $this->showEditModal = true;
     }
@@ -135,6 +139,7 @@ class UserManager extends Component
         $this->phone = '';
         $this->title = '';
         $this->is_admin = false;
+        $this->is_economy = false;
         $this->is_active = true;
         $this->password = '';
         $this->password_confirmation = '';
@@ -152,6 +157,7 @@ class UserManager extends Component
             'phone' => $this->phone ?: null,
             'title' => $this->title ?: null,
             'is_admin' => $this->is_admin,
+            'is_economy' => $this->is_economy,
             'is_active' => $this->is_active,
             'password' => Hash::make(str()->random(32)), // Temporary password
         ]);
@@ -176,6 +182,7 @@ class UserManager extends Component
             'phone' => $this->phone ?: null,
             'title' => $this->title ?: null,
             'is_admin' => $this->is_admin,
+            'is_economy' => $this->is_economy,
             'is_active' => $this->is_active,
         ]);
 
@@ -283,7 +290,8 @@ class UserManager extends Component
             ->when($this->filterStatus === 'inactive', fn ($q) => $q->where('is_active', false))
             ->when($this->filterStatus === 'invited', fn ($q) => $q->whereNotNull('invitation_token')->whereNull('invitation_accepted_at'))
             ->when($this->filterRole === 'admin', fn ($q) => $q->where('is_admin', true))
-            ->when($this->filterRole === 'user', fn ($q) => $q->where('is_admin', false))
+            ->when($this->filterRole === 'economy', fn ($q) => $q->where('is_economy', true))
+            ->when($this->filterRole === 'user', fn ($q) => $q->where('is_admin', false)->where('is_economy', false))
             ->orderBy('name');
 
         return view('livewire.user-manager', [

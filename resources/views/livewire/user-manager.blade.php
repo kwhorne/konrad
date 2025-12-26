@@ -54,6 +54,7 @@
             <flux:select wire:model.live="filterRole" placeholder="Alle roller">
                 <flux:select.option value="">Alle roller</flux:select.option>
                 <flux:select.option value="admin">Administratorer</flux:select.option>
+                <flux:select.option value="economy">Økonomi</flux:select.option>
                 <flux:select.option value="user">Brukere</flux:select.option>
             </flux:select>
 
@@ -100,11 +101,17 @@
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            @if($user->is_admin)
-                                <flux:badge color="indigo">Administrator</flux:badge>
-                            @else
-                                <flux:badge color="zinc">Bruker</flux:badge>
-                            @endif
+                            <div class="flex flex-wrap gap-1">
+                                @if($user->is_admin)
+                                    <flux:badge color="indigo">Admin</flux:badge>
+                                @endif
+                                @if($user->is_economy)
+                                    <flux:badge color="emerald">Økonomi</flux:badge>
+                                @endif
+                                @if(!$user->is_admin && !$user->is_economy)
+                                    <flux:badge color="zinc">Bruker</flux:badge>
+                                @endif
+                            </div>
                         </flux:table.cell>
 
                         <flux:table.cell>
@@ -188,8 +195,9 @@
                 <flux:input wire:model="phone" label="Telefon" type="tel" placeholder="+47 123 45 678" />
                 <flux:input wire:model="title" label="Stilling" placeholder="Daglig leder" />
 
-                <div class="flex gap-6">
+                <div class="flex flex-col gap-4">
                     <flux:checkbox wire:model="is_admin" label="Administrator" description="Gi tilgang til admin-panelet" />
+                    <flux:checkbox wire:model="is_economy" label="Økonomi" description="Gi tilgang til økonomi-panelet" />
                     <flux:checkbox wire:model="is_active" label="Aktiv" description="Brukeren kan logge inn" />
                 </div>
 
@@ -217,8 +225,9 @@
                 <flux:input wire:model="phone" label="Telefon" type="tel" placeholder="+47 123 45 678" />
                 <flux:input wire:model="title" label="Stilling" placeholder="Daglig leder" />
 
-                <div class="flex gap-6">
+                <div class="flex flex-col gap-4">
                     <flux:checkbox wire:model="is_admin" label="Administrator" description="Gi tilgang til admin-panelet" />
+                    <flux:checkbox wire:model="is_economy" label="Økonomi" description="Gi tilgang til økonomi-panelet" />
                     <flux:checkbox wire:model="is_active" label="Aktiv" description="Brukeren kan logge inn" />
                 </div>
             </div>

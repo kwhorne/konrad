@@ -4,6 +4,7 @@ use App\Http\Controllers\AltinnController;
 use App\Http\Controllers\AnnualAccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\EconomyController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\SitemapController;
@@ -179,5 +180,22 @@ Route::middleware('auth')->group(function () {
         Route::get('/company-settings', [AuthController::class, 'companySettings'])->name('company-settings');
         Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
         Route::get('/posts', fn () => view('admin.posts'))->name('posts');
+    });
+
+    // Economy routes - accessible by economy users and admins
+    Route::middleware('economy')->prefix('economy')->name('economy.')->group(function () {
+        Route::get('/', [EconomyController::class, 'dashboard'])->name('dashboard');
+        Route::get('/accounting', [EconomyController::class, 'accounting'])->name('accounting');
+        Route::get('/incoming', [EconomyController::class, 'incoming'])->name('incoming');
+        Route::get('/vouchers', [EconomyController::class, 'vouchers'])->name('vouchers');
+        Route::get('/customer-ledger', [EconomyController::class, 'customerLedger'])->name('customer-ledger');
+        Route::get('/supplier-ledger', [EconomyController::class, 'supplierLedger'])->name('supplier-ledger');
+        Route::get('/reports', [EconomyController::class, 'reports'])->name('reports');
+        Route::get('/vat-reports', [EconomyController::class, 'vatReports'])->name('vat-reports');
+        Route::get('/accounts', [EconomyController::class, 'accounts'])->name('accounts');
+        Route::get('/shareholders', [EconomyController::class, 'shareholders'])->name('shareholders');
+        Route::get('/tax', [EconomyController::class, 'tax'])->name('tax');
+        Route::get('/annual-accounts', [EconomyController::class, 'annualAccounts'])->name('annual-accounts');
+        Route::get('/altinn', [EconomyController::class, 'altinn'])->name('altinn');
     });
 });

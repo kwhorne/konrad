@@ -3,7 +3,7 @@
 <flux:sidebar sticky stashable class="bg-zinc-50 dark:bg-zinc-900 border-r rtl:border-r-0 rtl:border-l border-zinc-200 dark:border-zinc-700">
     <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-2 py-3">
+    <a href="{{ route('economy.dashboard') }}" class="flex items-center gap-2 px-2 py-3">
         <svg class="h-8 w-8 shrink-0" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M 0.0,139.5 L 0.5,120.0 L 2.0,120.5 L 1.5,119.0 L 4.0,116.5 L 7.0,115.5 L 17.0,115.5 L 16.5,114.0 L 20.5,112.0 L 22.5,107.0 L 25.5,95.0 L 15.0,83.5 L 12.5,83.0 L 13.5,79.0 L 15.0,81.5 L 16.5,79.0 L 15.5,76.0 L 17.5,75.0 L 17.0,73.5 L 11.5,80.0 L 14.5,72.0 L 17.5,71.0 L 16.5,69.0 L 21.5,63.0 L 20.5,62.0 L 23.5,60.0 L 22.5,59.0 L 25.0,56.5 L 26.5,58.0 L 25.0,60.5 L 31.0,58.5 L 33.0,59.5 L 36.0,57.5 L 38.0,59.5 L 45.0,59.5 L 47.0,57.5 L 48.5,59.0 L 47.0,61.5 L 49.5,59.0 L 48.5,56.0 L 54.0,50.5 L 55.5,52.0 L 54.5,54.0 L 56.0,54.5 L 60.5,50.0 L 61.5,47.0 L 58.0,45.5 L 65.5,45.0 L 63.0,39.5 L 62.0,42.5 L 59.5,41.0 L 56.5,32.0 L 57.0,26.5 L 55.5,27.0 L 55.5,34.0 L 57.5,37.0 L 56.5,40.0 L 53.5,32.0 L 53.5,26.0 L 55.0,24.5 L 59.0,22.5 L 57.5,25.0 L 59.5,26.0 L 59.0,27.5 L 61.5,26.0 L 59.5,22.0 L 61.0,20.5 L 65.0,18.5 L 71.0,19.5 L 71.0,16.5 L 74.0,20.5 L 77.0,21.5 L 77.5,20.0 L 75.5,19.0 L 77.5,18.0 L 72.0,16.5 L 71.5,15.0 L 75.0,12.5 L 78.0,12.5 L 80.0,15.5 L 81.5,15.0 L 81.5,18.0 L 84.5,19.0 L 83.5,20.0 L 86.0,20.5 L 91.5,26.0 L 91.0,27.5 L 97.0,27.5 L 98.0,24.5 L 107.0,21.5 L 109.5,22.0 L 105.5,24.0 L 107.0,25.5 L 111.0,25.5 L 110.5,23.0 L 112.5,19.0 L 111.0,19.5 L 110.5,17.0 L 112.0,14.5 L 113.5,16.0 L 113.5,21.0 L 115.5,21.0 L 114.5,15.0 L 111.5,12.0 L 113.5,12.0 L 112.5,9.0 L 114.5,7.0 L 114.5,2.0 L 116.0,0.5 L 131.0,1.5 L 134.0,4.5 L 138.0,3.5 L 138.5,5.0 L 136.0,6.5 L 129.0,5.5 L 129.0,3.5 L 121.5,5.0 L 124.5,7.0 L 121.5,9.0 L 125.5,12.0 L 121.5,13.0 L 123.0,14.5 L 127.5,13.0 L 123.5,19.0 L 120.5,20.0 L 121.0,21.5 L 116.5,21.0 L 118.0,23.5 L 121.5,23.0 L 119.5,25.0 L 118.5,31.0 L 117.0,32.5 L 116.0,30.5 L 114.5,35.0 L 116.5,38.0 L 116.5,48.0 L 115.0,49.5 L 114.0,45.5 L 113.0,48.5 L 108.5,49.0 L 109.0,50.5 L 113.0,51.5 L 107.0,51.5 L 106.0,53.5 L 104.0,52.5 L 95.0,57.5 L 92.5,55.0 L 96.0,55.5 L 95.0,53.5 L 91.0,52.5 L 91.0,55.5 L 88.0,53.5 L 87.5,55.0 L 91.0,58.5 L 93.5,58.0 L 89.0,61.5 L 87.0,58.5 L 83.0,58.5 L 84.5,61.0 L 83.5,62.0 L 85.0,61.5 L 85.5,63.0 L 82.0,65.5 L 80.5,65.0 L 81.0,63.5 L 79.0,63.5 L 78.5,65.0 L 80.5,67.0 L 76.0,70.5 L 74.0,69.5 L 72.5,71.0 L 72.0,72.5 L 74.5,72.0 L 66.0,81.5 L 63.5,80.0 L 64.5,81.0 L 63.5,82.0 L 65.5,83.0 L 62.5,87.0 L 61.0,88.5 L 58.0,85.5 L 54.5,89.0 L 54.5,92.0 L 57.5,95.0 L 54.5,95.0 L 56.5,96.0 L 55.0,100.5 L 53.0,97.5 L 52.0,98.5 L 50.5,97.0 L 50.5,100.0 L 52.5,100.0 L 52.5,109.0 L 49.5,108.0 L 51.5,112.0 L 49.5,120.0 L 48.0,116.5 L 46.0,121.5 L 45.5,119.0 L 43.5,118.0 L 43.5,125.0 L 46.0,127.5 L 49.5,124.0 L 48.5,137.0 L 47.0,138.5 L 45.5,136.0 L 45.5,147.0 L 47.5,147.0 L 48.0,143.5 L 50.5,147.0 L 50.5,151.0 L 54.5,161.0 L 53.5,162.0 L 55.5,164.0 L 54.0,166.5 L 51.5,167.0 L 54.5,168.0 L 52.5,169.0 L 54.0,171.5 L 55.0,170.5 L 56.0,172.5 L 57.0,169.5 L 58.5,171.0 L 57.5,172.0 L 59.5,172.0 L 58.5,178.0 L 61.0,175.5 L 64.5,180.0 L 62.5,182.0 L 63.0,184.5 L 60.5,183.0 L 63.0,185.5 L 66.0,181.5 L 66.5,184.0 L 71.5,188.0 L 70.5,189.0 L 73.5,190.0 L 73.0,191.5 L 71.0,190.5 L 69.0,193.5 L 68.0,190.5 L 65.5,194.0 L 68.0,193.5 L 69.0,195.5 L 72.0,194.5 L 75.0,197.5 L 77.5,196.0 L 72.5,194.0 L 75.0,191.5 L 81.5,197.0 L 80.0,199.5 L 77.0,200.5 L 75.0,198.5 L 73.5,201.0 L 81.0,200.5 L 83.0,202.5 L 82.5,200.0 L 85.0,199.5 L 95.5,206.0 L 91.5,209.0 L 95.5,210.0 L 93.0,211.5 L 97.0,211.5 L 98.5,210.0 L 97.5,208.0 L 99.0,207.5 L 100.5,209.0 L 100.0,211.5 L 102.0,208.5 L 104.5,210.0 L 104.0,211.5 L 111.0,211.5 L 111.5,214.0 L 110.0,215.5 L 112.0,215.5 L 115.0,212.5 L 116.5,216.0 L 115.5,221.0 L 117.5,225.0 L 116.5,229.0 L 118.5,231.0 L 117.0,233.5 L 116.0,230.5 L 113.5,232.0 L 117.0,236.5 L 118.0,233.5 L 120.5,238.0 L 120.5,240.0 L 118.0,241.5 L 118.0,237.5 L 116.0,237.5 L 115.5,240.0 L 118.0,242.5 L 122.0,241.5 L 123.5,246.0 L 122.0,244.5 L 121.5,246.0 L 126.5,248.0 L 130.5,253.0 L 130.0,255.5 L 134.0,255.5 L 132.5,257.0 L 134.0,258.5 L 137.0,257.5 L 143.0,260.5 L 143.5,262.0 L 140.5,264.0 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
             <path d="M 282.0,161.5 L 274.0,160.5 L 274.0,157.5 L 269.0,156.5 L 264.5,157.0 L 268.0,159.5 L 262.0,157.5 L 252.5,148.0 L 252.5,146.0 L 255.5,143.0 L 252.5,144.0 L 251.5,136.0 L 250.0,139.5 L 248.5,137.0 L 249.5,124.0 L 251.0,121.5 L 252.0,127.5 L 254.0,121.5 L 256.0,127.5 L 255.5,121.0 L 258.5,115.0 L 253.0,119.5 L 252.5,118.0 L 258.0,111.5 L 269.0,105.5 L 276.0,105.5 L 280.0,107.5 L 283.0,107.5 L 285.0,105.5 L 290.0,107.5 L 290.0,109.5 L 293.0,109.5 L 292.5,111.0 L 294.0,110.5 L 296.5,113.0 L 295.5,116.0 L 297.0,117.5 L 298.5,116.0 L 297.0,113.5 L 300.5,116.0 L 301.5,119.0 L 298.0,118.5 L 297.5,120.0 L 299.0,119.5 L 300.0,121.5 L 302.0,119.5 L 305.5,127.0 L 304.5,143.0 L 302.0,147.5 L 300.5,144.0 L 301.5,143.0 L 299.5,142.0 L 299.0,139.5 L 297.5,141.0 L 299.5,143.0 L 297.5,144.0 L 298.5,147.0 L 295.5,149.0 L 299.0,148.5 L 300.0,146.5 L 301.5,148.0 L 300.5,150.0 L 292.0,157.5 L 290.5,157.0 L 291.0,154.5 L 290.0,156.5 L 282.0,154.5 L 281.0,158.5 L 284.0,157.5 L 284.0,159.5 L 288.5,159.0 L 282.0,161.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
@@ -14,75 +14,27 @@
             <path d="M 174.0,73.5 L 152.0,66.5 L 130.5,69.0 L 130.5,37.0 L 135.5,25.0 L 148.0,14.5 L 156.0,12.5 L 165.0,12.5 L 172.0,14.5 L 180.0,19.5 L 187.5,28.0 L 190.5,36.0 L 189.5,52.0 L 186.5,58.0 L 174.0,73.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
             <path d="M 166.0,251.5 L 151.0,250.5 L 142.0,245.5 L 134.5,237.0 L 130.5,225.0 L 131.0,183.5 L 167.0,183.5 L 187.5,207.0 L 190.5,214.0 L 190.5,228.0 L 188.5,234.0 L 179.0,245.5 L 166.0,251.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
         </svg>
-        <span class="font-semibold text-zinc-900 dark:text-white">Konrad Office</span>
+        <div class="flex flex-col">
+            <span class="font-semibold text-zinc-900 dark:text-white">Konrad Office</span>
+            <span class="text-xs text-zinc-500 dark:text-zinc-400">Økonomi</span>
+        </div>
     </a>
 
     <flux:input as="button" variant="filled" placeholder="Søk..." icon="magnifying-glass" />
 
     <flux:navlist variant="outline">
-        <flux:navlist.item icon="home" href="{{ route('dashboard') }}" :current="$current === 'dashboard'">
-            Dashboard
+        <flux:navlist.item icon="home" href="{{ route('economy.dashboard') }}" :current="$current === 'economy-dashboard'">
+            Oversikt
         </flux:navlist.item>
-        
+
         <flux:separator variant="subtle" class="my-4" />
-        
-        <flux:navlist.group expandable heading="Funksjoner" class="grid">
-            @if(config('features.contracts'))
-                <flux:navlist.item icon="document-text" href="{{ route('contracts.index') }}" :current="$current === 'contracts'">
-                    Kontraktsregister
-                </flux:navlist.item>
-            @endif
-            
-            @if(config('features.assets'))
-                <flux:navlist.item icon="cube" href="{{ route('assets.index') }}" :current="$current === 'assets'">
-                    Eiendelsregister
-                </flux:navlist.item>
-            @endif
-            
-            @if(config('features.contacts'))
-                <flux:navlist.item icon="users" href="{{ route('contacts.index') }}" :current="$current === 'contacts'">
-                    Kontaktregister
-                </flux:navlist.item>
-            @endif
 
-            @if(config('features.products'))
-                <flux:navlist.item icon="cube" href="{{ route('products.index') }}" :current="$current === 'products'">
-                    Vareregister
-                </flux:navlist.item>
-            @endif
-
-            @if(config('features.projects'))
-                <flux:navlist.item icon="folder" href="{{ route('projects.index') }}" :current="$current === 'projects'">
-                    Prosjekter
-                </flux:navlist.item>
-            @endif
-
-            @if(config('features.work_orders'))
-                <flux:navlist.item icon="clipboard-document-list" href="{{ route('work-orders.index') }}" :current="$current === 'work-orders'">
-                    Arbeidsordrer
-                </flux:navlist.item>
-            @endif
-        </flux:navlist.group>
-
-        @if(config('features.sales'))
-            <flux:navlist.group expandable heading="Salg" class="grid">
-                <flux:navlist.item icon="document-text" href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
-                    Tilbud
-                </flux:navlist.item>
-                <flux:navlist.item icon="shopping-cart" href="{{ route('orders.index') }}" :current="$current === 'orders'">
-                    Ordrer
-                </flux:navlist.item>
-                <flux:navlist.item icon="banknotes" href="{{ route('invoices.index') }}" :current="$current === 'invoices'">
-                    Fakturaer
-                </flux:navlist.item>
-            </flux:navlist.group>
-        @endif
-
-        @if(auth()->user()->is_economy || auth()->user()->is_admin)
-            <flux:separator variant="subtle" class="my-4" />
-
-            <flux:navlist.item icon="calculator" href="{{ route('economy.dashboard') }}">
-                Økonomi
+        <flux:navlist.group expandable heading="Økonomi" class="grid">
+            <flux:navlist.item icon="calculator" href="{{ route('economy.accounting') }}" :current="$current === 'accounting'">
+                Regnskap
+            </flux:navlist.item>
+            <flux:navlist.item icon="inbox-arrow-down" href="{{ route('economy.incoming') }}" :current="$current === 'incoming'">
+                Innboks
                 @php
                     $incomingCount = \App\Models\IncomingVoucher::whereIn('status', ['pending', 'parsing', 'parsed'])->count();
                 @endphp
@@ -90,31 +42,55 @@
                     <flux:badge size="sm" color="amber" class="ml-auto">{{ $incomingCount }}</flux:badge>
                 @endif
             </flux:navlist.item>
-        @endif
-
-        @if(!config('features.contracts') && !config('features.assets') && !config('features.contacts') && !config('features.products') && !config('features.projects') && !config('features.work_orders') && !config('features.sales'))
-            <flux:text class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
-                Ingen moduler aktivert enna.
-            </flux:text>
-        @endif
-
-        @if(auth()->user()->is_admin)
-            <flux:separator variant="subtle" class="my-4" />
-            
-            <flux:navlist.item icon="shield-check" href="{{ route('admin.users') }}">
-                Administrasjon
+            <flux:navlist.item icon="document-text" href="{{ route('economy.vouchers') }}" :current="$current === 'vouchers'">
+                Bilagsregistrering
             </flux:navlist.item>
-        @endif
+            <flux:navlist.item icon="users" href="{{ route('economy.customer-ledger') }}" :current="$current === 'customer-ledger'">
+                Kundereskontro
+            </flux:navlist.item>
+            <flux:navlist.item icon="building-office" href="{{ route('economy.supplier-ledger') }}" :current="$current === 'supplier-ledger'">
+                Leverandørreskontro
+            </flux:navlist.item>
+            <flux:navlist.item icon="chart-bar" href="{{ route('economy.reports') }}" :current="$current === 'reports'">
+                Rapporter
+            </flux:navlist.item>
+            <flux:navlist.item icon="document-chart-bar" href="{{ route('economy.vat-reports') }}" :current="$current === 'vat-reports'">
+                MVA-meldinger
+            </flux:navlist.item>
+            <flux:navlist.item icon="table-cells" href="{{ route('economy.accounts') }}" :current="$current === 'accounts'">
+                Kontoplan
+            </flux:navlist.item>
+        </flux:navlist.group>
+
+        <flux:navlist.group expandable heading="Årsoppgjør" class="grid">
+            @if(config('features.shareholders'))
+                <flux:navlist.item icon="users" href="{{ route('economy.shareholders') }}" :current="$current === 'shareholders'">
+                    Aksjonærregister
+                </flux:navlist.item>
+            @endif
+            <flux:navlist.item icon="document-text" href="{{ route('economy.tax') }}" :current="$current === 'tax'">
+                Skattemelding
+            </flux:navlist.item>
+            <flux:navlist.item icon="chart-bar" href="{{ route('economy.annual-accounts') }}" :current="$current === 'annual-accounts'">
+                Årsregnskap
+            </flux:navlist.item>
+            <flux:navlist.item icon="cloud-arrow-up" href="{{ route('economy.altinn') }}" :current="$current === 'altinn'">
+                Altinn
+            </flux:navlist.item>
+        </flux:navlist.group>
+
+        <flux:separator variant="subtle" class="my-4" />
+
+        <flux:navlist.item icon="arrow-left" href="{{ route('dashboard') }}">
+            Tilbake til hovedapp
+        </flux:navlist.item>
     </flux:navlist>
 
     <flux:spacer />
 
     <flux:navlist variant="outline">
-        <flux:navlist.item icon="cog-6-tooth" href="{{ route('settings') }}" :current="$current === 'settings'">
+        <flux:navlist.item icon="cog-6-tooth" href="{{ route('settings') }}">
             Innstillinger
-        </flux:navlist.item>
-        <flux:navlist.item icon="book-open" href="{{ route('help') }}" :current="$current === 'help'">
-            Brukerdokumentasjon
         </flux:navlist.item>
     </flux:navlist>
 

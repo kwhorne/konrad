@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'economy' => \App\Http\Middleware\EconomyMiddleware::class,
             'feature' => \App\Http\Middleware\CheckFeatureEnabled::class,
         ]);
     })
