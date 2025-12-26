@@ -62,14 +62,14 @@
                                     <flux:label for="type">Type *</flux:label>
                                     <flux:select id="type" name="type" required>
                                         <option value="">Velg type</option>
-                                        <option value="service" {{ old('type', $contract->type) == 'service' ? 'selected' : '' }}>Tjeneste</option>
-                                        <option value="lease" {{ old('type', $contract->type) == 'lease' ? 'selected' : '' }}>Leie</option>
-                                        <option value="maintenance" {{ old('type', $contract->type) == 'maintenance' ? 'selected' : '' }}>Vedlikehold</option>
-                                        <option value="software" {{ old('type', $contract->type) == 'software' ? 'selected' : '' }}>Programvare</option>
-                                        <option value="insurance" {{ old('type', $contract->type) == 'insurance' ? 'selected' : '' }}>Forsikring</option>
-                                        <option value="employment" {{ old('type', $contract->type) == 'employment' ? 'selected' : '' }}>Ansettelse</option>
-                                        <option value="supplier" {{ old('type', $contract->type) == 'supplier' ? 'selected' : '' }}>Leverandør</option>
-                                        <option value="other" {{ old('type', $contract->type) == 'other' ? 'selected' : '' }}>Annet</option>
+                                        <option value="service" @selected(old('type', $contract->type) == 'service')>Tjeneste</option>
+                                        <option value="lease" @selected(old('type', $contract->type) == 'lease')>Leie</option>
+                                        <option value="maintenance" @selected(old('type', $contract->type) == 'maintenance')>Vedlikehold</option>
+                                        <option value="software" @selected(old('type', $contract->type) == 'software')>Programvare</option>
+                                        <option value="insurance" @selected(old('type', $contract->type) == 'insurance')>Forsikring</option>
+                                        <option value="employment" @selected(old('type', $contract->type) == 'employment')>Ansettelse</option>
+                                        <option value="supplier" @selected(old('type', $contract->type) == 'supplier')>Leverandør</option>
+                                        <option value="other" @selected(old('type', $contract->type) == 'other')>Annet</option>
                                     </flux:select>
                                     @error('type')
                                         <flux:error>{{ $message }}</flux:error>
@@ -79,12 +79,12 @@
                                 <flux:field>
                                     <flux:label for="status">Status *</flux:label>
                                     <flux:select id="status" name="status" required>
-                                        <option value="draft" {{ old('status', $contract->status) == 'draft' ? 'selected' : '' }}>Utkast</option>
-                                        <option value="active" {{ old('status', $contract->status) == 'active' ? 'selected' : '' }}>Aktiv</option>
-                                        <option value="expiring_soon" {{ old('status', $contract->status) == 'expiring_soon' ? 'selected' : '' }}>Utgår snart</option>
-                                        <option value="expired" {{ old('status', $contract->status) == 'expired' ? 'selected' : '' }}>Utgått</option>
-                                        <option value="terminated" {{ old('status', $contract->status) == 'terminated' ? 'selected' : '' }}>Avsluttet</option>
-                                        <option value="renewed" {{ old('status', $contract->status) == 'renewed' ? 'selected' : '' }}>Fornyet</option>
+                                        <option value="draft" @selected(old('status', $contract->status) == 'draft')>Utkast</option>
+                                        <option value="active" @selected(old('status', $contract->status) == 'active')>Aktiv</option>
+                                        <option value="expiring_soon" @selected(old('status', $contract->status) == 'expiring_soon')>Utgår snart</option>
+                                        <option value="expired" @selected(old('status', $contract->status) == 'expired')>Utgått</option>
+                                        <option value="terminated" @selected(old('status', $contract->status) == 'terminated')>Avsluttet</option>
+                                        <option value="renewed" @selected(old('status', $contract->status) == 'renewed')>Fornyet</option>
                                     </flux:select>
                                     @error('status')
                                         <flux:error>{{ $message }}</flux:error>
@@ -161,7 +161,7 @@
                                 </flux:field>
 
                                 <div class="md:col-span-2">
-                                    <flux:checkbox id="auto_renewal" name="auto_renewal" value="1" {{ old('auto_renewal', $contract->auto_renewal) ? 'checked' : '' }}>
+                                    <flux:checkbox id="auto_renewal" name="auto_renewal" value="1" :checked="old('auto_renewal', $contract->auto_renewal)">
                                         Automatisk fornyelse
                                     </flux:checkbox>
                                 </div>
@@ -314,11 +314,11 @@
                                 <flux:field>
                                     <flux:label for="currency">Valuta</flux:label>
                                     <flux:select id="currency" name="currency">
-                                        <option value="NOK" {{ old('currency', $contract->currency) == 'NOK' ? 'selected' : '' }}>NOK</option>
-                                        <option value="EUR" {{ old('currency', $contract->currency) == 'EUR' ? 'selected' : '' }}>EUR</option>
-                                        <option value="USD" {{ old('currency', $contract->currency) == 'USD' ? 'selected' : '' }}>USD</option>
-                                        <option value="SEK" {{ old('currency', $contract->currency) == 'SEK' ? 'selected' : '' }}>SEK</option>
-                                        <option value="DKK" {{ old('currency', $contract->currency) == 'DKK' ? 'selected' : '' }}>DKK</option>
+                                        <option value="NOK" @selected(old('currency', $contract->currency) == 'NOK')>NOK</option>
+                                        <option value="EUR" @selected(old('currency', $contract->currency) == 'EUR')>EUR</option>
+                                        <option value="USD" @selected(old('currency', $contract->currency) == 'USD')>USD</option>
+                                        <option value="SEK" @selected(old('currency', $contract->currency) == 'SEK')>SEK</option>
+                                        <option value="DKK" @selected(old('currency', $contract->currency) == 'DKK')>DKK</option>
                                     </flux:select>
                                     @error('currency')
                                         <flux:error>{{ $message }}</flux:error>
@@ -329,10 +329,10 @@
                                     <flux:label for="payment_frequency">Betalingsfrekvens</flux:label>
                                     <flux:select id="payment_frequency" name="payment_frequency">
                                         <option value="">Velg frekvens</option>
-                                        <option value="monthly" {{ old('payment_frequency', $contract->payment_frequency) == 'monthly' ? 'selected' : '' }}>Månedlig</option>
-                                        <option value="quarterly" {{ old('payment_frequency', $contract->payment_frequency) == 'quarterly' ? 'selected' : '' }}>Kvartalsvis</option>
-                                        <option value="yearly" {{ old('payment_frequency', $contract->payment_frequency) == 'yearly' ? 'selected' : '' }}>Årlig</option>
-                                        <option value="one_time" {{ old('payment_frequency', $contract->payment_frequency) == 'one_time' ? 'selected' : '' }}>Engangsbeløp</option>
+                                        <option value="monthly" @selected(old('payment_frequency', $contract->payment_frequency) == 'monthly')>Månedlig</option>
+                                        <option value="quarterly" @selected(old('payment_frequency', $contract->payment_frequency) == 'quarterly')>Kvartalsvis</option>
+                                        <option value="yearly" @selected(old('payment_frequency', $contract->payment_frequency) == 'yearly')>Årlig</option>
+                                        <option value="one_time" @selected(old('payment_frequency', $contract->payment_frequency) == 'one_time')>Engangsbeløp</option>
                                     </flux:select>
                                     @error('payment_frequency')
                                         <flux:error>{{ $message }}</flux:error>
@@ -357,7 +357,7 @@
                                     <flux:select id="responsible_user_id" name="responsible_user_id">
                                         <option value="">Velg ansvarlig</option>
                                         @foreach($users as $user)
-                                            <option value="{{ $user->id }}" {{ old('responsible_user_id', $contract->responsible_user_id) == $user->id ? 'selected' : '' }}>
+                                            <option value="{{ $user->id }}" @selected(old('responsible_user_id', $contract->responsible_user_id) == $user->id)>
                                                 {{ $user->name }}
                                             </option>
                                         @endforeach
@@ -436,9 +436,5 @@
                 </div>
             </form>
         </flux:main>
-
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-            @csrf
-        </form>
     </div>
 </x-layouts.app>

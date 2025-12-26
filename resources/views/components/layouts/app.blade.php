@@ -15,9 +15,13 @@
     </head>
     <body>
         {{ $slot }}
-        
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+            @csrf
+        </form>
+
         <flux:toast />
-        
+
         @fluxScripts
     </body>
 </html>
