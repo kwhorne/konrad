@@ -114,6 +114,28 @@ class InvoiceManager extends Component
 
     public $invoicePayments = [];
 
+    public function mount(): void
+    {
+        // Check for contact_id in query parameters to auto-open create modal
+        if (request()->has('contact_id')) {
+            $contactId = request()->get('contact_id');
+            $contact = Contact::find($contactId);
+
+            if ($contact) {
+                $this->contact_id = $contactId;
+                $this->customer_name = $contact->company_name;
+                $this->customer_address = $contact->billing_address ?? $contact->address;
+                $this->customer_postal_code = $contact->billing_postal_code ?? $contact->postal_code;
+                $this->customer_city = $contact->billing_city ?? $contact->city;
+                $this->customer_country = $contact->billing_country ?? $contact->country ?? 'Norge';
+                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
+                $this->invoice_date = now()->format('Y-m-d');
+                $this->due_date = now()->addDays($this->payment_terms_days)->format('Y-m-d');
+                $this->showModal = true;
+            }
+        }
+    }
+
     protected function rules(): array
     {
         return [
@@ -336,15 +358,16 @@ class InvoiceManager extends Component
         if ($this->editingId) {
             $invoice = Invoice::findOrFail($this->editingId);
             $invoice->update($data);
-            session()->flash('success', 'Fakturaen ble oppdatert.');
+            $this->dispatch('toast', message: 'Fakturaen ble oppdatert', variant: 'success');
+            $this->closeModal();
         } else {
             $invoice = Invoice::create($data);
             $this->editingId = $invoice->id;
             $this->currentInvoiceId = $invoice->id;
-            session()->flash('success', 'Fakturaen ble opprettet.');
+            $this->loadInvoiceLines();
+            $this->dispatch('toast', message: 'Fakturaen ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+            // Don't close modal - allow adding lines
         }
-
-        $this->closeModal();
     }
 
     public function delete($id): void

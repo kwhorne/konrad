@@ -121,7 +121,19 @@
                                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <flux:field>
                                                     <flux:label for="organization_number">Organisasjonsnummer</flux:label>
-                                                    <flux:input id="organization_number" name="organization_number" type="text" value="{{ old('organization_number', $contact->organization_number) }}" />
+                                                    <div class="flex gap-2">
+                                                        <flux:input id="organization_number" name="organization_number" type="text" value="{{ old('organization_number', $contact->organization_number) }}" class="flex-1" />
+                                                        @if($contact->organization_number)
+                                                            <flux:button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                icon="arrow-top-right-on-square"
+                                                                href="https://www.proff.no/bransjesøk?q={{ $contact->organization_number }}"
+                                                                target="_blank"
+                                                                title="Søk i Proff.no"
+                                                            />
+                                                        @endif
+                                                    </div>
                                                     @error('organization_number')<flux:error>{{ $message }}</flux:error>@enderror
                                                 </flux:field>
                                                 <flux:field>

@@ -132,6 +132,10 @@ class ContactController extends Controller
         if ($request->filled('contact_persons')) {
             $persons = json_decode($request->contact_persons, true);
             foreach ($persons as $personData) {
+                // Convert empty strings to null for date fields
+                if (isset($personData['birthday']) && $personData['birthday'] === '') {
+                    $personData['birthday'] = null;
+                }
                 $contact->contactPersons()->create($personData);
             }
         }
@@ -233,6 +237,10 @@ class ContactController extends Controller
             $contact->contactPersons()->delete();
 
             foreach ($persons as $personData) {
+                // Convert empty strings to null for date fields
+                if (isset($personData['birthday']) && $personData['birthday'] === '') {
+                    $personData['birthday'] = null;
+                }
                 $contact->contactPersons()->create($personData);
             }
         }

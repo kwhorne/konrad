@@ -353,9 +353,9 @@
 
                 <!-- Submit -->
                 <div class="flex justify-end gap-3">
-                    <flux:button wire:click="closeModal" variant="ghost">Avbryt</flux:button>
+                    <flux:button wire:click="closeModal" variant="ghost">{{ $editingId ? 'Lukk' : 'Avbryt' }}</flux:button>
                     <flux:button type="submit" variant="primary">
-                        {{ $editingId ? 'Oppdater' : 'Opprett' }}
+                        {{ $editingId ? 'Oppdater' : 'Opprett og legg til linjer' }}
                     </flux:button>
                 </div>
             </form>

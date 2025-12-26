@@ -14,7 +14,7 @@
             </div>
 
             <!-- Key Financial Stats -->
-            <div class="grid grid-cols-2 gap-4 lg:grid-cols-4 mb-6">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-6">
                 <!-- Utestående kundefakturaer -->
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
                     <div class="p-4">
@@ -63,53 +63,6 @@
                     </div>
                 </flux:card>
 
-                <!-- Leverandørgjeld -->
-                <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
-                    <div class="p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="min-w-0">
-                                <flux:text class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                                    Leverandørgjeld
-                                </flux:text>
-                                <flux:heading size="lg" class="text-zinc-900 dark:text-white truncate">
-                                    {{ number_format($unpaidSupplierInvoices, 0, ',', ' ') }} kr
-                                </flux:heading>
-                            </div>
-                            <div class="p-2 rounded-full bg-orange-100 dark:bg-orange-900/30 shrink-0">
-                                <flux:icon.building-office class="h-5 w-5 text-orange-600 dark:text-orange-400" />
-                            </div>
-                        </div>
-                        @if($overdueSupplierInvoicesCount > 0)
-                            <flux:badge color="amber" size="sm" class="mt-2">{{ $overdueSupplierInvoicesCount }} forfalt</flux:badge>
-                        @endif
-                    </div>
-                </flux:card>
-
-                <!-- Innboks -->
-                <flux:card class="bg-white dark:bg-zinc-900 shadow-sm {{ $incomingVouchersCount > 0 ? 'ring-2 ring-amber-500' : '' }}">
-                    <div class="p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="min-w-0">
-                                <flux:text class="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                                    Innboks
-                                </flux:text>
-                                <flux:heading size="lg" class="{{ $incomingVouchersCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-zinc-900 dark:text-white' }}">
-                                    {{ $incomingVouchersCount }}
-                                </flux:heading>
-                            </div>
-                            <div class="p-2 rounded-full {{ $incomingVouchersCount > 0 ? 'bg-amber-100 dark:bg-amber-900/30' : 'bg-zinc-100 dark:bg-zinc-800' }} shrink-0">
-                                <flux:icon.inbox-arrow-down class="h-5 w-5 {{ $incomingVouchersCount > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-zinc-400' }}" />
-                            </div>
-                        </div>
-                        @if($incomingVouchersCount > 0)
-                            <flux:button href="{{ route('accounting.incoming') }}" variant="primary" size="xs" class="w-full mt-3">
-                                Behandle
-                            </flux:button>
-                        @else
-                            <flux:text class="mt-2 text-xs text-zinc-400">Ingen ventende</flux:text>
-                        @endif
-                    </div>
-                </flux:card>
             </div>
 
             <!-- Feature-dependent Stats -->
@@ -220,13 +173,8 @@
                 </div>
             @endif
 
-            <!-- Revenue & Expense Chart -->
-            <div class="mb-6">
-                <livewire:dashboard.revenue-expense-chart />
-            </div>
-
             <!-- Recent Activity -->
-            <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+            <div class="mb-6">
                 <!-- Recent Invoices -->
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
                     <div class="p-4">
@@ -283,57 +231,6 @@
                         @endif
                     </div>
                 </flux:card>
-
-                <!-- Recent Supplier Invoices -->
-                <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
-                    <div class="p-4">
-                        <div class="flex items-center justify-between mb-3">
-                            <flux:heading size="base" level="2" class="text-zinc-900 dark:text-white">
-                                Siste leverandørfakturaer
-                            </flux:heading>
-                            <flux:button href="{{ route('accounting.supplier-ledger') }}" variant="ghost" size="xs">
-                                Se alle
-                            </flux:button>
-                        </div>
-
-                        @if($recentSupplierInvoices->count() > 0)
-                            <div class="space-y-2">
-                                @foreach($recentSupplierInvoices as $supplierInvoice)
-                                    <div class="flex items-center justify-between py-1.5 border-b border-zinc-100 dark:border-zinc-800 last:border-0">
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex items-center gap-2">
-                                                <flux:text class="text-sm font-medium text-zinc-900 dark:text-white truncate">
-                                                    {{ $supplierInvoice->internal_number }}
-                                                </flux:text>
-                                                <flux:badge size="sm" :color="$supplierInvoice->status_color">
-                                                    {{ $supplierInvoice->status_label }}
-                                                </flux:badge>
-                                            </div>
-                                            <flux:text class="text-xs text-zinc-500 dark:text-zinc-400 truncate">
-                                                {{ $supplierInvoice->contact?->name ?? 'Ukjent leverandør' }}
-                                            </flux:text>
-                                        </div>
-                                        <div class="text-right ml-3">
-                                            <flux:text class="text-sm font-medium text-zinc-900 dark:text-white">
-                                                {{ number_format($supplierInvoice->total, 0, ',', ' ') }} kr
-                                            </flux:text>
-                                            <flux:text class="text-xs text-zinc-500 dark:text-zinc-400">
-                                                {{ $supplierInvoice->invoice_date?->format('d.m.Y') }}
-                                            </flux:text>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @else
-                            <div class="text-center py-6">
-                                <flux:icon.building-office class="h-10 w-10 text-zinc-300 dark:text-zinc-600 mx-auto mb-2" />
-                                <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">
-                                    Ingen leverandørfakturaer ennå
-                                </flux:text>
-                            </div>
-                        @endif
-                    </div>
-                </flux:card>
             </div>
 
             <!-- Quick Actions -->
@@ -353,11 +250,6 @@
                         </flux:button>
                     @endif
 
-                    <flux:button href="{{ route('accounting.vouchers') }}" variant="ghost" class="flex-col h-auto py-3">
-                        <flux:icon.document-text class="h-6 w-6 mb-1 text-green-600" />
-                        <span class="text-xs">Nytt bilag</span>
-                    </flux:button>
-
                     @if(config('features.contacts'))
                         <flux:button href="{{ route('contacts.create') }}" variant="ghost" class="flex-col h-auto py-3">
                             <flux:icon.user-plus class="h-6 w-6 mb-1 text-emerald-600" />
@@ -371,13 +263,28 @@
                             <span class="text-xs">Nytt prosjekt</span>
                         </flux:button>
                     @endif
-
-                    <flux:button href="{{ route('reports.index') }}" variant="ghost" class="flex-col h-auto py-3">
-                        <flux:icon.chart-bar class="h-6 w-6 mb-1 text-purple-600" />
-                        <span class="text-xs">Rapporter</span>
-                    </flux:button>
                 </div>
             </div>
+
+            @if(auth()->user()->is_economy || auth()->user()->is_admin)
+                <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border-2 border-green-200 dark:border-green-800 mb-4">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <flux:heading size="base" level="2" class="text-zinc-900 dark:text-white">
+                                    Økonomi
+                                </flux:heading>
+                                <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
+                                    Regnskap, bilag, rapporter og årsoppgjør
+                                </flux:text>
+                            </div>
+                            <flux:button href="{{ route('economy.dashboard') }}" variant="primary" size="sm">
+                                Gå til økonomi
+                            </flux:button>
+                        </div>
+                    </div>
+                </flux:card>
+            @endif
 
             @if(auth()->user()->is_admin)
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border-2 border-indigo-200 dark:border-indigo-800">

@@ -23,6 +23,11 @@
 
         {{-- Quotes Tab --}}
         <flux:tab.panel name="quotes" class="pt-4">
+            <div class="flex justify-end mb-4">
+                <flux:button href="{{ route('quotes.create', ['contact_id' => $contactId]) }}" variant="primary" size="sm" icon="plus">
+                    Nytt tilbud
+                </flux:button>
+            </div>
             @if($this->quotes->count() > 0)
                 <div class="overflow-x-auto">
                     <flux:table>
@@ -70,6 +75,11 @@
 
         {{-- Orders Tab --}}
         <flux:tab.panel name="orders" class="pt-4">
+            <div class="flex justify-end mb-4">
+                <flux:button href="{{ route('orders.create', ['contact_id' => $contactId]) }}" variant="primary" size="sm" icon="plus">
+                    Ny ordre
+                </flux:button>
+            </div>
             @if($this->orders->count() > 0)
                 <div class="overflow-x-auto">
                     <flux:table>
@@ -117,6 +127,11 @@
 
         {{-- Invoices Tab --}}
         <flux:tab.panel name="invoices" class="pt-4">
+            <div class="flex justify-end mb-4">
+                <flux:button href="{{ route('invoices.create', ['contact_id' => $contactId]) }}" variant="primary" size="sm" icon="plus">
+                    Ny faktura
+                </flux:button>
+            </div>
             @if($this->invoices->count() > 0)
                 <div class="overflow-x-auto">
                     <flux:table>

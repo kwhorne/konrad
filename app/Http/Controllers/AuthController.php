@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
-use App\Models\IncomingVoucher;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Project;
 use App\Models\Quote;
-use App\Models\SupplierInvoice;
 use App\Models\User;
 use App\Models\WorkOrder;
 use Illuminate\Http\Request;
@@ -95,16 +93,10 @@ class AuthController extends Controller
             default => 'kveld'
         };
 
-        // Financial stats
+        // Financial stats (customer invoices only)
         $unpaidInvoices = Invoice::invoices()->unpaid()->sum('balance');
         $overdueInvoices = Invoice::invoices()->overdue()->sum('balance');
         $overdueInvoicesCount = Invoice::invoices()->overdue()->count();
-        $unpaidSupplierInvoices = SupplierInvoice::unpaid()->sum('balance');
-        $overdueSupplierInvoices = SupplierInvoice::overdue()->sum('balance');
-        $overdueSupplierInvoicesCount = SupplierInvoice::overdue()->count();
-
-        // Incoming vouchers
-        $incomingVouchersCount = IncomingVoucher::whereIn('status', ['pending', 'parsing', 'parsed'])->count();
 
         // Feature-dependent stats
         $stats = [];
@@ -127,14 +119,9 @@ class AuthController extends Controller
             $stats['totalContacts'] = Contact::active()->count();
         }
 
-        // Recent activity
+        // Recent customer invoices
         $recentInvoices = Invoice::invoices()
             ->with(['contact', 'invoiceStatus'])
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $recentSupplierInvoices = SupplierInvoice::with('contact')
             ->latest()
             ->take(5)
             ->get();
@@ -144,13 +131,8 @@ class AuthController extends Controller
             'unpaidInvoices',
             'overdueInvoices',
             'overdueInvoicesCount',
-            'unpaidSupplierInvoices',
-            'overdueSupplierInvoices',
-            'overdueSupplierInvoicesCount',
-            'incomingVouchersCount',
             'stats',
-            'recentInvoices',
-            'recentSupplierInvoices'
+            'recentInvoices'
         ));
     }
 

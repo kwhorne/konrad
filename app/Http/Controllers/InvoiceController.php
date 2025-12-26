@@ -18,7 +18,8 @@ class InvoiceController extends Controller
 
     public function create()
     {
-        return redirect()->route('invoices.index');
+        // Return view directly to preserve query parameters (contact_id)
+        return view('invoices.index');
     }
 
     public function show()

@@ -24,58 +24,62 @@
             Dashboard
         </flux:navlist.item>
         
-        <flux:separator variant="subtle" class="my-4" />
-        
-        <flux:navlist.group expandable heading="Funksjoner" class="grid">
-            @if(config('features.contracts'))
-                <flux:navlist.item icon="document-text" href="{{ route('contracts.index') }}" :current="$current === 'contracts'">
-                    Kontraktsregister
-                </flux:navlist.item>
-            @endif
-            
-            @if(config('features.assets'))
-                <flux:navlist.item icon="cube" href="{{ route('assets.index') }}" :current="$current === 'assets'">
-                    Eiendelsregister
-                </flux:navlist.item>
-            @endif
-            
-            @if(config('features.contacts'))
-                <flux:navlist.item icon="users" href="{{ route('contacts.index') }}" :current="$current === 'contacts'">
-                    Kontaktregister
-                </flux:navlist.item>
-            @endif
+        @if(config('features.sales') || config('features.contacts') || config('features.products'))
+            <flux:separator variant="subtle" class="my-4" />
 
-            @if(config('features.products'))
-                <flux:navlist.item icon="cube" href="{{ route('products.index') }}" :current="$current === 'products'">
-                    Vareregister
-                </flux:navlist.item>
-            @endif
+            <flux:navlist.group expandable heading="CRM" icon="user-group" class="grid">
+                @if(config('features.contacts'))
+                    <flux:navlist.item href="{{ route('contacts.index') }}" :current="$current === 'contacts'">
+                        Kontakter
+                    </flux:navlist.item>
+                @endif
 
-            @if(config('features.projects'))
-                <flux:navlist.item icon="folder" href="{{ route('projects.index') }}" :current="$current === 'projects'">
-                    Prosjekter
-                </flux:navlist.item>
-            @endif
+                @if(config('features.products'))
+                    <flux:navlist.item href="{{ route('products.index') }}" :current="$current === 'products'">
+                        Varer
+                    </flux:navlist.item>
+                @endif
 
-            @if(config('features.work_orders'))
-                <flux:navlist.item icon="clipboard-document-list" href="{{ route('work-orders.index') }}" :current="$current === 'work-orders'">
-                    Arbeidsordrer
-                </flux:navlist.item>
-            @endif
-        </flux:navlist.group>
-
-        @if(config('features.sales'))
-            <flux:navlist.group expandable heading="Salg" class="grid">
-                <flux:navlist.item icon="document-text" href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
-                    Tilbud
-                </flux:navlist.item>
-                <flux:navlist.item icon="shopping-cart" href="{{ route('orders.index') }}" :current="$current === 'orders'">
-                    Ordrer
-                </flux:navlist.item>
-                <flux:navlist.item icon="banknotes" href="{{ route('invoices.index') }}" :current="$current === 'invoices'">
-                    Fakturaer
-                </flux:navlist.item>
+                @if(config('features.sales'))
+                    <flux:navlist.item href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
+                        Tilbud
+                    </flux:navlist.item>
+                    <flux:navlist.item href="{{ route('orders.index') }}" :current="$current === 'orders'">
+                        Ordrer
+                    </flux:navlist.item>
+                    <flux:navlist.item href="{{ route('invoices.index') }}" :current="$current === 'invoices'">
+                        Faktura
+                    </flux:navlist.item>
+                @endif
             </flux:navlist.group>
+        @endif
+
+        @if(config('features.projects') || config('features.work_orders'))
+            <flux:navlist.group expandable heading="Prosjekt" icon="rectangle-stack" class="grid">
+                @if(config('features.projects'))
+                    <flux:navlist.item href="{{ route('projects.index') }}" :current="$current === 'projects'">
+                        Prosjekter
+                    </flux:navlist.item>
+                @endif
+
+                @if(config('features.work_orders'))
+                    <flux:navlist.item href="{{ route('work-orders.index') }}" :current="$current === 'work-orders'">
+                        Arbeidsordrer
+                    </flux:navlist.item>
+                @endif
+            </flux:navlist.group>
+        @endif
+
+        @if(config('features.contracts'))
+            <flux:navlist.item icon="document-text" href="{{ route('contracts.index') }}" :current="$current === 'contracts'">
+                Kontrakter
+            </flux:navlist.item>
+        @endif
+
+        @if(config('features.assets'))
+            <flux:navlist.item icon="cube" href="{{ route('assets.index') }}" :current="$current === 'assets'">
+                Eiendeler
+            </flux:navlist.item>
         @endif
 
         @if(auth()->user()->is_economy || auth()->user()->is_admin)
@@ -90,12 +94,6 @@
                     <flux:badge size="sm" color="amber" class="ml-auto">{{ $incomingCount }}</flux:badge>
                 @endif
             </flux:navlist.item>
-        @endif
-
-        @if(!config('features.contracts') && !config('features.assets') && !config('features.contacts') && !config('features.products') && !config('features.projects') && !config('features.work_orders') && !config('features.sales'))
-            <flux:text class="px-3 py-2 text-sm text-zinc-500 dark:text-zinc-400">
-                Ingen moduler aktivert enna.
-            </flux:text>
         @endif
 
         @if(auth()->user()->is_admin)

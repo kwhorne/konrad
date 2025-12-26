@@ -18,7 +18,8 @@ class OrderController extends Controller
 
     public function create()
     {
-        return redirect()->route('orders.index');
+        // Return view directly to preserve query parameters (contact_id)
+        return view('orders.index');
     }
 
     public function show()

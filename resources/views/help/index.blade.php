@@ -113,14 +113,33 @@
                                 </ol>
 
                                 <h4>Navigasjon</h4>
-                                <p>Menyen pa venstre side gir deg tilgang til alle moduler:</p>
+                                <p>Konrad har to hovedpaneler med egne menyer:</p>
+
+                                <h5>App-panel (hovedmeny)</h5>
                                 <ul>
-                                    <li><strong>Dashboard</strong> - Hovedoversikt</li>
-                                    <li><strong>Funksjoner</strong> - Kontakter, Produkter, Prosjekter, Arbeidsordrer</li>
-                                    <li><strong>Salg</strong> - Tilbud, Ordrer, Fakturaer</li>
-                                    <li><strong>Okonomi</strong> - Oversikt, Innboks (AI-tolkning), Bilag, Reskontro, Rapporter, MVA</li>
-                                    <li><strong>Innstillinger</strong> - Personlige innstillinger</li>
+                                    <li><strong>Dashboard</strong> - Hovedoversikt over virksomheten</li>
+                                    <li><strong>CRM</strong> - Kontakter, Varer, Tilbud, Ordrer, Faktura</li>
+                                    <li><strong>Prosjekt</strong> - Prosjekter, Arbeidsordrer</li>
+                                    <li><strong>Kontrakter</strong> - Kontraktsregister</li>
+                                    <li><strong>Eiendeler</strong> - Eiendelsregister</li>
+                                    <li><strong>Okonomi</strong> - Link til okonomi-panelet</li>
+                                    <li><strong>Administrasjon</strong> - Brukeradministrasjon (kun admin)</li>
                                 </ul>
+
+                                <h5>Okonomi-panel</h5>
+                                <p>Eget panel for regnskap og okonomi (krever okonomi- eller admin-rolle):</p>
+                                <ul>
+                                    <li><strong>Dashboard</strong> - Okonomisk oversikt med grafer</li>
+                                    <li><strong>Okonomi</strong> - Bilag, Innboks, Reskontro, Rapporter, MVA, Kontoplan</li>
+                                    <li><strong>Arsoppgjor</strong> - Aksjonaerregister, Skattemelding, Arsregnskap, Altinn</li>
+                                </ul>
+
+                                <flux:callout variant="info" icon="information-circle" class="not-prose my-4">
+                                    <flux:callout.heading>Brukerroller</flux:callout.heading>
+                                    <flux:callout.text>
+                                        <strong>Admin</strong> har full tilgang. <strong>Okonomi</strong> har tilgang til app og okonomi-panel. <strong>Bruker</strong> har kun tilgang til app-panelet.
+                                    </flux:callout.text>
+                                </flux:callout>
 
                                 <h4>Hurtigtaster</h4>
                                 <div class="not-prose">
@@ -180,6 +199,24 @@
 
                                 <h4>Dokumenter</h4>
                                 <p>Last opp og organiser dokumenter knyttet til kontakten, som kontrakter, avtaler og korrespondanse.</p>
+
+                                <h4>Tilbud, Ordrer og Fakturaer</h4>
+                                <p>Fra kontaktkortet kan du se alle dokumenter knyttet til kontakten og opprette nye:</p>
+                                <ol>
+                                    <li>Apne kontakten og ga til <strong>Dokumenter</strong>-fanen</li>
+                                    <li>Her ser du alle tilbud, ordrer og fakturaer for kontakten</li>
+                                    <li>Klikk <strong>Nytt tilbud</strong>, <strong>Ny ordre</strong> eller <strong>Ny faktura</strong></li>
+                                    <li>Dokumentet opprettes med kontakten forhåndsvalgt</li>
+                                    <li>Legg til linjer med produkter fra vareregisteret</li>
+                                </ol>
+
+                                <flux:callout variant="success" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Tips: Opprett og legg til linjer</flux:callout.heading>
+                                    <flux:callout.text>Nar du oppretter et nytt dokument, forblir modalen apen sa du kan legge til varelinjer med en gang.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Sosiale medier</h4>
+                                <p>Legg til lenker til kontaktens LinkedIn, Facebook og Twitter-profiler for rask tilgang.</p>
                             </div>
                         </div>
                     </flux:card>
@@ -355,13 +392,19 @@
                                 <h4>Tilbud</h4>
                                 <p>Opprett profesjonelle tilbud til kunder:</p>
                                 <ol>
-                                    <li>Klikk <strong>Nytt tilbud</strong></li>
+                                    <li>Klikk <strong>Nytt tilbud</strong> fra Tilbud-siden eller fra kontaktkortet</li>
                                     <li>Velg kunde - adresseinformasjon fylles ut automatisk</li>
-                                    <li>Legg til produkter og tjenester</li>
+                                    <li>Klikk <strong>Opprett og legg til linjer</strong></li>
+                                    <li>Legg til produkter og tjenester fra vareregisteret</li>
                                     <li>Angi rabatter om onskelig</li>
                                     <li>Sett gyldighetsdato</li>
                                     <li>Forhandsvis PDF og send pa e-post</li>
                                 </ol>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Opprett fra kontaktkortet</flux:callout.heading>
+                                    <flux:callout.text>Du kan opprette tilbud, ordrer og fakturaer direkte fra <strong>Dokumenter</strong>-fanen pa kontaktkortet. Kontakten velges automatisk.</flux:callout.text>
+                                </flux:callout>
 
                                 <h4>Ordrer</h4>
                                 <p>Nar kunden aksepterer tilbudet:</p>
@@ -420,6 +463,11 @@
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
                                 <p>Okonomismodulen gir deg full kontroll over regnskapet.</p>
 
+                                <flux:callout variant="info" icon="arrow-top-right-on-square" class="not-prose my-4">
+                                    <flux:callout.heading>Eget okonomi-panel</flux:callout.heading>
+                                    <flux:callout.text>Okonomifunksjonene er tilgjengelige via <strong>/economy</strong>-panelet. Dette krever <strong>okonomi</strong> eller <strong>admin</strong>-rolle. Klikk pa <strong>Okonomi</strong>-lenken i app-menyen for a ga til okonomi-panelet.</flux:callout.text>
+                                </flux:callout>
+
                                 <h4>Kontoplan</h4>
                                 <p>Systemet bruker norsk standard kontoplan (NS 4102):</p>
                                 <ul>
@@ -435,7 +483,7 @@
                                 <h4>Bilagsregistrering</h4>
                                 <p>Registrer manuelle bilag:</p>
                                 <ol>
-                                    <li>Ga til <strong>Okonomi > Bilagsregistrering</strong></li>
+                                    <li>Ga til <strong>Okonomi-panelet > Bilagsregistrering</strong></li>
                                     <li>Klikk <strong>Nytt bilag</strong></li>
                                     <li>Sett bilagsdato og beskrivelse</li>
                                     <li>Legg til linjer med konto, debet og kredit</li>
@@ -500,7 +548,7 @@
 
                                 <h4>Laste opp bilag</h4>
                                 <ol>
-                                    <li>Ga til <strong>Okonomi > Innboks</strong></li>
+                                    <li>Ga til <strong>Okonomi-panelet > Innkommende bilag</strong></li>
                                     <li>Klikk <strong>Last opp bilag</strong></li>
                                     <li>Velg en eller flere filer (PDF, JPG, PNG)</li>
                                     <li>Klikk <strong>Last opp</strong></li>
@@ -708,7 +756,7 @@
 
                                 <h4>Opprette MVA-melding</h4>
                                 <ol>
-                                    <li>Ga til <strong>Okonomi > MVA-meldinger</strong></li>
+                                    <li>Ga til <strong>Okonomi-panelet > MVA-meldinger</strong></li>
                                     <li>Klikk <strong>Ny MVA-melding</strong></li>
                                     <li>Velg ar og periode</li>
                                     <li>Klikk <strong>Opprett</strong></li>

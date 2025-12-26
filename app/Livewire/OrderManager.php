@@ -95,6 +95,31 @@ class OrderManager extends Component
 
     public $orderLines = [];
 
+    public function mount(): void
+    {
+        // Check for contact_id in query parameters to auto-open create modal
+        if (request()->has('contact_id')) {
+            $contactId = request()->get('contact_id');
+            $contact = Contact::find($contactId);
+
+            if ($contact) {
+                $this->contact_id = $contactId;
+                $this->customer_name = $contact->company_name;
+                $this->customer_address = $contact->address;
+                $this->customer_postal_code = $contact->postal_code;
+                $this->customer_city = $contact->city;
+                $this->customer_country = $contact->country ?? 'Norge';
+                $this->delivery_address = $contact->address;
+                $this->delivery_postal_code = $contact->postal_code;
+                $this->delivery_city = $contact->city;
+                $this->delivery_country = $contact->country ?? 'Norge';
+                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
+                $this->order_date = now()->format('Y-m-d');
+                $this->showModal = true;
+            }
+        }
+    }
+
     protected function rules(): array
     {
         return [
@@ -286,15 +311,16 @@ class OrderManager extends Component
         if ($this->editingId) {
             $order = Order::findOrFail($this->editingId);
             $order->update($data);
-            session()->flash('success', 'Ordren ble oppdatert.');
+            $this->dispatch('toast', message: 'Ordren ble oppdatert', variant: 'success');
+            $this->closeModal();
         } else {
             $order = Order::create($data);
             $this->editingId = $order->id;
             $this->currentOrderId = $order->id;
-            session()->flash('success', 'Ordren ble opprettet.');
+            $this->loadOrderLines();
+            $this->dispatch('toast', message: 'Ordren ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+            // Don't close modal - allow adding lines
         }
-
-        $this->closeModal();
     }
 
     public function delete($id): void

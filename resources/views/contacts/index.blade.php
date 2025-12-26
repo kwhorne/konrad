@@ -106,76 +106,54 @@
                     </form>
 
                     @if($contacts->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700">
-                                <thead class="bg-zinc-50 dark:bg-zinc-800">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                                            Bedrift
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                                            Type
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                                            Kontaktperson
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                                            E-post
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                                            Status
-                                        </th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
-                                            Handlinger
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-zinc-900 divide-y divide-zinc-200 dark:divide-zinc-700">
+                        <div x-data x-on:dblclick="
+                            const row = $event.target.closest('tr[data-href]');
+                            if (row) window.location.href = row.dataset.href;
+                        ">
+                            <flux:table :paginate="$contacts">
+                                <flux:table.columns>
+                                    <flux:table.column>Bedrift</flux:table.column>
+                                    <flux:table.column>Type</flux:table.column>
+                                    <flux:table.column>Kontaktperson</flux:table.column>
+                                    <flux:table.column>E-post</flux:table.column>
+                                    <flux:table.column>Status</flux:table.column>
+                                    <flux:table.column></flux:table.column>
+                                </flux:table.columns>
+
+                                <flux:table.rows>
                                     @foreach($contacts as $contact)
-                                        <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                                            <td class="px-6 py-4 whitespace-nowrap">
+                                        <flux:table.row
+                                            :key="$contact->id"
+                                            class="cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                            data-href="{{ route('contacts.edit', $contact) }}"
+                                        >
+                                            <flux:table.cell>
                                                 <div>
-                                                    <flux:text class="font-medium text-zinc-900 dark:text-white">
-                                                        {{ $contact->company_name }}
-                                                    </flux:text>
-                                                    <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">
-                                                        {{ $contact->contact_number }}
-                                                    </flux:text>
+                                                    <flux:text class="font-medium">{{ $contact->company_name }}</flux:text>
+                                                    <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">{{ $contact->contact_number }}</flux:text>
                                                 </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <flux:badge variant="{{ $contact->getTypeBadgeColor() }}">
+                                            </flux:table.cell>
+                                            <flux:table.cell>
+                                                <flux:badge color="{{ $contact->getTypeBadgeColor() }}" size="sm">
                                                     {{ $contact->getTypeLabel() }}
                                                 </flux:badge>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <flux:text class="text-zinc-900 dark:text-white">
-                                                    {{ $contact->primaryContact?->name ?? '-' }}
-                                                </flux:text>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <flux:text class="text-zinc-900 dark:text-white">
-                                                    {{ $contact->email ?? '-' }}
-                                                </flux:text>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <flux:badge variant="{{ $contact->getStatusBadgeColor() }}">
+                                            </flux:table.cell>
+                                            <flux:table.cell>{{ $contact->primaryContact?->name ?? '-' }}</flux:table.cell>
+                                            <flux:table.cell>{{ $contact->email ?? '-' }}</flux:table.cell>
+                                            <flux:table.cell>
+                                                <flux:badge color="{{ $contact->getStatusBadgeColor() }}" size="sm">
                                                     {{ $contact->getStatusLabel() }}
                                                 </flux:badge>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            </flux:table.cell>
+                                            <flux:table.cell>
                                                 <flux:button href="{{ route('contacts.show', $contact) }}" variant="ghost" size="sm">
                                                     Vis
                                                 </flux:button>
-                                            </td>
-                                        </tr>
+                                            </flux:table.cell>
+                                        </flux:table.row>
                                     @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="mt-6">
-                            {{ $contacts->links() }}
+                                </flux:table.rows>
+                            </flux:table>
                         </div>
                     @else
                         <div class="text-center py-12">

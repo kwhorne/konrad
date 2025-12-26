@@ -85,6 +85,28 @@ class QuoteManager extends Component
 
     public $quoteLines = [];
 
+    public function mount(): void
+    {
+        // Check for contact_id in query parameters to auto-open create modal
+        if (request()->has('contact_id')) {
+            $contactId = request()->get('contact_id');
+            $contact = Contact::find($contactId);
+
+            if ($contact) {
+                $this->contact_id = $contactId;
+                $this->customer_name = $contact->company_name;
+                $this->customer_address = $contact->address;
+                $this->customer_postal_code = $contact->postal_code;
+                $this->customer_city = $contact->city;
+                $this->customer_country = $contact->country ?? 'Norge';
+                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
+                $this->quote_date = now()->format('Y-m-d');
+                $this->valid_until = now()->addDays(30)->format('Y-m-d');
+                $this->showModal = true;
+            }
+        }
+    }
+
     protected function rules(): array
     {
         return [
@@ -257,15 +279,16 @@ class QuoteManager extends Component
         if ($this->editingId) {
             $quote = Quote::findOrFail($this->editingId);
             $quote->update($data);
-            session()->flash('success', 'Tilbudet ble oppdatert.');
+            $this->dispatch('toast', message: 'Tilbudet ble oppdatert', variant: 'success');
+            $this->closeModal();
         } else {
             $quote = Quote::create($data);
             $this->editingId = $quote->id;
             $this->currentQuoteId = $quote->id;
-            session()->flash('success', 'Tilbudet ble opprettet.');
+            $this->loadQuoteLines();
+            $this->dispatch('toast', message: 'Tilbudet ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+            // Don't close modal - allow adding lines
         }
-
-        $this->closeModal();
     }
 
     public function delete($id): void

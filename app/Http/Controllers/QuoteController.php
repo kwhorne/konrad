@@ -18,7 +18,8 @@ class QuoteController extends Controller
 
     public function create()
     {
-        return redirect()->route('quotes.index');
+        // Return view directly to preserve query parameters (contact_id)
+        return view('quotes.index');
     }
 
     public function show()

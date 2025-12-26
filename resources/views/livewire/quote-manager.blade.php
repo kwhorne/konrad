@@ -303,8 +303,10 @@
             <flux:separator />
 
             <div class="flex justify-end gap-2">
-                <flux:button wire:click="closeModal" variant="ghost">Avbryt</flux:button>
-                <flux:button wire:click="save" variant="primary">{{ $editingId ? 'Oppdater' : 'Opprett' }}</flux:button>
+                <flux:button wire:click="closeModal" variant="ghost">{{ $editingId ? 'Lukk' : 'Avbryt' }}</flux:button>
+                <flux:button wire:click="save" variant="primary">
+                    {{ $editingId ? 'Oppdater' : 'Opprett og legg til linjer' }}
+                </flux:button>
             </div>
         </div>
     </flux:modal>

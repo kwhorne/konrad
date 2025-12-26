@@ -95,6 +95,11 @@
                 </a>
             </div>
 
+            <!-- Revenue & Expense Chart -->
+            <div class="mb-8">
+                <livewire:dashboard.revenue-expense-chart />
+            </div>
+
             <!-- Quick Links -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">

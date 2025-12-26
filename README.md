@@ -15,11 +15,62 @@
 
 Konrad er et komplett forretningssystem designet for norske bedrifter. Systemet tilbyr moduler for kontakthåndtering, vareregister, prosjektstyring, salg, regnskap og MVA-rapportering - alt i en moderne og brukervennlig pakke.
 
+## Navigasjon
+
+Konrad har to hovedpaneler:
+
+### App-panel (`/app`)
+Hovedpanelet for daglig drift med følgende struktur:
+- **Dashboard** - Oversikt over virksomheten
+- **CRM** (ekspanderbar gruppe)
+  - Kontakter
+  - Varer
+  - Tilbud
+  - Ordrer
+  - Faktura
+- **Prosjekt** (ekspanderbar gruppe)
+  - Prosjekter
+  - Arbeidsordrer
+- **Kontrakter** - Kontraktsregister
+- **Eiendeler** - Eiendelsregister
+- **Økonomi** - Link til økonomi-panelet (kun for økonomi/admin-brukere)
+- **Administrasjon** - Brukeradministrasjon (kun for admin-brukere)
+
+### Økonomi-panel (`/economy`)
+Dedikert panel for regnskap og økonomi:
+- **Dashboard** - Økonomisk oversikt med inntekts-/kostnadsgrafer
+- **Økonomi**
+  - Bilagsregistrering
+  - Innkommende bilag
+  - Kundereskontro
+  - Leverandørreskontro
+  - Rapporter
+  - MVA-meldinger
+  - Kontoplan
+- **Årsoppgjør**
+  - Aksjonærregister
+  - Skattemelding
+  - Årsregnskap
+  - Altinn
+
+## Brukerroller
+
+| Rolle | Tilgang |
+|-------|---------|
+| **Admin** (`is_admin`) | Full tilgang til alle moduler inkl. brukeradministrasjon |
+| **Økonomi** (`is_economy`) | Tilgang til `/app` og `/economy` panel |
+| **Bruker** | Tilgang kun til `/app` panel |
+
 ## Moduler
 
 ### Kontaktregister
 - Kunder og leverandører med organisasjonsnummer
-- Adressehåndtering og kontaktinformasjon
+- Automatisk oppslag i Brønnøysundregistrene
+- Adressehåndtering (besøks- og fakturaadresse)
+- Kontaktpersoner med roller
+- Sosiale medier (LinkedIn, Facebook, Twitter)
+- Dokumenter-fane med tilbud, ordrer og fakturaer
+- Opprett nye dokumenter direkte fra kontakten
 - Aktivitetslogg med tilpassbare aktivitetstyper
 - Kobling til prosjekter og arbeidsordrer
 
@@ -50,6 +101,8 @@ Konrad er et komplett forretningssystem designet for norske bedrifter. Systemet 
 - **Tilbud**: Opprett og send tilbud til kunder med PDF-generering
 - **Ordrer**: Konverter tilbud til ordrer, håndter ordrebekreftelser
 - **Fakturaer**: Fakturering med betalingssporing og purringer
+- Opprett dokumenter direkte fra kontaktkortet (Dokumenter-fane)
+- Linjer med produkter fra vareregisteret
 - Auto-nummerering (T-YYYY-NNNN, O-YYYY-NNNN, F-YYYY-NNNN)
 - Kreditnotaer
 - PDF-generering og e-postutsending
@@ -149,6 +202,7 @@ SALES_ENABLED=true
 
 ## Ruter
 
+### App-panel
 | Rute | Beskrivelse |
 |------|-------------|
 | `/` | Velkomstside |
@@ -160,15 +214,27 @@ SALES_ENABLED=true
 | `/quotes` | Tilbud |
 | `/orders` | Ordrer |
 | `/invoices` | Fakturaer |
-| `/accounting` | Økonomi oversikt |
-| `/accounting/vouchers` | Bilagsregistrering |
-| `/accounting/customer-ledger` | Kundereskontro |
-| `/accounting/supplier-ledger` | Leverandørreskontro |
-| `/accounts` | Kontoplan |
-| `/reports` | Rapporter |
-| `/vat-reports` | MVA-meldinger |
+| `/contracts` | Kontrakter |
+| `/assets` | Eiendeler |
 | `/app/settings` | Innstillinger |
 | `/admin/*` | Administrasjon (kun admin) |
+
+### Økonomi-panel (krever økonomi- eller admin-rolle)
+| Rute | Beskrivelse |
+|------|-------------|
+| `/economy` | Økonomi dashboard |
+| `/economy/accounting` | Bilagsregistrering |
+| `/economy/incoming` | Innkommende bilag |
+| `/economy/vouchers` | Bilag |
+| `/economy/customer-ledger` | Kundereskontro |
+| `/economy/supplier-ledger` | Leverandørreskontro |
+| `/economy/reports` | Rapporter |
+| `/economy/vat-reports` | MVA-meldinger |
+| `/economy/accounts` | Kontoplan |
+| `/economy/shareholders` | Aksjonærregister |
+| `/economy/tax` | Skattemelding |
+| `/economy/annual-accounts` | Årsregnskap |
+| `/economy/altinn` | Altinn-integrasjon |
 
 ## Prosjektstruktur
 
@@ -243,10 +309,11 @@ php artisan cache:clear
 
 Etter seeding er følgende brukere tilgjengelige:
 
-| E-post | Passord | Rolle |
-|--------|---------|-------|
-| admin@example.com | password | Administrator |
-| user@example.com | password | Bruker |
+| E-post | Passord | Roller |
+|--------|---------|--------|
+| admin@example.com | password | Administrator (`is_admin`) |
+| economy@example.com | password | Økonomi (`is_economy`) |
+| user@example.com | password | Vanlig bruker |
 
 ## Lisens
 
