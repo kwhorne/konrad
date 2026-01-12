@@ -30,6 +30,7 @@ class User extends Authenticatable
         'invited_at',
         'invitation_accepted_at',
         'last_login_at',
+        'seen_version',
     ];
 
     /**

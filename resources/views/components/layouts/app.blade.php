@@ -24,6 +24,10 @@
 
         <flux:toast />
 
+        @auth
+            <livewire:release-notes-modal />
+        @endauth
+
         @fluxScripts
     </body>
 </html>
