@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\HasStatusColorMapping;
 use App\Models\Contact;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
@@ -11,21 +12,25 @@ use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\VatRate;
+use App\Services\ContactFormPopulator;
+use App\Services\DocumentLineService;
+use App\Services\InvoiceService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class InvoiceManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, HasStatusColorMapping, WithPagination;
 
+    // Modal states
     public $showModal = false;
 
     public $showLineModal = false;
 
     public $showPaymentModal = false;
 
-    public $editingId = null;
-
+    // Filter states
     public $search = '';
 
     public $filterStatus = '';
@@ -35,6 +40,8 @@ class InvoiceManager extends Component
     public $filterType = 'all';
 
     // Invoice form fields
+    public $editingId = null;
+
     public $invoice_type = 'invoice';
 
     public $title = '';
@@ -107,30 +114,34 @@ class InvoiceManager extends Component
 
     public $payment_notes = '';
 
-    // Currently editing invoice
+    // Current context
     public $currentInvoiceId = null;
 
     public $invoiceLines = [];
 
     public $invoicePayments = [];
 
-    public function mount(): void
-    {
-        // Check for contact_id in query parameters to auto-open create modal
-        if (request()->has('contact_id')) {
-            $contactId = request()->get('contact_id');
-            $contact = Contact::find($contactId);
+    protected $messages = [
+        'title.required' => 'Tittel er påkrevd.',
+        'contact_id.required' => 'Kunde er påkrevd.',
+        'due_date.after_or_equal' => 'Forfallsdato må være etter eller lik fakturadato.',
+        'line_description.required' => 'Beskrivelse er påkrevd.',
+        'line_quantity.required' => 'Antall er påkrevd.',
+        'line_unit_price.required' => 'Pris er påkrevd.',
+        'payment_method_id.required' => 'Betalingsmåte er påkrevd.',
+        'payment_date.required' => 'Betalingsdato er påkrevd.',
+        'payment_amount.required' => 'Beløp er påkrevd.',
+    ];
 
+    public function mount(ContactFormPopulator $populator, InvoiceService $invoiceService): void
+    {
+        if (request()->has('contact_id')) {
+            $contact = Contact::find(request()->get('contact_id'));
             if ($contact) {
-                $this->contact_id = $contactId;
-                $this->customer_name = $contact->company_name;
-                $this->customer_address = $contact->billing_address ?? $contact->address;
-                $this->customer_postal_code = $contact->billing_postal_code ?? $contact->postal_code;
-                $this->customer_city = $contact->billing_city ?? $contact->city;
-                $this->customer_country = $contact->billing_country ?? $contact->country ?? 'Norge';
-                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
+                $this->contact_id = $contact->id;
+                $this->applyContactFields($populator->populateForInvoice($contact));
                 $this->invoice_date = now()->format('Y-m-d');
-                $this->due_date = now()->addDays($this->payment_terms_days)->format('Y-m-d');
+                $this->due_date = $invoiceService->calculateDueDateString($this->invoice_date, $this->payment_terms_days);
                 $this->showModal = true;
             }
         }
@@ -186,18 +197,7 @@ class InvoiceManager extends Component
         ];
     }
 
-    protected $messages = [
-        'title.required' => 'Tittel er påkrevd.',
-        'contact_id.required' => 'Kunde er påkrevd.',
-        'due_date.after_or_equal' => 'Forfallsdato må være etter eller lik fakturadato.',
-        'line_description.required' => 'Beskrivelse er påkrevd.',
-        'line_quantity.required' => 'Antall er påkrevd.',
-        'line_unit_price.required' => 'Pris er påkrevd.',
-        'payment_method_id.required' => 'Betalingsmåte er påkrevd.',
-        'payment_date.required' => 'Betalingsdato er påkrevd.',
-        'payment_amount.required' => 'Beløp er påkrevd.',
-    ];
-
+    // Filter updates
     public function updatedSearch(): void
     {
         $this->resetPage();
@@ -218,95 +218,56 @@ class InvoiceManager extends Component
         $this->resetPage();
     }
 
-    public function updatedContactId($value): void
+    public function updatedContactId($value, ContactFormPopulator $populator, InvoiceService $invoiceService): void
     {
-        if ($value) {
-            $contact = Contact::find($value);
-            if ($contact) {
-                $this->customer_name = $contact->company_name;
-                $this->customer_address = $contact->address;
-                $this->customer_postal_code = $contact->postal_code;
-                $this->customer_city = $contact->city;
-                $this->customer_country = $contact->country ?? 'Norge';
-                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
-                $this->updateDueDate();
-            }
+        if ($value && $contact = Contact::find($value)) {
+            $this->applyContactFields($populator->populateForInvoice($contact));
+            $this->updateDueDate($invoiceService);
         }
     }
 
-    public function updatedPaymentTermsDays(): void
+    public function updatedPaymentTermsDays(InvoiceService $invoiceService): void
     {
-        $this->updateDueDate();
+        $this->updateDueDate($invoiceService);
     }
 
-    private function updateDueDate(): void
+    public function updatedLineProductId($value, DocumentLineService $lineService): void
     {
-        if ($this->invoice_date && $this->payment_terms_days) {
-            $this->due_date = date('Y-m-d', strtotime($this->invoice_date.' +'.$this->payment_terms_days.' days'));
-        }
-    }
-
-    public function updatedLineProductId($value): void
-    {
-        if ($value) {
-            $product = Product::with('vatRate')->find($value);
-            if ($product) {
-                $this->line_description = $product->name;
-                $this->line_unit_price = $product->price;
-                $this->line_unit = $product->unit?->abbreviation ?? 'stk';
-                if ($product->vatRate) {
-                    $this->line_vat_rate_id = $product->vatRate->id;
-                    $this->line_vat_percent = $product->vatRate->rate;
-                }
-            }
+        if ($value && $product = Product::with('productType.vatRate')->find($value)) {
+            $fields = $lineService->populateFromProduct($product);
+            $this->line_description = $fields['description'];
+            $this->line_unit_price = $fields['unit_price'];
+            $this->line_unit = $fields['unit'];
+            $this->line_vat_rate_id = $fields['vat_rate_id'] ?? '';
+            $this->line_vat_percent = $fields['vat_percent'];
         }
     }
 
     public function updatedLineVatRateId($value): void
     {
-        if ($value) {
-            $vatRate = VatRate::find($value);
-            if ($vatRate) {
-                $this->line_vat_percent = $vatRate->rate;
-            }
+        if ($value && $vatRate = VatRate::find($value)) {
+            $this->line_vat_percent = $vatRate->rate;
         }
     }
 
-    public function openModal($id = null): void
+    // Invoice CRUD
+    public function openModal($id, InvoiceService $invoiceService): void
     {
+        if ($id) {
+            $invoice = Invoice::findOrFail($id);
+            $this->authorize('view', $invoice);
+        } else {
+            $this->authorize('create', Invoice::class);
+        }
+
         $this->resetForm();
 
         if ($id) {
-            $this->editingId = $id;
-            $invoice = Invoice::with(['lines.product', 'payments'])->findOrFail($id);
-
-            $this->invoice_type = $invoice->invoice_type;
-            $this->title = $invoice->title;
-            $this->description = $invoice->description;
-            $this->contact_id = $invoice->contact_id ?? '';
-            $this->project_id = $invoice->project_id ?? '';
-            $this->invoice_status_id = $invoice->invoice_status_id ?? '';
-            $this->invoice_date = $invoice->invoice_date?->format('Y-m-d') ?? '';
-            $this->due_date = $invoice->due_date?->format('Y-m-d') ?? '';
-            $this->payment_terms_days = $invoice->payment_terms_days ?? 30;
-            $this->reminder_days = $invoice->reminder_days ?? 14;
-            $this->terms_conditions = $invoice->terms_conditions;
-            $this->internal_notes = $invoice->internal_notes;
-            $this->customer_name = $invoice->customer_name;
-            $this->customer_address = $invoice->customer_address;
-            $this->customer_postal_code = $invoice->customer_postal_code;
-            $this->customer_city = $invoice->customer_city;
-            $this->customer_country = $invoice->customer_country ?? 'Norge';
-            $this->our_reference = $invoice->our_reference;
-            $this->customer_reference = $invoice->customer_reference;
-            $this->is_active = $invoice->is_active;
-            $this->currentInvoiceId = $id;
-            $this->loadInvoiceLines();
-            $this->loadInvoicePayments();
+            $this->loadInvoice($id);
         } else {
             $this->invoice_date = date('Y-m-d');
             $this->due_date = date('Y-m-d', strtotime('+30 days'));
-            $defaultStatus = InvoiceStatus::where('code', 'draft')->first();
+            $defaultStatus = $invoiceService->getDefaultStatus();
             if ($defaultStatus) {
                 $this->invoice_status_id = $defaultStatus->id;
             }
@@ -321,43 +282,22 @@ class InvoiceManager extends Component
         $this->resetForm();
     }
 
-    public function save(): void
+    public function save(InvoiceService $invoiceService): void
     {
         $this->validate();
 
-        $reminderDate = null;
-        if ($this->due_date && $this->reminder_days) {
-            $reminderDate = date('Y-m-d', strtotime($this->due_date.' +'.$this->reminder_days.' days'));
-        }
-
-        $data = [
-            'invoice_type' => $this->invoice_type,
-            'title' => $this->title,
-            'description' => $this->description,
-            'contact_id' => $this->contact_id ?: null,
-            'project_id' => $this->project_id ?: null,
-            'invoice_status_id' => $this->invoice_status_id ?: null,
-            'invoice_date' => $this->invoice_date ?: null,
-            'due_date' => $this->due_date ?: null,
-            'payment_terms_days' => $this->payment_terms_days,
-            'reminder_days' => $this->reminder_days,
-            'reminder_date' => $reminderDate,
-            'terms_conditions' => $this->terms_conditions,
-            'internal_notes' => $this->internal_notes,
-            'customer_name' => $this->customer_name,
-            'customer_address' => $this->customer_address,
-            'customer_postal_code' => $this->customer_postal_code,
-            'customer_city' => $this->customer_city,
-            'customer_country' => $this->customer_country,
-            'our_reference' => $this->our_reference,
-            'customer_reference' => $this->customer_reference,
-            'is_active' => $this->is_active,
-            'created_by' => $this->editingId ? Invoice::find($this->editingId)->created_by : auth()->id(),
-        ];
-
         if ($this->editingId) {
             $invoice = Invoice::findOrFail($this->editingId);
-            $invoice->update($data);
+            $this->authorize('update', $invoice);
+        } else {
+            $this->authorize('create', Invoice::class);
+        }
+
+        $data = $this->getInvoiceData();
+        $data['reminder_date'] = $invoiceService->prepareReminderDate($this->due_date, $this->reminder_days);
+
+        if ($this->editingId) {
+            Invoice::findOrFail($this->editingId)->update($data);
             $this->dispatch('toast', message: 'Fakturaen ble oppdatert', variant: 'success');
             $this->closeModal();
         } else {
@@ -366,67 +306,51 @@ class InvoiceManager extends Component
             $this->currentInvoiceId = $invoice->id;
             $this->loadInvoiceLines();
             $this->dispatch('toast', message: 'Fakturaen ble opprettet. Du kan nå legge til linjer.', variant: 'success');
-            // Don't close modal - allow adding lines
         }
     }
 
     public function delete($id): void
     {
-        Invoice::findOrFail($id)->delete();
+        $invoice = Invoice::findOrFail($id);
+        $this->authorize('delete', $invoice);
+
+        $invoice->delete();
         session()->flash('success', 'Fakturaen ble slettet.');
     }
 
-    public function createCreditNote($id): void
+    public function createCreditNote($id, InvoiceService $invoiceService): void
     {
         $invoice = Invoice::findOrFail($id);
+        $this->authorize('createCreditNote', $invoice);
 
-        if ($invoice->is_credit_note) {
-            session()->flash('error', 'Kan ikke lage kreditnota av en kreditnota.');
-
-            return;
-        }
-
-        $creditNote = $invoice->createCreditNote();
-        session()->flash('success', 'Kreditnota '.$creditNote->invoice_number.' ble opprettet.');
-    }
-
-    public function markAsSent($id): void
-    {
-        $invoice = Invoice::findOrFail($id);
-        $sentStatus = InvoiceStatus::where('code', 'sent')->first();
-
-        if ($sentStatus) {
-            $invoice->update([
-                'invoice_status_id' => $sentStatus->id,
-                'sent_at' => now(),
-            ]);
-            session()->flash('success', 'Fakturaen ble merket som sendt.');
+        try {
+            $creditNote = $invoiceService->createCreditNote($invoice);
+            session()->flash('success', 'Kreditnota '.$creditNote->invoice_number.' ble opprettet.');
+        } catch (\InvalidArgumentException $e) {
+            session()->flash('error', $e->getMessage());
         }
     }
 
-    // Invoice Lines Management
-    public function openLineModal($lineId = null): void
+    public function markAsSent($id, InvoiceService $invoiceService): void
+    {
+        $invoice = Invoice::findOrFail($id);
+        $this->authorize('markAsSent', $invoice);
+
+        $invoiceService->markAsSent($invoice);
+        session()->flash('success', 'Fakturaen ble merket som sendt.');
+    }
+
+    // Line management
+    public function openLineModal($lineId, DocumentLineService $lineService): void
     {
         $this->resetLineForm();
 
         if ($lineId) {
-            $this->editingLineId = $lineId;
-            $line = InvoiceLine::findOrFail($lineId);
-
-            $this->line_product_id = $line->product_id ?? '';
-            $this->line_description = $line->description;
-            $this->line_quantity = $line->quantity;
-            $this->line_unit = $line->unit;
-            $this->line_unit_price = $line->unit_price;
-            $this->line_discount_percent = $line->discount_percent;
-            $this->line_vat_rate_id = $line->vat_rate_id ?? '';
-            $this->line_vat_percent = $line->vat_percent;
+            $this->loadLine($lineId);
         } else {
-            $defaultVatRate = VatRate::where('is_default', true)->first() ?? VatRate::first();
-            if ($defaultVatRate) {
-                $this->line_vat_rate_id = $defaultVatRate->id;
-                $this->line_vat_percent = $defaultVatRate->rate;
-            }
+            $defaults = $lineService->getDefaultLineValues();
+            $this->line_vat_rate_id = $defaults['vat_rate_id'] ?? '';
+            $this->line_vat_percent = $defaults['vat_percent'];
         }
 
         $this->showLineModal = true;
@@ -438,55 +362,35 @@ class InvoiceManager extends Component
         $this->resetLineForm();
     }
 
-    public function saveLine(): void
+    public function saveLine(DocumentLineService $lineService): void
     {
         $this->validate($this->lineRules());
 
-        $data = [
-            'invoice_id' => $this->currentInvoiceId,
-            'product_id' => $this->line_product_id ?: null,
-            'description' => $this->line_description,
-            'quantity' => $this->line_quantity,
-            'unit' => $this->line_unit,
-            'unit_price' => $this->line_unit_price,
-            'discount_percent' => $this->line_discount_percent ?? 0,
-            'vat_rate_id' => $this->line_vat_rate_id ?: null,
-            'vat_percent' => $this->line_vat_percent,
-            'sort_order' => $this->editingLineId
-                ? InvoiceLine::find($this->editingLineId)->sort_order
-                : InvoiceLine::where('invoice_id', $this->currentInvoiceId)->count(),
-        ];
+        $invoice = Invoice::findOrFail($this->currentInvoiceId);
+        $this->authorize('update', $invoice);
 
-        if ($this->editingLineId) {
-            InvoiceLine::findOrFail($this->editingLineId)->update($data);
-        } else {
-            InvoiceLine::create($data);
-        }
+        $lineService->saveLine($invoice, $this->getLineData(), $this->editingLineId);
 
         $this->loadInvoiceLines();
         $this->closeLineModal();
     }
 
-    public function deleteLine($lineId): void
+    public function deleteLine($lineId, DocumentLineService $lineService): void
     {
-        InvoiceLine::findOrFail($lineId)->delete();
+        $line = InvoiceLine::findOrFail($lineId);
+        $this->authorize('update', $line->invoice);
+
+        $lineService->deleteLine($line);
         $this->loadInvoiceLines();
     }
 
-    // Payment Management
+    // Payment management
     public function openPaymentModal($paymentId = null): void
     {
         $this->resetPaymentForm();
 
         if ($paymentId) {
-            $this->editingPaymentId = $paymentId;
-            $payment = InvoicePayment::findOrFail($paymentId);
-
-            $this->payment_method_id = $payment->payment_method_id ?? '';
-            $this->payment_date = $payment->payment_date?->format('Y-m-d') ?? '';
-            $this->payment_amount = $payment->amount;
-            $this->payment_reference = $payment->reference;
-            $this->payment_notes = $payment->notes;
+            $this->loadPayment($paymentId);
         } else {
             $this->payment_date = date('Y-m-d');
             $invoice = Invoice::find($this->currentInvoiceId);
@@ -504,60 +408,215 @@ class InvoiceManager extends Component
         $this->resetPaymentForm();
     }
 
-    public function savePayment(): void
+    public function savePayment(InvoiceService $invoiceService): void
     {
         $this->validate($this->paymentRules());
 
-        $data = [
-            'invoice_id' => $this->currentInvoiceId,
-            'payment_method_id' => $this->payment_method_id,
-            'payment_date' => $this->payment_date,
-            'amount' => $this->payment_amount,
-            'reference' => $this->payment_reference,
-            'notes' => $this->payment_notes,
-            'created_by' => auth()->id(),
-        ];
+        $invoice = Invoice::findOrFail($this->currentInvoiceId);
+        $this->authorize('recordPayment', $invoice);
+
+        $data = $this->getPaymentData();
 
         if ($this->editingPaymentId) {
-            InvoicePayment::findOrFail($this->editingPaymentId)->update($data);
+            $payment = InvoicePayment::findOrFail($this->editingPaymentId);
+            $invoiceService->updatePayment($payment, $data);
         } else {
-            InvoicePayment::create($data);
+            $invoiceService->recordPayment($invoice, $data);
         }
 
         $this->loadInvoicePayments();
         $this->closePaymentModal();
     }
 
-    public function deletePayment($paymentId): void
+    public function deletePayment($paymentId, InvoiceService $invoiceService): void
     {
-        InvoicePayment::findOrFail($paymentId)->delete();
+        $payment = InvoicePayment::findOrFail($paymentId);
+        $this->authorize('recordPayment', $payment->invoice);
+
+        $invoiceService->deletePayment($payment);
         $this->loadInvoicePayments();
+    }
+
+    public function render()
+    {
+        return view('livewire.invoice-manager', [
+            'invoices' => $this->getInvoicesQuery()->paginate(15),
+            'statuses' => InvoiceStatus::active()->ordered()->get(),
+            'contacts' => Contact::active()->ordered()->get(),
+            'projects' => Project::active()->ordered()->get(),
+            'products' => Product::active()->ordered()->get(),
+            'vatRates' => VatRate::active()->ordered()->get(),
+            'paymentMethods' => PaymentMethod::active()->ordered()->get(),
+        ]);
+    }
+
+    // Private helpers
+    private function applyContactFields(array $fields): void
+    {
+        foreach ($fields as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
+    }
+
+    private function updateDueDate(InvoiceService $invoiceService): void
+    {
+        if ($this->invoice_date && $this->payment_terms_days) {
+            $this->due_date = $invoiceService->calculateDueDateString($this->invoice_date, $this->payment_terms_days);
+        }
+    }
+
+    private function loadInvoice(int $id): void
+    {
+        $invoice = Invoice::with(['lines.product', 'payments'])->findOrFail($id);
+
+        $this->editingId = $id;
+        $this->invoice_type = $invoice->invoice_type;
+        $this->title = $invoice->title;
+        $this->description = $invoice->description;
+        $this->contact_id = $invoice->contact_id ?? '';
+        $this->project_id = $invoice->project_id ?? '';
+        $this->invoice_status_id = $invoice->invoice_status_id ?? '';
+        $this->invoice_date = $invoice->invoice_date?->format('Y-m-d') ?? '';
+        $this->due_date = $invoice->due_date?->format('Y-m-d') ?? '';
+        $this->payment_terms_days = $invoice->payment_terms_days ?? 30;
+        $this->reminder_days = $invoice->reminder_days ?? 14;
+        $this->terms_conditions = $invoice->terms_conditions;
+        $this->internal_notes = $invoice->internal_notes;
+        $this->customer_name = $invoice->customer_name;
+        $this->customer_address = $invoice->customer_address;
+        $this->customer_postal_code = $invoice->customer_postal_code;
+        $this->customer_city = $invoice->customer_city;
+        $this->customer_country = $invoice->customer_country ?? 'Norge';
+        $this->our_reference = $invoice->our_reference;
+        $this->customer_reference = $invoice->customer_reference;
+        $this->is_active = $invoice->is_active;
+        $this->currentInvoiceId = $id;
+        $this->loadInvoiceLines();
+        $this->loadInvoicePayments();
+    }
+
+    private function loadLine(int $lineId): void
+    {
+        $line = InvoiceLine::findOrFail($lineId);
+        $this->editingLineId = $lineId;
+        $this->line_product_id = $line->product_id ?? '';
+        $this->line_description = $line->description;
+        $this->line_quantity = $line->quantity;
+        $this->line_unit = $line->unit;
+        $this->line_unit_price = $line->unit_price;
+        $this->line_discount_percent = $line->discount_percent;
+        $this->line_vat_rate_id = $line->vat_rate_id ?? '';
+        $this->line_vat_percent = $line->vat_percent;
+    }
+
+    private function loadPayment(int $paymentId): void
+    {
+        $payment = InvoicePayment::findOrFail($paymentId);
+        $this->editingPaymentId = $paymentId;
+        $this->payment_method_id = $payment->payment_method_id ?? '';
+        $this->payment_date = $payment->payment_date?->format('Y-m-d') ?? '';
+        $this->payment_amount = $payment->amount;
+        $this->payment_reference = $payment->reference;
+        $this->payment_notes = $payment->notes;
     }
 
     private function loadInvoiceLines(): void
     {
-        if ($this->currentInvoiceId) {
-            $this->invoiceLines = InvoiceLine::with(['product', 'vatRate'])
-                ->where('invoice_id', $this->currentInvoiceId)
-                ->ordered()
-                ->get()
-                ->toArray();
-        } else {
-            $this->invoiceLines = [];
-        }
+        $this->invoiceLines = $this->currentInvoiceId
+            ? InvoiceLine::with(['product', 'vatRate'])->where('invoice_id', $this->currentInvoiceId)->ordered()->get()->toArray()
+            : [];
     }
 
     private function loadInvoicePayments(): void
     {
-        if ($this->currentInvoiceId) {
-            $this->invoicePayments = InvoicePayment::with(['paymentMethod', 'creator'])
-                ->where('invoice_id', $this->currentInvoiceId)
-                ->ordered()
-                ->get()
-                ->toArray();
-        } else {
-            $this->invoicePayments = [];
+        $this->invoicePayments = $this->currentInvoiceId
+            ? InvoicePayment::with(['paymentMethod', 'creator'])->where('invoice_id', $this->currentInvoiceId)->ordered()->get()->toArray()
+            : [];
+    }
+
+    private function getInvoiceData(): array
+    {
+        return [
+            'invoice_type' => $this->invoice_type,
+            'title' => $this->title,
+            'description' => $this->description,
+            'contact_id' => $this->contact_id ?: null,
+            'project_id' => $this->project_id ?: null,
+            'invoice_status_id' => $this->invoice_status_id ?: null,
+            'invoice_date' => $this->invoice_date ?: null,
+            'due_date' => $this->due_date ?: null,
+            'payment_terms_days' => $this->payment_terms_days,
+            'reminder_days' => $this->reminder_days,
+            'terms_conditions' => $this->terms_conditions,
+            'internal_notes' => $this->internal_notes,
+            'customer_name' => $this->customer_name,
+            'customer_address' => $this->customer_address,
+            'customer_postal_code' => $this->customer_postal_code,
+            'customer_city' => $this->customer_city,
+            'customer_country' => $this->customer_country,
+            'our_reference' => $this->our_reference,
+            'customer_reference' => $this->customer_reference,
+            'is_active' => $this->is_active,
+            'created_by' => $this->editingId ? Invoice::find($this->editingId)->created_by : auth()->id(),
+        ];
+    }
+
+    private function getLineData(): array
+    {
+        return [
+            'product_id' => $this->line_product_id ?: null,
+            'description' => $this->line_description,
+            'quantity' => $this->line_quantity,
+            'unit' => $this->line_unit,
+            'unit_price' => $this->line_unit_price,
+            'discount_percent' => $this->line_discount_percent ?? 0,
+            'vat_rate_id' => $this->line_vat_rate_id ?: null,
+            'vat_percent' => $this->line_vat_percent,
+        ];
+    }
+
+    private function getPaymentData(): array
+    {
+        return [
+            'payment_method_id' => $this->payment_method_id,
+            'payment_date' => $this->payment_date,
+            'amount' => $this->payment_amount,
+            'reference' => $this->payment_reference,
+            'notes' => $this->payment_notes,
+        ];
+    }
+
+    private function getInvoicesQuery()
+    {
+        $query = Invoice::with(['contact', 'project', 'invoiceStatus', 'creator', 'lines', 'payments'])->ordered();
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%'.$this->search.'%')
+                    ->orWhere('invoice_number', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_reference', 'like', '%'.$this->search.'%');
+            });
         }
+
+        if ($this->filterStatus) {
+            $query->where('invoice_status_id', $this->filterStatus);
+        }
+
+        if ($this->filterContact) {
+            $query->where('contact_id', $this->filterContact);
+        }
+
+        if ($this->filterType === 'invoices') {
+            $query->invoices();
+        } elseif ($this->filterType === 'credit_notes') {
+            $query->creditNotes();
+        }
+
+        return $query;
     }
 
     private function resetForm(): void
@@ -610,64 +669,5 @@ class InvoiceManager extends Component
         $this->payment_amount = '';
         $this->payment_reference = '';
         $this->payment_notes = '';
-    }
-
-    public function getStatusColorClass($color): string
-    {
-        return match ($color) {
-            'blue' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-            'yellow' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-            'green' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-            'red' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-            'purple' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
-            'zinc' => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-            default => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-        };
-    }
-
-    public function render()
-    {
-        $query = Invoice::with([
-            'contact',
-            'project',
-            'invoiceStatus',
-            'creator',
-            'lines',
-            'payments',
-        ])->ordered();
-
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('title', 'like', '%'.$this->search.'%')
-                    ->orWhere('invoice_number', 'like', '%'.$this->search.'%')
-                    ->orWhere('description', 'like', '%'.$this->search.'%')
-                    ->orWhere('customer_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('customer_reference', 'like', '%'.$this->search.'%');
-            });
-        }
-
-        if ($this->filterStatus) {
-            $query->where('invoice_status_id', $this->filterStatus);
-        }
-
-        if ($this->filterContact) {
-            $query->where('contact_id', $this->filterContact);
-        }
-
-        if ($this->filterType === 'invoices') {
-            $query->invoices();
-        } elseif ($this->filterType === 'credit_notes') {
-            $query->creditNotes();
-        }
-
-        return view('livewire.invoice-manager', [
-            'invoices' => $query->paginate(15),
-            'statuses' => InvoiceStatus::active()->ordered()->get(),
-            'contacts' => Contact::active()->ordered()->get(),
-            'projects' => Project::active()->ordered()->get(),
-            'products' => Product::active()->ordered()->get(),
-            'vatRates' => VatRate::active()->ordered()->get(),
-            'paymentMethods' => PaymentMethod::active()->ordered()->get(),
-        ]);
     }
 }

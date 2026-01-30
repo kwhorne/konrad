@@ -6,12 +6,13 @@ use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Models\ProductType;
 use App\Models\Unit;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class ProductManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -92,6 +93,13 @@ class ProductManager extends Component
 
     public function openModal($id = null)
     {
+        if ($id) {
+            $product = Product::findOrFail($id);
+            $this->authorize('view', $product);
+        } else {
+            $this->authorize('create', Product::class);
+        }
+
         $this->resetForm();
 
         if ($id) {
@@ -123,6 +131,13 @@ class ProductManager extends Component
     {
         $this->validate();
 
+        if ($this->editingId) {
+            $product = Product::findOrFail($this->editingId);
+            $this->authorize('update', $product);
+        } else {
+            $this->authorize('create', Product::class);
+        }
+
         $data = [
             'name' => $this->name,
             'sku' => $this->sku,
@@ -150,13 +165,18 @@ class ProductManager extends Component
 
     public function delete($id)
     {
-        Product::findOrFail($id)->delete();
+        $product = Product::findOrFail($id);
+        $this->authorize('delete', $product);
+
+        $product->delete();
         session()->flash('success', 'Produktet ble slettet.');
     }
 
     public function toggleActive($id)
     {
         $product = Product::findOrFail($id);
+        $this->authorize('update', $product);
+
         $product->update(['is_active' => ! $product->is_active]);
     }
 

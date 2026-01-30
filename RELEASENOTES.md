@@ -1,5 +1,25 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.0.1
+**Dato:** 30. januar 2026
+
+### Sikkerhet og tilgangskontroll
+
+- **Autorisering på alle handlinger** - Alle operasjoner i systemet (opprett, rediger, slett) sjekker nå at brukeren har riktig tilgang
+- **Forretningsregler i policies** - Kan ikke slette sendte fakturaer, posterte bilag, eller konverterte tilbud
+- **Admin-bypass** - Administratorer har full tilgang til alle funksjoner
+
+### Konfigurerbare kontoklasser
+
+- **Fleksibel kontoplan** - Kontoklasser for rapporter kan nå tilpasses via konfigurasjon
+- **Enklere tilpasning** - Støtter ikke-standard kontoplaner uten kodeendringer
+
+### Tips
+
+Administratorer kan nå være trygge på at brukere kun kan endre data de har tilgang til. Systemet håndhever forretningsregler automatisk.
+
+---
+
 ## Versjon 1.0.0
 **Dato:** 12. januar 2026
 

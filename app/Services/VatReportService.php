@@ -437,6 +437,61 @@ class VatReportService
     }
 
     /**
+     * Delete a VAT report (only if in draft status).
+     */
+    public function deleteReport(VatReport $report): bool
+    {
+        if ($report->status !== 'draft') {
+            return false;
+        }
+
+        $report->delete();
+
+        return true;
+    }
+
+    /**
+     * Get available years for filtering and selection.
+     *
+     * @return array<int>
+     */
+    public function getAvailableYears(int $yearsBack = 5): array
+    {
+        $years = [];
+        $currentYear = now()->year;
+
+        for ($i = $currentYear; $i >= $currentYear - $yearsBack; $i--) {
+            $years[] = $i;
+        }
+
+        return $years;
+    }
+
+    /**
+     * Check if a report can be deleted.
+     */
+    public function canDelete(VatReport $report): bool
+    {
+        return $report->status === 'draft';
+    }
+
+    /**
+     * Check if a report can be submitted.
+     */
+    public function canSubmit(VatReport $report): bool
+    {
+        return $report->status === 'draft';
+    }
+
+    /**
+     * Check if a report can be accepted/rejected.
+     */
+    public function canChangeStatus(VatReport $report): bool
+    {
+        return $report->status === 'submitted';
+    }
+
+    /**
      * Get or create a draft report for a period.
      */
     public function getOrCreateDraftReport(int $year, int $period): VatReport

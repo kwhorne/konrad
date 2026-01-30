@@ -2,18 +2,21 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\HasStatusColorMapping;
 use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\ProjectLine;
 use App\Models\ProjectStatus;
 use App\Models\ProjectType;
+use App\Services\ProjectService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class ProjectManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, HasStatusColorMapping, WithPagination;
 
     public $showModal = false;
 
@@ -122,19 +125,27 @@ class ProjectManager extends Component
         $this->resetPage();
     }
 
-    public function updatedLineProductId($value): void
+    public function updatedLineProductId($value, ProjectService $service): void
     {
         if ($value) {
             $product = Product::find($value);
             if ($product) {
-                $this->line_description = $product->name;
-                $this->line_unit_price = $product->price;
+                $data = $service->populateFromProduct($product);
+                $this->line_description = $data['description'];
+                $this->line_unit_price = $data['unit_price'];
             }
         }
     }
 
     public function openModal($id = null): void
     {
+        if ($id) {
+            $project = Project::findOrFail($id);
+            $this->authorize('view', $project);
+        } else {
+            $this->authorize('create', Project::class);
+        }
+
         $this->resetForm();
 
         if ($id) {
@@ -168,6 +179,13 @@ class ProjectManager extends Component
     {
         $this->validate();
 
+        if ($this->editingId) {
+            $project = Project::findOrFail($this->editingId);
+            $this->authorize('update', $project);
+        } else {
+            $this->authorize('create', Project::class);
+        }
+
         $data = [
             'name' => $this->name,
             'description' => $this->description,
@@ -182,7 +200,6 @@ class ProjectManager extends Component
         ];
 
         if ($this->editingId) {
-            $project = Project::findOrFail($this->editingId);
             $project->update($data);
             session()->flash('success', 'Prosjektet ble oppdatert.');
         } else {
@@ -197,13 +214,18 @@ class ProjectManager extends Component
 
     public function delete($id): void
     {
-        Project::findOrFail($id)->delete();
+        $project = Project::findOrFail($id);
+        $this->authorize('delete', $project);
+
+        $project->delete();
         session()->flash('success', 'Prosjektet ble slettet.');
     }
 
     public function toggleActive($id): void
     {
         $project = Project::findOrFail($id);
+        $this->authorize('update', $project);
+
         $project->update(['is_active' => ! $project->is_active]);
     }
 
@@ -232,35 +254,31 @@ class ProjectManager extends Component
         $this->resetLineForm();
     }
 
-    public function saveLine(): void
+    public function saveLine(ProjectService $service): void
     {
         $this->validate($this->lineRules());
 
-        $data = [
-            'project_id' => $this->currentProjectId,
-            'product_id' => $this->line_product_id ?: null,
+        $project = Project::findOrFail($this->currentProjectId);
+        $this->authorize('update', $project);
+
+        $service->saveLine($project, [
+            'product_id' => $this->line_product_id,
             'description' => $this->line_description,
             'quantity' => $this->line_quantity,
             'unit_price' => $this->line_unit_price,
-            'discount_percent' => $this->line_discount_percent ?? 0,
-            'sort_order' => $this->editingLineId
-                ? ProjectLine::find($this->editingLineId)->sort_order
-                : ProjectLine::where('project_id', $this->currentProjectId)->count(),
-        ];
-
-        if ($this->editingLineId) {
-            ProjectLine::findOrFail($this->editingLineId)->update($data);
-        } else {
-            ProjectLine::create($data);
-        }
+            'discount_percent' => $this->line_discount_percent,
+        ], $this->editingLineId);
 
         $this->loadProjectLines();
         $this->closeLineModal();
     }
 
-    public function deleteLine($lineId): void
+    public function deleteLine($lineId, ProjectService $service): void
     {
-        ProjectLine::findOrFail($lineId)->delete();
+        $line = ProjectLine::findOrFail($lineId);
+        $this->authorize('update', $line->project);
+
+        $service->deleteLine($line);
         $this->loadProjectLines();
     }
 
@@ -303,18 +321,6 @@ class ProjectManager extends Component
         $this->line_quantity = 1;
         $this->line_unit_price = '';
         $this->line_discount_percent = 0;
-    }
-
-    public function getStatusColorClass($color): string
-    {
-        return match ($color) {
-            'blue' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-            'yellow' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-            'green' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-            'red' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-            'gray' => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-            default => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-        };
     }
 
     public function render()

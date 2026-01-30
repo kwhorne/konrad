@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\HasStatusColorMapping;
 use App\Models\Contact;
 use App\Models\Order;
 use App\Models\OrderLine;
@@ -9,19 +10,23 @@ use App\Models\OrderStatus;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\VatRate;
+use App\Services\ContactFormPopulator;
+use App\Services\DocumentConversionService;
+use App\Services\DocumentLineService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class OrderManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, HasStatusColorMapping, WithPagination;
 
+    // Modal states
     public $showModal = false;
 
     public $showLineModal = false;
 
-    public $editingId = null;
-
+    // Filter states
     public $search = '';
 
     public $filterStatus = '';
@@ -29,6 +34,8 @@ class OrderManager extends Component
     public $filterContact = '';
 
     // Order form fields
+    public $editingId = null;
+
     public $title = '';
 
     public $description = '';
@@ -90,30 +97,27 @@ class OrderManager extends Component
 
     public $line_vat_percent = 25;
 
-    // Currently editing order for lines
+    // Current context
     public $currentOrderId = null;
 
     public $orderLines = [];
 
-    public function mount(): void
-    {
-        // Check for contact_id in query parameters to auto-open create modal
-        if (request()->has('contact_id')) {
-            $contactId = request()->get('contact_id');
-            $contact = Contact::find($contactId);
+    protected $messages = [
+        'title.required' => 'Tittel er påkrevd.',
+        'contact_id.required' => 'Kunde er påkrevd.',
+        'delivery_date.after_or_equal' => 'Leveringsdato må være etter eller lik ordredato.',
+        'line_description.required' => 'Beskrivelse er påkrevd.',
+        'line_quantity.required' => 'Antall er påkrevd.',
+        'line_unit_price.required' => 'Pris er påkrevd.',
+    ];
 
+    public function mount(ContactFormPopulator $populator): void
+    {
+        if (request()->has('contact_id')) {
+            $contact = Contact::find(request()->get('contact_id'));
             if ($contact) {
-                $this->contact_id = $contactId;
-                $this->customer_name = $contact->company_name;
-                $this->customer_address = $contact->address;
-                $this->customer_postal_code = $contact->postal_code;
-                $this->customer_city = $contact->city;
-                $this->customer_country = $contact->country ?? 'Norge';
-                $this->delivery_address = $contact->address;
-                $this->delivery_postal_code = $contact->postal_code;
-                $this->delivery_city = $contact->city;
-                $this->delivery_country = $contact->country ?? 'Norge';
-                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
+                $this->contact_id = $contact->id;
+                $this->applyContactFields($populator->populateForOrder($contact));
                 $this->order_date = now()->format('Y-m-d');
                 $this->showModal = true;
             }
@@ -161,15 +165,7 @@ class OrderManager extends Component
         ];
     }
 
-    protected $messages = [
-        'title.required' => 'Tittel er påkrevd.',
-        'contact_id.required' => 'Kunde er påkrevd.',
-        'delivery_date.after_or_equal' => 'Leveringsdato må være etter eller lik ordredato.',
-        'line_description.required' => 'Beskrivelse er påkrevd.',
-        'line_quantity.required' => 'Antall er påkrevd.',
-        'line_unit_price.required' => 'Pris er påkrevd.',
-    ];
-
+    // Filter updates
     public function updatedSearch(): void
     {
         $this->resetPage();
@@ -185,82 +181,46 @@ class OrderManager extends Component
         $this->resetPage();
     }
 
-    public function updatedContactId($value): void
+    public function updatedContactId($value, ContactFormPopulator $populator): void
     {
-        if ($value) {
-            $contact = Contact::find($value);
-            if ($contact) {
-                $this->customer_name = $contact->company_name;
-                $this->customer_address = $contact->address;
-                $this->customer_postal_code = $contact->postal_code;
-                $this->customer_city = $contact->city;
-                $this->customer_country = $contact->country ?? 'Norge';
-                $this->delivery_address = $contact->address;
-                $this->delivery_postal_code = $contact->postal_code;
-                $this->delivery_city = $contact->city;
-                $this->delivery_country = $contact->country ?? 'Norge';
-                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
-            }
+        if ($value && $contact = Contact::find($value)) {
+            $this->applyContactFields($populator->populateForOrder($contact));
         }
     }
 
-    public function updatedLineProductId($value): void
+    public function updatedLineProductId($value, DocumentLineService $lineService): void
     {
-        if ($value) {
-            $product = Product::with('vatRate')->find($value);
-            if ($product) {
-                $this->line_description = $product->name;
-                $this->line_unit_price = $product->price;
-                $this->line_unit = $product->unit?->abbreviation ?? 'stk';
-                if ($product->vatRate) {
-                    $this->line_vat_rate_id = $product->vatRate->id;
-                    $this->line_vat_percent = $product->vatRate->rate;
-                }
-            }
+        if ($value && $product = Product::with('productType.vatRate')->find($value)) {
+            $fields = $lineService->populateFromProduct($product);
+            $this->line_description = $fields['description'];
+            $this->line_unit_price = $fields['unit_price'];
+            $this->line_unit = $fields['unit'];
+            $this->line_vat_rate_id = $fields['vat_rate_id'] ?? '';
+            $this->line_vat_percent = $fields['vat_percent'];
         }
     }
 
     public function updatedLineVatRateId($value): void
     {
-        if ($value) {
-            $vatRate = VatRate::find($value);
-            if ($vatRate) {
-                $this->line_vat_percent = $vatRate->rate;
-            }
+        if ($value && $vatRate = VatRate::find($value)) {
+            $this->line_vat_percent = $vatRate->rate;
         }
     }
 
+    // Order CRUD
     public function openModal($id = null): void
     {
+        if ($id) {
+            $order = Order::findOrFail($id);
+            $this->authorize('view', $order);
+        } else {
+            $this->authorize('create', Order::class);
+        }
+
         $this->resetForm();
 
         if ($id) {
-            $this->editingId = $id;
-            $order = Order::with('lines.product')->findOrFail($id);
-
-            $this->title = $order->title;
-            $this->description = $order->description;
-            $this->contact_id = $order->contact_id ?? '';
-            $this->project_id = $order->project_id ?? '';
-            $this->order_status_id = $order->order_status_id ?? '';
-            $this->order_date = $order->order_date?->format('Y-m-d') ?? '';
-            $this->delivery_date = $order->delivery_date?->format('Y-m-d') ?? '';
-            $this->customer_reference = $order->customer_reference;
-            $this->payment_terms_days = $order->payment_terms_days ?? 30;
-            $this->terms_conditions = $order->terms_conditions;
-            $this->internal_notes = $order->internal_notes;
-            $this->customer_name = $order->customer_name;
-            $this->customer_address = $order->customer_address;
-            $this->customer_postal_code = $order->customer_postal_code;
-            $this->customer_city = $order->customer_city;
-            $this->customer_country = $order->customer_country ?? 'Norge';
-            $this->delivery_address = $order->delivery_address;
-            $this->delivery_postal_code = $order->delivery_postal_code;
-            $this->delivery_city = $order->delivery_city;
-            $this->delivery_country = $order->delivery_country ?? 'Norge';
-            $this->is_active = $order->is_active;
-            $this->currentOrderId = $id;
-            $this->loadOrderLines();
+            $this->loadOrder($id);
         } else {
             $this->order_date = date('Y-m-d');
             $this->delivery_date = date('Y-m-d', strtotime('+14 days'));
@@ -283,7 +243,170 @@ class OrderManager extends Component
     {
         $this->validate();
 
-        $data = [
+        if ($this->editingId) {
+            $order = Order::findOrFail($this->editingId);
+            $this->authorize('update', $order);
+        } else {
+            $this->authorize('create', Order::class);
+        }
+
+        $data = $this->getOrderData();
+
+        if ($this->editingId) {
+            $order->update($data);
+            $this->dispatch('toast', message: 'Ordren ble oppdatert', variant: 'success');
+            $this->closeModal();
+        } else {
+            $order = Order::create($data);
+            $this->editingId = $order->id;
+            $this->currentOrderId = $order->id;
+            $this->loadOrderLines();
+            $this->dispatch('toast', message: 'Ordren ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+        }
+    }
+
+    public function delete($id): void
+    {
+        $order = Order::findOrFail($id);
+        $this->authorize('delete', $order);
+
+        $order->delete();
+        session()->flash('success', 'Ordren ble slettet.');
+    }
+
+    public function convertToInvoice($id, DocumentConversionService $conversionService): void
+    {
+        $order = Order::findOrFail($id);
+        $this->authorize('convertToInvoice', $order);
+
+        try {
+            $invoice = $conversionService->convertOrderToInvoice($order);
+            session()->flash('success', 'Ordren ble konvertert til faktura '.$invoice->invoice_number.'.');
+        } catch (\InvalidArgumentException $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    // Line management
+    public function openLineModal($lineId, DocumentLineService $lineService): void
+    {
+        $this->resetLineForm();
+
+        if ($lineId) {
+            $this->loadLine($lineId);
+        } else {
+            $defaults = $lineService->getDefaultLineValues();
+            $this->line_vat_rate_id = $defaults['vat_rate_id'] ?? '';
+            $this->line_vat_percent = $defaults['vat_percent'];
+        }
+
+        $this->showLineModal = true;
+    }
+
+    public function closeLineModal(): void
+    {
+        $this->showLineModal = false;
+        $this->resetLineForm();
+    }
+
+    public function saveLine(DocumentLineService $lineService): void
+    {
+        $this->validate($this->lineRules());
+
+        $order = Order::findOrFail($this->currentOrderId);
+        $this->authorize('update', $order);
+
+        $lineService->saveLine($order, $this->getLineData(), $this->editingLineId);
+
+        $this->loadOrderLines();
+        $this->closeLineModal();
+    }
+
+    public function deleteLine($lineId, DocumentLineService $lineService): void
+    {
+        $line = OrderLine::findOrFail($lineId);
+        $this->authorize('update', $line->order);
+
+        $lineService->deleteLine($line);
+        $this->loadOrderLines();
+    }
+
+    public function render()
+    {
+        return view('livewire.order-manager', [
+            'orders' => $this->getOrdersQuery()->paginate(15),
+            'statuses' => OrderStatus::active()->ordered()->get(),
+            'contacts' => Contact::active()->ordered()->get(),
+            'projects' => Project::active()->ordered()->get(),
+            'products' => Product::active()->ordered()->get(),
+            'vatRates' => VatRate::active()->ordered()->get(),
+        ]);
+    }
+
+    // Private helpers
+    private function applyContactFields(array $fields): void
+    {
+        foreach ($fields as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
+    }
+
+    private function loadOrder(int $id): void
+    {
+        $order = Order::with('lines.product')->findOrFail($id);
+
+        $this->editingId = $id;
+        $this->title = $order->title;
+        $this->description = $order->description;
+        $this->contact_id = $order->contact_id ?? '';
+        $this->project_id = $order->project_id ?? '';
+        $this->order_status_id = $order->order_status_id ?? '';
+        $this->order_date = $order->order_date?->format('Y-m-d') ?? '';
+        $this->delivery_date = $order->delivery_date?->format('Y-m-d') ?? '';
+        $this->customer_reference = $order->customer_reference;
+        $this->payment_terms_days = $order->payment_terms_days ?? 30;
+        $this->terms_conditions = $order->terms_conditions;
+        $this->internal_notes = $order->internal_notes;
+        $this->customer_name = $order->customer_name;
+        $this->customer_address = $order->customer_address;
+        $this->customer_postal_code = $order->customer_postal_code;
+        $this->customer_city = $order->customer_city;
+        $this->customer_country = $order->customer_country ?? 'Norge';
+        $this->delivery_address = $order->delivery_address;
+        $this->delivery_postal_code = $order->delivery_postal_code;
+        $this->delivery_city = $order->delivery_city;
+        $this->delivery_country = $order->delivery_country ?? 'Norge';
+        $this->is_active = $order->is_active;
+        $this->currentOrderId = $id;
+        $this->loadOrderLines();
+    }
+
+    private function loadLine(int $lineId): void
+    {
+        $line = OrderLine::findOrFail($lineId);
+        $this->editingLineId = $lineId;
+        $this->line_product_id = $line->product_id ?? '';
+        $this->line_description = $line->description;
+        $this->line_quantity = $line->quantity;
+        $this->line_unit = $line->unit;
+        $this->line_unit_price = $line->unit_price;
+        $this->line_discount_percent = $line->discount_percent;
+        $this->line_vat_rate_id = $line->vat_rate_id ?? '';
+        $this->line_vat_percent = $line->vat_percent;
+    }
+
+    private function loadOrderLines(): void
+    {
+        $this->orderLines = $this->currentOrderId
+            ? OrderLine::with(['product', 'vatRate'])->where('order_id', $this->currentOrderId)->ordered()->get()->toArray()
+            : [];
+    }
+
+    private function getOrderData(): array
+    {
+        return [
             'title' => $this->title,
             'description' => $this->description,
             'contact_id' => $this->contact_id ?: null,
@@ -307,82 +430,11 @@ class OrderManager extends Component
             'is_active' => $this->is_active,
             'created_by' => $this->editingId ? Order::find($this->editingId)->created_by : auth()->id(),
         ];
-
-        if ($this->editingId) {
-            $order = Order::findOrFail($this->editingId);
-            $order->update($data);
-            $this->dispatch('toast', message: 'Ordren ble oppdatert', variant: 'success');
-            $this->closeModal();
-        } else {
-            $order = Order::create($data);
-            $this->editingId = $order->id;
-            $this->currentOrderId = $order->id;
-            $this->loadOrderLines();
-            $this->dispatch('toast', message: 'Ordren ble opprettet. Du kan nå legge til linjer.', variant: 'success');
-            // Don't close modal - allow adding lines
-        }
     }
 
-    public function delete($id): void
+    private function getLineData(): array
     {
-        Order::findOrFail($id)->delete();
-        session()->flash('success', 'Ordren ble slettet.');
-    }
-
-    public function convertToInvoice($id): void
-    {
-        $order = Order::findOrFail($id);
-
-        if (! $order->can_convert) {
-            session()->flash('error', 'Ordren kan ikke konverteres til faktura.');
-
-            return;
-        }
-
-        $invoice = $order->convertToInvoice();
-        session()->flash('success', 'Ordren ble konvertert til faktura '.$invoice->invoice_number.'.');
-    }
-
-    // Order Lines Management
-    public function openLineModal($lineId = null): void
-    {
-        $this->resetLineForm();
-
-        if ($lineId) {
-            $this->editingLineId = $lineId;
-            $line = OrderLine::findOrFail($lineId);
-
-            $this->line_product_id = $line->product_id ?? '';
-            $this->line_description = $line->description;
-            $this->line_quantity = $line->quantity;
-            $this->line_unit = $line->unit;
-            $this->line_unit_price = $line->unit_price;
-            $this->line_discount_percent = $line->discount_percent;
-            $this->line_vat_rate_id = $line->vat_rate_id ?? '';
-            $this->line_vat_percent = $line->vat_percent;
-        } else {
-            $defaultVatRate = VatRate::where('is_default', true)->first() ?? VatRate::first();
-            if ($defaultVatRate) {
-                $this->line_vat_rate_id = $defaultVatRate->id;
-                $this->line_vat_percent = $defaultVatRate->rate;
-            }
-        }
-
-        $this->showLineModal = true;
-    }
-
-    public function closeLineModal(): void
-    {
-        $this->showLineModal = false;
-        $this->resetLineForm();
-    }
-
-    public function saveLine(): void
-    {
-        $this->validate($this->lineRules());
-
-        $data = [
-            'order_id' => $this->currentOrderId,
+        return [
             'product_id' => $this->line_product_id ?: null,
             'description' => $this->line_description,
             'quantity' => $this->line_quantity,
@@ -391,38 +443,32 @@ class OrderManager extends Component
             'discount_percent' => $this->line_discount_percent ?? 0,
             'vat_rate_id' => $this->line_vat_rate_id ?: null,
             'vat_percent' => $this->line_vat_percent,
-            'sort_order' => $this->editingLineId
-                ? OrderLine::find($this->editingLineId)->sort_order
-                : OrderLine::where('order_id', $this->currentOrderId)->count(),
         ];
-
-        if ($this->editingLineId) {
-            OrderLine::findOrFail($this->editingLineId)->update($data);
-        } else {
-            OrderLine::create($data);
-        }
-
-        $this->loadOrderLines();
-        $this->closeLineModal();
     }
 
-    public function deleteLine($lineId): void
+    private function getOrdersQuery()
     {
-        OrderLine::findOrFail($lineId)->delete();
-        $this->loadOrderLines();
-    }
+        $query = Order::with(['contact', 'project', 'orderStatus', 'creator', 'lines'])->ordered();
 
-    private function loadOrderLines(): void
-    {
-        if ($this->currentOrderId) {
-            $this->orderLines = OrderLine::with(['product', 'vatRate'])
-                ->where('order_id', $this->currentOrderId)
-                ->ordered()
-                ->get()
-                ->toArray();
-        } else {
-            $this->orderLines = [];
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%'.$this->search.'%')
+                    ->orWhere('order_number', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_name', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_reference', 'like', '%'.$this->search.'%');
+            });
         }
+
+        if ($this->filterStatus) {
+            $query->where('order_status_id', $this->filterStatus);
+        }
+
+        if ($this->filterContact) {
+            $query->where('contact_id', $this->filterContact);
+        }
+
+        return $query;
     }
 
     private function resetForm(): void
@@ -465,56 +511,5 @@ class OrderManager extends Component
         $this->line_discount_percent = 0;
         $this->line_vat_rate_id = '';
         $this->line_vat_percent = 25;
-    }
-
-    public function getStatusColorClass($color): string
-    {
-        return match ($color) {
-            'blue' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-            'yellow' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-            'green' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-            'red' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-            'purple' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
-            'zinc' => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-            default => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-        };
-    }
-
-    public function render()
-    {
-        $query = Order::with([
-            'contact',
-            'project',
-            'orderStatus',
-            'creator',
-            'lines',
-        ])->ordered();
-
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('title', 'like', '%'.$this->search.'%')
-                    ->orWhere('order_number', 'like', '%'.$this->search.'%')
-                    ->orWhere('description', 'like', '%'.$this->search.'%')
-                    ->orWhere('customer_name', 'like', '%'.$this->search.'%')
-                    ->orWhere('customer_reference', 'like', '%'.$this->search.'%');
-            });
-        }
-
-        if ($this->filterStatus) {
-            $query->where('order_status_id', $this->filterStatus);
-        }
-
-        if ($this->filterContact) {
-            $query->where('contact_id', $this->filterContact);
-        }
-
-        return view('livewire.order-manager', [
-            'orders' => $query->paginate(15),
-            'statuses' => OrderStatus::active()->ordered()->get(),
-            'contacts' => Contact::active()->ordered()->get(),
-            'projects' => Project::active()->ordered()->get(),
-            'products' => Product::active()->ordered()->get(),
-            'vatRates' => VatRate::active()->ordered()->get(),
-        ]);
     }
 }

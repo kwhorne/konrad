@@ -69,17 +69,12 @@ class Account extends Model
 
     public function getClassNameAttribute(): string
     {
-        return match ($this->account_class) {
-            '1' => 'Eiendeler',
-            '2' => 'Egenkapital og gjeld',
-            '3' => 'Salgsinntekter',
-            '4' => 'Varekostnad',
-            '5' => 'Lønn og personal',
-            '6' => 'Avskrivninger',
-            '7' => 'Andre driftskostnader',
-            '8' => 'Finansposter',
-            default => 'Ukjent',
-        };
+        return config("accounting.account_classes.{$this->account_class}.name", 'Ukjent');
+    }
+
+    public function getReportCategoryAttribute(): ?string
+    {
+        return config("accounting.account_classes.{$this->account_class}.report_category");
     }
 
     public function getTypeNameAttribute(): string

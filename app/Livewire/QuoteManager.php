@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\HasStatusColorMapping;
 use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Project;
@@ -9,19 +10,23 @@ use App\Models\Quote;
 use App\Models\QuoteLine;
 use App\Models\QuoteStatus;
 use App\Models\VatRate;
+use App\Services\ContactFormPopulator;
+use App\Services\DocumentConversionService;
+use App\Services\DocumentLineService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class QuoteManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, HasStatusColorMapping, WithPagination;
 
+    // Modal states
     public $showModal = false;
 
     public $showLineModal = false;
 
-    public $editingId = null;
-
+    // Filter states
     public $search = '';
 
     public $filterStatus = '';
@@ -29,6 +34,8 @@ class QuoteManager extends Component
     public $filterContact = '';
 
     // Quote form fields
+    public $editingId = null;
+
     public $title = '';
 
     public $description = '';
@@ -80,26 +87,27 @@ class QuoteManager extends Component
 
     public $line_vat_percent = 25;
 
-    // Currently editing quote for lines
+    // Current context
     public $currentQuoteId = null;
 
     public $quoteLines = [];
 
-    public function mount(): void
-    {
-        // Check for contact_id in query parameters to auto-open create modal
-        if (request()->has('contact_id')) {
-            $contactId = request()->get('contact_id');
-            $contact = Contact::find($contactId);
+    protected $messages = [
+        'title.required' => 'Tittel er påkrevd.',
+        'contact_id.required' => 'Kunde er påkrevd.',
+        'valid_until.after_or_equal' => 'Gyldig til må være etter eller lik tilbudsdato.',
+        'line_description.required' => 'Beskrivelse er påkrevd.',
+        'line_quantity.required' => 'Antall er påkrevd.',
+        'line_unit_price.required' => 'Pris er påkrevd.',
+    ];
 
+    public function mount(ContactFormPopulator $populator): void
+    {
+        if (request()->has('contact_id')) {
+            $contact = Contact::find(request()->get('contact_id'));
             if ($contact) {
-                $this->contact_id = $contactId;
-                $this->customer_name = $contact->company_name;
-                $this->customer_address = $contact->address;
-                $this->customer_postal_code = $contact->postal_code;
-                $this->customer_city = $contact->city;
-                $this->customer_country = $contact->country ?? 'Norge';
-                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
+                $this->contact_id = $contact->id;
+                $this->applyContactFields($populator->populateForQuote($contact));
                 $this->quote_date = now()->format('Y-m-d');
                 $this->valid_until = now()->addDays(30)->format('Y-m-d');
                 $this->showModal = true;
@@ -143,15 +151,7 @@ class QuoteManager extends Component
         ];
     }
 
-    protected $messages = [
-        'title.required' => 'Tittel er påkrevd.',
-        'contact_id.required' => 'Kunde er påkrevd.',
-        'valid_until.after_or_equal' => 'Gyldig til må være etter eller lik tilbudsdato.',
-        'line_description.required' => 'Beskrivelse er påkrevd.',
-        'line_quantity.required' => 'Antall er påkrevd.',
-        'line_unit_price.required' => 'Pris er påkrevd.',
-    ];
-
+    // Filter updates
     public function updatedSearch(): void
     {
         $this->resetPage();
@@ -167,73 +167,46 @@ class QuoteManager extends Component
         $this->resetPage();
     }
 
-    public function updatedContactId($value): void
+    public function updatedContactId($value, ContactFormPopulator $populator): void
     {
-        if ($value) {
-            $contact = Contact::find($value);
-            if ($contact) {
-                $this->customer_name = $contact->company_name;
-                $this->customer_address = $contact->address;
-                $this->customer_postal_code = $contact->postal_code;
-                $this->customer_city = $contact->city;
-                $this->customer_country = $contact->country ?? 'Norge';
-                $this->payment_terms_days = $contact->payment_terms_days ?? 30;
-            }
+        if ($value && $contact = Contact::find($value)) {
+            $this->applyContactFields($populator->populateForQuote($contact));
         }
     }
 
-    public function updatedLineProductId($value): void
+    public function updatedLineProductId($value, DocumentLineService $lineService): void
     {
-        if ($value) {
-            $product = Product::with('vatRate')->find($value);
-            if ($product) {
-                $this->line_description = $product->name;
-                $this->line_unit_price = $product->price;
-                $this->line_unit = $product->unit?->abbreviation ?? 'stk';
-                if ($product->vatRate) {
-                    $this->line_vat_rate_id = $product->vatRate->id;
-                    $this->line_vat_percent = $product->vatRate->rate;
-                }
-            }
+        if ($value && $product = Product::with('productType.vatRate')->find($value)) {
+            $fields = $lineService->populateFromProduct($product);
+            $this->line_description = $fields['description'];
+            $this->line_unit_price = $fields['unit_price'];
+            $this->line_unit = $fields['unit'];
+            $this->line_vat_rate_id = $fields['vat_rate_id'] ?? '';
+            $this->line_vat_percent = $fields['vat_percent'];
         }
     }
 
     public function updatedLineVatRateId($value): void
     {
-        if ($value) {
-            $vatRate = VatRate::find($value);
-            if ($vatRate) {
-                $this->line_vat_percent = $vatRate->rate;
-            }
+        if ($value && $vatRate = VatRate::find($value)) {
+            $this->line_vat_percent = $vatRate->rate;
         }
     }
 
+    // Quote CRUD
     public function openModal($id = null): void
     {
+        if ($id) {
+            $quote = Quote::findOrFail($id);
+            $this->authorize('view', $quote);
+        } else {
+            $this->authorize('create', Quote::class);
+        }
+
         $this->resetForm();
 
         if ($id) {
-            $this->editingId = $id;
-            $quote = Quote::with('lines.product')->findOrFail($id);
-
-            $this->title = $quote->title;
-            $this->description = $quote->description;
-            $this->contact_id = $quote->contact_id ?? '';
-            $this->project_id = $quote->project_id ?? '';
-            $this->quote_status_id = $quote->quote_status_id ?? '';
-            $this->quote_date = $quote->quote_date?->format('Y-m-d') ?? '';
-            $this->valid_until = $quote->valid_until?->format('Y-m-d') ?? '';
-            $this->payment_terms_days = $quote->payment_terms_days ?? 30;
-            $this->terms_conditions = $quote->terms_conditions;
-            $this->internal_notes = $quote->internal_notes;
-            $this->customer_name = $quote->customer_name;
-            $this->customer_address = $quote->customer_address;
-            $this->customer_postal_code = $quote->customer_postal_code;
-            $this->customer_city = $quote->customer_city;
-            $this->customer_country = $quote->customer_country ?? 'Norge';
-            $this->is_active = $quote->is_active;
-            $this->currentQuoteId = $id;
-            $this->loadQuoteLines();
+            $this->loadQuote($id);
         } else {
             $this->quote_date = date('Y-m-d');
             $this->valid_until = date('Y-m-d', strtotime('+30 days'));
@@ -256,7 +229,165 @@ class QuoteManager extends Component
     {
         $this->validate();
 
-        $data = [
+        if ($this->editingId) {
+            $quote = Quote::findOrFail($this->editingId);
+            $this->authorize('update', $quote);
+        } else {
+            $this->authorize('create', Quote::class);
+        }
+
+        $data = $this->getQuoteData();
+
+        if ($this->editingId) {
+            $quote->update($data);
+            $this->dispatch('toast', message: 'Tilbudet ble oppdatert', variant: 'success');
+            $this->closeModal();
+        } else {
+            $quote = Quote::create($data);
+            $this->editingId = $quote->id;
+            $this->currentQuoteId = $quote->id;
+            $this->loadQuoteLines();
+            $this->dispatch('toast', message: 'Tilbudet ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+        }
+    }
+
+    public function delete($id): void
+    {
+        $quote = Quote::findOrFail($id);
+        $this->authorize('delete', $quote);
+
+        $quote->delete();
+        session()->flash('success', 'Tilbudet ble slettet.');
+    }
+
+    public function convertToOrder($id, DocumentConversionService $conversionService): void
+    {
+        $quote = Quote::findOrFail($id);
+        $this->authorize('convertToOrder', $quote);
+
+        try {
+            $order = $conversionService->convertQuoteToOrder($quote);
+            session()->flash('success', 'Tilbudet ble konvertert til ordre '.$order->order_number.'.');
+        } catch (\InvalidArgumentException $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    // Line management
+    public function openLineModal($lineId, DocumentLineService $lineService): void
+    {
+        $this->resetLineForm();
+
+        if ($lineId) {
+            $this->loadLine($lineId);
+        } else {
+            $defaults = $lineService->getDefaultLineValues();
+            $this->line_vat_rate_id = $defaults['vat_rate_id'] ?? '';
+            $this->line_vat_percent = $defaults['vat_percent'];
+        }
+
+        $this->showLineModal = true;
+    }
+
+    public function closeLineModal(): void
+    {
+        $this->showLineModal = false;
+        $this->resetLineForm();
+    }
+
+    public function saveLine(DocumentLineService $lineService): void
+    {
+        $this->validate($this->lineRules());
+
+        $quote = Quote::findOrFail($this->currentQuoteId);
+        $this->authorize('update', $quote);
+
+        $lineService->saveLine($quote, $this->getLineData(), $this->editingLineId);
+
+        $this->loadQuoteLines();
+        $this->closeLineModal();
+    }
+
+    public function deleteLine($lineId, DocumentLineService $lineService): void
+    {
+        $line = QuoteLine::findOrFail($lineId);
+        $this->authorize('update', $line->quote);
+
+        $lineService->deleteLine($line);
+        $this->loadQuoteLines();
+    }
+
+    public function render()
+    {
+        return view('livewire.quote-manager', [
+            'quotes' => $this->getQuotesQuery()->paginate(15),
+            'statuses' => QuoteStatus::active()->ordered()->get(),
+            'contacts' => Contact::active()->ordered()->get(),
+            'projects' => Project::active()->ordered()->get(),
+            'products' => Product::active()->ordered()->get(),
+            'vatRates' => VatRate::active()->ordered()->get(),
+        ]);
+    }
+
+    // Private helpers
+    private function applyContactFields(array $fields): void
+    {
+        foreach ($fields as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
+    }
+
+    private function loadQuote(int $id): void
+    {
+        $quote = Quote::with('lines.product')->findOrFail($id);
+
+        $this->editingId = $id;
+        $this->title = $quote->title;
+        $this->description = $quote->description;
+        $this->contact_id = $quote->contact_id ?? '';
+        $this->project_id = $quote->project_id ?? '';
+        $this->quote_status_id = $quote->quote_status_id ?? '';
+        $this->quote_date = $quote->quote_date?->format('Y-m-d') ?? '';
+        $this->valid_until = $quote->valid_until?->format('Y-m-d') ?? '';
+        $this->payment_terms_days = $quote->payment_terms_days ?? 30;
+        $this->terms_conditions = $quote->terms_conditions;
+        $this->internal_notes = $quote->internal_notes;
+        $this->customer_name = $quote->customer_name;
+        $this->customer_address = $quote->customer_address;
+        $this->customer_postal_code = $quote->customer_postal_code;
+        $this->customer_city = $quote->customer_city;
+        $this->customer_country = $quote->customer_country ?? 'Norge';
+        $this->is_active = $quote->is_active;
+        $this->currentQuoteId = $id;
+        $this->loadQuoteLines();
+    }
+
+    private function loadLine(int $lineId): void
+    {
+        $line = QuoteLine::findOrFail($lineId);
+        $this->editingLineId = $lineId;
+        $this->line_product_id = $line->product_id ?? '';
+        $this->line_description = $line->description;
+        $this->line_quantity = $line->quantity;
+        $this->line_unit = $line->unit;
+        $this->line_unit_price = $line->unit_price;
+        $this->line_discount_percent = $line->discount_percent;
+        $this->line_vat_rate_id = $line->vat_rate_id ?? '';
+        $this->line_vat_percent = $line->vat_percent;
+    }
+
+    private function loadQuoteLines(): void
+    {
+        $this->quoteLines = $this->currentQuoteId
+            ? QuoteLine::with(['product', 'vatRate'])->where('quote_id', $this->currentQuoteId)->ordered()->get()->toArray()
+            : [];
+    }
+
+    private function getQuoteData(): array
+    {
+        return [
             'title' => $this->title,
             'description' => $this->description,
             'contact_id' => $this->contact_id ?: null,
@@ -275,82 +406,11 @@ class QuoteManager extends Component
             'is_active' => $this->is_active,
             'created_by' => $this->editingId ? Quote::find($this->editingId)->created_by : auth()->id(),
         ];
-
-        if ($this->editingId) {
-            $quote = Quote::findOrFail($this->editingId);
-            $quote->update($data);
-            $this->dispatch('toast', message: 'Tilbudet ble oppdatert', variant: 'success');
-            $this->closeModal();
-        } else {
-            $quote = Quote::create($data);
-            $this->editingId = $quote->id;
-            $this->currentQuoteId = $quote->id;
-            $this->loadQuoteLines();
-            $this->dispatch('toast', message: 'Tilbudet ble opprettet. Du kan nå legge til linjer.', variant: 'success');
-            // Don't close modal - allow adding lines
-        }
     }
 
-    public function delete($id): void
+    private function getLineData(): array
     {
-        Quote::findOrFail($id)->delete();
-        session()->flash('success', 'Tilbudet ble slettet.');
-    }
-
-    public function convertToOrder($id): void
-    {
-        $quote = Quote::findOrFail($id);
-
-        if (! $quote->can_convert) {
-            session()->flash('error', 'Tilbudet kan ikke konverteres til ordre.');
-
-            return;
-        }
-
-        $order = $quote->convertToOrder();
-        session()->flash('success', 'Tilbudet ble konvertert til ordre '.$order->order_number.'.');
-    }
-
-    // Quote Lines Management
-    public function openLineModal($lineId = null): void
-    {
-        $this->resetLineForm();
-
-        if ($lineId) {
-            $this->editingLineId = $lineId;
-            $line = QuoteLine::findOrFail($lineId);
-
-            $this->line_product_id = $line->product_id ?? '';
-            $this->line_description = $line->description;
-            $this->line_quantity = $line->quantity;
-            $this->line_unit = $line->unit;
-            $this->line_unit_price = $line->unit_price;
-            $this->line_discount_percent = $line->discount_percent;
-            $this->line_vat_rate_id = $line->vat_rate_id ?? '';
-            $this->line_vat_percent = $line->vat_percent;
-        } else {
-            $defaultVatRate = VatRate::where('is_default', true)->first() ?? VatRate::first();
-            if ($defaultVatRate) {
-                $this->line_vat_rate_id = $defaultVatRate->id;
-                $this->line_vat_percent = $defaultVatRate->rate;
-            }
-        }
-
-        $this->showLineModal = true;
-    }
-
-    public function closeLineModal(): void
-    {
-        $this->showLineModal = false;
-        $this->resetLineForm();
-    }
-
-    public function saveLine(): void
-    {
-        $this->validate($this->lineRules());
-
-        $data = [
-            'quote_id' => $this->currentQuoteId,
+        return [
             'product_id' => $this->line_product_id ?: null,
             'description' => $this->line_description,
             'quantity' => $this->line_quantity,
@@ -359,38 +419,31 @@ class QuoteManager extends Component
             'discount_percent' => $this->line_discount_percent ?? 0,
             'vat_rate_id' => $this->line_vat_rate_id ?: null,
             'vat_percent' => $this->line_vat_percent,
-            'sort_order' => $this->editingLineId
-                ? QuoteLine::find($this->editingLineId)->sort_order
-                : QuoteLine::where('quote_id', $this->currentQuoteId)->count(),
         ];
-
-        if ($this->editingLineId) {
-            QuoteLine::findOrFail($this->editingLineId)->update($data);
-        } else {
-            QuoteLine::create($data);
-        }
-
-        $this->loadQuoteLines();
-        $this->closeLineModal();
     }
 
-    public function deleteLine($lineId): void
+    private function getQuotesQuery()
     {
-        QuoteLine::findOrFail($lineId)->delete();
-        $this->loadQuoteLines();
-    }
+        $query = Quote::with(['contact', 'project', 'quoteStatus', 'creator', 'lines'])->ordered();
 
-    private function loadQuoteLines(): void
-    {
-        if ($this->currentQuoteId) {
-            $this->quoteLines = QuoteLine::with(['product', 'vatRate'])
-                ->where('quote_id', $this->currentQuoteId)
-                ->ordered()
-                ->get()
-                ->toArray();
-        } else {
-            $this->quoteLines = [];
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('title', 'like', '%'.$this->search.'%')
+                    ->orWhere('quote_number', 'like', '%'.$this->search.'%')
+                    ->orWhere('description', 'like', '%'.$this->search.'%')
+                    ->orWhere('customer_name', 'like', '%'.$this->search.'%');
+            });
         }
+
+        if ($this->filterStatus) {
+            $query->where('quote_status_id', $this->filterStatus);
+        }
+
+        if ($this->filterContact) {
+            $query->where('contact_id', $this->filterContact);
+        }
+
+        return $query;
     }
 
     private function resetForm(): void
@@ -428,55 +481,5 @@ class QuoteManager extends Component
         $this->line_discount_percent = 0;
         $this->line_vat_rate_id = '';
         $this->line_vat_percent = 25;
-    }
-
-    public function getStatusColorClass($color): string
-    {
-        return match ($color) {
-            'blue' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-            'green' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-            'red' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-            'amber' => 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
-            'purple' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
-            'zinc' => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-            default => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-        };
-    }
-
-    public function render()
-    {
-        $query = Quote::with([
-            'contact',
-            'project',
-            'quoteStatus',
-            'creator',
-            'lines',
-        ])->ordered();
-
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('title', 'like', '%'.$this->search.'%')
-                    ->orWhere('quote_number', 'like', '%'.$this->search.'%')
-                    ->orWhere('description', 'like', '%'.$this->search.'%')
-                    ->orWhere('customer_name', 'like', '%'.$this->search.'%');
-            });
-        }
-
-        if ($this->filterStatus) {
-            $query->where('quote_status_id', $this->filterStatus);
-        }
-
-        if ($this->filterContact) {
-            $query->where('contact_id', $this->filterContact);
-        }
-
-        return view('livewire.quote-manager', [
-            'quotes' => $query->paginate(15),
-            'statuses' => QuoteStatus::active()->ordered()->get(),
-            'contacts' => Contact::active()->ordered()->get(),
-            'projects' => Project::active()->ordered()->get(),
-            'products' => Product::active()->ordered()->get(),
-            'vatRates' => VatRate::active()->ordered()->get(),
-        ]);
     }
 }

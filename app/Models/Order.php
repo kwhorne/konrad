@@ -124,84 +124,21 @@ class Order extends Model
 
     public function recalculateTotals(): void
     {
-        $subtotal = 0;
-        $discountTotal = 0;
-        $vatTotal = 0;
-
-        foreach ($this->lines as $line) {
-            $lineSubtotal = $line->quantity * $line->unit_price;
-            $lineDiscount = $lineSubtotal * ($line->discount_percent / 100);
-            $lineNet = $lineSubtotal - $lineDiscount;
-            $lineVat = $lineNet * ($line->vat_percent / 100);
-
-            $subtotal += $lineSubtotal;
-            $discountTotal += $lineDiscount;
-            $vatTotal += $lineVat;
-        }
+        $totalsService = app(\App\Services\DocumentTotalsService::class);
+        $this->load('lines');
+        $totals = $totalsService->calculate($this->lines);
 
         $this->update([
-            'subtotal' => $subtotal,
-            'discount_total' => $discountTotal,
-            'vat_total' => $vatTotal,
-            'total' => $subtotal - $discountTotal + $vatTotal,
+            'subtotal' => $totals['subtotal'],
+            'discount_total' => $totals['discount_total'],
+            'vat_total' => $totals['vat_total'],
+            'total' => $totals['total'],
         ]);
     }
 
     public function convertToInvoice(): Invoice
     {
-        $dueDate = now()->addDays($this->payment_terms_days);
-        $reminderDays = 14;
-
-        $invoice = Invoice::create([
-            'invoice_type' => 'invoice',
-            'title' => $this->title,
-            'description' => $this->description,
-            'contact_id' => $this->contact_id,
-            'project_id' => $this->project_id,
-            'order_id' => $this->id,
-            'created_by' => auth()->id(),
-            'invoice_date' => now(),
-            'due_date' => $dueDate,
-            'payment_terms_days' => $this->payment_terms_days,
-            'reminder_days' => $reminderDays,
-            'reminder_date' => $dueDate->copy()->addDays($reminderDays),
-            'terms_conditions' => $this->terms_conditions,
-            'customer_name' => $this->customer_name,
-            'customer_address' => $this->customer_address,
-            'customer_postal_code' => $this->customer_postal_code,
-            'customer_city' => $this->customer_city,
-            'customer_country' => $this->customer_country,
-            'customer_reference' => $this->customer_reference,
-            'subtotal' => $this->subtotal,
-            'discount_total' => $this->discount_total,
-            'vat_total' => $this->vat_total,
-            'total' => $this->total,
-            'balance' => $this->total,
-        ]);
-
-        foreach ($this->lines as $line) {
-            InvoiceLine::create([
-                'invoice_id' => $invoice->id,
-                'order_line_id' => $line->id,
-                'product_id' => $line->product_id,
-                'description' => $line->description,
-                'quantity' => $line->quantity,
-                'unit' => $line->unit,
-                'unit_price' => $line->unit_price,
-                'discount_percent' => $line->discount_percent,
-                'vat_rate_id' => $line->vat_rate_id,
-                'vat_percent' => $line->vat_percent,
-                'sort_order' => $line->sort_order,
-            ]);
-        }
-
-        // Update order status to invoiced
-        $invoicedStatus = OrderStatus::where('code', 'invoiced')->first();
-        if ($invoicedStatus) {
-            $this->update(['order_status_id' => $invoicedStatus->id]);
-        }
-
-        return $invoice;
+        return app(\App\Services\DocumentConversionService::class)->convertOrderToInvoice($this);
     }
 
     public function getCanConvertAttribute(): bool

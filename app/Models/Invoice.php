@@ -76,12 +76,19 @@ class Invoice extends Model
             if (empty($invoice->invoice_date)) {
                 $invoice->invoice_date = now();
             }
-            if (empty($invoice->due_date)) {
-                $paymentTerms = $invoice->payment_terms_days ?? 14;
-                $invoice->due_date = $invoice->invoice_date->copy()->addDays($paymentTerms);
-            }
-            if (empty($invoice->reminder_date) && $invoice->due_date && $invoice->reminder_days) {
-                $invoice->reminder_date = $invoice->due_date->copy()->addDays($invoice->reminder_days);
+            if (empty($invoice->due_date) || empty($invoice->reminder_date)) {
+                $invoiceService = app(\App\Services\InvoiceService::class);
+                $dates = $invoiceService->calculateInvoiceDates(
+                    $invoice->invoice_date,
+                    $invoice->payment_terms_days,
+                    $invoice->reminder_days
+                );
+                if (empty($invoice->due_date)) {
+                    $invoice->due_date = $dates['due_date'];
+                }
+                if (empty($invoice->reminder_date) && $dates['reminder_date']) {
+                    $invoice->reminder_date = $dates['reminder_date'];
+                }
             }
             if ($invoice->balance === null) {
                 $invoice->balance = $invoice->total ?? 0;
@@ -157,30 +164,7 @@ class Invoice extends Model
 
     public function recalculateTotals(): void
     {
-        $subtotal = 0;
-        $discountTotal = 0;
-        $vatTotal = 0;
-
-        foreach ($this->lines as $line) {
-            $lineSubtotal = $line->quantity * $line->unit_price;
-            $lineDiscount = $lineSubtotal * ($line->discount_percent / 100);
-            $lineNet = $lineSubtotal - $lineDiscount;
-            $lineVat = $lineNet * ($line->vat_percent / 100);
-
-            $subtotal += $lineSubtotal;
-            $discountTotal += $lineDiscount;
-            $vatTotal += $lineVat;
-        }
-
-        $total = $subtotal - $discountTotal + $vatTotal;
-
-        $this->update([
-            'subtotal' => $subtotal,
-            'discount_total' => $discountTotal,
-            'vat_total' => $vatTotal,
-            'total' => $total,
-            'balance' => $total - $this->paid_amount,
-        ]);
+        app(\App\Services\InvoiceService::class)->recalculateTotals($this);
     }
 
     public function updatePaidAmount(): void
@@ -214,53 +198,7 @@ class Invoice extends Model
 
     public function createCreditNote(): Invoice
     {
-        $creditNote = Invoice::create([
-            'invoice_type' => 'credit_note',
-            'title' => 'Kreditnota for '.$this->invoice_number,
-            'description' => $this->description,
-            'contact_id' => $this->contact_id,
-            'project_id' => $this->project_id,
-            'original_invoice_id' => $this->id,
-            'created_by' => auth()->id(),
-            'invoice_date' => now(),
-            'due_date' => now(),
-            'payment_terms_days' => 0,
-            'customer_name' => $this->customer_name,
-            'customer_address' => $this->customer_address,
-            'customer_postal_code' => $this->customer_postal_code,
-            'customer_city' => $this->customer_city,
-            'customer_country' => $this->customer_country,
-            'customer_reference' => $this->customer_reference,
-            'subtotal' => -$this->subtotal,
-            'discount_total' => -$this->discount_total,
-            'vat_total' => -$this->vat_total,
-            'total' => -$this->total,
-            'paid_amount' => -$this->total,
-            'balance' => 0,
-        ]);
-
-        foreach ($this->lines as $line) {
-            InvoiceLine::create([
-                'invoice_id' => $creditNote->id,
-                'product_id' => $line->product_id,
-                'description' => $line->description,
-                'quantity' => -$line->quantity,
-                'unit' => $line->unit,
-                'unit_price' => $line->unit_price,
-                'discount_percent' => $line->discount_percent,
-                'vat_rate_id' => $line->vat_rate_id,
-                'vat_percent' => $line->vat_percent,
-                'sort_order' => $line->sort_order,
-            ]);
-        }
-
-        // Update original invoice status to credited
-        $creditedStatus = InvoiceStatus::where('code', 'credited')->first();
-        if ($creditedStatus) {
-            $this->update(['invoice_status_id' => $creditedStatus->id]);
-        }
-
-        return $creditNote;
+        return app(\App\Services\InvoiceService::class)->createCreditNote($this);
     }
 
     public function getIsPaidAttribute(): bool

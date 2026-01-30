@@ -2,11 +2,10 @@
 
 namespace App\Livewire;
 
-use App\Jobs\ParseVoucherJob;
 use App\Models\Account;
 use App\Models\Contact;
 use App\Models\IncomingVoucher;
-use App\Services\AccountSuggestionService;
+use App\Services\IncomingVoucherService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -83,7 +82,7 @@ class IncomingVoucherManager extends Component
         $this->showUploadModal = false;
     }
 
-    public function uploadVouchers(): void
+    public function uploadVouchers(IncomingVoucherService $service): void
     {
         $this->validate([
             'uploadFiles' => 'required|array|min:1',
@@ -94,28 +93,11 @@ class IncomingVoucherManager extends Component
             'uploadFiles.*.mimes' => 'Ugyldig filtype. Tillatte typer: PDF, JPG, PNG, GIF, WebP',
         ]);
 
-        $disk = config('voucher.storage.disk', 'local');
-        $path = config('voucher.storage.path', 'incoming-vouchers');
-
-        foreach ($this->uploadFiles as $file) {
-            $storedPath = $file->store($path, $disk);
-
-            $voucher = IncomingVoucher::create([
-                'original_filename' => $file->getClientOriginalName(),
-                'file_path' => $storedPath,
-                'mime_type' => $file->getMimeType(),
-                'file_size' => $file->getSize(),
-                'source' => IncomingVoucher::SOURCE_UPLOAD,
-                'status' => IncomingVoucher::STATUS_PENDING,
-                'created_by' => auth()->id(),
-            ]);
-
-            // Start AI-tolkning asynkront
-            dispatch(new ParseVoucherJob($voucher));
-        }
+        $uploadedCount = count($this->uploadFiles);
+        $service->uploadFiles($this->uploadFiles);
 
         $this->closeUploadModal();
-        session()->flash('success', count($this->uploadFiles).' bilag lastet opp og sendt til tolkning.');
+        session()->flash('success', $uploadedCount.' bilag lastet opp og sendt til tolkning.');
     }
 
     public function openDetail(int $id): void
@@ -149,24 +131,20 @@ class IncomingVoucherManager extends Component
         $this->resetValidation();
     }
 
-    protected function updateSuggestions(): void
+    protected function getSuggestionData(): array
     {
-        if (! $this->selectedVoucher) {
-            return;
-        }
-
-        $this->selectedVoucher->update([
-            'suggested_supplier_id' => $this->editSupplierId,
-            'suggested_invoice_number' => $this->editInvoiceNumber ?: null,
-            'suggested_invoice_date' => $this->editInvoiceDate ?: null,
-            'suggested_due_date' => $this->editDueDate ?: null,
-            'suggested_total' => $this->editTotal ? (float) $this->editTotal : null,
-            'suggested_vat_total' => $this->editVatTotal ? (float) $this->editVatTotal : null,
-            'suggested_account_id' => $this->editAccountId,
-        ]);
+        return [
+            'supplier_id' => $this->editSupplierId,
+            'invoice_number' => $this->editInvoiceNumber ?: null,
+            'invoice_date' => $this->editInvoiceDate ?: null,
+            'due_date' => $this->editDueDate ?: null,
+            'total' => $this->editTotal ?: null,
+            'vat_total' => $this->editVatTotal ?: null,
+            'account_id' => $this->editAccountId,
+        ];
     }
 
-    public function attest(): void
+    public function attest(IncomingVoucherService $service): void
     {
         if (! $this->selectedVoucher) {
             return;
@@ -186,9 +164,7 @@ class IncomingVoucherManager extends Component
             'editAccountId.required' => 'Velg en konto',
         ]);
 
-        $this->updateSuggestions();
-
-        if ($this->selectedVoucher->attest(auth()->user())) {
+        if ($service->attest($this->selectedVoucher, $this->getSuggestionData())) {
             session()->flash('success', 'Bilag attestert.');
             $this->closeDetail();
         } else {
@@ -196,39 +172,23 @@ class IncomingVoucherManager extends Component
         }
     }
 
-    public function approve(): void
+    public function approve(IncomingVoucherService $service): void
     {
         if (! $this->selectedVoucher) {
             return;
         }
 
-        $this->updateSuggestions();
+        $result = $service->approve($this->selectedVoucher, $this->getSuggestionData());
 
-        if ($this->selectedVoucher->approve(auth()->user())) {
-            // Opprett leverandørfaktura og bokfør
-            $supplierInvoice = $this->selectedVoucher->createSupplierInvoice();
-
-            if ($supplierInvoice) {
-                // Registrer kontobruk for læring
-                $supplier = $supplierInvoice->contact;
-                $account = Account::find($this->editAccountId);
-
-                if ($supplier && $account) {
-                    app(AccountSuggestionService::class)->recordUsage(
-                        $supplier,
-                        $this->selectedVoucher->parsed_data['description'] ?? '',
-                        $account
-                    );
-                }
-
-                session()->flash('success', 'Bilag godkjent og bokført.');
+        if ($result['success']) {
+            if ($result['error']) {
+                session()->flash('error', $result['error']);
             } else {
-                session()->flash('error', 'Bilaget ble godkjent, men kunne ikke opprette leverandørfaktura.');
+                session()->flash('success', 'Bilag godkjent og bokført.');
             }
-
             $this->closeDetail();
         } else {
-            session()->flash('error', 'Kunne ikke godkjenne bilaget.');
+            session()->flash('error', $result['error'] ?? 'Kunne ikke godkjenne bilaget.');
         }
     }
 
@@ -244,7 +204,7 @@ class IncomingVoucherManager extends Component
         $this->showRejectModal = false;
     }
 
-    public function reject(): void
+    public function reject(IncomingVoucherService $service): void
     {
         if (! $this->selectedVoucher) {
             return;
@@ -257,7 +217,7 @@ class IncomingVoucherManager extends Component
             'rejectReason.min' => 'Grunnen må være minst 5 tegn',
         ]);
 
-        if ($this->selectedVoucher->reject(auth()->user(), $this->rejectReason)) {
+        if ($service->reject($this->selectedVoucher, $this->rejectReason)) {
             session()->flash('success', 'Bilag avvist.');
             $this->closeRejectModal();
             $this->closeDetail();
@@ -266,37 +226,29 @@ class IncomingVoucherManager extends Component
         }
     }
 
-    public function reParse(int $id): void
+    public function reParse(int $id, IncomingVoucherService $service): void
     {
         $voucher = IncomingVoucher::findOrFail($id);
 
-        if ($voucher->status === IncomingVoucher::STATUS_PARSING) {
+        if ($service->reParse($voucher)) {
+            session()->flash('success', 'Bilaget blir tolket på nytt.');
+        } else {
             session()->flash('error', 'Bilaget tolkes allerede.');
-
-            return;
         }
-
-        $voucher->update(['status' => IncomingVoucher::STATUS_PENDING]);
-        dispatch(new ParseVoucherJob($voucher));
-
-        session()->flash('success', 'Bilaget blir tolket på nytt.');
     }
 
-    public function delete(int $id): void
+    public function delete(int $id, IncomingVoucherService $service): void
     {
         $voucher = IncomingVoucher::findOrFail($id);
 
-        if (in_array($voucher->status, [IncomingVoucher::STATUS_APPROVED, IncomingVoucher::STATUS_POSTED])) {
+        if ($service->delete($voucher)) {
+            session()->flash('success', 'Bilaget ble slettet.');
+
+            if ($this->showDetailModal) {
+                $this->closeDetail();
+            }
+        } else {
             session()->flash('error', 'Kan ikke slette godkjente eller bokførte bilag.');
-
-            return;
-        }
-
-        $voucher->delete();
-        session()->flash('success', 'Bilaget ble slettet.');
-
-        if ($this->showDetailModal) {
-            $this->closeDetail();
         }
     }
 
@@ -339,7 +291,7 @@ class IncomingVoucherManager extends Component
             ->get();
     }
 
-    public function render()
+    public function render(IncomingVoucherService $service)
     {
         $query = IncomingVoucher::with(['suggestedSupplier', 'suggestedAccount', 'creator'])
             ->ordered();
@@ -365,20 +317,9 @@ class IncomingVoucherManager extends Component
 
         $vouchers = $query->paginate(20);
 
-        // Status-tellinger
-        $statusCounts = [
-            'pending' => IncomingVoucher::where('status', IncomingVoucher::STATUS_PENDING)->count(),
-            'parsing' => IncomingVoucher::where('status', IncomingVoucher::STATUS_PARSING)->count(),
-            'parsed' => IncomingVoucher::where('status', IncomingVoucher::STATUS_PARSED)->count(),
-            'attested' => IncomingVoucher::where('status', IncomingVoucher::STATUS_ATTESTED)->count(),
-            'approved' => IncomingVoucher::where('status', IncomingVoucher::STATUS_APPROVED)->count(),
-            'posted' => IncomingVoucher::where('status', IncomingVoucher::STATUS_POSTED)->count(),
-            'rejected' => IncomingVoucher::where('status', IncomingVoucher::STATUS_REJECTED)->count(),
-        ];
-
         return view('livewire.incoming-voucher-manager', [
             'vouchers' => $vouchers,
-            'statusCounts' => $statusCounts,
+            'statusCounts' => $service->getStatusCounts(),
         ]);
     }
 }

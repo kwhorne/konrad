@@ -130,23 +130,25 @@ class ReportService
      */
     public function getIncomeStatement(Carbon $fromDate, Carbon $toDate): array
     {
-        // Revenue accounts (class 3)
-        $revenues = $this->getAccountBalancesForPeriod($fromDate, $toDate, ['3']);
+        $categories = config('accounting.report_categories');
 
-        // Cost of goods sold (class 4)
-        $costOfGoods = $this->getAccountBalancesForPeriod($fromDate, $toDate, ['4']);
+        // Revenue accounts
+        $revenues = $this->getAccountBalancesForPeriod($fromDate, $toDate, $categories['income_revenue']);
 
-        // Payroll costs (class 5)
-        $payrollCosts = $this->getAccountBalancesForPeriod($fromDate, $toDate, ['5']);
+        // Cost of goods sold
+        $costOfGoods = $this->getAccountBalancesForPeriod($fromDate, $toDate, $categories['income_cost_of_goods']);
 
-        // Depreciation (class 6)
-        $depreciation = $this->getAccountBalancesForPeriod($fromDate, $toDate, ['6']);
+        // Payroll costs
+        $payrollCosts = $this->getAccountBalancesForPeriod($fromDate, $toDate, $categories['income_payroll']);
 
-        // Other operating costs (class 7)
-        $otherOperatingCosts = $this->getAccountBalancesForPeriod($fromDate, $toDate, ['7']);
+        // Depreciation
+        $depreciation = $this->getAccountBalancesForPeriod($fromDate, $toDate, $categories['income_depreciation']);
 
-        // Financial items (class 8)
-        $financialItems = $this->getAccountBalancesForPeriod($fromDate, $toDate, ['8']);
+        // Other operating costs
+        $otherOperatingCosts = $this->getAccountBalancesForPeriod($fromDate, $toDate, $categories['income_operating_other']);
+
+        // Financial items
+        $financialItems = $this->getAccountBalancesForPeriod($fromDate, $toDate, $categories['income_financial']);
 
         $totalRevenue = $revenues->sum('amount');
         $totalCostOfGoods = $costOfGoods->sum('amount');
@@ -187,11 +189,13 @@ class ReportService
      */
     public function getBalanceSheet(Carbon $atDate): array
     {
-        // Assets (class 1)
-        $assets = $this->getAccountBalancesAtDate($atDate, ['1']);
+        $categories = config('accounting.report_categories');
 
-        // Equity and liabilities (class 2)
-        $equityAndLiabilities = $this->getAccountBalancesAtDate($atDate, ['2']);
+        // Assets
+        $assets = $this->getAccountBalancesAtDate($atDate, $categories['balance_sheet_asset']);
+
+        // Equity and liabilities
+        $equityAndLiabilities = $this->getAccountBalancesAtDate($atDate, $categories['balance_sheet_equity_liability']);
 
         // Calculate profit/loss from income statement (classes 3-8)
         $incomeStatement = $this->getIncomeStatement(

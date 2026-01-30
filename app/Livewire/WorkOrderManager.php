@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\HasStatusColorMapping;
 use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Project;
@@ -11,12 +12,14 @@ use App\Models\WorkOrderLine;
 use App\Models\WorkOrderPriority;
 use App\Models\WorkOrderStatus;
 use App\Models\WorkOrderType;
+use App\Services\WorkOrderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class WorkOrderManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, HasStatusColorMapping, WithPagination;
 
     public $showModal = false;
 
@@ -153,31 +156,41 @@ class WorkOrderManager extends Component
         $this->resetPage();
     }
 
-    public function updatedLineProductId($value): void
+    public function updatedLineProductId($value, WorkOrderService $service): void
     {
         if ($value) {
             $product = Product::find($value);
             if ($product) {
-                $this->line_description = $product->name;
-                $this->line_unit_price = $product->price;
+                $data = $service->populateFromProduct($product);
+                $this->line_description = $data['description'];
+                $this->line_unit_price = $data['unit_price'];
             }
         }
     }
 
-    public function updatedLineType($value): void
+    public function updatedLineType($value, WorkOrderService $service): void
     {
         if ($value === 'time') {
+            $defaults = $service->getTimeEntryDefaults();
             $this->line_product_id = '';
-            $this->line_performed_at = date('Y-m-d');
-            $this->line_performed_by = auth()->id();
+            $this->line_performed_at = $defaults['performed_at'];
+            $this->line_performed_by = $defaults['performed_by'];
         } else {
-            $this->line_performed_at = '';
-            $this->line_performed_by = '';
+            $defaults = $service->getProductEntryDefaults();
+            $this->line_performed_at = $defaults['performed_at'] ?? '';
+            $this->line_performed_by = $defaults['performed_by'] ?? '';
         }
     }
 
     public function openModal($id = null): void
     {
+        if ($id) {
+            $workOrder = WorkOrder::findOrFail($id);
+            $this->authorize('view', $workOrder);
+        } else {
+            $this->authorize('create', WorkOrder::class);
+        }
+
         $this->resetForm();
 
         if ($id) {
@@ -215,6 +228,13 @@ class WorkOrderManager extends Component
     {
         $this->validate();
 
+        if ($this->editingId) {
+            $workOrder = WorkOrder::findOrFail($this->editingId);
+            $this->authorize('update', $workOrder);
+        } else {
+            $this->authorize('create', WorkOrder::class);
+        }
+
         $data = [
             'title' => $this->title,
             'description' => $this->description,
@@ -230,11 +250,10 @@ class WorkOrderManager extends Component
             'budget' => $this->budget ?: null,
             'internal_notes' => $this->internal_notes,
             'is_active' => $this->is_active,
-            'created_by' => $this->editingId ? WorkOrder::find($this->editingId)->created_by : auth()->id(),
+            'created_by' => $this->editingId ? $workOrder->created_by : auth()->id(),
         ];
 
         if ($this->editingId) {
-            $workOrder = WorkOrder::findOrFail($this->editingId);
             $workOrder->update($data);
             session()->flash('success', 'Arbeidsordren ble oppdatert.');
         } else {
@@ -249,13 +268,18 @@ class WorkOrderManager extends Component
 
     public function delete($id): void
     {
-        WorkOrder::findOrFail($id)->delete();
+        $workOrder = WorkOrder::findOrFail($id);
+        $this->authorize('delete', $workOrder);
+
+        $workOrder->delete();
         session()->flash('success', 'Arbeidsordren ble slettet.');
     }
 
     public function toggleActive($id): void
     {
         $workOrder = WorkOrder::findOrFail($id);
+        $this->authorize('update', $workOrder);
+
         $workOrder->update(['is_active' => ! $workOrder->is_active]);
     }
 
@@ -290,38 +314,34 @@ class WorkOrderManager extends Component
         $this->resetLineForm();
     }
 
-    public function saveLine(): void
+    public function saveLine(WorkOrderService $service): void
     {
         $this->validate($this->lineRules());
 
-        $data = [
-            'work_order_id' => $this->currentWorkOrderId,
+        $workOrder = WorkOrder::findOrFail($this->currentWorkOrderId);
+        $this->authorize('update', $workOrder);
+
+        $service->saveLine($workOrder, [
             'line_type' => $this->line_type,
-            'product_id' => $this->line_type === 'product' ? ($this->line_product_id ?: null) : null,
+            'product_id' => $this->line_product_id,
             'description' => $this->line_description,
             'quantity' => $this->line_quantity,
             'unit_price' => $this->line_unit_price,
-            'discount_percent' => $this->line_discount_percent ?? 0,
-            'performed_at' => $this->line_type === 'time' ? ($this->line_performed_at ?: null) : null,
-            'performed_by' => $this->line_type === 'time' ? ($this->line_performed_by ?: null) : null,
-            'sort_order' => $this->editingLineId
-                ? WorkOrderLine::find($this->editingLineId)->sort_order
-                : WorkOrderLine::where('work_order_id', $this->currentWorkOrderId)->count(),
-        ];
-
-        if ($this->editingLineId) {
-            WorkOrderLine::findOrFail($this->editingLineId)->update($data);
-        } else {
-            WorkOrderLine::create($data);
-        }
+            'discount_percent' => $this->line_discount_percent,
+            'performed_at' => $this->line_performed_at,
+            'performed_by' => $this->line_performed_by,
+        ], $this->editingLineId);
 
         $this->loadWorkOrderLines();
         $this->closeLineModal();
     }
 
-    public function deleteLine($lineId): void
+    public function deleteLine($lineId, WorkOrderService $service): void
     {
-        WorkOrderLine::findOrFail($lineId)->delete();
+        $line = WorkOrderLine::findOrFail($lineId);
+        $this->authorize('update', $line->workOrder);
+
+        $service->deleteLine($line);
         $this->loadWorkOrderLines();
     }
 
@@ -371,21 +391,6 @@ class WorkOrderManager extends Component
         $this->line_discount_percent = 0;
         $this->line_performed_at = '';
         $this->line_performed_by = '';
-    }
-
-    public function getStatusColorClass($color): string
-    {
-        return match ($color) {
-            'blue' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-            'indigo' => 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400',
-            'yellow' => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-            'green' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-            'emerald' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
-            'purple' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
-            'red' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-            'gray' => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-            default => 'bg-zinc-100 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-300',
-        };
     }
 
     public function render()

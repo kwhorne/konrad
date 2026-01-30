@@ -5,13 +5,14 @@ namespace App\Livewire;
 use App\Models\Account;
 use App\Models\Contact;
 use App\Models\Voucher;
-use App\Models\VoucherLine;
+use App\Services\VoucherService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class VoucherManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public string $search = '';
 
@@ -89,28 +90,35 @@ class VoucherManager extends Component
         return Contact::orderBy('company_name')->get();
     }
 
-    public function getTotalDebitProperty(): float
+    public function getTotalDebitProperty(VoucherService $service): float
     {
-        return collect($this->workingLines)->sum('debit');
+        return $service->calculateTotalDebit($this->workingLines);
     }
 
-    public function getTotalCreditProperty(): float
+    public function getTotalCreditProperty(VoucherService $service): float
     {
-        return collect($this->workingLines)->sum('credit');
+        return $service->calculateTotalCredit($this->workingLines);
     }
 
-    public function getDifferenceProperty(): float
+    public function getDifferenceProperty(VoucherService $service): float
     {
-        return abs($this->totalDebit - $this->totalCredit);
+        return $service->calculateDifference($this->workingLines);
     }
 
-    public function getIsBalancedProperty(): bool
+    public function getIsBalancedProperty(VoucherService $service): bool
     {
-        return $this->difference < 0.01 && count($this->workingLines) > 0;
+        return $service->isBalanced($this->workingLines);
     }
 
-    public function openModal(?int $id = null): void
+    public function openModal(?int $id, VoucherService $service): void
     {
+        if ($id) {
+            $voucher = Voucher::with('lines.account', 'lines.contact')->findOrFail($id);
+            $this->authorize('view', $voucher);
+        } else {
+            $this->authorize('create', Voucher::class);
+        }
+
         $this->resetValidation();
         $this->editingId = $id;
 
@@ -118,20 +126,7 @@ class VoucherManager extends Component
             $voucher = Voucher::with('lines.account', 'lines.contact')->findOrFail($id);
             $this->voucher_date = $voucher->voucher_date->format('Y-m-d');
             $this->description = $voucher->description ?? '';
-
-            $this->workingLines = $voucher->lines->map(function ($line) {
-                return [
-                    'id' => $line->id,
-                    'account_id' => $line->account_id,
-                    'account_number' => $line->account->account_number,
-                    'account_name' => $line->account->name,
-                    'description' => $line->description ?? '',
-                    'debit' => (float) $line->debit,
-                    'credit' => (float) $line->credit,
-                    'contact_id' => $line->contact_id,
-                    'contact_name' => $line->contact?->company_name,
-                ];
-            })->toArray();
+            $this->workingLines = $service->voucherLinesToWorkingLines($voucher);
         } else {
             $this->voucher_date = now()->format('Y-m-d');
             $this->description = '';
@@ -191,7 +186,7 @@ class VoucherManager extends Component
         }
     }
 
-    public function saveLine(): void
+    public function saveLine(VoucherService $service): void
     {
         $this->validate([
             'line_account_id' => 'required|exists:accounts,id',
@@ -206,37 +201,31 @@ class VoucherManager extends Component
         $debit = (float) ($this->line_debit ?: 0);
         $credit = (float) ($this->line_credit ?: 0);
 
-        if ($debit == 0 && $credit == 0) {
-            $this->addError('line_debit', 'Du må fylle inn debet eller kredit');
+        $errors = $service->validateLineAmounts($debit, $credit);
+        if ($errors) {
+            foreach ($errors as $field => $message) {
+                $this->addError('line_'.$field, $message);
+            }
 
             return;
         }
 
-        if ($debit > 0 && $credit > 0) {
-            $this->addError('line_debit', 'Du kan ikke fylle inn både debet og kredit på samme linje');
+        $existingId = $this->editingLineId !== null
+            ? ($this->workingLines[$this->editingLineId]['id'] ?? null)
+            : null;
 
-            return;
-        }
-
-        $account = Account::find($this->line_account_id);
-        $contact = $this->line_contact_id ? Contact::find($this->line_contact_id) : null;
-
-        $lineData = [
-            'account_id' => $this->line_account_id,
-            'account_number' => $account->account_number,
-            'account_name' => $account->name,
-            'description' => $this->line_description,
-            'debit' => $debit,
-            'credit' => $credit,
-            'contact_id' => $this->line_contact_id,
-            'contact_name' => $contact?->company_name,
-        ];
+        $lineData = $service->buildLineData(
+            $this->line_account_id,
+            $this->line_description,
+            $debit,
+            $credit,
+            $this->line_contact_id ?: null,
+            $existingId
+        );
 
         if ($this->editingLineId !== null) {
-            $lineData['id'] = $this->workingLines[$this->editingLineId]['id'] ?? null;
             $this->workingLines[$this->editingLineId] = $lineData;
         } else {
-            $lineData['id'] = null;
             $this->workingLines[] = $lineData;
         }
 
@@ -249,7 +238,7 @@ class VoucherManager extends Component
         $this->workingLines = array_values($this->workingLines);
     }
 
-    public function save(): void
+    public function save(VoucherService $service): void
     {
         $this->validate([
             'voucher_date' => 'required|date',
@@ -259,111 +248,67 @@ class VoucherManager extends Component
             'description.required' => 'Beskrivelse er påkrevd',
         ]);
 
-        if (count($this->workingLines) < 2) {
-            $this->addError('workingLines', 'Et bilag må ha minst 2 linjer');
-
-            return;
-        }
-
-        if (! $this->isBalanced) {
-            $this->addError('workingLines', 'Debet og kredit må være i balanse');
-
-            return;
-        }
-
         if ($this->editingId) {
             $voucher = Voucher::findOrFail($this->editingId);
-
-            if ($voucher->is_posted) {
-                $this->addError('workingLines', 'Kan ikke redigere et bokført bilag');
-
-                return;
-            }
-
-            $voucher->update([
-                'voucher_date' => $this->voucher_date,
-                'description' => $this->description,
-            ]);
-
-            // Get existing line IDs
-            $existingIds = collect($this->workingLines)->pluck('id')->filter()->toArray();
-
-            // Delete removed lines
-            $voucher->lines()->whereNotIn('id', $existingIds)->delete();
-
-            // Update or create lines
-            foreach ($this->workingLines as $index => $line) {
-                if ($line['id']) {
-                    VoucherLine::find($line['id'])->update([
-                        'account_id' => $line['account_id'],
-                        'description' => $line['description'],
-                        'debit' => $line['debit'],
-                        'credit' => $line['credit'],
-                        'contact_id' => $line['contact_id'],
-                        'sort_order' => $index,
-                    ]);
-                } else {
-                    $voucher->lines()->create([
-                        'account_id' => $line['account_id'],
-                        'description' => $line['description'],
-                        'debit' => $line['debit'],
-                        'credit' => $line['credit'],
-                        'contact_id' => $line['contact_id'],
-                        'sort_order' => $index,
-                    ]);
-                }
-            }
-
-            $voucher->recalculateTotals();
+            $this->authorize('update', $voucher);
         } else {
-            $voucher = Voucher::create([
-                'voucher_date' => $this->voucher_date,
-                'description' => $this->description,
-                'voucher_type' => 'manual',
-                'created_by' => auth()->id(),
-            ]);
+            $this->authorize('create', Voucher::class);
+        }
 
-            foreach ($this->workingLines as $index => $line) {
-                $voucher->lines()->create([
-                    'account_id' => $line['account_id'],
-                    'description' => $line['description'],
-                    'debit' => $line['debit'],
-                    'credit' => $line['credit'],
-                    'contact_id' => $line['contact_id'],
-                    'sort_order' => $index,
-                ]);
+        $errors = $service->validateVoucher($this->workingLines);
+        if ($errors) {
+            foreach ($errors as $field => $message) {
+                $this->addError('workingLines', $message);
             }
 
-            $voucher->recalculateTotals();
+            return;
+        }
+
+        $voucherData = [
+            'voucher_date' => $this->voucher_date,
+            'description' => $this->description,
+            'voucher_type' => 'manual',
+        ];
+
+        try {
+            if ($this->editingId) {
+                $voucher = Voucher::findOrFail($this->editingId);
+                $service->updateVoucher($voucher, $voucherData, $this->workingLines);
+            } else {
+                $service->createVoucher($voucherData, $this->workingLines);
+            }
+        } catch (\InvalidArgumentException $e) {
+            $this->addError('workingLines', $e->getMessage());
+
+            return;
         }
 
         $this->closeModal();
         session()->flash('success', $this->editingId ? 'Bilaget ble oppdatert' : 'Bilaget ble opprettet');
     }
 
-    public function post(int $id): void
+    public function post(int $id, VoucherService $service): void
     {
         $voucher = Voucher::findOrFail($id);
+        $this->authorize('post', $voucher);
 
-        if ($voucher->post()) {
+        if ($service->postVoucher($voucher)) {
             session()->flash('success', 'Bilaget ble bokført');
         } else {
             session()->flash('error', 'Kunne ikke bokføre bilaget. Sjekk at debet og kredit er i balanse.');
         }
     }
 
-    public function delete(int $id): void
+    public function delete(int $id, VoucherService $service): void
     {
         $voucher = Voucher::findOrFail($id);
+        $this->authorize('delete', $voucher);
 
-        if ($voucher->is_posted) {
+        if ($service->deleteVoucher($voucher)) {
+            session()->flash('success', 'Bilaget ble slettet');
+        } else {
             session()->flash('error', 'Kan ikke slette et bokført bilag');
-
-            return;
         }
-
-        $voucher->delete();
-        session()->flash('success', 'Bilaget ble slettet');
     }
 
     public function render()

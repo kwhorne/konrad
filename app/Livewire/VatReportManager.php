@@ -6,6 +6,7 @@ use App\Models\VatReport;
 use App\Models\VatReportAttachment;
 use App\Models\VatReportLine;
 use App\Services\VatReportService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
@@ -14,7 +15,7 @@ use Livewire\WithPagination;
 
 class VatReportManager extends Component
 {
-    use WithFileUploads, WithPagination;
+    use AuthorizesRequests, WithFileUploads, WithPagination;
 
     public string $search = '';
 
@@ -100,22 +101,14 @@ class VatReportManager extends Component
     }
 
     #[Computed]
-    public function availableYears(): array
+    public function availableYears(VatReportService $service): array
     {
-        $years = [];
-        $currentYear = now()->year;
-        for ($i = $currentYear; $i >= $currentYear - 5; $i--) {
-            $years[] = $i;
-        }
-
-        return $years;
+        return $service->getAvailableYears();
     }
 
     #[Computed]
-    public function availablePeriods(): Collection
+    public function availablePeriods(VatReportService $service): Collection
     {
-        $service = app(VatReportService::class);
-
         return $service->getAvailablePeriods($this->createYear);
     }
 
@@ -132,14 +125,14 @@ class VatReportManager extends Component
         $this->resetValidation();
     }
 
-    public function create(): void
+    public function create(VatReportService $service): void
     {
+        $this->authorize('create', VatReport::class);
+
         $this->validate([
             'createYear' => 'required|integer|min:2020|max:2099',
             'createPeriod' => 'required|integer|min:1|max:6',
         ]);
-
-        $service = app(VatReportService::class);
 
         if ($service->reportExists($this->createYear, $this->createPeriod)) {
             $this->addError('createPeriod', 'Det finnes allerede en MVA-melding for denne perioden.');
@@ -157,6 +150,8 @@ class VatReportManager extends Component
 
     public function openEditModal(VatReport $report): void
     {
+        $this->authorize('view', $report);
+
         $this->editingReport = $report->load(['lines.vatCode', 'attachments']);
         $this->reportNote = $report->note;
         $this->showEditModal = true;
@@ -169,13 +164,14 @@ class VatReportManager extends Component
         $this->resetValidation();
     }
 
-    public function calculate(): void
+    public function calculate(VatReportService $service): void
     {
         if (! $this->editingReport) {
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('update', $this->editingReport);
+
         $this->editingReport = $service->calculateReport($this->editingReport);
 
         session()->flash('success', 'MVA-melding beregnet.');
@@ -200,7 +196,7 @@ class VatReportManager extends Component
         $this->resetValidation();
     }
 
-    public function saveLine(): void
+    public function saveLine(VatReportService $service): void
     {
         $this->validate([
             'lineBaseAmount' => 'required|numeric',
@@ -211,7 +207,8 @@ class VatReportManager extends Component
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('update', $this->editingLine->vatReport);
+
         $service->updateLine(
             $this->editingLine,
             (float) $this->lineBaseAmount,
@@ -241,13 +238,14 @@ class VatReportManager extends Component
         $this->showNoteModal = false;
     }
 
-    public function saveNote(): void
+    public function saveNote(VatReportService $service): void
     {
         if (! $this->editingReport) {
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('update', $this->editingReport);
+
         $this->editingReport = $service->updateNote($this->editingReport, $this->reportNote);
         $this->editingReport->load(['lines.vatCode', 'attachments']);
 
@@ -255,7 +253,7 @@ class VatReportManager extends Component
         session()->flash('success', 'Merknad lagret.');
     }
 
-    public function uploadAttachment(): void
+    public function uploadAttachment(VatReportService $service): void
     {
         $this->validate([
             'attachment' => 'required|file|max:10240', // Max 10MB
@@ -265,7 +263,8 @@ class VatReportManager extends Component
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('update', $this->editingReport);
+
         $service->addAttachment($this->editingReport, $this->attachment);
 
         $this->editingReport = $this->editingReport->fresh(['lines.vatCode', 'attachments']);
@@ -274,9 +273,10 @@ class VatReportManager extends Component
         session()->flash('success', 'Vedlegg lastet opp.');
     }
 
-    public function removeAttachment(VatReportAttachment $attachment): void
+    public function removeAttachment(VatReportAttachment $attachment, VatReportService $service): void
     {
-        $service = app(VatReportService::class);
+        $this->authorize('update', $attachment->vatReport);
+
         $service->removeAttachment($attachment);
 
         if ($this->editingReport) {
@@ -298,13 +298,14 @@ class VatReportManager extends Component
         $this->altinnReference = null;
     }
 
-    public function submit(): void
+    public function submit(VatReportService $service): void
     {
         if (! $this->editingReport) {
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('submit', $this->editingReport);
+
         $this->editingReport = $service->submitReport($this->editingReport, $this->altinnReference);
         $this->editingReport->load(['lines.vatCode', 'attachments']);
 
@@ -312,42 +313,43 @@ class VatReportManager extends Component
         session()->flash('success', 'MVA-melding merket som sendt.');
     }
 
-    public function markAccepted(): void
+    public function markAccepted(VatReportService $service): void
     {
         if (! $this->editingReport) {
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('changeStatus', $this->editingReport);
+
         $this->editingReport = $service->acceptReport($this->editingReport);
         $this->editingReport->load(['lines.vatCode', 'attachments']);
 
         session()->flash('success', 'MVA-melding merket som godkjent.');
     }
 
-    public function markRejected(): void
+    public function markRejected(VatReportService $service): void
     {
         if (! $this->editingReport) {
             return;
         }
 
-        $service = app(VatReportService::class);
+        $this->authorize('changeStatus', $this->editingReport);
+
         $this->editingReport = $service->rejectReport($this->editingReport);
         $this->editingReport->load(['lines.vatCode', 'attachments']);
 
         session()->flash('success', 'MVA-melding merket som avvist.');
     }
 
-    public function delete(VatReport $report): void
+    public function delete(VatReport $report, VatReportService $service): void
     {
-        if ($report->status !== 'draft') {
+        $this->authorize('delete', $report);
+
+        if ($service->deleteReport($report)) {
+            session()->flash('success', 'MVA-melding slettet.');
+        } else {
             session()->flash('error', 'Kan ikke slette MVA-meldinger som er sendt eller godkjent.');
-
-            return;
         }
-
-        $report->delete();
-        session()->flash('success', 'MVA-melding slettet.');
     }
 
     public function updatedFilterYear(): void
