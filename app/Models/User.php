@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -31,6 +33,8 @@ class User extends Authenticatable
         'invitation_accepted_at',
         'last_login_at',
         'seen_version',
+        'current_company_id',
+        'onboarding_completed',
     ];
 
     /**
@@ -60,7 +64,109 @@ class User extends Authenticatable
             'invited_at' => 'datetime',
             'invitation_accepted_at' => 'datetime',
             'last_login_at' => 'datetime',
+            'onboarding_completed' => 'boolean',
         ];
+    }
+
+    /**
+     * Get all companies the user belongs to.
+     */
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class)
+            ->withPivot(['role', 'is_default', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the user's currently active company.
+     */
+    public function currentCompany(): BelongsTo
+    {
+        return $this->belongsTo(Company::class, 'current_company_id');
+    }
+
+    /**
+     * Get the user's default company.
+     */
+    public function defaultCompany(): ?Company
+    {
+        return $this->companies()->wherePivot('is_default', true)->first()
+            ?? $this->companies()->first();
+    }
+
+    /**
+     * Check if user is the owner of a company.
+     */
+    public function isOwnerOf(Company $company): bool
+    {
+        return $this->companies()
+            ->wherePivot('company_id', $company->id)
+            ->wherePivot('role', 'owner')
+            ->exists();
+    }
+
+    /**
+     * Check if user is a manager of a company.
+     */
+    public function isManagerOf(Company $company): bool
+    {
+        return $this->companies()
+            ->wherePivot('company_id', $company->id)
+            ->wherePivot('role', 'manager')
+            ->exists();
+    }
+
+    /**
+     * Check if user can manage a company (owner or manager).
+     */
+    public function canManage(Company $company): bool
+    {
+        return $this->companies()
+            ->wherePivot('company_id', $company->id)
+            ->whereIn('company_user.role', ['owner', 'manager'])
+            ->exists();
+    }
+
+    /**
+     * Check if user belongs to any company.
+     */
+    public function hasCompany(): bool
+    {
+        return $this->companies()->exists();
+    }
+
+    /**
+     * Check if user needs onboarding.
+     */
+    public function needsOnboarding(): bool
+    {
+        return ! $this->onboarding_completed || ! $this->hasCompany();
+    }
+
+    /**
+     * Get the user's role in a specific company.
+     */
+    public function roleIn(Company $company): ?string
+    {
+        $pivot = $this->companies()
+            ->wherePivot('company_id', $company->id)
+            ->first()?->pivot;
+
+        return $pivot?->role;
+    }
+
+    /**
+     * Get role label in Norwegian.
+     */
+    public function getRoleLabelIn(Company $company): string
+    {
+        return match ($this->roleIn($company)) {
+            'owner' => 'Eier',
+            'manager' => 'Administrator',
+            'member' => 'Medlem',
+            default => 'Ukjent',
+        };
     }
 
     /**

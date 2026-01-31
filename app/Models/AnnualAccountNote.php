@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AnnualAccountNote extends Model
 {
-    use HasFactory;
+    use BelongsToCompany, HasFactory;
 
     // Standard notetyper for norsk årsregnskap
     public const NOTE_TYPES = [

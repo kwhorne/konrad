@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TaxDepreciationSchedule extends Model
 {
-    use HasFactory;
+    use BelongsToCompany, HasFactory;
 
     // Standard norske saldogrupper med avskrivningssatser
     public const DEPRECIATION_GROUPS = [

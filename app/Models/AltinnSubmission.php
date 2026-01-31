@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AltinnSubmission extends Model
 {
-    use SoftDeletes;
+    use BelongsToCompany, SoftDeletes;
 
     // Submission types
     public const TYPE_AKSJONAERREGISTER = 'aksjonaerregister';

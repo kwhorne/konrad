@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DeferredTaxItem extends Model
 {
-    use HasFactory;
+    use BelongsToCompany, HasFactory;
 
     public const TAX_RATE = 0.22; // 22% norsk selskapsskatt
 
