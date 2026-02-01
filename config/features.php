@@ -22,5 +22,6 @@ return [
     'sales' => env('SALES_ENABLED', false),
     'shareholders' => env('SHAREHOLDERS_ENABLED', false),
     'altinn' => env('ALTINN_ENABLED', false),
+    'inventory' => env('INVENTORY_ENABLED', false),
 
 ];

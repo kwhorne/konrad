@@ -107,6 +107,26 @@
             </flux:sidebar.item>
         @endif
 
+        @if(config('features.inventory'))
+            <flux:sidebar.group expandable icon="archive-box" heading="Lager" :expanded="in_array($current, ['inventory', 'purchasing'])">
+                <flux:sidebar.item href="{{ route('inventory.dashboard') }}" :current="$current === 'inventory-dashboard'">
+                    Lageroversikt
+                </flux:sidebar.item>
+                <flux:sidebar.item href="{{ route('inventory.stock-levels') }}" :current="$current === 'stock-levels'">
+                    Beholdning
+                </flux:sidebar.item>
+                <flux:sidebar.item href="{{ route('purchasing.purchase-orders.index') }}" :current="$current === 'purchase-orders'">
+                    Innkjopsordrer
+                </flux:sidebar.item>
+                <flux:sidebar.item href="{{ route('purchasing.goods-receipts.index') }}" :current="$current === 'goods-receipts'">
+                    Varemottak
+                </flux:sidebar.item>
+                <flux:sidebar.item href="{{ route('inventory.locations') }}" :current="$current === 'stock-locations'">
+                    Lokasjoner
+                </flux:sidebar.item>
+            </flux:sidebar.group>
+        @endif
+
         @if(auth()->user()->is_economy || auth()->user()->is_admin)
             <flux:sidebar.item icon="calculator" href="{{ route('economy.dashboard') }}">
                 Økonomi

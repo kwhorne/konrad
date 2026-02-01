@@ -205,6 +205,27 @@ Route::middleware('auth')->group(function () {
             Route::get('/rapporter', fn () => view('timesheets.reports'))->name('reports')->middleware('company.manager');
         });
 
+        // Inventory routes
+        Route::middleware(['feature:inventory'])->prefix('inventory')->name('inventory.')->group(function () {
+            Route::get('/', fn () => view('inventory.dashboard'))->name('dashboard');
+            Route::get('/stock-levels', fn () => view('inventory.stock-levels'))->name('stock-levels');
+            Route::get('/transactions', fn () => view('inventory.transactions'))->name('transactions');
+            Route::get('/locations', fn () => view('inventory.locations'))->name('locations');
+            Route::get('/adjustments', fn () => view('inventory.adjustments'))->name('adjustments');
+        });
+
+        // Purchasing routes
+        Route::middleware(['feature:inventory'])->prefix('purchasing')->name('purchasing.')->group(function () {
+            Route::get('/purchase-orders', fn () => view('purchasing.purchase-orders.index'))->name('purchase-orders.index');
+            Route::get('/purchase-orders/create', fn () => view('purchasing.purchase-orders.create'))->name('purchase-orders.create');
+            Route::get('/purchase-orders/{purchaseOrder}', fn ($purchaseOrder) => view('purchasing.purchase-orders.show', compact('purchaseOrder')))->name('purchase-orders.show');
+            Route::get('/purchase-orders/{purchaseOrder}/edit', fn ($purchaseOrder) => view('purchasing.purchase-orders.edit', compact('purchaseOrder')))->name('purchase-orders.edit');
+
+            Route::get('/goods-receipts', fn () => view('purchasing.goods-receipts.index'))->name('goods-receipts.index');
+            Route::get('/goods-receipts/create', fn () => view('purchasing.goods-receipts.create'))->name('goods-receipts.create');
+            Route::get('/goods-receipts/{goodsReceipt}', fn ($goodsReceipt) => view('purchasing.goods-receipts.show', compact('goodsReceipt')))->name('goods-receipts.show');
+        });
+
         // Economy routes - accessible by economy users and admins
         Route::middleware('economy')->prefix('economy')->name('economy.')->group(function () {
             Route::get('/', [EconomyController::class, 'dashboard'])->name('dashboard');

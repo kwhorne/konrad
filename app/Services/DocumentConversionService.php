@@ -13,8 +13,11 @@ use App\Models\QuoteStatus;
 class DocumentConversionService
 {
     public function __construct(
-        private InvoiceService $invoiceService
-    ) {}
+        private InvoiceService $invoiceService,
+        private ?OrderStockService $orderStockService = null
+    ) {
+        $this->orderStockService = $orderStockService ?? app(OrderStockService::class);
+    }
 
     /**
      * Convert a quote to an order.
@@ -136,6 +139,11 @@ class DocumentConversionService
         $invoicedStatus = OrderStatus::where('code', 'invoiced')->first();
         if ($invoicedStatus) {
             $order->update(['order_status_id' => $invoicedStatus->id]);
+        }
+
+        // Issue stock for stocked products (fulfills reservations or direct issue)
+        if (config('features.inventory')) {
+            $this->orderStockService->issueStockForInvoice($invoice);
         }
 
         return $invoice;

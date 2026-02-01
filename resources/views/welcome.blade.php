@@ -1,6 +1,6 @@
 <x-layouts.public
     title="Konrad Office - Komplett forretningssystem for norske bedrifter"
-    description="Konrad Office samler fakturering, regnskap, prosjektstyring, kontraktshåndtering og eiendelsregister i ett system. Skreddersydd for norske SMB-bedrifter."
+    description="Konrad Office samler fakturering, regnskap, prosjektstyring, timeregistrering, årsoppgjør og intelligent selskapsanalyse i ett system. Skreddersydd for norske SMB-bedrifter."
     :open-modal="$openModal ?? null"
 >
     @php
@@ -10,7 +10,7 @@
             "name" => "Konrad Office",
             "applicationCategory" => "BusinessApplication",
             "operatingSystem" => "Web",
-            "description" => "Komplett forretningssystem med fakturering, regnskap, prosjektstyring og mer for norske bedrifter",
+            "description" => "Komplett forretningssystem med fakturering, regnskap, prosjektstyring, timeregistrering, årsoppgjør og intelligent selskapsanalyse for norske bedrifter",
             "offers" => [
                 "@type" => "Offer",
                 "price" => "399",
@@ -57,7 +57,7 @@
                 <!-- Subtitle -->
                 <p class="text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto mb-12">
                     Konrad Office er et komplett forretningssystem med salg, fakturering, regnskap,
-                    prosjektstyring, kontrakter og eiendeler. Enkelt, oversiktlig og effektivt.
+                    prosjektstyring, timeregistrering og intelligent selskapsanalyse. Enkelt, oversiktlig og effektivt.
                 </p>
 
                 <!-- CTA Buttons -->
@@ -484,6 +484,108 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Time Tracking Module -->
+                <div class="p-8 rounded-2xl bg-gradient-to-br from-sky-50 to-blue-50 dark:from-sky-900/20 dark:to-blue-900/20 border border-sky-200 dark:border-sky-800">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-sky-500 rounded-2xl flex items-center justify-center shrink-0">
+                            <flux:icon.clock class="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                                Timer
+                            </h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+                                Komplett timeregistrering med ukelister,
+                                godkjenning og rapporter.
+                            </p>
+                            <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-sky-500" />
+                                    Ukelister og timelister
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-sky-500" />
+                                    Godkjenningsflyt
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-sky-500" />
+                                    Timerapporter
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Activities Module -->
+                <div class="p-8 rounded-2xl bg-gradient-to-br from-fuchsia-50 to-pink-50 dark:from-fuchsia-900/20 dark:to-pink-900/20 border border-fuchsia-200 dark:border-fuchsia-800">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-fuchsia-500 to-pink-500 rounded-2xl flex items-center justify-center shrink-0">
+                            <flux:icon.sparkles class="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                                Mine aktiviteter
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white">
+                                    AI
+                                </span>
+                            </h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+                                Intelligente forslag til prioritering basert
+                                på dine ventende oppgaver.
+                            </p>
+                            <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-fuchsia-500" />
+                                    Intelligente forslag
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-fuchsia-500" />
+                                    Personlige notater
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-fuchsia-500" />
+                                    Arbeidsmengde-score
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Annual Accounts Module -->
+                <div class="p-8 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-900/20 dark:to-violet-900/20 border border-indigo-200 dark:border-indigo-800">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-2xl flex items-center justify-center shrink-0">
+                            <flux:icon.chart-bar class="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                                Årsoppgjør
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-indigo-500 to-violet-500 text-white">
+                                    AI
+                                </span>
+                            </h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+                                Komplett årsoppgjør med aksjebok, skatteberegning
+                                og selskapsanalyse.
+                            </p>
+                            <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-indigo-500" />
+                                    Årsregnskap og noter
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-indigo-500" />
+                                    Aksjebok og transaksjoner
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-indigo-500" />
+                                    intelligent selskapsanalyse
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -560,6 +662,16 @@
                         Fullt norsk grensesnitt tilpasset norske bedrifter
                     </p>
                 </div>
+
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-gradient-to-br from-fuchsia-100 to-pink-100 dark:from-fuchsia-900/30 dark:to-pink-900/30 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <flux:icon.sparkles class="w-6 h-6 text-fuchsia-600 dark:text-fuchsia-400" />
+                    </div>
+                    <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">Intelligent</h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Intelligente forslag og selskapsanalyse
+                    </p>
+                </div>
             </div>
         </div>
     </section>
@@ -569,7 +681,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">9</div>
+                    <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">12</div>
                     <div class="text-zinc-600 dark:text-zinc-400">Hovedmoduler</div>
                 </div>
                 <div>

@@ -1,5 +1,31 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.3.0
+**Dato:** 1. februar 2026
+
+### Lager og innkjop
+
+- **Lagerhold** - Full lagerstyring med transaksjonsbasert sporing av alle varebevegelser
+- **Innkjopsordrer** - Opprett innkjopsordrer til leverandorer med godkjenningsflyt
+- **Varemottak** - Registrer mottak av varer basert pa innkjopsordre eller fritstaende
+- **Lagerlokasjoner** - Stotte for flere lagre med hierarkisk struktur (lager, sone, hylle)
+- **Automatisk reservering** - Varer reserveres automatisk nar ordrer bekreftes
+- **Lageruttak ved fakturering** - Automatisk trekk fra lager nar ordre konverteres til faktura
+- **Vektet gjennomsnittskost** - Automatisk beregning av varekostnad ved salg
+
+### Lageroversikt
+
+- **Beholdning** - Se lagerbeholdning per produkt og lokasjon
+- **Transaksjonshistorikk** - Full sporbarhet pa alle lagerbevegelser
+- **Lagerjusteringer** - Manuell justering ved opptelling eller svinn
+- **Bestillingspunkt** - Varsling nar varer nar bestillingspunkt
+
+### Tips
+
+Aktiver lagermodulen ved a sette `INVENTORY_ENABLED=true` i .env-filen. Ga til **Lager** i sidemenyen for a opprette lagerlokasjoner og begynne a fore lagerbeholdning. Merk produkter som "lagerfort" for a aktivere lagertransaksjoner pa dem.
+
+---
+
 ## Versjon 1.2.0
 **Dato:** 1. februar 2026
 
