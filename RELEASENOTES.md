@@ -1,5 +1,22 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.1.1
+**Dato:** 1. februar 2026
+
+### Selskapsanalyse
+
+- **Ny analysemodul** - Få en komplett analyse av selskapets økonomiske helse
+- **Styrker og svakheter** - Se hva som fungerer bra og hva som kan forbedres
+- **Muligheter og risikoer** - Identifiser vekstmuligheter og potensielle farer
+- **Konkrete anbefalinger** - Motta handlingsrettede råd med prioritering
+- **Nøkkeltall** - Oversikt over likviditet, lønnsomhet, vekst og kundefordringer
+
+### Tips
+
+Gå til **Økonomi → Analyse** for å kjøre en selskapsanalyse. Analysen gir deg innsikt basert på dine faktiske regnskapsdata og hjelper deg å ta bedre beslutninger.
+
+---
+
 ## Versjon 1.1.0
 **Dato:** 1. februar 2026
 

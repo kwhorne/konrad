@@ -61,6 +61,10 @@
                                     <flux:icon.calculator class="w-4 h-4" />
                                     Okonomi
                                 </a>
+                                <a href="#selskapsanalyse" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.sparkles class="w-4 h-4" />
+                                    Selskapsanalyse
+                                </a>
                                 <a href="#innboks" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.inbox-arrow-down class="w-4 h-4" />
                                     Innboks (AI-tolkning)
@@ -656,6 +660,76 @@
                                 <flux:callout variant="info" icon="sparkles" class="not-prose my-4">
                                     <flux:callout.heading>AI-tolkning i Innboks</flux:callout.heading>
                                     <flux:callout.text>Last opp leverandorfakturaer som PDF eller bilde i <a href="#innboks" class="text-indigo-600 dark:text-indigo-400 underline">Innboksen</a>. Systemet tolker automatisk leverandor, belop og datoer med AI.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Selskapsanalyse --}}
+                    <flux:card id="selskapsanalyse" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.sparkles class="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Selskapsanalyse</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Selskapsanalysen gir deg en komplett oversikt over selskapets okonomiske helse basert pa dine faktiske regnskapsdata.</p>
+
+                                <h4>Kjore en analyse</h4>
+                                <ol>
+                                    <li>Ga til <strong>Okonomi → Analyse</strong></li>
+                                    <li>Klikk <strong>Start analyse</strong></li>
+                                    <li>Vent mens systemet analyserer dataene (10-30 sekunder)</li>
+                                    <li>Se gjennom resultatene</li>
+                                </ol>
+
+                                <h4>Hva analysen inneholder</h4>
+                                <p>Analysen gir deg innsikt pa flere omrader:</p>
+
+                                <p><strong>Okonomisk helse:</strong></p>
+                                <ul>
+                                    <li>Score fra 0-100 som viser den generelle okonomiske tilstanden</li>
+                                    <li>Statusindikator: Utmerket, God, Akseptabel, Bekymringsfull eller Kritisk</li>
+                                </ul>
+
+                                <p><strong>Nokkeltall:</strong></p>
+                                <ul>
+                                    <li><strong>Likviditet</strong> - Evne til a betale lopende utgifter</li>
+                                    <li><strong>Lonnsomhet</strong> - Fortjeneste i forhold til omsetning</li>
+                                    <li><strong>Vekst</strong> - Endring fra forrige ar</li>
+                                    <li><strong>Kundefordringer</strong> - Status pa utestående krav</li>
+                                </ul>
+
+                                <p><strong>SWOT-analyse:</strong></p>
+                                <ul>
+                                    <li><strong>Styrker</strong> - Hva som fungerer bra i selskapet</li>
+                                    <li><strong>Svakheter</strong> - Omrader som kan forbedres</li>
+                                    <li><strong>Muligheter</strong> - Potensielle vekstomrader</li>
+                                    <li><strong>Risikoer</strong> - Farer du bor vare oppmerksom pa</li>
+                                </ul>
+
+                                <p><strong>Anbefalinger:</strong></p>
+                                <ul>
+                                    <li>Konkrete tiltak med prioritering (hoy, medium, lav)</li>
+                                    <li>Forventet effekt av hvert tiltak</li>
+                                </ul>
+
+                                <div class="not-prose mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                    <div class="flex gap-3">
+                                        <flux:icon.light-bulb class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                                        <div>
+                                            <p class="text-sm font-medium text-blue-900 dark:text-blue-100">Tips</p>
+                                            <p class="text-sm text-blue-700 dark:text-blue-300 mt-1">Kjor analysen jevnlig for a folge med pa utviklingen. Sammenlign resultatene over tid for a se om tiltakene dine gir effekt.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Viktig</flux:callout.heading>
+                                    <flux:callout.text>Analysen er et hjelpemiddel og bor verifiseres av en regnskapsforer for viktige beslutninger.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>

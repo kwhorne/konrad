@@ -27,6 +27,10 @@
             Oversikt
         </flux:navlist.item>
 
+        <flux:navlist.item icon="sparkles" href="{{ route('economy.analysis') }}" :current="$current === 'economy-analysis'">
+            Analyse
+        </flux:navlist.item>
+
         <flux:separator variant="subtle" class="my-4" />
 
         <flux:navlist.group expandable heading="Økonomi" class="grid">

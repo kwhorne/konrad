@@ -219,6 +219,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/tax', [EconomyController::class, 'tax'])->name('tax');
             Route::get('/annual-accounts', [EconomyController::class, 'annualAccounts'])->name('annual-accounts');
             Route::get('/altinn', [EconomyController::class, 'altinn'])->name('altinn');
+            Route::get('/analysis', fn () => view('economy.analysis'))->name('analysis');
         });
     }); // End of company middleware group
 });
