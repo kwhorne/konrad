@@ -58,6 +58,9 @@ class DemoSeeder extends Seeder
      */
     public function run(): void
     {
+        // 0. Ensure modules exist (required for enableAllModules)
+        $this->call(ModuleSeeder::class);
+
         // 1. Create demo admin user
         $this->user = User::firstOrCreate(
             ['email' => 'kh@gets.no'],
