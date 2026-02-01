@@ -45,6 +45,10 @@
                                     <flux:icon.clipboard-document-list class="w-4 h-4" />
                                     Arbeidsordrer
                                 </a>
+                                <a href="#timeregistrering" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.clock class="w-4 h-4" />
+                                    Timeregistrering
+                                </a>
                                 <a href="#salg" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.shopping-cart class="w-4 h-4" />
                                     Salg
@@ -84,6 +88,10 @@
                                 <a href="#innstillinger" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.cog-6-tooth class="w-4 h-4" />
                                     Innstillinger
+                                </a>
+                                <a href="#selskap" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.building-office-2 class="w-4 h-4" />
+                                    Selskap og brukere
                                 </a>
                             </nav>
                         </div>
@@ -370,6 +378,95 @@
                                         <flux:badge color="emerald">Godkjent</flux:badge>
                                         <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
                                         <flux:badge color="indigo">Fakturert</flux:badge>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Timeregistrering --}}
+                    <flux:card id="timeregistrering" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.clock class="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Timeregistrering</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Registrer arbeidstimer ukentlig og send til godkjenning. Timer kan knyttes til prosjekter, arbeidsordrer eller registreres som intern tid.</p>
+
+                                <h4>Registrere timer</h4>
+                                <p>Du kan registrere timer pa to mater:</p>
+                                <ul>
+                                    <li><strong>Inline i rutenett:</strong> Skriv timer direkte i cellen for den aktuelle dagen</li>
+                                    <li><strong>Via modal:</strong> Dobbelklikk pa en celle eller bruk <strong>Registrer timer</strong>-knappen for a apne et skjema med flere felt</li>
+                                </ul>
+
+                                <h4>Koble til prosjekt eller arbeidsordre</h4>
+                                <ol>
+                                    <li>Klikk <strong>Legg til linje</strong> eller <strong>Registrer timer</strong></li>
+                                    <li>Velg type: Prosjekt, Arbeidsordre eller Annet (intern tid)</li>
+                                    <li>Velg prosjekt/arbeidsordre fra listen</li>
+                                    <li>For intern tid, skriv en beskrivelse (f.eks. "Internt mote")</li>
+                                </ol>
+
+                                <h4>Notatfelt</h4>
+                                <p>Nar du bruker modalvinduet kan du legge til et notat som beskriver hva du har jobbet med. Dette er nyttig for godkjenneren og for egen oversikt.</p>
+
+                                <h4>Sende til godkjenning</h4>
+                                <ol>
+                                    <li>Nar uken er ferdig, klikk <strong>Send til godkjenning</strong></li>
+                                    <li>Legg eventuelt til en kommentar</li>
+                                    <li>Timeseddelen lases for redigering</li>
+                                </ol>
+
+                                <h4>Arbeidsflyt</h4>
+                                <div class="not-prose my-4">
+                                    <div class="flex flex-wrap items-center gap-2 text-sm">
+                                        <flux:badge color="zinc">Utkast</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="amber">Innsendt</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="green">Godkjent</flux:badge>
+                                    </div>
+                                    <div class="flex flex-wrap items-center gap-2 text-sm mt-2">
+                                        <flux:badge color="amber">Innsendt</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="red">Avvist</flux:badge>
+                                        <flux:icon.arrow-right class="w-4 h-4 text-zinc-400" />
+                                        <flux:badge color="zinc">Utkast</flux:badge>
+                                        <span class="text-zinc-500">(kan redigeres og sendes pa nytt)</span>
+                                    </div>
+                                </div>
+
+                                <h4>Mine timer (historikk)</h4>
+                                <p>Under <strong>Mine timer</strong> finner du oversikt over alle dine timesedler:</p>
+                                <ul>
+                                    <li>Filtrer pa status (utkast, innsendt, godkjent, avvist)</li>
+                                    <li>Filtrer pa ar</li>
+                                    <li>Klikk pa en timeseddel for a se detaljer</li>
+                                </ul>
+
+                                <h4>Godkjenning (for ledere)</h4>
+                                <p>Eiere og administratorer kan godkjenne andres timer:</p>
+                                <ul>
+                                    <li>Antall ventende timesedler vises som badge i menyen</li>
+                                    <li>Se detaljer for hver timeseddel</li>
+                                    <li>Godkjenn eller avvis med begrunnelse</li>
+                                    <li>Du kan ikke godkjenne egne timer</li>
+                                </ul>
+
+                                <div class="not-prose mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                    <div class="flex gap-3">
+                                        <flux:icon.light-bulb class="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0 mt-0.5" />
+                                        <div>
+                                            <p class="font-medium text-blue-900 dark:text-blue-100">Tips</p>
+                                            <p class="text-sm text-blue-700 dark:text-blue-300 mt-1">
+                                                Dobbelklikk pa en timecelle for a apne registreringsskjemaet med prosjektet forhåndsvalgt.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1299,33 +1396,99 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Under innstillinger kan du tilpasse systemet.</p>
+                                <p>Innstillingssiden er organisert i faner for enkel navigering.</p>
 
-                                <h4>Personlige innstillinger</h4>
+                                <h4>Min konto</h4>
+                                <p>Personlige innstillinger for din brukerkonto:</p>
                                 <ul>
-                                    <li>Endre passord</li>
-                                    <li>Oppdater profilinformasjon</li>
+                                    <li><strong>Profilinformasjon</strong> - Se navn og e-postadresse</li>
+                                    <li><strong>Sikkerhet</strong> - Endre passord</li>
+                                    <li><strong>Utseende</strong> - Velg lyst, morkt eller automatisk tema</li>
+                                    <li><strong>Varsler</strong> - Administrer e-post- og push-varsler</li>
                                 </ul>
 
-                                <h4>Stamdata (admin)</h4>
-                                <p>Administratorer har tilgang til:</p>
+                                <h4>Selskap (kun for eiere/ledere)</h4>
+                                <p>Hvis du er eier eller leder av selskapet, vil du se en ekstra fane for selskapsinnstillinger:</p>
                                 <ul>
-                                    <li><strong>Aktivitetstyper</strong> - Tilpass typer for kontaktaktiviteter</li>
-                                    <li><strong>Varegrupper</strong> - Organiser produkter</li>
-                                    <li><strong>Varetyper</strong> - Definer MVA per varetype</li>
-                                    <li><strong>MVA-satser</strong> - Administrer MVA-satser</li>
-                                    <li><strong>Enheter</strong> - Definer malenheter</li>
-                                    <li><strong>Prosjekttyper</strong> - Kategoriser prosjekter</li>
-                                    <li><strong>Prosjektstatuser</strong> - Tilpass statusflyt</li>
-                                    <li><strong>Kontoplan</strong> - Administrer regnskapskonti</li>
+                                    <li>Rediger selskapsinformasjon (navn, organisasjonsnummer, adresse)</li>
+                                    <li>Last opp firmalogo</li>
+                                    <li>Konfigurer bankopplysninger</li>
+                                    <li>Sett standardverdier for betalingsbetingelser</li>
+                                    <li>Tilpass dokumentfooter og vilkar</li>
                                 </ul>
 
-                                <h4>Brukere (admin)</h4>
+                                <h4>Brukere (kun for eiere/ledere)</h4>
+                                <p>Administrer brukerne i ditt selskap:</p>
                                 <ul>
-                                    <li>Opprett nye brukere</li>
-                                    <li>Tildel admin-rettigheter</li>
-                                    <li>Deaktiver brukere</li>
+                                    <li>Inviter nye brukere via e-post</li>
+                                    <li>Tildel roller (medlem eller leder)</li>
+                                    <li>Fjern brukere fra selskapet</li>
                                 </ul>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Selskap og brukere --}}
+                    <flux:card id="selskap" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.building-office-2 class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Selskap og brukere</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Konrad Office stotter flere selskaper (multi-tenancy). Hver bruker kan tilhore ett eller flere selskaper med ulike roller.</p>
+
+                                <h4>Brukerroller</h4>
+                                <p>Det finnes tre roller innenfor et selskap:</p>
+                                <ul>
+                                    <li><strong>Eier</strong> - Full tilgang til selskapet, kan administrere alle innstillinger og brukere</li>
+                                    <li><strong>Leder (Manager)</strong> - Kan administrere selskapsinnstillinger og invitere brukere</li>
+                                    <li><strong>Medlem</strong> - Standard bruker med tilgang til selskapets data</li>
+                                </ul>
+
+                                <h4>Opprette et selskap</h4>
+                                <p>Nar du registrerer deg for forste gang, blir du guidet gjennom opprettelse av ditt forste selskap. Du blir automatisk eier av dette selskapet.</p>
+
+                                <h4>Invitere brukere</h4>
+                                <p>Som eier eller leder kan du invitere nye brukere:</p>
+                                <ol>
+                                    <li>Ga til <strong>Innstillinger</strong> i sidemenyen</li>
+                                    <li>Velg fanen <strong>Brukere</strong></li>
+                                    <li>Klikk <strong>Inviter bruker</strong></li>
+                                    <li>Skriv inn e-postadresse og velg rolle</li>
+                                </ol>
+                                <p>Hvis brukeren allerede har en konto i Konrad Office, blir de umiddelbart lagt til i selskapet. Nye brukere far en invitasjon pa e-post.</p>
+
+                                <h4>Administrere brukere</h4>
+                                <p>I brukerlisten kan du:</p>
+                                <ul>
+                                    <li>Se alle brukere og deres roller</li>
+                                    <li>Endre rolle for eksisterende brukere (unntak: kan ikke endre eierens rolle)</li>
+                                    <li>Fjerne brukere fra selskapet</li>
+                                </ul>
+
+                                <h4>Selskapsinnstillinger</h4>
+                                <p>Under fanen <strong>Selskap</strong> i innstillinger kan du redigere:</p>
+                                <ul>
+                                    <li><strong>Grunnleggende informasjon</strong> - Selskapsnavn, organisasjonsnummer, MVA-nummer</li>
+                                    <li><strong>Kontaktinformasjon</strong> - Adresse, telefon, e-post, nettside</li>
+                                    <li><strong>Bankopplysninger</strong> - Banknavn, kontonummer, IBAN, SWIFT</li>
+                                    <li><strong>Firmalogo</strong> - Last opp logo som vises pa dokumenter</li>
+                                    <li><strong>Standardverdier</strong> - Betalingsfrist (dager), tilbudsgyldighet</li>
+                                    <li><strong>Dokumentmaler</strong> - Faktura-/tilbudsvilkar, dokumentfooter</li>
+                                </ul>
+
+                                <h4>Bytte mellom selskaper</h4>
+                                <p>Hvis du tilhorer flere selskaper, kan du bytte mellom dem via profilmenyen oppe til hoyre. All data du ser vil automatisk filtreres til det valgte selskapet.</p>
+
+                                <div class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                                    <p class="text-amber-800 dark:text-amber-200 text-sm mb-0">
+                                        <strong>Merk:</strong> Systemadministratorer (is_admin) har tilgang til administrasjonspanelet hvor de kan se alle selskaper og brukere pa tvers av systemet.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </flux:card>

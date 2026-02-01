@@ -19,73 +19,92 @@
 
     <flux:input as="button" variant="filled" placeholder="Søk..." icon="magnifying-glass" />
 
-    <flux:navlist variant="outline">
-        <flux:navlist.item icon="home" href="{{ route('dashboard') }}" :current="$current === 'dashboard'">
+    <flux:sidebar.nav>
+        <flux:sidebar.item icon="home" href="{{ route('dashboard') }}" :current="$current === 'dashboard'">
             Dashboard
-        </flux:navlist.item>
-        
-        @if(config('features.sales') || config('features.contacts') || config('features.products'))
-            <flux:separator variant="subtle" class="my-4" />
+        </flux:sidebar.item>
 
-            <flux:navlist.group expandable heading="CRM" icon="user-group" class="grid">
+        @if(config('features.sales') || config('features.contacts') || config('features.products'))
+            <flux:sidebar.group expandable icon="user-group" heading="CRM" :expanded="in_array($current, ['contacts', 'products', 'quotes', 'orders', 'invoices'])">
                 @if(config('features.contacts'))
-                    <flux:navlist.item href="{{ route('contacts.index') }}" :current="$current === 'contacts'">
+                    <flux:sidebar.item href="{{ route('contacts.index') }}" :current="$current === 'contacts'">
                         Kontakter
-                    </flux:navlist.item>
+                    </flux:sidebar.item>
                 @endif
 
                 @if(config('features.products'))
-                    <flux:navlist.item href="{{ route('products.index') }}" :current="$current === 'products'">
+                    <flux:sidebar.item href="{{ route('products.index') }}" :current="$current === 'products'">
                         Varer
-                    </flux:navlist.item>
+                    </flux:sidebar.item>
                 @endif
 
                 @if(config('features.sales'))
-                    <flux:navlist.item href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
+                    <flux:sidebar.item href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
                         Tilbud
-                    </flux:navlist.item>
-                    <flux:navlist.item href="{{ route('orders.index') }}" :current="$current === 'orders'">
+                    </flux:sidebar.item>
+                    <flux:sidebar.item href="{{ route('orders.index') }}" :current="$current === 'orders'">
                         Ordrer
-                    </flux:navlist.item>
-                    <flux:navlist.item href="{{ route('invoices.index') }}" :current="$current === 'invoices'">
+                    </flux:sidebar.item>
+                    <flux:sidebar.item href="{{ route('invoices.index') }}" :current="$current === 'invoices'">
                         Faktura
-                    </flux:navlist.item>
+                    </flux:sidebar.item>
                 @endif
-            </flux:navlist.group>
+            </flux:sidebar.group>
         @endif
 
         @if(config('features.projects') || config('features.work_orders'))
-            <flux:navlist.group expandable heading="Prosjekt" icon="rectangle-stack" class="grid">
+            <flux:sidebar.group expandable icon="rectangle-stack" heading="Prosjekt" :expanded="in_array($current, ['projects', 'work-orders'])">
                 @if(config('features.projects'))
-                    <flux:navlist.item href="{{ route('projects.index') }}" :current="$current === 'projects'">
+                    <flux:sidebar.item href="{{ route('projects.index') }}" :current="$current === 'projects'">
                         Prosjekter
-                    </flux:navlist.item>
+                    </flux:sidebar.item>
                 @endif
 
                 @if(config('features.work_orders'))
-                    <flux:navlist.item href="{{ route('work-orders.index') }}" :current="$current === 'work-orders'">
+                    <flux:sidebar.item href="{{ route('work-orders.index') }}" :current="$current === 'work-orders'">
                         Arbeidsordrer
-                    </flux:navlist.item>
+                    </flux:sidebar.item>
                 @endif
-            </flux:navlist.group>
+            </flux:sidebar.group>
         @endif
 
+        <flux:sidebar.group expandable icon="timer" heading="Timer" :expanded="in_array($current, ['timesheets', 'timesheets-history', 'timesheets-approval', 'timesheets-reports'])">
+            <flux:sidebar.item href="{{ route('timesheets.index') }}" :current="$current === 'timesheets'">
+                Timeregistrering
+            </flux:sidebar.item>
+            <flux:sidebar.item href="{{ route('timesheets.history') }}" :current="$current === 'timesheets-history'">
+                Mine timer
+            </flux:sidebar.item>
+            @can('viewAwaitingApproval', App\Models\Timesheet::class)
+                <flux:sidebar.item href="{{ route('timesheets.approval') }}" :current="$current === 'timesheets-approval'">
+                    Godkjenn timer
+                    @php
+                        $awaitingCount = \App\Models\Timesheet::where('company_id', auth()->user()->current_company_id)->submitted()->count();
+                    @endphp
+                    @if($awaitingCount > 0)
+                        <flux:badge size="sm" color="amber" class="ml-auto">{{ $awaitingCount }}</flux:badge>
+                    @endif
+                </flux:sidebar.item>
+                <flux:sidebar.item href="{{ route('timesheets.reports') }}" :current="$current === 'timesheets-reports'">
+                    Rapporter
+                </flux:sidebar.item>
+            @endcan
+        </flux:sidebar.group>
+
         @if(config('features.contracts'))
-            <flux:navlist.item icon="document-text" href="{{ route('contracts.index') }}" :current="$current === 'contracts'">
+            <flux:sidebar.item icon="document-text" href="{{ route('contracts.index') }}" :current="$current === 'contracts'">
                 Kontrakter
-            </flux:navlist.item>
+            </flux:sidebar.item>
         @endif
 
         @if(config('features.assets'))
-            <flux:navlist.item icon="cube" href="{{ route('assets.index') }}" :current="$current === 'assets'">
+            <flux:sidebar.item icon="cube" href="{{ route('assets.index') }}" :current="$current === 'assets'">
                 Eiendeler
-            </flux:navlist.item>
+            </flux:sidebar.item>
         @endif
 
         @if(auth()->user()->is_economy || auth()->user()->is_admin)
-            <flux:separator variant="subtle" class="my-4" />
-
-            <flux:navlist.item icon="calculator" href="{{ route('economy.dashboard') }}">
+            <flux:sidebar.item icon="calculator" href="{{ route('economy.dashboard') }}">
                 Økonomi
                 @php
                     $incomingCount = \App\Models\IncomingVoucher::whereIn('status', ['pending', 'parsing', 'parsed'])->count();
@@ -93,28 +112,26 @@
                 @if($incomingCount > 0)
                     <flux:badge size="sm" color="amber" class="ml-auto">{{ $incomingCount }}</flux:badge>
                 @endif
-            </flux:navlist.item>
+            </flux:sidebar.item>
         @endif
 
         @if(auth()->user()->is_admin)
-            <flux:separator variant="subtle" class="my-4" />
-            
-            <flux:navlist.item icon="shield-check" href="{{ route('admin.users') }}">
+            <flux:sidebar.item icon="shield-check" href="{{ route('admin.users') }}">
                 Administrasjon
-            </flux:navlist.item>
+            </flux:sidebar.item>
         @endif
-    </flux:navlist>
+    </flux:sidebar.nav>
 
     <flux:spacer />
 
-    <flux:navlist variant="outline">
-        <flux:navlist.item icon="cog-6-tooth" href="{{ route('settings') }}" :current="$current === 'settings'">
+    <flux:sidebar.nav>
+        <flux:sidebar.item icon="cog-6-tooth" href="{{ route('settings') }}" :current="$current === 'settings'">
             Innstillinger
-        </flux:navlist.item>
-        <flux:navlist.item icon="book-open" href="{{ route('help') }}" :current="$current === 'help'">
+        </flux:sidebar.item>
+        <flux:sidebar.item icon="book-open" href="{{ route('help') }}" :current="$current === 'help'">
             Brukerdokumentasjon
-        </flux:navlist.item>
-    </flux:navlist>
+        </flux:sidebar.item>
+    </flux:sidebar.nav>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">
         <flux:profile avatar="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=4f46e5&color=fff" name="{{ auth()->user()->name }}" />

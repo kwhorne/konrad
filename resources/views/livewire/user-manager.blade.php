@@ -71,6 +71,7 @@
                 <flux:table.column>Bruker</flux:table.column>
                 <flux:table.column>Kontakt</flux:table.column>
                 <flux:table.column>Rolle</flux:table.column>
+                <flux:table.column>Selskap</flux:table.column>
                 <flux:table.column>Status</flux:table.column>
                 <flux:table.column>Siste innlogging</flux:table.column>
                 <flux:table.column></flux:table.column>
@@ -112,6 +113,21 @@
                                     <flux:badge color="zinc">Bruker</flux:badge>
                                 @endif
                             </div>
+                        </flux:table.cell>
+
+                        <flux:table.cell>
+                            @if($user->companies->count() > 0)
+                                <div class="space-y-1">
+                                    @foreach($user->companies as $company)
+                                        <div class="flex items-center gap-1">
+                                            <flux:text class="text-sm">{{ $company->name }}</flux:text>
+                                            <flux:badge size="sm" color="zinc">{{ $company->pivot->role }}</flux:badge>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <flux:text class="text-sm text-zinc-400">Ingen selskap</flux:text>
+                            @endif
                         </flux:table.cell>
 
                         <flux:table.cell>
@@ -168,7 +184,7 @@
                     </flux:table.row>
                 @empty
                     <flux:table.row>
-                        <flux:table.cell colspan="6" class="text-center py-8">
+                        <flux:table.cell colspan="7" class="text-center py-8">
                             <flux:text class="text-zinc-500">Ingen brukere funnet</flux:text>
                         </flux:table.cell>
                     </flux:table.row>

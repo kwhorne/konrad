@@ -31,6 +31,10 @@ Hovedpanelet for daglig drift med følgende struktur:
 - **Prosjekt** (ekspanderbar gruppe)
   - Prosjekter
   - Arbeidsordrer
+- **Timer** (ekspanderbar gruppe)
+  - Timeregistrering
+  - Mine timer
+  - Godkjenn timer (kun for ledere)
 - **Kontrakter** - Kontraktsregister
 - **Eiendeler** - Eiendelsregister
 - **Økonomi** - Link til økonomi-panelet (kun for økonomi/admin-brukere)
@@ -60,6 +64,14 @@ Dedikert panel for regnskap og økonomi:
 | **Admin** (`is_admin`) | Full tilgang til alle moduler inkl. brukeradministrasjon |
 | **Økonomi** (`is_economy`) | Tilgang til `/app` og `/economy` panel |
 | **Bruker** | Tilgang kun til `/app` panel |
+
+### Selskapsroller (per selskap)
+
+| Rolle | Tilgang |
+|-------|---------|
+| **Owner** | Full tilgang, kan godkjenne timer |
+| **Manager** | Administrere selskap, kan godkjenne timer |
+| **Member** | Standard bruker, kan registrere egne timer |
 
 ## Moduler
 
@@ -96,6 +108,22 @@ Dedikert panel for regnskap og økonomi:
 - Produktlinjer fra vareregisteret
 - Kobling til kontakter og prosjekter
 - Tildeling til ansvarlig bruker
+
+### Timeregistrering
+- **Ukentlig timeregistrering** for ansatte
+- **To metoder for timeføring**:
+  - Inline-redigering direkte i ukegrid (skriv timer i cellen)
+  - Modal-basert registrering med ekstra felt (dobbelklikk på celle eller bruk "Registrer timer"-knappen)
+- **Kobling til prosjekter og arbeidsordrer** (valgfritt)
+- **Intern tid** uten prosjekttilknytning (møter, opplæring, etc.)
+- **Notatfelt** for å beskrive utført arbeid
+- **Godkjenningsflyt**:
+  - Utkast → Innsendt → Godkjent/Avvist
+  - Ledere (owner/manager) kan godkjenne andres timer
+  - Kan ikke godkjenne egne timer
+  - Avviste timesedler kan redigeres og sendes på nytt
+- **Historikk**: Oversikt over alle egne timesedler med filter på status og år
+- **Godkjenningspanel**: Ledere ser ventende timesedler med badge-teller i menyen
 
 ### Salg
 - **Tilbud**: Opprett og send tilbud til kunder med PDF-generering
@@ -211,6 +239,9 @@ SALES_ENABLED=true
 | `/products` | Vareregister |
 | `/projects` | Prosjekter |
 | `/work-orders` | Arbeidsordrer |
+| `/timer` | Timeregistrering |
+| `/timer/historikk` | Mine timer (historikk) |
+| `/timer/godkjenning` | Godkjenn timer (kun ledere) |
 | `/quotes` | Tilbud |
 | `/orders` | Ordrer |
 | `/invoices` | Fakturaer |
@@ -240,36 +271,52 @@ SALES_ENABLED=true
 
 ```
 app/
-├── Http/Controllers/        # Kontrollere
+├── Http/
+│   ├── Controllers/        # Kontrollere (Contact, Asset, Contract)
+│   └── Middleware/
+│       ├── SetCurrentCompany.php    # Multi-tenancy context
+│       └── EnsureUserBelongsToCompany.php
 ├── Livewire/               # Livewire-komponenter
-│   ├── ContactManager.php
 │   ├── ProductManager.php
 │   ├── ProjectManager.php
 │   ├── WorkOrderManager.php
+│   ├── TimesheetManager.php        # Timeregistrering
+│   ├── TimesheetHistory.php        # Mine timer
+│   ├── TimesheetApprovalManager.php # Godkjenning av timer
 │   ├── QuoteManager.php
 │   ├── OrderManager.php
 │   ├── InvoiceManager.php
 │   ├── VoucherManager.php
-│   ├── CustomerLedger.php
-│   ├── SupplierLedger.php
-│   └── VatReportManager.php
-├── Models/                 # Eloquent-modeller
+│   ├── VatReportManager.php
+│   ├── CompanyProfileManager.php   # Selskapsinnstillinger
+│   ├── CompanyUserManager.php      # Brukeradministrasjon
+│   └── UserManager.php             # Admin brukeradmin
+├── Models/
+│   ├── Company.php         # Multi-tenant selskap
 │   ├── Contact.php
 │   ├── Product.php
 │   ├── Project.php
 │   ├── WorkOrder.php
+│   ├── Timesheet.php       # Ukentlig timeseddel
+│   ├── TimesheetEntry.php  # Daglig timeføring
 │   ├── Quote.php
 │   ├── Order.php
 │   ├── Invoice.php
 │   ├── Account.php
 │   ├── Voucher.php
-│   ├── VatCode.php
-│   ├── VatReport.php
-│   └── ...
-└── Services/              # Business logic
-    ├── AccountingService.php
-    ├── LedgerService.php
-    ├── ReportService.php
+│   └── Traits/
+│       └── BelongsToCompany.php    # Multi-tenant scope
+├── Jobs/
+│   └── Concerns/
+│       └── HasCompanyContext.php   # Job company context
+└── Services/               # Business logic
+    ├── CompanyService.php  # Selskaps- og brukeradmin
+    ├── ContactService.php  # Kontakthåndtering
+    ├── InvoiceService.php
+    ├── ProjectService.php
+    ├── WorkOrderService.php
+    ├── TimesheetService.php # Timeregistrering
+    ├── VoucherService.php
     └── VatReportService.php
 
 database/

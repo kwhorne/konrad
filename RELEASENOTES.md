@@ -1,5 +1,29 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.1.0
+**Dato:** 1. februar 2026
+
+### Timerapporter
+
+- **Ny rapportmodul** - Se oversikt over timer på tvers av ansatte, prosjekter og arbeidsordrer
+- **Fleksible filtre** - Filtrer på tidsperiode (denne uken, forrige måned, dette kvartalet, osv.)
+- **Fire rapporttyper** - Timer per prosjekt, per arbeidsordre, per ansatt, eller per uke
+- **Detaljvisning** - Klikk på et prosjekt for å se hvilke ansatte som har jobbet på det
+- **Oppsummering** - Se totaltimer, fakturerbare timer og antall ansatte/prosjekter
+
+### Forbedret validering i timeregistrering
+
+- **Maksgrense per dag** - Kan ikke registrere mer enn 24 timer per dag
+- **Validering i service-lag** - Forretningsregler håndheves konsekvent, også for fremtidig API
+- **Datovalidering** - Timeføringer må være innenfor riktig uke
+- **Krav til mål** - Hver timeføring må ha prosjekt, arbeidsordre eller beskrivelse
+
+### Tips
+
+Gå til **Timer → Rapporter** for å se en oversikt over timer på tvers av hele firmaet. Perfekt for å svare på spørsmål som "Hvor mange timer har vi brukt på Prosjekt X totalt?"
+
+---
+
 ## Versjon 1.0.2
 **Dato:** 1. februar 2026
 

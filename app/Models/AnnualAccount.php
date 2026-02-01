@@ -101,6 +101,11 @@ class AnnualAccount extends Model
         return $this->hasMany(AnnualAccountNote::class)->orderBy('sort_order');
     }
 
+    public function notes(): HasMany
+    {
+        return $this->accountNotes();
+    }
+
     public function cashFlowStatement(): HasOne
     {
         return $this->hasOne(CashFlowStatement::class);

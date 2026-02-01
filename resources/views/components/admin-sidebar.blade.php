@@ -33,8 +33,8 @@
             <flux:navlist.item icon="chart-bar" href="{{ route('admin.analytics') }}" :current="$current === 'analytics'">
                 Analyse
             </flux:navlist.item>
-            <flux:navlist.item icon="building-office-2" href="{{ route('admin.company-settings') }}" :current="$current === 'company-settings'">
-                Firmainnstillinger
+            <flux:navlist.item icon="building-office-2" href="{{ route('admin.companies') }}" :current="$current === 'companies'">
+                Selskaper
             </flux:navlist.item>
             <flux:navlist.item icon="cog-6-tooth" href="{{ route('admin.system') }}" :current="$current === 'system'">
                 System

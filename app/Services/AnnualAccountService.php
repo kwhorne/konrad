@@ -269,7 +269,7 @@ class AnnualAccountService
      */
     public function cloneFromPreviousYear(int $targetYear, int $createdBy): ?AnnualAccount
     {
-        $previousYear = AnnualAccount::forYear($targetYear - 1)->first();
+        $previousYear = AnnualAccount::forYear($targetYear - 1)->with('notes')->first();
 
         if (! $previousYear) {
             return null;
@@ -279,7 +279,7 @@ class AnnualAccountService
         $newAccount = $this->createAnnualAccount($targetYear, $createdBy);
 
         // Copy notes content from previous year
-        foreach ($previousYear->notes as $oldNote) {
+        foreach ($previousYear->notes ?? [] as $oldNote) {
             $newNote = $newAccount->notes()->where('note_type', $oldNote->note_type)->first();
             if ($newNote) {
                 $newNote->update([

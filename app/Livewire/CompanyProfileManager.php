@@ -2,23 +2,20 @@
 
 namespace App\Livewire;
 
-use App\Models\CompanySetting;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class CompanySettingsManager extends Component
+class CompanyProfileManager extends Component
 {
     use WithFileUploads;
 
-    // Company information
-    public string $company_name = '';
+    public string $name = '';
 
     public ?string $organization_number = '';
 
     public ?string $vat_number = '';
 
-    // Address
     public ?string $address = '';
 
     public ?string $postal_code = '';
@@ -27,14 +24,12 @@ class CompanySettingsManager extends Component
 
     public string $country = 'Norge';
 
-    // Contact
     public ?string $phone = '';
 
     public ?string $email = '';
 
     public ?string $website = '';
 
-    // Bank
     public ?string $bank_name = '';
 
     public ?string $bank_account = '';
@@ -43,17 +38,13 @@ class CompanySettingsManager extends Component
 
     public ?string $swift = '';
 
-    // Logo
     public $logo;
 
     public ?string $current_logo_path = null;
 
-    // Document settings
     public ?string $invoice_terms = '';
 
     public ?string $quote_terms = '';
-
-    public ?string $order_terms = '';
 
     public int $default_payment_days = 14;
 
@@ -63,36 +54,47 @@ class CompanySettingsManager extends Component
 
     public function mount(): void
     {
-        $settings = CompanySetting::getOrCreate();
+        $company = app('current.company');
 
-        $this->company_name = $settings->company_name ?? '';
-        $this->organization_number = $settings->organization_number ?? '';
-        $this->vat_number = $settings->vat_number ?? '';
-        $this->address = $settings->address ?? '';
-        $this->postal_code = $settings->postal_code ?? '';
-        $this->city = $settings->city ?? '';
-        $this->country = $settings->country ?? 'Norge';
-        $this->phone = $settings->phone ?? '';
-        $this->email = $settings->email ?? '';
-        $this->website = $settings->website ?? '';
-        $this->bank_name = $settings->bank_name ?? '';
-        $this->bank_account = $settings->bank_account ?? '';
-        $this->iban = $settings->iban ?? '';
-        $this->swift = $settings->swift ?? '';
-        $this->current_logo_path = $settings->logo_path;
-        $this->invoice_terms = $settings->invoice_terms ?? '';
-        $this->quote_terms = $settings->quote_terms ?? '';
-        $this->order_terms = $settings->order_terms ?? '';
-        $this->default_payment_days = $settings->default_payment_days ?? 14;
-        $this->default_quote_validity_days = $settings->default_quote_validity_days ?? 30;
-        $this->document_footer = $settings->document_footer ?? '';
+        if (! $company) {
+            return;
+        }
+
+        $this->name = $company->name ?? '';
+        $this->organization_number = $company->organization_number ?? '';
+        $this->vat_number = $company->vat_number ?? '';
+        $this->address = $company->address ?? '';
+        $this->postal_code = $company->postal_code ?? '';
+        $this->city = $company->city ?? '';
+        $this->country = $company->country ?? 'Norge';
+        $this->phone = $company->phone ?? '';
+        $this->email = $company->email ?? '';
+        $this->website = $company->website ?? '';
+        $this->bank_name = $company->bank_name ?? '';
+        $this->bank_account = $company->bank_account ?? '';
+        $this->iban = $company->iban ?? '';
+        $this->swift = $company->swift ?? '';
+        $this->current_logo_path = $company->logo_path;
+        $this->invoice_terms = $company->invoice_terms ?? '';
+        $this->quote_terms = $company->quote_terms ?? '';
+        $this->default_payment_days = $company->default_payment_days ?? 14;
+        $this->default_quote_validity_days = $company->default_quote_validity_days ?? 30;
+        $this->document_footer = $company->document_footer ?? '';
     }
 
     public function save(): void
     {
+        $company = app('current.company');
+
+        if (! $company || ! auth()->user()->canManage($company)) {
+            $this->dispatch('toast', message: 'Du har ikke tilgang til å endre selskapsinnstillinger.', variant: 'danger');
+
+            return;
+        }
+
         $this->validate([
-            'company_name' => 'required|string|max:255',
-            'organization_number' => 'nullable|string|max:20',
+            'name' => 'required|string|max:255',
+            'organization_number' => 'required|string|max:20',
             'vat_number' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
             'postal_code' => 'nullable|string|max:10',
@@ -108,26 +110,21 @@ class CompanySettingsManager extends Component
             'logo' => 'nullable|image|max:2048',
             'invoice_terms' => 'nullable|string',
             'quote_terms' => 'nullable|string',
-            'order_terms' => 'nullable|string',
             'default_payment_days' => 'required|integer|min:1|max:365',
             'default_quote_validity_days' => 'required|integer|min:1|max:365',
             'document_footer' => 'nullable|string',
         ]);
 
-        $settings = CompanySetting::getOrCreate();
-
-        // Handle logo upload
-        $logoPath = $settings->logo_path;
+        $logoPath = $company->logo_path;
         if ($this->logo) {
-            // Delete old logo if exists
-            if ($settings->logo_path && Storage::exists($settings->logo_path)) {
-                Storage::delete($settings->logo_path);
+            if ($company->logo_path && Storage::disk('public')->exists($company->logo_path)) {
+                Storage::disk('public')->delete($company->logo_path);
             }
             $logoPath = $this->logo->store('logos', 'public');
         }
 
-        $settings->update([
-            'company_name' => $this->company_name,
+        $company->update([
+            'name' => $this->name,
             'organization_number' => $this->organization_number ?: null,
             'vat_number' => $this->vat_number ?: null,
             'address' => $this->address ?: null,
@@ -144,7 +141,6 @@ class CompanySettingsManager extends Component
             'logo_path' => $logoPath,
             'invoice_terms' => $this->invoice_terms ?: null,
             'quote_terms' => $this->quote_terms ?: null,
-            'order_terms' => $this->order_terms ?: null,
             'default_payment_days' => $this->default_payment_days,
             'default_quote_validity_days' => $this->default_quote_validity_days,
             'document_footer' => $this->document_footer ?: null,
@@ -153,18 +149,22 @@ class CompanySettingsManager extends Component
         $this->current_logo_path = $logoPath;
         $this->logo = null;
 
-        $this->dispatch('toast', message: 'Firmainnstillinger lagret', variant: 'success');
+        $this->dispatch('toast', message: 'Selskapsinnstillinger lagret', variant: 'success');
     }
 
     public function deleteLogo(): void
     {
-        $settings = CompanySetting::first();
+        $company = app('current.company');
 
-        if ($settings && $settings->logo_path) {
-            if (Storage::disk('public')->exists($settings->logo_path)) {
-                Storage::disk('public')->delete($settings->logo_path);
+        if (! $company || ! auth()->user()->canManage($company)) {
+            return;
+        }
+
+        if ($company->logo_path) {
+            if (Storage::disk('public')->exists($company->logo_path)) {
+                Storage::disk('public')->delete($company->logo_path);
             }
-            $settings->update(['logo_path' => null]);
+            $company->update(['logo_path' => null]);
             $this->current_logo_path = null;
 
             $this->dispatch('toast', message: 'Logo slettet', variant: 'success');
@@ -173,6 +173,10 @@ class CompanySettingsManager extends Component
 
     public function render()
     {
-        return view('livewire.company-settings-manager');
+        $company = app('current.company');
+
+        return view('livewire.company-profile-manager', [
+            'canManage' => $company && auth()->user()->canManage($company),
+        ]);
     }
 }

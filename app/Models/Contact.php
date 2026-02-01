@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contact extends Model
@@ -40,7 +41,6 @@ class Contact extends Model
         'twitter',
         'description',
         'notes',
-        'tags',
         'attachments',
         'status',
         'is_active',
@@ -56,7 +56,6 @@ class Contact extends Model
         'last_contact_date' => 'date',
         'credit_limit' => 'decimal:2',
         'payment_terms_days' => 'integer',
-        'tags' => 'array',
         'attachments' => 'array',
     ];
 
@@ -123,6 +122,36 @@ class Contact extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'contact_tag')
+            ->withPivot('company_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Attach tags to the contact with company_id.
+     *
+     * @param  array<int>|int  $tagIds
+     */
+    public function attachTags(array|int $tagIds): void
+    {
+        $tagIds = is_array($tagIds) ? $tagIds : [$tagIds];
+        $pivotData = array_fill_keys($tagIds, ['company_id' => $this->company_id]);
+        $this->tags()->syncWithoutDetaching($pivotData);
+    }
+
+    /**
+     * Sync tags for the contact with company_id.
+     *
+     * @param  array<int>  $tagIds
+     */
+    public function syncTags(array $tagIds): void
+    {
+        $pivotData = array_fill_keys($tagIds, ['company_id' => $this->company_id]);
+        $this->tags()->sync($pivotData);
     }
 
     // Accessors

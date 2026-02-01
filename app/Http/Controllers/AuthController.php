@@ -141,11 +141,6 @@ class AuthController extends Controller
         return view('app.settings');
     }
 
-    public function companySettings()
-    {
-        return view('admin.company-settings');
-    }
-
     public function updatePassword(Request $request)
     {
         $request->validate([

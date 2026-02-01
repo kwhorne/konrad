@@ -279,6 +279,7 @@ class UserManager extends Component
     public function render()
     {
         $query = User::query()
+            ->with('companies')
             ->when($this->search, function ($q) {
                 $q->where(function ($q) {
                     $q->where('name', 'like', '%'.$this->search.'%')

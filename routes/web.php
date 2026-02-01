@@ -68,10 +68,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/app/settings', [AuthController::class, 'settings'])->name('settings');
         Route::post('/app/settings/password', [AuthController::class, 'updatePassword'])->name('settings.password');
 
-        // Company settings routes
+        // Company settings routes - redirects to settings page with tabs
         Route::prefix('company')->name('company.')->middleware('company.manager')->group(function () {
-            Route::get('/settings', fn () => view('app.company.settings'))->name('settings');
-            Route::get('/users', fn () => view('app.company.users'))->name('users');
+            Route::get('/settings', fn () => redirect()->route('settings'))->name('settings');
+            Route::get('/users', fn () => redirect()->route('settings'))->name('users');
         });
 
         // Contract routes
@@ -191,9 +191,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/users', [AuthController::class, 'adminUsers'])->name('users');
             Route::get('/analytics', [AuthController::class, 'adminAnalytics'])->name('analytics');
             Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
-            Route::get('/company-settings', [AuthController::class, 'companySettings'])->name('company-settings');
+            Route::get('/companies', fn () => view('admin.companies'))->name('companies');
             Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
             Route::get('/posts', fn () => view('admin.posts'))->name('posts');
+        });
+
+        // Timesheet routes
+        Route::prefix('timer')->name('timesheets.')->group(function () {
+            Route::get('/', fn () => view('timesheets.index'))->name('index');
+            Route::get('/historikk', fn () => view('timesheets.history'))->name('history');
+            Route::get('/godkjenning', fn () => view('timesheets.approval'))->name('approval')->middleware('company.manager');
+            Route::get('/rapporter', fn () => view('timesheets.reports'))->name('reports')->middleware('company.manager');
         });
 
         // Economy routes - accessible by economy users and admins

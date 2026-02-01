@@ -112,6 +112,9 @@ class CompanyService
 
     /**
      * Switch the user's current company.
+     *
+     * Uses session for the active context (multi-tab safe).
+     * Also updates database as the new default for future sessions.
      */
     public function switchCompany(User $user, Company $company): bool
     {
@@ -120,7 +123,13 @@ class CompanyService
             return false;
         }
 
+        // Store in session (primary - multi-tab safe)
+        session([\App\Http\Middleware\SetCurrentCompany::SESSION_KEY => $company->id]);
+
+        // Update database as new default for future sessions
         $user->update(['current_company_id' => $company->id]);
+
+        // Update container for current request
         app()->instance('current.company', $company);
 
         return true;
