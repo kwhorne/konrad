@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\Activity;
 use App\Models\ActivityType;
 use App\Models\User;
+use App\Rules\ExistsInCompany;
+use App\Rules\UserInCompany;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -37,11 +39,11 @@ class ActivityManager extends Component
     protected function rules(): array
     {
         return [
-            'activity_type_id' => 'required|exists:activity_types,id',
+            'activity_type_id' => ['required', new ExistsInCompany('activity_types')],
             'subject' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'assigned_to' => 'nullable|exists:users,id',
+            'assigned_to' => ['nullable', new UserInCompany],
             'is_completed' => 'boolean',
         ];
     }

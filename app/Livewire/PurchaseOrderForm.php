@@ -8,6 +8,7 @@ use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderLine;
 use App\Models\StockLocation;
 use App\Models\VatRate;
+use App\Rules\ExistsInCompany;
 use App\Services\PurchaseOrderService;
 use Livewire\Component;
 
@@ -86,8 +87,8 @@ class PurchaseOrderForm extends Component
     protected function rules(): array
     {
         return [
-            'contact_id' => 'required|exists:contacts,id',
-            'stock_location_id' => 'required|exists:stock_locations,id',
+            'contact_id' => ['required', new ExistsInCompany('contacts')],
+            'stock_location_id' => ['required', new ExistsInCompany('stock_locations')],
             'order_date' => 'required|date',
             'expected_date' => 'nullable|date|after_or_equal:order_date',
             'supplier_reference' => 'nullable|string|max:100',
@@ -100,13 +101,13 @@ class PurchaseOrderForm extends Component
     protected function lineRules(): array
     {
         return [
-            'line_product_id' => 'nullable|exists:products,id',
+            'line_product_id' => ['nullable', new ExistsInCompany('products')],
             'line_description' => 'required|string',
             'line_quantity' => 'required|numeric|min:0.01',
             'line_unit' => 'required|string|max:20',
             'line_unit_price' => 'required|numeric|min:0',
             'line_discount_percent' => 'nullable|numeric|min:0|max:100',
-            'line_vat_rate_id' => 'nullable|exists:vat_rates,id',
+            'line_vat_rate_id' => ['nullable', new ExistsInCompany('vat_rates')],
             'line_vat_percent' => 'required|numeric|min:0|max:100',
         ];
     }

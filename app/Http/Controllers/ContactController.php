@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Models\User;
+use App\Rules\UserInCompany;
 use App\Services\ContactService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -144,7 +145,7 @@ class ContactController extends Controller
             'is_active' => 'nullable|boolean',
             'customer_since' => 'nullable|date',
             'last_contact_date' => 'nullable|date',
-            'account_manager_id' => 'nullable|exists:users,id',
+            'account_manager_id' => ['nullable', new UserInCompany],
             'livewire_attachments' => 'nullable|string',
             'contact_persons' => 'nullable|string',
         ]);

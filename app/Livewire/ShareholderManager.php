@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Contact;
 use App\Models\Shareholder;
+use App\Rules\ExistsInCompany;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -63,7 +64,7 @@ class ShareholderManager extends Component
             'phone' => 'nullable|string|max:20',
             'is_active' => 'boolean',
             'notes' => 'nullable|string',
-            'contact_id' => 'nullable|exists:contacts,id',
+            'contact_id' => ['nullable', new ExistsInCompany('contacts')],
         ];
     }
 

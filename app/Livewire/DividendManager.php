@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Dividend;
 use App\Models\ShareClass;
+use App\Rules\ExistsInCompany;
 use App\Services\ShareholderService;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -50,7 +51,7 @@ class DividendManager extends Component
             'declaration_date' => 'required|date',
             'record_date' => 'required|date|after_or_equal:declaration_date',
             'payment_date' => 'required|date|after_or_equal:record_date',
-            'share_class_id' => 'required|exists:share_classes,id',
+            'share_class_id' => ['required', new ExistsInCompany('share_classes')],
             'amount_per_share' => 'required|numeric|min:0.0001',
             'dividend_type' => 'required|in:ordinary,extraordinary',
             'description' => 'nullable|string',

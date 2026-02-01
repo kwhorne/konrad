@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Rules\ExistsInCompany;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -46,7 +47,7 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'account_class' => 'required|in:1,2,3,4,5,6,7,8',
             'account_type' => 'required|in:asset,liability,equity,revenue,expense',
-            'parent_id' => 'nullable|exists:accounts,id',
+            'parent_id' => ['nullable', new ExistsInCompany('accounts')],
             'description' => 'nullable|string',
             'vat_code' => 'nullable|string|max:10',
             'is_active' => 'nullable|boolean',
@@ -83,7 +84,7 @@ class AccountController extends Controller
             'name' => 'required|string|max:255',
             'account_class' => 'required|in:1,2,3,4,5,6,7,8',
             'account_type' => 'required|in:asset,liability,equity,revenue,expense',
-            'parent_id' => 'nullable|exists:accounts,id',
+            'parent_id' => ['nullable', new ExistsInCompany('accounts')],
             'description' => 'nullable|string',
             'vat_code' => 'nullable|string|max:10',
             'is_active' => 'nullable|boolean',

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asset;
 use App\Models\User;
+use App\Rules\UserInCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -78,7 +79,7 @@ class AssetController extends Controller
             'condition' => 'required|in:excellent,good,fair,poor,broken',
             'is_active' => 'boolean',
             'notes' => 'nullable|string',
-            'responsible_user_id' => 'nullable|exists:users,id',
+            'responsible_user_id' => ['nullable', new UserInCompany],
         ]);
 
         $validated['created_by'] = Auth::id();
@@ -148,7 +149,7 @@ class AssetController extends Controller
             'condition' => 'required|in:excellent,good,fair,poor,broken',
             'is_active' => 'boolean',
             'notes' => 'nullable|string',
-            'responsible_user_id' => 'nullable|exists:users,id',
+            'responsible_user_id' => ['nullable', new UserInCompany],
         ]);
 
         // Handle new file uploads

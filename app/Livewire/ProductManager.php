@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductGroup;
 use App\Models\ProductType;
 use App\Models\Unit;
+use App\Rules\ExistsInCompany;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -56,9 +57,9 @@ class ProductManager extends Component
             'name' => 'required|string|max:255',
             'sku' => $skuRule,
             'description' => 'nullable|string',
-            'product_group_id' => 'nullable|exists:product_groups,id',
-            'product_type_id' => 'required|exists:product_types,id',
-            'unit_id' => 'required|exists:units,id',
+            'product_group_id' => ['nullable', new ExistsInCompany('product_groups')],
+            'product_type_id' => ['required', new ExistsInCompany('product_types')],
+            'unit_id' => ['required', new ExistsInCompany('units')],
             'price' => 'required|numeric|min:0',
             'cost_price' => 'nullable|numeric|min:0',
             'sort_order' => 'nullable|integer|min:0',

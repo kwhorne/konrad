@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contract;
 use App\Models\User;
+use App\Rules\UserInCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -79,7 +80,7 @@ class ContractController extends Controller
             'auto_renewal' => 'boolean',
             'renewal_period_months' => 'nullable|integer|min:1',
             'notes' => 'nullable|string',
-            'responsible_user_id' => 'nullable|exists:users,id',
+            'responsible_user_id' => ['nullable', new UserInCompany],
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
         ]);
 
@@ -151,7 +152,7 @@ class ContractController extends Controller
             'auto_renewal' => 'boolean',
             'renewal_period_months' => 'nullable|integer|min:1',
             'notes' => 'nullable|string',
-            'responsible_user_id' => 'nullable|exists:users,id',
+            'responsible_user_id' => ['nullable', new UserInCompany],
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png',
         ]);
 

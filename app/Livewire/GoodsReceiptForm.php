@@ -7,6 +7,7 @@ use App\Models\GoodsReceipt;
 use App\Models\Product;
 use App\Models\PurchaseOrder;
 use App\Models\StockLocation;
+use App\Rules\ExistsInCompany;
 use App\Services\GoodsReceiptService;
 use Livewire\Component;
 
@@ -72,8 +73,8 @@ class GoodsReceiptForm extends Component
     protected function rules(): array
     {
         return [
-            'contact_id' => 'required|exists:contacts,id',
-            'stock_location_id' => 'required|exists:stock_locations,id',
+            'contact_id' => ['required', new ExistsInCompany('contacts')],
+            'stock_location_id' => ['required', new ExistsInCompany('stock_locations')],
             'receipt_date' => 'required|date',
             'supplier_delivery_note' => 'nullable|string|max:100',
             'notes' => 'nullable|string',

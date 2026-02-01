@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductType;
 use App\Models\VatRate;
+use App\Rules\ExistsInCompany;
 use Illuminate\Http\Request;
 
 class ProductTypeController extends Controller
@@ -27,7 +28,7 @@ class ProductTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:product_types,code',
-            'vat_rate_id' => 'required|exists:vat_rates,id',
+            'vat_rate_id' => ['required', new ExistsInCompany('vat_rates')],
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'sort_order' => 'nullable|integer|min:0',
@@ -59,7 +60,7 @@ class ProductTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50|unique:product_types,code,'.$productType->id,
-            'vat_rate_id' => 'required|exists:vat_rates,id',
+            'vat_rate_id' => ['required', new ExistsInCompany('vat_rates')],
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'sort_order' => 'nullable|integer|min:0',

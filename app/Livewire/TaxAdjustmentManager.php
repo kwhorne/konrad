@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Account;
 use App\Models\TaxAdjustment;
+use App\Rules\ExistsInCompany;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -43,7 +44,7 @@ class TaxAdjustmentManager extends Component
             'adjustment_type' => 'required|in:permanent,temporary_deductible,temporary_taxable',
             'category' => 'required|string|max:100',
             'description' => 'required|string|max:255',
-            'account_id' => 'nullable|exists:accounts,id',
+            'account_id' => ['nullable', new ExistsInCompany('accounts')],
             'accounting_amount' => 'required|numeric',
             'tax_amount' => 'required|numeric',
             'notes' => 'nullable|string',

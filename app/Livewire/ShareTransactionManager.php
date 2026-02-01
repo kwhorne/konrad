@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\ShareClass;
 use App\Models\Shareholder;
 use App\Models\ShareTransaction;
+use App\Rules\ExistsInCompany;
 use App\Services\ShareholderService;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -49,7 +50,7 @@ class ShareTransactionManager extends Component
         $rules = [
             'transaction_type' => 'required|in:issue,transfer,redemption,split,merger,bonus',
             'transaction_date' => 'required|date',
-            'share_class_id' => 'required|exists:share_classes,id',
+            'share_class_id' => ['required', new ExistsInCompany('share_classes')],
             'number_of_shares' => 'required|integer|min:1',
             'price_per_share' => 'nullable|numeric|min:0',
             'total_amount' => 'nullable|numeric|min:0',
@@ -58,11 +59,11 @@ class ShareTransactionManager extends Component
         ];
 
         if (in_array($this->transaction_type, ['transfer', 'redemption'])) {
-            $rules['from_shareholder_id'] = 'required|exists:shareholders,id';
+            $rules['from_shareholder_id'] = ['required', new ExistsInCompany('shareholders')];
         }
 
         if (in_array($this->transaction_type, ['issue', 'transfer', 'bonus'])) {
-            $rules['to_shareholder_id'] = 'required|exists:shareholders,id';
+            $rules['to_shareholder_id'] = ['required', new ExistsInCompany('shareholders')];
         }
 
         return $rules;

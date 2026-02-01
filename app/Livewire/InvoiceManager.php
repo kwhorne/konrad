@@ -12,6 +12,7 @@ use App\Models\PaymentMethod;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\VatRate;
+use App\Rules\ExistsInCompany;
 use App\Services\ContactFormPopulator;
 use App\Services\DocumentLineService;
 use App\Services\InvoiceService;
@@ -152,9 +153,9 @@ class InvoiceManager extends Component
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'contact_id' => 'required|exists:contacts,id',
-            'project_id' => 'nullable|exists:projects,id',
-            'invoice_status_id' => 'nullable|exists:invoice_statuses,id',
+            'contact_id' => ['required', new ExistsInCompany('contacts')],
+            'project_id' => ['nullable', new ExistsInCompany('projects')],
+            'invoice_status_id' => ['nullable', new ExistsInCompany('invoice_statuses')],
             'invoice_date' => 'nullable|date',
             'due_date' => 'nullable|date|after_or_equal:invoice_date',
             'payment_terms_days' => 'nullable|integer|min:0',
@@ -175,13 +176,13 @@ class InvoiceManager extends Component
     protected function lineRules(): array
     {
         return [
-            'line_product_id' => 'nullable|exists:products,id',
+            'line_product_id' => ['nullable', new ExistsInCompany('products')],
             'line_description' => 'required|string',
             'line_quantity' => 'required|numeric',
             'line_unit' => 'required|string|max:20',
             'line_unit_price' => 'required|numeric|min:0',
             'line_discount_percent' => 'nullable|numeric|min:0|max:100',
-            'line_vat_rate_id' => 'nullable|exists:vat_rates,id',
+            'line_vat_rate_id' => ['nullable', new ExistsInCompany('vat_rates')],
             'line_vat_percent' => 'required|numeric|min:0|max:100',
         ];
     }
@@ -189,7 +190,7 @@ class InvoiceManager extends Component
     protected function paymentRules(): array
     {
         return [
-            'payment_method_id' => 'required|exists:payment_methods,id',
+            'payment_method_id' => ['required', new ExistsInCompany('payment_methods')],
             'payment_date' => 'required|date',
             'payment_amount' => 'required|numeric|min:0.01',
             'payment_reference' => 'nullable|string|max:100',

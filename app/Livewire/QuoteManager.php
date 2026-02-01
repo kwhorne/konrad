@@ -10,6 +10,7 @@ use App\Models\Quote;
 use App\Models\QuoteLine;
 use App\Models\QuoteStatus;
 use App\Models\VatRate;
+use App\Rules\ExistsInCompany;
 use App\Services\ContactFormPopulator;
 use App\Services\DocumentConversionService;
 use App\Services\DocumentLineService;
@@ -120,9 +121,9 @@ class QuoteManager extends Component
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'contact_id' => 'required|exists:contacts,id',
-            'project_id' => 'nullable|exists:projects,id',
-            'quote_status_id' => 'nullable|exists:quote_statuses,id',
+            'contact_id' => ['required', new ExistsInCompany('contacts')],
+            'project_id' => ['nullable', new ExistsInCompany('projects')],
+            'quote_status_id' => ['nullable', new ExistsInCompany('quote_statuses')],
             'quote_date' => 'nullable|date',
             'valid_until' => 'nullable|date|after_or_equal:quote_date',
             'payment_terms_days' => 'nullable|integer|min:0',
@@ -140,13 +141,13 @@ class QuoteManager extends Component
     protected function lineRules(): array
     {
         return [
-            'line_product_id' => 'nullable|exists:products,id',
+            'line_product_id' => ['nullable', new ExistsInCompany('products')],
             'line_description' => 'required|string',
             'line_quantity' => 'required|numeric|min:0.01',
             'line_unit' => 'required|string|max:20',
             'line_unit_price' => 'required|numeric|min:0',
             'line_discount_percent' => 'nullable|numeric|min:0|max:100',
-            'line_vat_rate_id' => 'nullable|exists:vat_rates,id',
+            'line_vat_rate_id' => ['nullable', new ExistsInCompany('vat_rates')],
             'line_vat_percent' => 'required|numeric|min:0|max:100',
         ];
     }

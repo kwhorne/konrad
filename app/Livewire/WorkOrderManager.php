@@ -12,6 +12,8 @@ use App\Models\WorkOrderLine;
 use App\Models\WorkOrderPriority;
 use App\Models\WorkOrderStatus;
 use App\Models\WorkOrderType;
+use App\Rules\ExistsInCompany;
+use App\Rules\UserInCompany;
 use App\Services\WorkOrderService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -95,12 +97,12 @@ class WorkOrderManager extends Component
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'contact_id' => 'nullable|exists:contacts,id',
-            'project_id' => 'nullable|exists:projects,id',
-            'work_order_type_id' => 'nullable|exists:work_order_types,id',
-            'work_order_status_id' => 'nullable|exists:work_order_statuses,id',
-            'work_order_priority_id' => 'nullable|exists:work_order_priorities,id',
-            'assigned_to' => 'nullable|exists:users,id',
+            'contact_id' => ['nullable', new ExistsInCompany('contacts')],
+            'project_id' => ['nullable', new ExistsInCompany('projects')],
+            'work_order_type_id' => ['nullable', new ExistsInCompany('work_order_types')],
+            'work_order_status_id' => ['nullable', new ExistsInCompany('work_order_statuses')],
+            'work_order_priority_id' => ['nullable', new ExistsInCompany('work_order_priorities')],
+            'assigned_to' => ['nullable', new UserInCompany],
             'scheduled_date' => 'nullable|date',
             'due_date' => 'nullable|date|after_or_equal:scheduled_date',
             'estimated_hours' => 'nullable|numeric|min:0',
@@ -114,13 +116,13 @@ class WorkOrderManager extends Component
     {
         return [
             'line_type' => 'required|in:time,product',
-            'line_product_id' => 'nullable|exists:products,id',
+            'line_product_id' => ['nullable', new ExistsInCompany('products')],
             'line_description' => 'nullable|string',
             'line_quantity' => 'required|numeric|min:0.01',
             'line_unit_price' => 'required|numeric|min:0',
             'line_discount_percent' => 'nullable|numeric|min:0|max:100',
             'line_performed_at' => 'nullable|date',
-            'line_performed_by' => 'nullable|exists:users,id',
+            'line_performed_by' => ['nullable', new UserInCompany],
         ];
     }
 

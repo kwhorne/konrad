@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\StockCount;
 use App\Models\StockLocation;
+use App\Rules\ExistsInCompany;
 use App\Services\StockCountService;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -44,7 +45,7 @@ class StockCountManager extends Component
     public function createCount(StockCountService $service)
     {
         $this->validate([
-            'create_location_id' => 'required|exists:stock_locations,id',
+            'create_location_id' => ['required', new ExistsInCompany('stock_locations')],
         ], [
             'create_location_id.required' => 'Velg en lokasjon.',
         ]);

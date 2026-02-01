@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\StockLocation;
+use App\Rules\ExistsInCompany;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -43,7 +44,7 @@ class StockLocationManager extends Component
             'description' => 'nullable|string|max:500',
             'address' => 'nullable|string|max:500',
             'location_type' => 'required|in:warehouse,zone,bin',
-            'parent_id' => 'nullable|exists:stock_locations,id',
+            'parent_id' => ['nullable', new ExistsInCompany('stock_locations')],
             'is_active' => 'boolean',
         ];
     }

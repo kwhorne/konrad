@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Account;
 use App\Models\Contact;
 use App\Models\Voucher;
+use App\Rules\ExistsInCompany;
 use App\Services\VoucherService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -189,11 +190,11 @@ class VoucherManager extends Component
     public function saveLine(VoucherService $service): void
     {
         $this->validate([
-            'line_account_id' => 'required|exists:accounts,id',
+            'line_account_id' => ['required', new ExistsInCompany('accounts')],
             'line_description' => 'nullable|string|max:255',
             'line_debit' => 'nullable|numeric|min:0',
             'line_credit' => 'nullable|numeric|min:0',
-            'line_contact_id' => 'nullable|exists:contacts,id',
+            'line_contact_id' => ['nullable', new ExistsInCompany('contacts')],
         ], [
             'line_account_id.required' => 'Velg en konto',
         ]);

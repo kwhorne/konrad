@@ -10,6 +10,8 @@ use App\Models\ProjectLine;
 use App\Models\ProjectStatus;
 use App\Models\ProjectType;
 use App\Models\User;
+use App\Rules\ExistsInCompany;
+use App\Rules\UserInCompany;
 use App\Services\ProjectService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -79,10 +81,10 @@ class ProjectManager extends Component
         return [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'contact_id' => 'nullable|exists:contacts,id',
-            'manager_id' => 'nullable|exists:users,id',
-            'project_type_id' => 'nullable|exists:project_types,id',
-            'project_status_id' => 'nullable|exists:project_statuses,id',
+            'contact_id' => ['nullable', new ExistsInCompany('contacts')],
+            'manager_id' => ['nullable', new UserInCompany],
+            'project_type_id' => ['nullable', new ExistsInCompany('project_types')],
+            'project_status_id' => ['nullable', new ExistsInCompany('project_statuses')],
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'budget' => 'nullable|numeric|min:0',
@@ -94,7 +96,7 @@ class ProjectManager extends Component
     protected function lineRules(): array
     {
         return [
-            'line_product_id' => 'nullable|exists:products,id',
+            'line_product_id' => ['nullable', new ExistsInCompany('products')],
             'line_description' => 'nullable|string',
             'line_quantity' => 'required|numeric|min:0.01',
             'line_unit_price' => 'required|numeric|min:0',

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Product;
 use App\Models\StockLocation;
+use App\Rules\ExistsInCompany;
 use App\Services\StockService;
 use Livewire\Component;
 
@@ -22,8 +23,8 @@ class StockAdjustmentManager extends Component
     protected function rules(): array
     {
         return [
-            'product_id' => 'required|exists:products,id',
-            'stock_location_id' => 'required|exists:stock_locations,id',
+            'product_id' => ['required', new ExistsInCompany('products')],
+            'stock_location_id' => ['required', new ExistsInCompany('stock_locations')],
             'quantity' => 'required|numeric|not_in:0',
             'unit_cost' => 'nullable|numeric|min:0',
             'notes' => 'required|string|max:500',

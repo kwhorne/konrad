@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Account;
 use App\Models\DeferredTaxItem;
+use App\Rules\ExistsInCompany;
 use Livewire\Component;
 
 class DeferredTaxManager extends Component
@@ -38,7 +39,7 @@ class DeferredTaxManager extends Component
             'item_type' => 'required|in:asset,liability',
             'category' => 'required|string|max:100',
             'description' => 'required|string|max:255',
-            'account_id' => 'nullable|exists:accounts,id',
+            'account_id' => ['nullable', new ExistsInCompany('accounts')],
             'accounting_value' => 'required|numeric',
             'tax_value' => 'required|numeric',
             'notes' => 'nullable|string',

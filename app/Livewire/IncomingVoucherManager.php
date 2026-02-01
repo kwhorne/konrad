@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Account;
 use App\Models\Contact;
 use App\Models\IncomingVoucher;
+use App\Rules\ExistsInCompany;
 use App\Services\IncomingVoucherService;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -151,11 +152,11 @@ class IncomingVoucherManager extends Component
         }
 
         $this->validate([
-            'editSupplierId' => 'required|exists:contacts,id',
+            'editSupplierId' => ['required', new ExistsInCompany('contacts')],
             'editInvoiceNumber' => 'required|string|max:100',
             'editInvoiceDate' => 'required|date',
             'editTotal' => 'required|numeric|min:0.01',
-            'editAccountId' => 'required|exists:accounts,id',
+            'editAccountId' => ['required', new ExistsInCompany('accounts')],
         ], [
             'editSupplierId.required' => 'Velg en leverandør',
             'editInvoiceNumber.required' => 'Fakturanummer er påkrevd',
