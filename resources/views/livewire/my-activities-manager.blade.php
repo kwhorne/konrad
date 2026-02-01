@@ -42,7 +42,7 @@
                 </flux:heading>
 
                 <flux:text class="text-zinc-600 dark:text-zinc-400 text-center max-w-lg mb-8">
-                    Få intelligente forslag til hva du bør prioritere basert på dine ventende aktiviteter, tilbud, fakturaer og prosjekter.
+                    Få intelligente forslag til hva du bør prioritere basert på dine ventende aktiviteter, tilbud, prosjekter, arbeidsordrer og fakturaer.
                 </flux:text>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 max-w-2xl">
