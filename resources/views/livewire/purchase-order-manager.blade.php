@@ -1,7 +1,7 @@
 <div>
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter PO-nummer eller leverandor..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter PO-nummer eller leverandør..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-48">
                 <option value="">Alle statuser</option>
@@ -24,7 +24,7 @@
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">PO-nummer</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Leverandor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Leverandør</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Dato</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Total</th>
@@ -80,7 +80,7 @@
                                                 @endif
                                                 @if($po->can_cancel)
                                                     <flux:menu.separator />
-                                                    <flux:menu.item wire:click="cancel({{ $po->id }})" wire:confirm="Er du sikker pa at du vil kansellere denne innkjopsordren?" icon="x-mark" class="text-red-600">
+                                                    <flux:menu.item wire:click="cancel({{ $po->id }})" wire:confirm="Er du sikker på at du vil kansellere denne innkjøpsordren?" icon="x-mark" class="text-red-600">
                                                         Kanseller
                                                     </flux:menu.item>
                                                 @endif
@@ -99,12 +99,12 @@
             @else
                 <div class="text-center py-12">
                     <flux:icon.document-text class="mx-auto h-12 w-12 text-zinc-400" />
-                    <flux:heading size="base" class="mt-2 text-zinc-900 dark:text-white">Ingen innkjopsordrer</flux:heading>
-                    <flux:text class="mt-1 text-zinc-500">Kom i gang ved a opprette din forste innkjopsordre.</flux:text>
+                    <flux:heading size="base" class="mt-2 text-zinc-900 dark:text-white">Ingen innkjøpsordrer</flux:heading>
+                    <flux:text class="mt-1 text-zinc-500">Kom i gang ved å opprette din første innkjøpsordre.</flux:text>
                     <div class="mt-6">
                         <flux:button href="{{ route('purchasing.purchase-orders.create') }}" variant="primary">
                             <flux:icon.plus class="w-5 h-5 mr-2" />
-                            Ny innkjopsordre
+                            Ny innkjøpsordre
                         </flux:button>
                     </div>
                 </div>

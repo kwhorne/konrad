@@ -11,7 +11,7 @@
                         @if($purchaseOrder)
                             <div class="mb-4 p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
                                 <flux:text class="text-sm text-indigo-700 dark:text-indigo-300">
-                                    Basert pa innkjopsordre: <span class="font-mono font-bold">{{ $purchaseOrder->po_number }}</span>
+                                    Basert på innkjøpsordre: <span class="font-mono font-bold">{{ $purchaseOrder->po_number }}</span>
                                 </flux:text>
                             </div>
                         @endif
@@ -19,9 +19,9 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @if(!$purchaseOrder)
                                 <flux:field class="col-span-2">
-                                    <flux:label>Leverandor *</flux:label>
+                                    <flux:label>Leverandør *</flux:label>
                                     <flux:select wire:model="contact_id">
-                                        <option value="">Velg leverandor</option>
+                                        <option value="">Velg leverandør</option>
                                         @foreach($suppliers as $supplier)
                                             <option value="{{ $supplier->id }}">{{ $supplier->company_name }}</option>
                                         @endforeach
@@ -30,7 +30,7 @@
                                 </flux:field>
                             @else
                                 <flux:field class="col-span-2">
-                                    <flux:label>Leverandor</flux:label>
+                                    <flux:label>Leverandør</flux:label>
                                     <flux:input value="{{ $purchaseOrder->contact?->company_name }}" disabled />
                                 </flux:field>
                             @endif
@@ -53,8 +53,8 @@
                             </flux:field>
 
                             <flux:field class="col-span-2">
-                                <flux:label>Leverandors pakkseddel</flux:label>
-                                <flux:input wire:model="supplier_delivery_note" placeholder="Referanse fra leverandor" />
+                                <flux:label>Leverandørs pakkseddel</flux:label>
+                                <flux:input wire:model="supplier_delivery_note" placeholder="Referanse fra leverandør" />
                                 <flux:error name="supplier_delivery_note" />
                             </flux:field>
                         </div>
@@ -177,9 +177,9 @@
                                 </div>
                             @else
                                 <div class="text-center py-8 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                                    <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen linjer lagt til enna</flux:text>
+                                    <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen linjer lagt til ennå</flux:text>
                                     <flux:button type="button" wire:click="openLineModal" variant="primary" size="sm" icon="plus" class="mt-2">
-                                        Legg til forste linje
+                                        Legg til første linje
                                     </flux:button>
                                 </div>
                             @endif
@@ -206,7 +206,7 @@
                 @if(!$purchaseOrder && $openPurchaseOrders->count() > 0)
                     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
                         <div class="p-6">
-                            <flux:heading size="base" class="mb-4 text-zinc-900 dark:text-white">Apne innkjopsordrer</flux:heading>
+                            <flux:heading size="base" class="mb-4 text-zinc-900 dark:text-white">Åpne innkjøpsordrer</flux:heading>
 
                             <div class="space-y-2">
                                 @foreach($openPurchaseOrders as $po)

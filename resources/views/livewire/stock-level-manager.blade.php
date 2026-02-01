@@ -1,7 +1,7 @@
 <div>
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter produkt..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter produkt..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterLocation" class="w-full sm:w-48">
                 <option value="">Alle lokasjoner</option>

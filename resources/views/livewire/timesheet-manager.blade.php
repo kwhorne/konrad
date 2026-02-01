@@ -124,7 +124,7 @@
                                     <td class="py-3 pl-2">
                                         <flux:button
                                             wire:click="deleteRow({{ $index }})"
-                                            wire:confirm="Er du sikker pa at du vil slette denne raden?"
+                                            wire:confirm="Er du sikker på at du vil slette denne raden?"
                                             variant="ghost"
                                             size="xs"
                                             class="opacity-0 group-hover:opacity-100"
@@ -143,7 +143,7 @@
                                     </flux:text>
                                     @if($this->timesheet?->is_editable)
                                         <flux:button wire:click="openAddRowModal" variant="ghost" size="sm" class="mt-3">
-                                            Legg til forste rad
+                                            Legg til første rad
                                         </flux:button>
                                     @endif
                                 </td>

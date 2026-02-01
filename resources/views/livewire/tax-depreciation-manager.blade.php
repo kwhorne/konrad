@@ -258,7 +258,7 @@
 
                 <flux:callout variant="info">
                     <flux:text class="text-sm">
-                        Avskrivning og utgaende balanse beregnes automatisk basert pa saldogruppens sats.
+                        Avskrivning og utgående balanse beregnes automatisk basert på saldogruppens sats.
                     </flux:text>
                 </flux:callout>
 

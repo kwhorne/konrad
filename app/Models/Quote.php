@@ -19,6 +19,7 @@ class Quote extends Model
         'description',
         'contact_id',
         'project_id',
+        'department_id',
         'quote_status_id',
         'created_by',
         'quote_date',
@@ -90,6 +91,11 @@ class Quote extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function quoteStatus(): BelongsTo

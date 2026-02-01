@@ -1,5 +1,37 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.4.0
+**Dato:** 1. februar 2026
+
+### Avdelinger som konteringsdimensjon
+
+- **Avdelingsregister** - Opprett og administrer avdelinger for selskapet med kode og navn
+- **Bruker-avdeling** - Tildel brukere til avdelinger via brukeradministrasjonen
+- **Dimensjon på bilag** - Avdeling følger med på alle bilagslinjer for detaljert rapportering
+- **Auto-propagering** - Avdeling arves automatisk fra bruker → dokument → bilag
+- **Valgfri aktivering** - Slå av/på avdelinger per selskap i regnskapsinnstillinger
+- **Rapportfilter** - Filtrer hovedbok og andre rapporter på avdeling
+
+### Kontoplan
+
+- **Kontoadministrasjon** - Full CRUD for kontoer med nummer, navn, klasse og type
+- **NS 4102 ett-klikk** - Opprett norsk standard kontoplan med over 200 kontoer på ett klikk
+- **MVA-koder** - Koble kontoer til MVA-koder for automatisk MVA-beregning
+- **Systemkontoer** - Beskytt viktige systemkontoer mot utilsiktet sletting
+
+### Regnskapsinnstillinger
+
+- **Ny innstillingsside** - Konfigurerbare regnskapsinnstillinger per selskap
+- **Avdelinger på/av** - Aktiver avdelingsdimensjon når du er klar
+- **Krav om avdeling** - Valgfritt krav om avdeling på alle bilag
+- **Standardavdeling** - Sett en standard avdeling for nye bilag
+
+### Tips
+
+Gå til **Innstillinger → Avdelinger** for å opprette avdelinger. Aktiver avdelingsfunksjonen under **Innstillinger → Regnskap**. Når avdelinger er aktivert kan du tildele brukere til avdelinger under **Innstillinger → Brukere**. Avdelingen følger automatisk med på alle dokumenter og bilag brukeren oppretter, slik at du får full sporbarhet i hovedboken.
+
+---
+
 ## Versjon 1.3.2
 **Dato:** 1. februar 2026
 

@@ -1,12 +1,12 @@
 <div>
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter mottaksnummer eller leverandor..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter mottaksnummer eller leverandør..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-48">
                 <option value="">Alle statuser</option>
                 <option value="draft">Utkast</option>
-                <option value="posted">Bokfort</option>
+                <option value="posted">Bokført</option>
                 <option value="cancelled">Kansellert</option>
             </flux:select>
         </div>
@@ -20,8 +20,8 @@
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Mottaksnummer</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Leverandor</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Innkjopsordre</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Leverandør</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Innkjøpsordre</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Dato</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Lokasjon</th>
@@ -66,10 +66,10 @@
                                                 </flux:menu.item>
                                                 @if($receipt->status === 'draft')
                                                     <flux:menu.item wire:click="post({{ $receipt->id }})" icon="check">
-                                                        Bokfor
+                                                        Bokfør
                                                     </flux:menu.item>
                                                     <flux:menu.separator />
-                                                    <flux:menu.item wire:click="delete({{ $receipt->id }})" wire:confirm="Er du sikker pa at du vil slette dette varemottaket?" icon="trash" class="text-red-600">
+                                                    <flux:menu.item wire:click="delete({{ $receipt->id }})" wire:confirm="Er du sikker på at du vil slette dette varemottaket?" icon="trash" class="text-red-600">
                                                         Slett
                                                     </flux:menu.item>
                                                 @endif
@@ -89,7 +89,7 @@
                 <div class="text-center py-12">
                     <flux:icon.archive-box-arrow-down class="mx-auto h-12 w-12 text-zinc-400" />
                     <flux:heading size="base" class="mt-2 text-zinc-900 dark:text-white">Ingen varemottak</flux:heading>
-                    <flux:text class="mt-1 text-zinc-500">Kom i gang ved a registrere ditt forste varemottak.</flux:text>
+                    <flux:text class="mt-1 text-zinc-500">Kom i gang ved å registrere ditt første varemottak.</flux:text>
                     <div class="mt-6">
                         <flux:button href="{{ route('purchasing.goods-receipts.create') }}" variant="primary">
                             <flux:icon.plus class="w-5 h-5 mr-2" />

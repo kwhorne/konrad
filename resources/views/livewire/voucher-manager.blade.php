@@ -2,12 +2,12 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row flex-wrap gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok i bilag..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk i bilag..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-40">
                 <option value="">Alle statuser</option>
-                <option value="unposted">Ikke bokfort</option>
-                <option value="posted">Bokfort</option>
+                <option value="unposted">Ikke bokført</option>
+                <option value="posted">Bokført</option>
             </flux:select>
         </div>
 
@@ -62,7 +62,7 @@
                                         @if($voucher->is_posted)
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                                 <flux:icon.check class="w-3 h-3 mr-1" />
-                                                Bokfort
+                                                Bokført
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
@@ -86,7 +86,7 @@
                                                 <flux:button wire:click="openModal({{ $voucher->id }})" variant="ghost" size="sm" title="Rediger">
                                                     <flux:icon.pencil class="w-4 h-4" />
                                                 </flux:button>
-                                                <flux:button wire:click="delete({{ $voucher->id }})" wire:confirm="Er du sikker pa at du vil slette dette bilaget?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
+                                                <flux:button wire:click="delete({{ $voucher->id }})" wire:confirm="Er du sikker på at du vil slette dette bilaget?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
                                                     <flux:icon.trash class="w-4 h-4" />
                                                 </flux:button>
                                             @else
@@ -134,14 +134,14 @@
                         @if($search || $filterStatus)
                             Ingen bilag funnet
                         @else
-                            Ingen manuelle bilag enna
+                            Ingen manuelle bilag ennå
                         @endif
                     </flux:heading>
                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
                         @if($search || $filterStatus)
-                            Prov a endre sokekriteriene
+                            Prøv å endre søkekriteriene
                         @else
-                            Kom i gang ved a opprette ditt forste bilag
+                            Kom i gang ved å opprette ditt første bilag
                         @endif
                     </flux:text>
                     @if(!$search && !$filterStatus)
@@ -281,7 +281,7 @@
                 @else
                     <div class="text-center py-8 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
                         <flux:icon.document-plus class="h-10 w-10 text-zinc-400 mx-auto mb-2" />
-                        <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen linjer enna. Legg til minst 2 linjer.</flux:text>
+                        <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen linjer ennå. Legg til minst 2 linjer.</flux:text>
                     </div>
                 @endif
             </div>
@@ -307,7 +307,7 @@
                 {{-- Account search --}}
                 <flux:field>
                     <flux:label>Konto *</flux:label>
-                    <flux:input wire:model.live.debounce.300ms="accountSearch" type="text" placeholder="Sok pa kontonummer eller navn..." />
+                    <flux:input wire:model.live.debounce.300ms="accountSearch" type="text" placeholder="Søk på kontonummer eller navn..." />
                     @error('line_account_id')<flux:error>{{ $message }}</flux:error>@enderror
 
                     @if($accountSearch && !$line_account_id)
@@ -352,14 +352,14 @@
                 </div>
 
                 <flux:field>
-                    <flux:label>Kunde/Leverandor (reskontro)</flux:label>
+                    <flux:label>Kunde/Leverandør (reskontro)</flux:label>
                     <flux:select wire:model="line_contact_id">
                         <option value="">Ingen (kun hovedbok)</option>
                         @foreach($this->contacts as $contact)
-                            <option value="{{ $contact->id }}">{{ $contact->company_name }} ({{ $contact->type === 'supplier' ? 'Leverandor' : 'Kunde' }})</option>
+                            <option value="{{ $contact->id }}">{{ $contact->company_name }} ({{ $contact->type === 'supplier' ? 'Leverandør' : 'Kunde' }})</option>
                         @endforeach
                     </flux:select>
-                    <flux:description>Velg kunde eller leverandor for a fore mot reskontro</flux:description>
+                    <flux:description>Velg kunde eller leverandør for å føre mot reskontro</flux:description>
                 </flux:field>
             </div>
 

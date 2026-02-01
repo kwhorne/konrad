@@ -8,6 +8,7 @@ use App\Http\Controllers\EconomyController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LegalController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TaxController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,14 @@ Route::middleware('auth')->group(function () {
         Route::prefix('company')->name('company.')->middleware('company.manager')->group(function () {
             Route::get('/settings', fn () => redirect()->route('settings'))->name('settings');
             Route::get('/users', fn () => redirect()->route('settings'))->name('users');
+        });
+
+        // Subscription routes (for company owners/managers)
+        Route::prefix('subscription')->name('subscription.')->middleware('company.manager')->group(function () {
+            Route::get('/', [SubscriptionController::class, 'index'])->name('index');
+            Route::post('/checkout/{module}', [SubscriptionController::class, 'checkout'])->name('checkout');
+            Route::get('/success/{module}', [SubscriptionController::class, 'success'])->name('success');
+            Route::get('/manage', [SubscriptionController::class, 'manage'])->name('manage');
         });
 
         // Contract routes
@@ -193,6 +202,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analytics', [AuthController::class, 'adminAnalytics'])->name('analytics');
             Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
             Route::get('/companies', fn () => view('admin.companies'))->name('companies');
+            Route::get('/modules', fn () => view('admin.modules'))->name('modules');
             Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
             Route::get('/posts', fn () => view('admin.posts'))->name('posts');
         });

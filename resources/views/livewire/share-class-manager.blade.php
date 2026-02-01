@@ -116,7 +116,7 @@
                 <div class="text-center py-12">
                     <flux:icon.squares-2x2 class="h-16 w-16 text-zinc-400 mx-auto mb-4" />
                     <flux:heading size="lg" level="3" class="mb-2">Ingen aksjeklasser</flux:heading>
-                    <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">Opprett din forste aksjeklasse for a komme i gang</flux:text>
+                    <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">Opprett din første aksjeklasse for å komme i gang</flux:text>
                     <flux:button wire:click="openModal" variant="primary">
                         <flux:icon.plus class="w-5 h-5 mr-2" />
                         Opprett aksjeklasse

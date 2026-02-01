@@ -2,7 +2,7 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter artikkel..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter artikkel..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterCategory" class="w-full sm:w-48">
                 <option value="">Alle kategorier</option>
@@ -127,7 +127,7 @@
                                             <flux:button wire:click="openModal({{ $post->id }})" variant="ghost" size="sm" title="Rediger">
                                                 <flux:icon.pencil class="w-4 h-4" />
                                             </flux:button>
-                                            <flux:button wire:click="delete({{ $post->id }})" wire:confirm="Er du sikker pa at du vil slette denne artikkelen?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
+                                            <flux:button wire:click="delete({{ $post->id }})" wire:confirm="Er du sikker på at du vil slette denne artikkelen?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
                                                 <flux:icon.trash class="w-4 h-4" />
                                             </flux:button>
                                         </div>
@@ -146,7 +146,7 @@
                     <flux:icon.document-text class="w-12 h-12 mx-auto text-zinc-400 mb-4" />
                     <flux:heading size="lg">Ingen artikler</flux:heading>
                     <flux:text class="text-zinc-500 dark:text-zinc-400 mt-2">
-                        Opprett din forste artikkel for a komme i gang.
+                        Opprett din første artikkel for å komme i gang.
                     </flux:text>
                     <flux:button wire:click="openModal" variant="primary" class="mt-4">
                         <flux:icon.plus class="w-5 h-5 mr-2" />
@@ -268,14 +268,14 @@
                         <div class="space-y-4">
                             <flux:field>
                                 <flux:label>Meta-tittel</flux:label>
-                                <flux:input wire:model="meta_title" placeholder="Tittel for sokemotorer..." />
-                                <flux:description>La sta tom for a bruke artikkeltittelen.</flux:description>
+                                <flux:input wire:model="meta_title" placeholder="Tittel for søkemotorer..." />
+                                <flux:description>La stå tom for å bruke artikkeltittelen.</flux:description>
                                 <flux:error name="meta_title" />
                             </flux:field>
 
                             <flux:field>
                                 <flux:label>Meta-beskrivelse</flux:label>
-                                <flux:textarea wire:model="meta_description" rows="2" placeholder="Beskrivelse for sokemotorer..." />
+                                <flux:textarea wire:model="meta_description" rows="2" placeholder="Beskrivelse for søkemotorer..." />
                                 <flux:description>Anbefalt lengde: 150-160 tegn.</flux:description>
                                 <flux:error name="meta_description" />
                             </flux:field>
@@ -283,7 +283,7 @@
                     </div>
 
                     <div class="md:col-span-2">
-                        <flux:switch wire:model="is_published" label="Publisert" description="Gjor artikkelen synlig pa nettsiden" />
+                        <flux:switch wire:model="is_published" label="Publisert" description="Gjør artikkelen synlig på nettsiden" />
                     </div>
                 </div>
 

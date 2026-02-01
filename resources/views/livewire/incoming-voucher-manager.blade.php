@@ -2,7 +2,7 @@
     {{-- Header with status tabs and actions --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row flex-wrap gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-44">
                 <option value="">Alle statuser</option>
@@ -11,7 +11,7 @@
                 <option value="parsed">Tolket ({{ $statusCounts['parsed'] }})</option>
                 <option value="attested">Attestert ({{ $statusCounts['attested'] }})</option>
                 <option value="approved">Godkjent ({{ $statusCounts['approved'] }})</option>
-                <option value="posted">Bokfort ({{ $statusCounts['posted'] }})</option>
+                <option value="posted">Bokført ({{ $statusCounts['posted'] }})</option>
                 <option value="rejected">Avvist ({{ $statusCounts['rejected'] }})</option>
             </flux:select>
 
@@ -32,12 +32,12 @@
     <div class="flex flex-wrap gap-2 mb-6">
         @if($statusCounts['parsed'] > 0)
             <flux:badge color="amber" size="sm">
-                {{ $statusCounts['parsed'] }} venter pa attestering
+                {{ $statusCounts['parsed'] }} venter på attestering
             </flux:badge>
         @endif
         @if($statusCounts['attested'] > 0)
             <flux:badge color="cyan" size="sm">
-                {{ $statusCounts['attested'] }} venter pa godkjenning
+                {{ $statusCounts['attested'] }} venter på godkjenning
             </flux:badge>
         @endif
         @if($statusCounts['pending'] + $statusCounts['parsing'] > 0)
@@ -69,9 +69,9 @@
                             <tr>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Referanse</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Fil</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Leverandor</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Leverandør</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Faktura</th>
-                                <th class="px-4 py-3 text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Belop</th>
+                                <th class="px-4 py-3 text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Beløp</th>
                                 <th class="px-4 py-3 text-center text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Status</th>
                                 <th class="px-4 py-3 text-right text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Handlinger</th>
                             </tr>
@@ -140,7 +140,7 @@
                                     <td class="px-4 py-4 text-right" wire:click.stop>
                                         <div class="flex items-center justify-end gap-1">
                                             @if(in_array($voucher->status, ['pending', 'parsed']))
-                                                <flux:button wire:click="reParse({{ $voucher->id }})" variant="ghost" size="sm" title="Tolk pa nytt">
+                                                <flux:button wire:click="reParse({{ $voucher->id }})" variant="ghost" size="sm" title="Tolk på nytt">
                                                     <flux:icon.arrow-path class="w-4 h-4" />
                                                 </flux:button>
                                             @endif
@@ -148,7 +148,7 @@
                                                 <flux:icon.eye class="w-4 h-4" />
                                             </flux:button>
                                             @if(!in_array($voucher->status, ['approved', 'posted']))
-                                                <flux:button wire:click="delete({{ $voucher->id }})" wire:confirm="Er du sikker pa at du vil slette dette bilaget?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
+                                                <flux:button wire:click="delete({{ $voucher->id }})" wire:confirm="Er du sikker på at du vil slette dette bilaget?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
                                                     <flux:icon.trash class="w-4 h-4" />
                                                 </flux:button>
                                             @endif
@@ -167,14 +167,14 @@
                         @if($search || $filterStatus || $filterSource)
                             Ingen bilag funnet
                         @else
-                            Ingen inngaende bilag
+                            Ingen inngående bilag
                         @endif
                     </flux:heading>
                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
                         @if($search || $filterStatus || $filterSource)
-                            Prov a endre sokekriteriene
+                            Prøv å endre søkekriteriene
                         @else
-                            Last opp leverandorfakturaer for AI-tolkning og godkjenning
+                            Last opp leverandørfakturaer for AI-tolkning og godkjenning
                         @endif
                     </flux:text>
                     @if(!$search && !$filterStatus && !$filterSource)
@@ -194,7 +194,7 @@
             <div>
                 <flux:heading size="lg">Last opp bilag</flux:heading>
                 <flux:text class="mt-1 text-zinc-600 dark:text-zinc-400">
-                    Last opp en eller flere leverandorfakturaer for AI-tolkning
+                    Last opp en eller flere leverandørfakturaer for AI-tolkning
                 </flux:text>
             </div>
 
@@ -274,7 +274,7 @@
                                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-4">PDF-dokument</flux:text>
                                     <a href="{{ Storage::disk(config('voucher.storage.disk', 'local'))->url($selectedVoucher->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:underline">
                                         <flux:icon.arrow-top-right-on-square class="w-4 h-4" />
-                                        Apne i ny fane
+                                        Åpne i ny fane
                                     </a>
                                 </div>
                             @endif
@@ -301,8 +301,8 @@
 
                         {{-- Supplier --}}
                         <flux:field>
-                            <flux:label>Leverandor *</flux:label>
-                            <flux:input wire:model.live.debounce.300ms="supplierSearch" type="text" placeholder="Sok pa leverandor..." />
+                            <flux:label>Leverandør *</flux:label>
+                            <flux:input wire:model.live.debounce.300ms="supplierSearch" type="text" placeholder="Søk på leverandør..." />
                             @error('editSupplierId')<flux:error>{{ $message }}</flux:error>@enderror
 
                             @if($supplierSearch && !$editSupplierId)
@@ -315,7 +315,7 @@
                                             @endif
                                         </button>
                                     @empty
-                                        <div class="px-3 py-2 text-sm text-zinc-500">Ingen leverandorer funnet</div>
+                                        <div class="px-3 py-2 text-sm text-zinc-500">Ingen leverandører funnet</div>
                                     @endforelse
                                 </div>
                             @endif
@@ -349,14 +349,14 @@
                                 <flux:input wire:model="editDueDate" type="date" />
                             </flux:field>
                             <flux:field>
-                                <flux:label>Totalbelop *</flux:label>
+                                <flux:label>Totalbeløp *</flux:label>
                                 <flux:input wire:model="editTotal" type="number" step="0.01" />
                                 @error('editTotal')<flux:error>{{ $message }}</flux:error>@enderror
                             </flux:field>
                         </div>
 
                         <flux:field>
-                            <flux:label>MVA-belop</flux:label>
+                            <flux:label>MVA-beløp</flux:label>
                             <flux:input wire:model="editVatTotal" type="number" step="0.01" />
                         </flux:field>
 
@@ -421,7 +421,7 @@
                         @elseif($selectedVoucher->status === 'attested')
                             <flux:button wire:click="approve" variant="primary">
                                 <flux:icon.check-badge class="w-4 h-4 mr-2" />
-                                Godkjenn og bokfor
+                                Godkjenn og bokfør
                             </flux:button>
                         @endif
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\AccountingSettings;
 use App\Models\User;
 use App\Services\CompanyService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -30,6 +31,8 @@ class CompanyUserManager extends Component
     public ?int $editingUserId = null;
 
     public string $editingRole = '';
+
+    public ?int $editingDepartmentId = null;
 
     public ?int $removingUserId = null;
 
@@ -93,13 +96,14 @@ class CompanyUserManager extends Component
 
         $this->editingUserId = $userId;
         $this->editingRole = $user->pivot->role;
+        $this->editingDepartmentId = $user->pivot->department_id;
         $this->showEditRoleModal = true;
     }
 
     public function closeEditRoleModal(): void
     {
         $this->showEditRoleModal = false;
-        $this->reset(['editingUserId', 'editingRole']);
+        $this->reset(['editingUserId', 'editingRole', 'editingDepartmentId']);
     }
 
     public function updateRole(): void
@@ -120,12 +124,23 @@ class CompanyUserManager extends Component
 
         $companyService = app(CompanyService::class);
 
-        if ($companyService->updateUserRole($company, $user, $this->editingRole)) {
-            $this->dispatch('toast', message: 'Rolle oppdatert.', variant: 'success');
-            $this->closeEditRoleModal();
-        } else {
+        $roleUpdated = $companyService->updateUserRole($company, $user, $this->editingRole);
+
+        if (! $roleUpdated) {
             $this->dispatch('toast', message: 'Kunne ikke oppdatere rolle. Selskapet må ha minst én eier.', variant: 'danger');
+
+            return;
         }
+
+        // Update department if departments are enabled
+        $settings = AccountingSettings::forCompany($company->id);
+        if ($settings?->isDepartmentsEnabled()) {
+            $departmentId = $this->editingDepartmentId ?: null;
+            $companyService->updateUserDepartment($company, $user, $departmentId);
+        }
+
+        $this->dispatch('toast', message: 'Bruker oppdatert.', variant: 'success');
+        $this->closeEditRoleModal();
     }
 
     public function confirmRemoveUser(int $userId): void
@@ -182,10 +197,16 @@ class CompanyUserManager extends Component
         $company = app('current.company');
         $users = $company ? $company->users()->orderBy('name')->get() : collect();
 
+        $settings = $company ? AccountingSettings::forCompany($company->id) : null;
+        $departmentsEnabled = $settings?->isDepartmentsEnabled() ?? false;
+        $departments = $departmentsEnabled ? $company->departments()->active()->ordered()->get() : collect();
+
         return view('livewire.company-user-manager', [
             'users' => $users,
             'canManage' => $company && auth()->user()->canManage($company),
             'isOwner' => $company && $company->isOwner(auth()->user()),
+            'departmentsEnabled' => $departmentsEnabled,
+            'departments' => $departments,
         ]);
     }
 }

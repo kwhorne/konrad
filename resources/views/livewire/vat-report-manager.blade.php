@@ -3,7 +3,7 @@
         {{-- List View --}}
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
             <div class="flex flex-col sm:flex-row flex-wrap gap-3">
-                <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok..." icon="magnifying-glass" class="w-full sm:w-48" />
+                <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk..." icon="magnifying-glass" class="w-full sm:w-48" />
 
                 <flux:select wire:model.live="filterYear" class="w-full sm:w-32">
                     @foreach($this->availableYears as $year)
@@ -84,11 +84,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div class="flex items-center justify-end gap-2">
-                                                <flux:button wire:click="openEditModal({{ $report->id }})" variant="ghost" size="sm" title="Apne">
+                                                <flux:button wire:click="openEditModal({{ $report->id }})" variant="ghost" size="sm" title="Åpne">
                                                     <flux:icon.eye class="w-4 h-4" />
                                                 </flux:button>
                                                 @if($report->status === 'draft')
-                                                    <flux:button wire:click="delete({{ $report->id }})" wire:confirm="Er du sikker pa at du vil slette denne MVA-meldingen?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
+                                                    <flux:button wire:click="delete({{ $report->id }})" wire:confirm="Er du sikker på at du vil slette denne MVA-meldingen?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700" title="Slett">
                                                         <flux:icon.trash class="w-4 h-4" />
                                                     </flux:button>
                                                 @endif
@@ -107,7 +107,7 @@
                             Ingen MVA-meldinger funnet
                         </flux:heading>
                         <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
-                            Opprett din forste MVA-melding for a komme i gang
+                            Opprett din første MVA-melding for å komme i gang
                         </flux:text>
                         <flux:button wire:click="openCreateModal" variant="primary">
                             <flux:icon.plus class="w-5 h-5 mr-2" />
@@ -273,10 +273,10 @@
                     <div class="p-12 text-center">
                         <flux:icon.calculator class="h-16 w-16 text-zinc-400 mx-auto mb-4" />
                         <flux:heading size="lg" level="3" class="text-zinc-900 dark:text-white mb-2">
-                            Ingen beregninger enna
+                            Ingen beregninger ennå
                         </flux:heading>
                         <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
-                            Klikk "Beregn MVA" for a beregne avgifter fra fakturaer og bilag
+                            Klikk "Beregn MVA" for å beregne avgifter fra fakturaer og bilag
                         </flux:text>
                         <flux:button wire:click="calculate" variant="primary">
                             <flux:icon.calculator class="w-5 h-5 mr-2" />

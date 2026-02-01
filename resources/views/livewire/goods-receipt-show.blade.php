@@ -7,25 +7,25 @@
                 <flux:badge color="{{ $goodsReceipt->status_color }}">{{ $goodsReceipt->status_label }}</flux:badge>
             </div>
             <flux:text class="text-zinc-600 dark:text-zinc-400 mt-1">
-                {{ $goodsReceipt->contact?->company_name ?? 'Ingen leverandor' }}
+                {{ $goodsReceipt->contact?->company_name ?? 'Ingen leverandør' }}
             </flux:text>
         </div>
 
         <div class="flex flex-wrap gap-2">
             @if($goodsReceipt->can_post)
                 <flux:button wire:click="post" variant="primary" icon="check">
-                    Bokfor
+                    Bokfør
                 </flux:button>
             @endif
 
             @if($goodsReceipt->status === 'posted')
-                <flux:button wire:click="reverse" wire:confirm="Er du sikker pa at du vil reversere dette varemottaket? Dette vil reversere alle lagertransaksjoner." variant="danger" icon="arrow-uturn-left">
+                <flux:button wire:click="reverse" wire:confirm="Er du sikker på at du vil reversere dette varemottaket? Dette vil reversere alle lagertransaksjoner." variant="danger" icon="arrow-uturn-left">
                     Reverser
                 </flux:button>
             @endif
 
             @if($goodsReceipt->can_cancel)
-                <flux:button wire:click="delete" wire:confirm="Er du sikker pa at du vil slette dette varemottaket?" variant="danger" icon="trash">
+                <flux:button wire:click="delete" wire:confirm="Er du sikker på at du vil slette dette varemottaket?" variant="danger" icon="trash">
                     Slett
                 </flux:button>
             @endif
@@ -50,7 +50,7 @@
                             <flux:text class="font-medium text-zinc-900 dark:text-white">{{ $goodsReceipt->stockLocation?->name ?? '-' }}</flux:text>
                         </div>
                         <div>
-                            <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Innkjopsordre</flux:text>
+                            <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Innkjøpsordre</flux:text>
                             @if($goodsReceipt->purchaseOrder)
                                 <a href="{{ route('purchasing.purchase-orders.show', $goodsReceipt->purchaseOrder) }}" class="font-mono text-indigo-600 hover:text-indigo-800 dark:text-indigo-400">
                                     {{ $goodsReceipt->purchaseOrder->po_number }}
@@ -60,7 +60,7 @@
                             @endif
                         </div>
                         <div>
-                            <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Leverandors pakkseddel</flux:text>
+                            <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Leverandørs pakkseddel</flux:text>
                             <flux:text class="font-medium text-zinc-900 dark:text-white">{{ $goodsReceipt->supplier_delivery_note ?? '-' }}</flux:text>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
             <!-- Supplier Info -->
             <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
                 <div class="p-6">
-                    <flux:heading size="base" class="mb-4 text-zinc-900 dark:text-white">Leverandor</flux:heading>
+                    <flux:heading size="base" class="mb-4 text-zinc-900 dark:text-white">Leverandør</flux:heading>
 
                     @if($goodsReceipt->contact)
                         <div class="space-y-2">
@@ -152,7 +152,7 @@
                             @endif
                         </div>
                     @else
-                        <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen leverandor</flux:text>
+                        <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen leverandør</flux:text>
                     @endif
                 </div>
             </flux:card>
@@ -173,11 +173,11 @@
                         </div>
                         @if($goodsReceipt->posted_at)
                             <div class="flex justify-between">
-                                <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Bokfort av</flux:text>
+                                <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Bokført av</flux:text>
                                 <flux:text class="text-sm text-zinc-900 dark:text-white">{{ $goodsReceipt->poster?->name ?? '-' }}</flux:text>
                             </div>
                             <div class="flex justify-between">
-                                <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Bokfort</flux:text>
+                                <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Bokført</flux:text>
                                 <flux:text class="text-sm text-zinc-900 dark:text-white">{{ $goodsReceipt->posted_at->format('d.m.Y H:i') }}</flux:text>
                             </div>
                         @endif

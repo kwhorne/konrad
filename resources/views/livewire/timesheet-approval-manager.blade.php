@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
         <div class="flex flex-wrap gap-3">
             <flux:select wire:model.live="filterStatus" class="w-40">
-                <option value="submitted">Venter pa godkjenning</option>
+                <option value="submitted">Venter på godkjenning</option>
                 <option value="">Alle statuser</option>
                 <option value="approved">Godkjent</option>
                 <option value="rejected">Avvist</option>
@@ -118,11 +118,11 @@
                 <div class="text-center py-12">
                     <flux:icon.check-badge class="w-12 h-12 mx-auto text-zinc-300 dark:text-zinc-600 mb-3" />
                     <flux:heading size="lg" class="text-zinc-700 dark:text-zinc-300 mb-2">
-                        Ingen timesedler a vise
+                        Ingen timesedler å vise
                     </flux:heading>
                     <flux:text class="text-zinc-500 dark:text-zinc-400">
                         @if($filterStatus === 'submitted')
-                            Det er ingen timesedler som venter pa godkjenning.
+                            Det er ingen timesedler som venter på godkjenning.
                         @else
                             Ingen timesedler matcher filteret ditt.
                         @endif

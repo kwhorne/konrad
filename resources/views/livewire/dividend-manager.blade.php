@@ -111,7 +111,7 @@
                 <div class="text-center py-12">
                     <flux:icon.banknotes class="h-16 w-16 text-zinc-400 mx-auto mb-4" />
                     <flux:heading size="lg" level="3" class="mb-2">Ingen utbytter</flux:heading>
-                    <flux:text class="text-zinc-600 mb-6">Registrer ditt forste utbyttevedtak</flux:text>
+                    <flux:text class="text-zinc-600 mb-6">Registrer ditt første utbyttevedtak</flux:text>
                     <flux:button wire:click="openModal" variant="primary">
                         <flux:icon.plus class="w-5 h-5 mr-2" />
                         Registrer utbytte

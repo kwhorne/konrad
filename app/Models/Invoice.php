@@ -20,6 +20,7 @@ class Invoice extends Model
         'description',
         'contact_id',
         'project_id',
+        'department_id',
         'order_id',
         'original_invoice_id',
         'invoice_status_id',
@@ -126,6 +127,11 @@ class Invoice extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function order(): BelongsTo

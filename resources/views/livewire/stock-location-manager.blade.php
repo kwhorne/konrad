@@ -1,7 +1,7 @@
 <div>
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter lokasjon..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter lokasjon..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterType" class="w-full sm:w-40">
                 <option value="">Alle typer</option>
@@ -72,7 +72,7 @@
                                             <flux:button wire:click="edit({{ $location->id }})" variant="ghost" size="sm">
                                                 <flux:icon.pencil class="w-4 h-4" />
                                             </flux:button>
-                                            <flux:button wire:click="delete({{ $location->id }})" wire:confirm="Er du sikker pa at du vil slette denne lokasjonen?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
+                                            <flux:button wire:click="delete({{ $location->id }})" wire:confirm="Er du sikker på at du vil slette denne lokasjonen?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
                                                 <flux:icon.trash class="w-4 h-4" />
                                             </flux:button>
                                         </div>
@@ -90,7 +90,7 @@
                 <div class="text-center py-12">
                     <flux:icon.archive-box class="mx-auto h-12 w-12 text-zinc-400" />
                     <flux:heading size="base" class="mt-2 text-zinc-900 dark:text-white">Ingen lokasjoner</flux:heading>
-                    <flux:text class="mt-1 text-zinc-500">Kom i gang ved a opprette din forste lagerlokasjon.</flux:text>
+                    <flux:text class="mt-1 text-zinc-500">Kom i gang ved å opprette din første lagerlokasjon.</flux:text>
                     <div class="mt-6">
                         <flux:button wire:click="create" variant="primary">
                             <flux:icon.plus class="w-5 h-5 mr-2" />

@@ -76,7 +76,7 @@ class User extends Authenticatable
     public function companies(): BelongsToMany
     {
         return $this->belongsToMany(Company::class)
-            ->withPivot(['role', 'is_default', 'joined_at'])
+            ->withPivot(['role', 'is_default', 'joined_at', 'department_id'])
             ->withTimestamps();
     }
 
@@ -271,5 +271,31 @@ class User extends Authenticatable
         }
 
         return 'green';
+    }
+
+    /**
+     * Get the user's department in their current company.
+     */
+    public function departmentInCurrentCompany(): ?Department
+    {
+        if (! $this->current_company_id) {
+            return null;
+        }
+
+        $pivot = $this->companies()
+            ->wherePivot('company_id', $this->current_company_id)
+            ->first()?->pivot;
+
+        return $pivot?->department_id
+            ? Department::find($pivot->department_id)
+            : null;
+    }
+
+    /**
+     * Get the user's department_id in their current company.
+     */
+    public function getCurrentDepartmentIdAttribute(): ?int
+    {
+        return $this->departmentInCurrentCompany()?->id;
     }
 }

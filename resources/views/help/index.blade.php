@@ -105,6 +105,18 @@
                                     <flux:icon.cog-6-tooth class="w-4 h-4" />
                                     Innstillinger
                                 </a>
+                                <a href="#avdelinger" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 pl-7">
+                                    <flux:icon.building-library class="w-4 h-4" />
+                                    Avdelinger
+                                </a>
+                                <a href="#regnskapsinnstillinger" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 pl-7">
+                                    <flux:icon.calculator class="w-4 h-4" />
+                                    Regnskapsinnstillinger
+                                </a>
+                                <a href="#kontoplan" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 pl-7">
+                                    <flux:icon.table-cells class="w-4 h-4" />
+                                    Kontoplan
+                                </a>
                                 <a href="#selskap" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.building-office-2 class="w-4 h-4" />
                                     Selskap og brukere
@@ -1667,6 +1679,141 @@
                                     <li>Tildel roller (medlem eller leder)</li>
                                     <li>Fjern brukere fra selskapet</li>
                                 </ul>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Avdelinger --}}
+                    <flux:card id="avdelinger" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.building-library class="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Avdelinger</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Avdelinger lar deg gruppere brukere og spore kostnader og inntekter per organisatorisk enhet. Avdelingsdimensjonen folger med pa alle bilag i hovedboken.</p>
+
+                                <h4>Opprette avdelinger</h4>
+                                <p>For a opprette avdelinger:</p>
+                                <ol>
+                                    <li>Ga til <strong>Innstillinger</strong> i sidemenyen</li>
+                                    <li>Velg fanen <strong>Avdelinger</strong></li>
+                                    <li>Klikk <strong>Ny avdeling</strong></li>
+                                    <li>Fyll inn avdelingskode (f.eks. "ADM", "SAL") og navn</li>
+                                </ol>
+
+                                <h4>Tildele brukere til avdelinger</h4>
+                                <p>Nar avdelinger er aktivert kan du tildele brukere til avdelinger:</p>
+                                <ol>
+                                    <li>Ga til <strong>Innstillinger → Brukere</strong></li>
+                                    <li>Klikk pa en bruker for a redigere</li>
+                                    <li>Velg avdeling fra nedtrekkslisten</li>
+                                </ol>
+
+                                <h4>Automatisk propagering</h4>
+                                <p>Nar en bruker har en avdeling, vil avdelingen automatisk folge med pa:</p>
+                                <ul>
+                                    <li>Tilbud brukeren oppretter</li>
+                                    <li>Ordrer konvertert fra tilbud</li>
+                                    <li>Fakturaer konvertert fra ordrer</li>
+                                    <li>Alle bilagslinjer som bokfores</li>
+                                </ul>
+
+                                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                    <p class="text-blue-800 dark:text-blue-200 text-sm mb-0">
+                                        <strong>Tips:</strong> Du ma aktivere avdelingsfunksjonen under <strong>Innstillinger → Regnskap</strong> for at avdelinger skal vare tilgjengelig.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Regnskapsinnstillinger --}}
+                    <flux:card id="regnskapsinnstillinger" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.calculator class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Regnskapsinnstillinger</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Regnskapsinnstillinger lar deg konfigurere regnskapsfunksjoner per selskap.</p>
+
+                                <h4>Tilgjengelige innstillinger</h4>
+                                <ul>
+                                    <li><strong>Avdelinger aktivert</strong> - Sla pa for a bruke avdelinger som konteringsdimensjon</li>
+                                    <li><strong>Krev avdeling pa bilag</strong> - Nar aktivert ma alle bilagslinjer ha en avdeling</li>
+                                    <li><strong>Standardavdeling</strong> - Velg en avdeling som brukes automatisk for nye bilag</li>
+                                </ul>
+
+                                <h4>Aktivere avdelinger</h4>
+                                <ol>
+                                    <li>Ga til <strong>Innstillinger → Regnskap</strong></li>
+                                    <li>Sla pa <strong>Avdelinger aktivert</strong></li>
+                                    <li>Klikk <strong>Lagre innstillinger</strong></li>
+                                </ol>
+                                <p>Etter aktivering kan du opprette avdelinger under fanen <strong>Avdelinger</strong> og tildele brukere til avdelinger under <strong>Brukere</strong>.</p>
+
+                                <div class="mt-4 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                                    <p class="text-amber-800 dark:text-amber-200 text-sm mb-0">
+                                        <strong>Merk:</strong> Hvis du deaktiverer avdelinger etter at data er registrert, vil eksisterende avdelingsinformasjon beholdes i databasen, men nye posteringer vil ikke fa avdeling.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Kontoplan --}}
+                    <flux:card id="kontoplan" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.table-cells class="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Kontoplan</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Kontoplanen er grunnlaget for regnskapet ditt. Konrad stotter NS 4102 - Norsk standard kontoplan for aksjeselskaper.</p>
+
+                                <h4>Opprette NS 4102 kontoplan</h4>
+                                <p>For nye selskaper anbefaler vi a bruke den norske standardkontoplanen:</p>
+                                <ol>
+                                    <li>Ga til <strong>Okonomi → Kontoplan</strong></li>
+                                    <li>Klikk <strong>Opprett NS 4102 kontoplan</strong></li>
+                                    <li>Bekreft at du vil opprette kontoplanen</li>
+                                </ol>
+                                <p>Dette oppretter over 200 forhåndsdefinerte kontoer som dekker de fleste behov for norske aksjeselskaper.</p>
+
+                                <h4>Administrere kontoer</h4>
+                                <p>Du kan ogsa opprette og redigere kontoer manuelt:</p>
+                                <ul>
+                                    <li><strong>Kontonummer</strong> - Firesifret nummer i henhold til NS 4102</li>
+                                    <li><strong>Kontonavn</strong> - Beskrivende navn pa kontoen</li>
+                                    <li><strong>Kontoklasse</strong> - F.eks. anleggsmidler, kortsiktig gjeld, driftsinntekter</li>
+                                    <li><strong>Kontotype</strong> - Eiendel, gjeld, egenkapital, inntekt eller kostnad</li>
+                                    <li><strong>MVA-kode</strong> - Koble kontoen til en MVA-kode for automatisk beregning</li>
+                                </ul>
+
+                                <h4>Systemkontoer</h4>
+                                <p>Noen kontoer er markert som systemkontoer og kan ikke slettes eller endres. Disse brukes av systemet for automatiske posteringer, som:</p>
+                                <ul>
+                                    <li>Kundefordringer (1500)</li>
+                                    <li>Leverandorgjeld (2400)</li>
+                                    <li>Utgaende MVA (2700)</li>
+                                    <li>Inngaende MVA (2710)</li>
+                                </ul>
+
+                                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                    <p class="text-blue-800 dark:text-blue-200 text-sm mb-0">
+                                        <strong>Tips:</strong> Eksisterende kontoer med samme kontonummer vil ikke bli overskrevet nar du oppretter NS 4102 kontoplan.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </flux:card>

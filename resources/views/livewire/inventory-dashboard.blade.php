@@ -18,9 +18,9 @@
 
         <flux:card class="bg-white dark:bg-zinc-900">
             <div class="p-4">
-                <flux:text class="text-xs font-medium text-zinc-500">Apne bestillinger</flux:text>
+                <flux:text class="text-xs font-medium text-zinc-500">Åpne bestillinger</flux:text>
                 <flux:heading size="xl" class="mt-1">{{ $openPurchaseOrders }}</flux:heading>
-                <flux:text class="text-xs text-zinc-400">Innkjopsordrer</flux:text>
+                <flux:text class="text-xs text-zinc-400">Innkjøpsordrer</flux:text>
             </div>
         </flux:card>
 
@@ -57,7 +57,7 @@
                         </flux:button>
                     </div>
                 @else
-                    <flux:text class="text-zinc-500 text-sm">Ingen bevegelser enna</flux:text>
+                    <flux:text class="text-zinc-500 text-sm">Ingen bevegelser ennå</flux:text>
                 @endif
             </div>
         </flux:card>
@@ -83,7 +83,7 @@
                         </flux:button>
                     </div>
                 @else
-                    <flux:text class="text-zinc-500 text-sm">Ingen varemottak enna</flux:text>
+                    <flux:text class="text-zinc-500 text-sm">Ingen varemottak ennå</flux:text>
                 @endif
             </div>
         </flux:card>

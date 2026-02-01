@@ -66,8 +66,8 @@
                 <div>
                     <flux:heading size="sm" class="mb-2">5. Tillatt og forbudt bruk</flux:heading>
                     <flux:text size="sm">
-                        Tjenesten skal kun brukes til lovlige forretningsformaal. Det er forbudt a
-                        bruke tjenesten til ulovlige aktiviteter, forsoke uautorisert tilgang,
+                        Tjenesten skal kun brukes til lovlige forretningsformål. Det er forbudt å
+                        bruke tjenesten til ulovlige aktiviteter, forsøke uautorisert tilgang,
                         eller distribuere skadelig programvare.
                     </flux:text>
                 </div>
@@ -92,7 +92,7 @@
                 {{-- Kontakt --}}
                 <div class="bg-zinc-50 dark:bg-zinc-700/50 rounded-lg p-3">
                     <flux:text size="sm">
-                        Sporsmal? Kontakt oss pa
+                        Spørsmål? Kontakt oss på
                         <a href="mailto:post@konradoffice.no" class="text-indigo-600 dark:text-indigo-400 hover:underline">post@konradoffice.no</a>
                     </flux:text>
                 </div>

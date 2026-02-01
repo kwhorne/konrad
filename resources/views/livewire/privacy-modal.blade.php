@@ -76,7 +76,7 @@
                 {{-- Kontakt --}}
                 <div class="bg-zinc-50 dark:bg-zinc-700/50 rounded-lg p-3">
                     <flux:text size="sm">
-                        Sporsmal? Kontakt oss pa
+                        Spørsmål? Kontakt oss på
                         <a href="mailto:post@konradoffice.no" class="text-indigo-600 dark:text-indigo-400 hover:underline">post@konradoffice.no</a>
                     </flux:text>
                 </div>

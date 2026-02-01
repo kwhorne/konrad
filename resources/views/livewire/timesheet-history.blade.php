@@ -103,7 +103,7 @@
                         @if($filterStatus || $filterYear)
                             Ingen timesedler matcher filteret ditt.
                         @else
-                            Du har ikke registrert noen timer enna.
+                            Du har ikke registrert noen timer ennå.
                         @endif
                     </flux:text>
                     <flux:button href="{{ route('timesheets.index') }}" variant="primary">

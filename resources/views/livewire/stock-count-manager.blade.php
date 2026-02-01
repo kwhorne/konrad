@@ -15,14 +15,14 @@
         <div class="p-4">
             <div class="flex flex-wrap gap-4">
                 <div class="flex-1 min-w-[200px]">
-                    <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok..." icon="magnifying-glass" />
+                    <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk..." icon="magnifying-glass" />
                 </div>
                 <flux:select wire:model.live="filterStatus" class="w-40">
                     <option value="">Alle statuser</option>
                     <option value="draft">Utkast</option>
-                    <option value="in_progress">Pagar</option>
-                    <option value="completed">Fullfort</option>
-                    <option value="posted">Bokfort</option>
+                    <option value="in_progress">Pågår</option>
+                    <option value="completed">Fullført</option>
+                    <option value="posted">Bokført</option>
                     <option value="cancelled">Kansellert</option>
                 </flux:select>
                 <flux:select wire:model.live="filterLocation" class="w-48">
@@ -87,7 +87,7 @@
                                     <flux:button variant="ghost" size="sm" icon="ellipsis-vertical" />
                                     <flux:menu>
                                         <flux:menu.item href="{{ route('inventory.stock-counts.show', $count) }}" icon="eye">
-                                            {{ $count->can_edit ? 'Apne' : 'Vis' }}
+                                            {{ $count->can_edit ? 'Åpne' : 'Vis' }}
                                         </flux:menu.item>
                                         @if($count->can_start)
                                             <flux:menu.item wire:click="startCount({{ $count->id }})" icon="play">

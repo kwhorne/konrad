@@ -17,6 +17,7 @@ class SupplierInvoice extends Model
         'invoice_number',
         'internal_number',
         'contact_id',
+        'department_id',
         'invoice_date',
         'due_date',
         'subtotal',
@@ -79,6 +80,11 @@ class SupplierInvoice extends Model
     public function contact(): BelongsTo
     {
         return $this->belongsTo(Contact::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function voucher(): BelongsTo

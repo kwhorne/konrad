@@ -2,7 +2,7 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok..." icon="magnifying-glass" class="w-full sm:w-48" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk..." icon="magnifying-glass" class="w-full sm:w-48" />
 
             <flux:select wire:model.live="filterType" class="w-full sm:w-40">
                 <option value="">Alle typer</option>
@@ -108,7 +108,7 @@
                 <div class="text-center py-12">
                     <flux:icon.arrows-right-left class="h-16 w-16 text-zinc-400 mx-auto mb-4" />
                     <flux:heading size="lg" level="3" class="mb-2">Ingen transaksjoner</flux:heading>
-                    <flux:text class="text-zinc-600 mb-6">Registrer din forste aksjetransaksjon</flux:text>
+                    <flux:text class="text-zinc-600 mb-6">Registrer din første aksjetransaksjon</flux:text>
                     <flux:button wire:click="openModal" variant="primary">
                         <flux:icon.plus class="w-5 h-5 mr-2" />
                         Registrer transaksjon
@@ -159,7 +159,7 @@
 
                 @if(in_array($transaction_type, ['transfer', 'redemption']))
                     <flux:field>
-                        <flux:label>Fra aksjonaer *</flux:label>
+                        <flux:label>Fra aksjonær *</flux:label>
                         <flux:select wire:model="from_shareholder_id">
                             <option value="">Velg selger</option>
                             @foreach($shareholders as $sh)
@@ -172,9 +172,9 @@
 
                 @if(in_array($transaction_type, ['issue', 'transfer', 'bonus']))
                     <flux:field>
-                        <flux:label>Til aksjonaer *</flux:label>
+                        <flux:label>Til aksjonær *</flux:label>
                         <flux:select wire:model="to_shareholder_id">
-                            <option value="">Velg kjoper</option>
+                            <option value="">Velg kjøper</option>
                             @foreach($shareholders as $sh)
                                 <option value="{{ $sh->id }}">{{ $sh->name }}</option>
                             @endforeach

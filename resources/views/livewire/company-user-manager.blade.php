@@ -19,6 +19,9 @@
         <flux:table.columns>
             <flux:table.column>Bruker</flux:table.column>
             <flux:table.column>Rolle</flux:table.column>
+            @if($departmentsEnabled)
+                <flux:table.column>Avdeling</flux:table.column>
+            @endif
             <flux:table.column>Ble med</flux:table.column>
             @if($canManage)
                 <flux:table.column class="text-right">Handlinger</flux:table.column>
@@ -59,6 +62,20 @@
                         @endphp
                         <flux:badge :variant="$roleVariant">{{ $roleLabel }}</flux:badge>
                     </flux:table.cell>
+                    @if($departmentsEnabled)
+                        <flux:table.cell>
+                            @php
+                                $userDepartment = $user->pivot->department_id
+                                    ? $departments->firstWhere('id', $user->pivot->department_id)
+                                    : null;
+                            @endphp
+                            @if($userDepartment)
+                                <flux:badge variant="outline">{{ $userDepartment->name }}</flux:badge>
+                            @else
+                                <span class="text-zinc-400">-</span>
+                            @endif
+                        </flux:table.cell>
+                    @endif
                     <flux:table.cell>
                         @if($user->pivot->joined_at)
                             {{ \Carbon\Carbon::parse($user->pivot->joined_at)->format('d.m.Y') }}
@@ -73,7 +90,7 @@
                                     <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
                                     <flux:menu>
                                         <flux:menu.item wire:click="openEditRoleModal({{ $user->id }})" icon="pencil">
-                                            Endre rolle
+                                            Rediger
                                         </flux:menu.item>
                                         <flux:menu.item wire:click="confirmRemoveUser({{ $user->id }})" icon="trash" variant="danger">
                                             Fjern fra selskap
@@ -86,7 +103,12 @@
                 </flux:table.row>
             @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="{{ $canManage ? 4 : 3 }}" class="text-center py-8">
+                    @php
+                        $colCount = 3;
+                        if ($departmentsEnabled) $colCount++;
+                        if ($canManage) $colCount++;
+                    @endphp
+                    <flux:table.cell colspan="{{ $colCount }}" class="text-center py-8">
                         <flux:icon.users class="w-10 h-10 text-zinc-400 mx-auto mb-2" />
                         <flux:text class="text-zinc-500">Ingen brukere funnet.</flux:text>
                     </flux:table.cell>
@@ -142,9 +164,9 @@
     <flux:modal wire:model="showEditRoleModal" name="edit-role-modal">
         <div class="space-y-6">
             <div>
-                <flux:heading size="lg">Endre rolle</flux:heading>
+                <flux:heading size="lg">Rediger bruker</flux:heading>
                 <flux:text class="text-zinc-500 dark:text-zinc-400">
-                    Endre rollen til denne brukeren.
+                    Endre rolle og avdeling for denne brukeren.
                 </flux:text>
             </div>
 
@@ -158,6 +180,19 @@
                     @endif
                 </flux:select>
             </flux:field>
+
+            @if($departmentsEnabled)
+                <flux:field>
+                    <flux:label>Avdeling</flux:label>
+                    <flux:select wire:model="editingDepartmentId">
+                        <flux:select.option value="">Ingen avdeling</flux:select.option>
+                        @foreach($departments as $department)
+                            <flux:select.option value="{{ $department->id }}">{{ $department->code }} - {{ $department->name }}</flux:select.option>
+                        @endforeach
+                    </flux:select>
+                    <flux:description>Brukerens standard avdeling for kontering.</flux:description>
+                </flux:field>
+            @endif
 
             <div class="flex justify-end gap-3">
                 <flux:button wire:click="closeEditRoleModal" variant="ghost">Avbryt</flux:button>

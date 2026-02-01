@@ -250,4 +250,28 @@ class CompanyService
 
         return true;
     }
+
+    /**
+     * Update user's department assignment in a company.
+     */
+    public function updateUserDepartment(Company $company, User $user, ?int $departmentId): bool
+    {
+        if (! $company->hasUser($user)) {
+            return false;
+        }
+
+        // Verify department belongs to company if provided
+        if ($departmentId !== null) {
+            $department = $company->departments()->find($departmentId);
+            if (! $department) {
+                return false;
+            }
+        }
+
+        $company->users()->updateExistingPivot($user->id, [
+            'department_id' => $departmentId,
+        ]);
+
+        return true;
+    }
 }

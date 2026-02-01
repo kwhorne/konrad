@@ -9,9 +9,9 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <flux:field class="col-span-2">
-                                <flux:label>Leverandor *</flux:label>
+                                <flux:label>Leverandør *</flux:label>
                                 <flux:select wire:model="contact_id">
-                                    <option value="">Velg leverandor</option>
+                                    <option value="">Velg leverandør</option>
                                     @foreach($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}">{{ $supplier->company_name }}</option>
                                     @endforeach
@@ -31,7 +31,7 @@
                             </flux:field>
 
                             <flux:field>
-                                <flux:label>Leverandorreferanse</flux:label>
+                                <flux:label>Leverandørreferanse</flux:label>
                                 <flux:input wire:model="supplier_reference" placeholder="f.eks. tilbudsnummer" />
                                 <flux:error name="supplier_reference" />
                             </flux:field>
@@ -140,9 +140,9 @@
                             @endif
                         @else
                             <div class="text-center py-8 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                                <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen linjer lagt til enna</flux:text>
+                                <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen linjer lagt til ennå</flux:text>
                                 <flux:button type="button" wire:click="openLineModal" variant="primary" size="sm" icon="plus" class="mt-2">
-                                    Legg til forste linje
+                                    Legg til første linje
                                 </flux:button>
                             </div>
                         @endif
@@ -178,12 +178,12 @@
                     <div class="p-6">
                         <div class="space-y-3">
                             <flux:button type="submit" variant="primary" class="w-full">
-                                {{ $purchaseOrder ? 'Oppdater innkjopsordre' : 'Opprett innkjopsordre' }}
+                                {{ $purchaseOrder ? 'Oppdater innkjøpsordre' : 'Opprett innkjøpsordre' }}
                             </flux:button>
 
                             @if($purchaseOrder)
                                 <flux:button href="{{ route('purchasing.purchase-orders.show', $purchaseOrder) }}" variant="ghost" class="w-full">
-                                    Vis innkjopsordre
+                                    Vis innkjøpsordre
                                 </flux:button>
                             @endif
 

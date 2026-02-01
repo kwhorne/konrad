@@ -59,7 +59,7 @@
                 <div class="p-4">
                     <div class="flex flex-wrap gap-4">
                         <div class="flex-1 min-w-[200px]">
-                            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok produkt..." icon="magnifying-glass" />
+                            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk produkt..." icon="magnifying-glass" />
                         </div>
                         <flux:select wire:model.live="filterStatus" class="w-40">
                             <option value="">Alle</option>
@@ -180,7 +180,7 @@
                         @endif
                         @if($stockCount->posted_at)
                             <div>
-                                <dt class="text-zinc-500">Bokfort</dt>
+                                <dt class="text-zinc-500">Bokført</dt>
                                 <dd class="font-medium text-zinc-900 dark:text-white">{{ $stockCount->posted_at->format('d.m.Y H:i') }}</dd>
                             </div>
                         @endif

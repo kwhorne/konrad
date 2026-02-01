@@ -41,7 +41,7 @@
     {{-- Filters and Actions --}}
     <div class="flex flex-col md:flex-row gap-4 mb-6">
         <div class="flex-1">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter navn, e-post eller telefon..." icon="magnifying-glass" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter navn, e-post eller telefon..." icon="magnifying-glass" />
         </div>
         <div class="flex gap-4">
             <flux:select wire:model.live="filterStatus" placeholder="Alle statuser">
@@ -165,7 +165,7 @@
 
                                     @if($user->id !== auth()->id())
                                         <flux:menu.item wire:click="toggleAdmin({{ $user->id }})" icon="shield-check">
-                                            {{ $user->is_admin ? 'Fjern admin' : 'Gjor til admin' }}
+                                            {{ $user->is_admin ? 'Fjern admin' : 'Gjør til admin' }}
                                         </flux:menu.item>
 
                                         <flux:menu.item wire:click="toggleActive({{ $user->id }})" icon="{{ $user->is_active ? 'x-circle' : 'check-circle' }}">

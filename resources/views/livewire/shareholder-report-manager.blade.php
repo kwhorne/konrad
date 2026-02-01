@@ -48,7 +48,7 @@
                                             {{ $report->getReportPeriod() }}
                                         </flux:text>
                                         <flux:text class="text-sm text-zinc-500">
-                                            {{ $report->number_of_shareholders }} aksjonaerer
+                                            {{ $report->number_of_shareholders }} aksjonærer
                                         </flux:text>
                                         <flux:text class="text-sm text-zinc-500">
                                             {{ $report->getFormattedShareCapital() }}
@@ -111,7 +111,7 @@
                 <div class="text-center py-12">
                     <flux:icon.document-text class="h-16 w-16 text-zinc-400 mx-auto mb-4" />
                     <flux:heading size="lg" level="3" class="mb-2">Ingen rapporter</flux:heading>
-                    <flux:text class="text-zinc-600 mb-6">Opprett din forste aksjonaeroppgave</flux:text>
+                    <flux:text class="text-zinc-600 mb-6">Opprett din første aksjonæroppgave</flux:text>
                     <flux:button wire:click="openCreateModal" variant="primary">
                         <flux:icon.plus class="w-5 h-5 mr-2" />
                         Opprett rapport
@@ -125,7 +125,7 @@
     <flux:modal wire:model="showCreateModal" class="max-w-md">
         <div class="space-y-6">
             <div>
-                <flux:heading size="lg">Opprett aksjonaeroppgave</flux:heading>
+                <flux:heading size="lg">Opprett aksjonæroppgave</flux:heading>
                 <flux:text class="mt-1 text-zinc-600">Velg regnskapsar for rapporten</flux:text>
             </div>
 
@@ -138,7 +138,7 @@
                         <option value="{{ $year }}">{{ $year }}</option>
                     @endforeach
                 </flux:select>
-                <flux:description>Rapport for aksjonaeropplysninger per 31.12.{{ $createYear }}</flux:description>
+                <flux:description>Rapport for aksjonæropplysninger per 31.12.{{ $createYear }}</flux:description>
                 @error('createYear') <flux:error>{{ $message }}</flux:error> @enderror
             </flux:field>
 
@@ -178,7 +178,7 @@
                         <flux:heading size="lg">{{ number_format($viewingReport->total_shares, 0, ',', ' ') }}</flux:heading>
                     </div>
                     <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                        <flux:text class="text-sm text-zinc-500">Antall aksjonaerer</flux:text>
+                        <flux:text class="text-sm text-zinc-500">Antall aksjonærer</flux:text>
                         <flux:heading size="lg">{{ $viewingReport->number_of_shareholders }}</flux:heading>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ class CheckFeatureEnabled
      */
     public function handle(Request $request, Closure $next, string $feature): Response
     {
-        if (! config("features.{$feature}")) {
+        if (! company_has_module($feature)) {
             abort(404);
         }
 

@@ -19,6 +19,7 @@ class VoucherLine extends Model
         'credit',
         'vat_amount',
         'contact_id',
+        'department_id',
         'sort_order',
     ];
 
@@ -55,6 +56,11 @@ class VoucherLine extends Model
         return $this->belongsTo(Contact::class);
     }
 
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
+
     public function getAmountAttribute(): float
     {
         return $this->debit > 0 ? $this->debit : -$this->credit;
@@ -68,6 +74,11 @@ class VoucherLine extends Model
     public function scopeByContact($query, int $contactId)
     {
         return $query->where('contact_id', $contactId);
+    }
+
+    public function scopeByDepartment($query, int $departmentId)
+    {
+        return $query->where('department_id', $departmentId);
     }
 
     public function scopeOrdered($query)

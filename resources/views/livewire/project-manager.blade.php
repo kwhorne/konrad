@@ -2,7 +2,7 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter prosjekt..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter prosjekt..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-48">
                 <option value="">Alle statuser</option>
@@ -150,7 +150,7 @@
                                             <flux:button wire:click="openModal({{ $project->id }})" variant="ghost" size="sm">
                                                 <flux:icon.pencil class="w-4 h-4" />
                                             </flux:button>
-                                            <flux:button wire:click="delete({{ $project->id }})" wire:confirm="Er du sikker pa at du vil slette dette prosjektet?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
+                                            <flux:button wire:click="delete({{ $project->id }})" wire:confirm="Er du sikker på at du vil slette dette prosjektet?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
                                                 <flux:icon.trash class="w-4 h-4" />
                                             </flux:button>
                                         </div>
@@ -171,14 +171,14 @@
                         @if($search || $filterType || $filterStatus || $filterContact)
                             Ingen prosjekter funnet
                         @else
-                            Ingen prosjekter enna
+                            Ingen prosjekter ennå
                         @endif
                     </flux:heading>
                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
                         @if($search || $filterType || $filterStatus || $filterContact)
-                            Prov a endre sokekriteriene
+                            Prøv å endre søkekriteriene
                         @else
-                            Kom i gang ved a opprette ditt forste prosjekt
+                            Kom i gang ved å opprette ditt første prosjekt
                         @endif
                     </flux:text>
                     @if(!$search && !$filterType && !$filterStatus && !$filterContact)
@@ -370,7 +370,7 @@
                         </div>
                     @else
                         <flux:text class="text-zinc-500 dark:text-zinc-400 text-center py-4">
-                            Ingen prosjektlinjer enna. Klikk "Legg til linje" for a legge til produkter.
+                            Ingen prosjektlinjer ennå. Klikk "Legg til linje" for å legge til produkter.
                         </flux:text>
                     @endif
                 </div>

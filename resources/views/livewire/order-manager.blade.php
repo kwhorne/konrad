@@ -2,7 +2,7 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row flex-wrap gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter ordre..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter ordre..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-40">
                 <option value="">Alle statuser</option>
@@ -103,7 +103,7 @@
                                             @endif
                                             <form action="{{ route('orders.send', $order) }}" method="POST" class="inline" onsubmit="return confirm('Send ordren til {{ $order->contact?->email ?? 'kunden' }}?')">
                                                 @csrf
-                                                <flux:button type="submit" variant="ghost" size="sm" title="{{ $order->sent_at ? 'Sendt '.$order->sent_at->format('d.m.Y H:i') : 'Send pa e-post' }}" class="{{ $order->sent_at ? 'text-green-600' : '' }}">
+                                                <flux:button type="submit" variant="ghost" size="sm" title="{{ $order->sent_at ? 'Sendt '.$order->sent_at->format('d.m.Y H:i') : 'Send på e-post' }}" class="{{ $order->sent_at ? 'text-green-600' : '' }}">
                                                     <flux:icon.paper-airplane class="w-4 h-4" />
                                                 </flux:button>
                                             </form>
@@ -120,7 +120,7 @@
                                             <flux:button wire:click="openModal({{ $order->id }})" variant="ghost" size="sm">
                                                 <flux:icon.pencil class="w-4 h-4" />
                                             </flux:button>
-                                            <flux:button wire:click="delete({{ $order->id }})" wire:confirm="Er du sikker pa at du vil slette denne ordren?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
+                                            <flux:button wire:click="delete({{ $order->id }})" wire:confirm="Er du sikker på at du vil slette denne ordren?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
                                                 <flux:icon.trash class="w-4 h-4" />
                                             </flux:button>
                                         </div>
@@ -138,14 +138,14 @@
                         @if($search || $filterStatus || $filterContact)
                             Ingen ordrer funnet
                         @else
-                            Ingen ordrer enna
+                            Ingen ordrer ennå
                         @endif
                     </flux:heading>
                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
                         @if($search || $filterStatus || $filterContact)
-                            Prov a endre sokekriteriene
+                            Prøv å endre søkekriteriene
                         @else
-                            Kom i gang ved a opprette din forste ordre
+                            Kom i gang ved å opprette din første ordre
                         @endif
                     </flux:text>
                     @if(!$search && !$filterStatus && !$filterContact)
@@ -174,7 +174,7 @@
             <div class="space-y-4">
                 <flux:field>
                     <flux:label>Tittel *</flux:label>
-                    <flux:input wire:model="title" type="text" placeholder="Tittel pa ordren" />
+                    <flux:input wire:model="title" type="text" placeholder="Tittel på ordren" />
                     @error('title')<flux:error>{{ $message }}</flux:error>@enderror
                 </flux:field>
 
@@ -300,7 +300,7 @@
                             @endforeach
                         </div>
                     @else
-                        <flux:text class="text-zinc-500 dark:text-zinc-400 text-center py-4">Ingen linjer enna.</flux:text>
+                        <flux:text class="text-zinc-500 dark:text-zinc-400 text-center py-4">Ingen linjer ennå.</flux:text>
                     @endif
                 </div>
             @endif

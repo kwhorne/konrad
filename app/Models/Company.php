@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Cashier\Billable;
 
 class Company extends Model
 {
-    use HasFactory, SoftDeletes;
+    use Billable, HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -51,8 +53,16 @@ class Company extends Model
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class)
-            ->withPivot(['role', 'is_default', 'joined_at'])
+            ->withPivot(['role', 'is_default', 'joined_at', 'department_id'])
             ->withTimestamps();
+    }
+
+    /**
+     * Get all departments for this company.
+     */
+    public function departments(): HasMany
+    {
+        return $this->hasMany(Department::class);
     }
 
     /**
@@ -177,5 +187,56 @@ class Company extends Model
     public function inventorySettings(): HasOne
     {
         return $this->hasOne(InventorySettings::class);
+    }
+
+    /**
+     * Get the accounting settings for this company.
+     */
+    public function accountingSettings(): HasOne
+    {
+        return $this->hasOne(AccountingSettings::class);
+    }
+
+    /**
+     * Get all modules for this company.
+     */
+    public function modules(): BelongsToMany
+    {
+        return $this->belongsToMany(Module::class, 'company_modules')
+            ->withPivot(['is_enabled', 'enabled_at', 'expires_at', 'enabled_by', 'stripe_subscription_id', 'stripe_subscription_status'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Get all enabled modules for this company.
+     */
+    public function enabledModules(): BelongsToMany
+    {
+        return $this->modules()
+            ->wherePivot('is_enabled', true)
+            ->where(function ($query) {
+                $query->whereNull('company_modules.expires_at')
+                    ->orWhere('company_modules.expires_at', '>', now());
+            });
+    }
+
+    /**
+     * Check if this company has access to a specific module.
+     */
+    public function hasModule(string $slug): bool
+    {
+        $module = Module::where('slug', $slug)->first();
+
+        if (! $module) {
+            return false;
+        }
+
+        // Standard modules are always enabled
+        if (! $module->is_premium) {
+            return true;
+        }
+
+        // Check if company has this premium module enabled
+        return $this->enabledModules()->where('modules.id', $module->id)->exists();
     }
 }

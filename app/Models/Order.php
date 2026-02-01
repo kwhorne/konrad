@@ -19,6 +19,7 @@ class Order extends Model
         'description',
         'contact_id',
         'project_id',
+        'department_id',
         'quote_id',
         'order_status_id',
         'created_by',
@@ -96,6 +97,11 @@ class Order extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function quote(): BelongsTo

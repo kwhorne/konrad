@@ -2,7 +2,7 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter aksjonaer..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter aksjonær..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterType" class="w-full sm:w-40">
                 <option value="">Alle typer</option>
@@ -19,7 +19,7 @@
 
         <flux:button wire:click="openModal" variant="primary">
             <flux:icon.plus class="w-5 h-5 mr-2" />
-            Ny aksjonaer
+            Ny aksjonær
         </flux:button>
     </div>
 
@@ -113,7 +113,7 @@
                                             <flux:button wire:click="openModal({{ $shareholder->id }})" variant="ghost" size="sm">
                                                 <flux:icon.pencil class="w-4 h-4" />
                                             </flux:button>
-                                            <flux:button wire:click="delete({{ $shareholder->id }})" wire:confirm="Er du sikker pa at du vil slette denne aksjonaeren?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
+                                            <flux:button wire:click="delete({{ $shareholder->id }})" wire:confirm="Er du sikker på at du vil slette denne aksjonæren?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
                                                 <flux:icon.trash class="w-4 h-4" />
                                             </flux:button>
                                         </div>
@@ -132,22 +132,22 @@
                     <flux:icon.users class="h-16 w-16 text-zinc-400 mx-auto mb-4" />
                     <flux:heading size="lg" level="3" class="text-zinc-900 dark:text-white mb-2">
                         @if($search || $filterType || $filterActive !== '')
-                            Ingen aksjonaerer funnet
+                            Ingen aksjonærer funnet
                         @else
-                            Ingen aksjonaerer enna
+                            Ingen aksjonærer ennå
                         @endif
                     </flux:heading>
                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
                         @if($search || $filterType || $filterActive !== '')
-                            Prov a endre sokekriteriene
+                            Prøv å endre søkekriteriene
                         @else
-                            Kom i gang ved a registrere din forste aksjonaer
+                            Kom i gang ved å registrere din første aksjonær
                         @endif
                     </flux:text>
                     @if(!$search && !$filterType && $filterActive === '')
                         <flux:button wire:click="openModal" variant="primary">
                             <flux:icon.plus class="w-5 h-5 mr-2" />
-                            Registrer aksjonaer
+                            Registrer aksjonær
                         </flux:button>
                     @endif
                 </div>
@@ -160,10 +160,10 @@
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">
-                    {{ $editingId ? 'Rediger aksjonaer' : 'Ny aksjonaer' }}
+                    {{ $editingId ? 'Rediger aksjonær' : 'Ny aksjonær' }}
                 </flux:heading>
                 <flux:text class="mt-1 text-zinc-600 dark:text-zinc-400">
-                    {{ $editingId ? 'Oppdater aksjonaerinfo' : 'Registrer en ny aksjonaer' }}
+                    {{ $editingId ? 'Oppdater aksjonærinfo' : 'Registrer en ny aksjonær' }}
                 </flux:text>
             </div>
 
@@ -171,7 +171,7 @@
 
             <div class="space-y-4">
                 <flux:field>
-                    <flux:label>Type aksjonaer *</flux:label>
+                    <flux:label>Type aksjonær *</flux:label>
                     <flux:select wire:model.live="shareholder_type">
                         <option value="person">Person</option>
                         <option value="company">Selskap</option>
@@ -288,7 +288,7 @@
                 </flux:field>
 
                 <flux:field>
-                    <flux:checkbox wire:model="is_active" label="Aktiv aksjonaer" />
+                    <flux:checkbox wire:model="is_active" label="Aktiv aksjonær" />
                 </flux:field>
             </div>
 

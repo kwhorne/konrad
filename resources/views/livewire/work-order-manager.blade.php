@@ -2,7 +2,7 @@
     {{-- Header with filters --}}
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <div class="flex flex-col sm:flex-row flex-wrap gap-3">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter arbeidsordre..." icon="magnifying-glass" class="w-full sm:w-64" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter arbeidsordre..." icon="magnifying-glass" class="w-full sm:w-64" />
 
             <flux:select wire:model.live="filterStatus" class="w-full sm:w-40">
                 <option value="">Alle statuser</option>
@@ -177,7 +177,7 @@
                                             <flux:button wire:click="openModal({{ $workOrder->id }})" variant="ghost" size="sm">
                                                 <flux:icon.pencil class="w-4 h-4" />
                                             </flux:button>
-                                            <flux:button wire:click="delete({{ $workOrder->id }})" wire:confirm="Er du sikker pa at du vil slette denne arbeidsordren?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
+                                            <flux:button wire:click="delete({{ $workOrder->id }})" wire:confirm="Er du sikker på at du vil slette denne arbeidsordren?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
                                                 <flux:icon.trash class="w-4 h-4" />
                                             </flux:button>
                                         </div>
@@ -198,14 +198,14 @@
                         @if($search || $filterStatus || $filterPriority || $filterType || $filterAssigned)
                             Ingen arbeidsordrer funnet
                         @else
-                            Ingen arbeidsordrer enna
+                            Ingen arbeidsordrer ennå
                         @endif
                     </flux:heading>
                     <flux:text class="text-zinc-600 dark:text-zinc-400 mb-6">
                         @if($search || $filterStatus || $filterPriority || $filterType || $filterAssigned)
-                            Prov a endre sokekriteriene
+                            Prøv å endre søkekriteriene
                         @else
-                            Kom i gang ved a opprette din forste arbeidsordre
+                            Kom i gang ved å opprette din første arbeidsordre
                         @endif
                     </flux:text>
                     @if(!$search && !$filterStatus && !$filterPriority && !$filterType && !$filterAssigned)
@@ -236,7 +236,7 @@
             <div class="space-y-4">
                 <flux:field>
                     <flux:label>Tittel *</flux:label>
-                    <flux:input wire:model="title" type="text" placeholder="Tittel pa arbeidsordren" />
+                    <flux:input wire:model="title" type="text" placeholder="Tittel på arbeidsordren" />
                     @error('title')
                         <flux:error>{{ $message }}</flux:error>
                     @enderror
@@ -444,7 +444,7 @@
                         </div>
                     @else
                         <flux:text class="text-zinc-500 dark:text-zinc-400 text-center py-4">
-                            Ingen linjer enna. Klikk "Legg til linje" for a registrere timer eller produkter.
+                            Ingen linjer ennå. Klikk "Legg til linje" for å registrere timer eller produkter.
                         </flux:text>
                     @endif
                 </div>

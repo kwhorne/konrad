@@ -29,7 +29,7 @@
 
     <!-- Filters -->
     <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok..." icon="magnifying-glass" />
+        <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk..." icon="magnifying-glass" />
 
         <flux:select wire:model.live="filterType">
             <flux:select.option value="all">Alle typer</flux:select.option>
@@ -124,7 +124,7 @@
                                         Rediger
                                     </flux:menu.item>
                                     <flux:menu.item onclick="event.preventDefault(); if(confirm('Send {{ $invoice->is_credit_note ? 'kreditnotaen' : 'fakturaen' }} til {{ $invoice->contact?->email ?? 'kunden' }}?')) { document.getElementById('send-invoice-{{ $invoice->id }}').submit(); }" icon="paper-airplane">
-                                        {{ $invoice->sent_at ? 'Send pa nytt' : 'Send pa e-post' }}
+                                        {{ $invoice->sent_at ? 'Send på nytt' : 'Send på e-post' }}
                                     </flux:menu.item>
                                     <form id="send-invoice-{{ $invoice->id }}" action="{{ route('invoices.send', $invoice) }}" method="POST" class="hidden">@csrf</form>
                                     @if (!$invoice->is_credit_note)
@@ -139,7 +139,7 @@
                                         Last ned PDF
                                     </flux:menu.item>
                                     <flux:menu.separator />
-                                    <flux:menu.item wire:click="delete({{ $invoice->id }})" wire:confirm="Er du sikker pa at du vil slette denne fakturaen?" icon="trash" variant="danger">
+                                    <flux:menu.item wire:click="delete({{ $invoice->id }})" wire:confirm="Er du sikker på at du vil slette denne fakturaen?" icon="trash" variant="danger">
                                         Slett
                                     </flux:menu.item>
                                 </flux:menu>
@@ -285,7 +285,7 @@
                             </div>
                         @else
                             <flux:text class="text-center text-zinc-500 dark:text-zinc-400">
-                                Ingen linjer lagt til enna.
+                                Ingen linjer lagt til ennå.
                             </flux:text>
                         @endif
                     </div>
@@ -345,11 +345,11 @@
                 <div class="space-y-4">
                     <flux:textarea wire:model="terms_conditions" label="Betingelser" placeholder="Betalingsbetingelser og vilkar" rows="2" />
 
-                    <flux:textarea wire:model="internal_notes" label="Interne notater" placeholder="Interne notater (vises ikke pa faktura)" rows="2" />
+                    <flux:textarea wire:model="internal_notes" label="Interne notater" placeholder="Interne notater (vises ikke på faktura)" rows="2" />
                 </div>
 
                 <!-- Active Toggle -->
-                <flux:switch wire:model="is_active" label="Aktiv" description="Deaktiver for a skjule fakturaen" />
+                <flux:switch wire:model="is_active" label="Aktiv" description="Deaktiver for å skjule fakturaen" />
 
                 <!-- Submit -->
                 <div class="flex justify-end gap-3">

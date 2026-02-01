@@ -43,7 +43,7 @@
             @endif
 
             @if($purchaseOrder->can_cancel)
-                <flux:button wire:click="cancel" wire:confirm="Er du sikker pa at du vil kansellere denne innkjopsordren?" variant="danger" icon="x-mark">
+                <flux:button wire:click="cancel" wire:confirm="Er du sikker på at du vil kansellere denne innkjøpsordren?" variant="danger" icon="x-mark">
                     Kanseller
                 </flux:button>
             @endif
@@ -72,7 +72,7 @@
                             <flux:text class="font-medium text-zinc-900 dark:text-white">{{ $purchaseOrder->stockLocation?->name ?? '-' }}</flux:text>
                         </div>
                         <div>
-                            <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Leverandorreferanse</flux:text>
+                            <flux:text class="text-sm text-zinc-500 dark:text-zinc-400">Leverandørreferanse</flux:text>
                             <flux:text class="font-medium text-zinc-900 dark:text-white">{{ $purchaseOrder->supplier_reference ?? '-' }}</flux:text>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
             <!-- Supplier Info -->
             <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
                 <div class="p-6">
-                    <flux:heading size="base" class="mb-4 text-zinc-900 dark:text-white">Leverandor</flux:heading>
+                    <flux:heading size="base" class="mb-4 text-zinc-900 dark:text-white">Leverandør</flux:heading>
 
                     @if($purchaseOrder->contact)
                         <div class="space-y-2">

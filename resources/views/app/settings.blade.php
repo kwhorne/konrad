@@ -24,6 +24,8 @@
                     @if($canManageCompany)
                         <flux:tab name="company" icon="building-office-2">Selskap</flux:tab>
                         <flux:tab name="users" icon="users">Brukere</flux:tab>
+                        <flux:tab name="departments" icon="building-office">Avdelinger</flux:tab>
+                        <flux:tab name="accounting" icon="calculator">Regnskap</flux:tab>
                     @endif
                 </flux:tabs>
 
@@ -331,6 +333,18 @@
                     <!-- Users Tab Panel -->
                     <flux:tab.panel name="users" class="pt-6">
                         <livewire:company-user-manager />
+                    </flux:tab.panel>
+
+                    <!-- Departments Tab Panel -->
+                    <flux:tab.panel name="departments" class="pt-6">
+                        <livewire:department-manager />
+                    </flux:tab.panel>
+
+                    <!-- Accounting Settings Tab Panel -->
+                    <flux:tab.panel name="accounting" class="pt-6">
+                        <div class="max-w-2xl">
+                            <livewire:accounting-settings-manager />
+                        </div>
                     </flux:tab.panel>
                 @endif
             </flux:tab.group>

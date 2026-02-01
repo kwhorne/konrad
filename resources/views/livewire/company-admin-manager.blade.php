@@ -29,7 +29,7 @@
     {{-- Filters --}}
     <div class="flex flex-col md:flex-row gap-4 mb-6">
         <div class="flex-1">
-            <flux:input wire:model.live.debounce.300ms="search" placeholder="Sok etter navn, org.nr eller e-post..." icon="magnifying-glass" />
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="Søk etter navn, org.nr eller e-post..." icon="magnifying-glass" />
         </div>
         <div class="flex gap-4">
             <flux:select wire:model.live="filterStatus" placeholder="Alle statuser">
@@ -48,6 +48,7 @@
                 <flux:table.column>Org.nr</flux:table.column>
                 <flux:table.column>Kontakt</flux:table.column>
                 <flux:table.column>Brukere</flux:table.column>
+                <flux:table.column>Moduler</flux:table.column>
                 <flux:table.column>Status</flux:table.column>
                 <flux:table.column>Opprettet</flux:table.column>
                 <flux:table.column></flux:table.column>
@@ -85,6 +86,21 @@
                         </flux:table.cell>
 
                         <flux:table.cell>
+                            @php
+                                $enabledModules = $company->enabledModules()->where('is_premium', true)->get();
+                            @endphp
+                            @if($enabledModules->count() > 0)
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($enabledModules as $module)
+                                        <flux:badge color="violet" size="sm">{{ $module->name }}</flux:badge>
+                                    @endforeach
+                                </div>
+                            @else
+                                <flux:text class="text-sm text-zinc-400">Ingen</flux:text>
+                            @endif
+                        </flux:table.cell>
+
+                        <flux:table.cell>
                             @if($company->is_active)
                                 <flux:badge color="green">Aktiv</flux:badge>
                             @else
@@ -101,6 +117,10 @@
                                 <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
 
                                 <flux:menu>
+                                    <flux:menu.item wire:click="openModuleModal({{ $company->id }})" icon="puzzle-piece">
+                                        Administrer moduler
+                                    </flux:menu.item>
+                                    <flux:menu.separator />
                                     <flux:menu.item wire:click="toggleActive({{ $company->id }})" icon="{{ $company->is_active ? 'x-circle' : 'check-circle' }}">
                                         {{ $company->is_active ? 'Deaktiver' : 'Aktiver' }}
                                     </flux:menu.item>
@@ -110,7 +130,7 @@
                     </flux:table.row>
                 @empty
                     <flux:table.row>
-                        <flux:table.cell colspan="7" class="text-center py-8">
+                        <flux:table.cell colspan="8" class="text-center py-8">
                             <flux:text class="text-zinc-500">Ingen selskaper funnet</flux:text>
                         </flux:table.cell>
                     </flux:table.row>
@@ -124,4 +144,38 @@
             </div>
         @endif
     </flux:card>
+
+    {{-- Module Management Modal --}}
+    <flux:modal wire:model="showModuleModal" name="module-modal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Administrer moduler</flux:heading>
+                <flux:text class="text-zinc-500 dark:text-zinc-400 mt-1">
+                    {{ $editingCompanyName }}
+                </flux:text>
+            </div>
+
+            <div class="space-y-4">
+                <flux:text class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Premium moduler</flux:text>
+
+                @foreach($premiumModules as $module)
+                    <div class="flex items-center justify-between p-4 rounded-lg bg-zinc-50 dark:bg-zinc-800">
+                        <div class="flex-1">
+                            <flux:text class="font-medium">{{ $module->name }}</flux:text>
+                            <flux:text class="text-sm text-zinc-500">{{ $module->description }}</flux:text>
+                            <flux:text class="text-sm text-violet-600 dark:text-violet-400 mt-1">{{ $module->price_formatted }}</flux:text>
+                        </div>
+                        <flux:switch
+                            wire:model="moduleStates.{{ $module->id }}"
+                        />
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <flux:button wire:click="closeModuleModal" variant="ghost">Avbryt</flux:button>
+                <flux:button wire:click="saveModules" variant="primary">Lagre endringer</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 </div>

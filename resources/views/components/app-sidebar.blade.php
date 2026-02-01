@@ -28,21 +28,21 @@
             Mine aktiviteter
         </flux:sidebar.item>
 
-        @if(config('features.sales') || config('features.contacts') || config('features.products'))
+        @if(company_has_module('sales') || company_has_module('contacts') || company_has_module('products'))
             <flux:sidebar.group expandable icon="user-group" heading="CRM" :expanded="in_array($current, ['contacts', 'products', 'quotes', 'orders', 'invoices'])">
-                @if(config('features.contacts'))
+                @if(company_has_module('contacts'))
                     <flux:sidebar.item href="{{ route('contacts.index') }}" :current="$current === 'contacts'">
                         Kontakter
                     </flux:sidebar.item>
                 @endif
 
-                @if(config('features.products'))
+                @if(company_has_module('products'))
                     <flux:sidebar.item href="{{ route('products.index') }}" :current="$current === 'products'">
                         Varer
                     </flux:sidebar.item>
                 @endif
 
-                @if(config('features.sales'))
+                @if(company_has_module('sales'))
                     <flux:sidebar.item href="{{ route('quotes.index') }}" :current="$current === 'quotes'">
                         Tilbud
                     </flux:sidebar.item>
@@ -56,15 +56,15 @@
             </flux:sidebar.group>
         @endif
 
-        @if(config('features.projects') || config('features.work_orders'))
+        @if(company_has_module('projects') || company_has_module('work_orders'))
             <flux:sidebar.group expandable icon="rectangle-stack" heading="Prosjekt" :expanded="in_array($current, ['projects', 'work-orders'])">
-                @if(config('features.projects'))
+                @if(company_has_module('projects'))
                     <flux:sidebar.item href="{{ route('projects.index') }}" :current="$current === 'projects'">
                         Prosjekter
                     </flux:sidebar.item>
                 @endif
 
-                @if(config('features.work_orders'))
+                @if(company_has_module('work_orders'))
                     <flux:sidebar.item href="{{ route('work-orders.index') }}" :current="$current === 'work-orders'">
                         Arbeidsordrer
                     </flux:sidebar.item>
@@ -95,19 +95,19 @@
             @endcan
         </flux:sidebar.group>
 
-        @if(config('features.contracts'))
+        @if(company_has_module('contracts'))
             <flux:sidebar.item icon="document-text" href="{{ route('contracts.index') }}" :current="$current === 'contracts'">
                 Kontrakter
             </flux:sidebar.item>
         @endif
 
-        @if(config('features.assets'))
+        @if(company_has_module('assets'))
             <flux:sidebar.item icon="cube" href="{{ route('assets.index') }}" :current="$current === 'assets'">
                 Eiendeler
             </flux:sidebar.item>
         @endif
 
-        @if(config('features.inventory'))
+        @if(company_has_module('inventory'))
             <flux:sidebar.group expandable icon="archive-box" heading="Lager" :expanded="in_array($current, ['inventory', 'purchasing'])">
                 <flux:sidebar.item href="{{ route('inventory.dashboard') }}" :current="$current === 'inventory-dashboard'">
                     Lageroversikt

@@ -36,6 +36,9 @@
             <flux:navlist.item icon="building-office-2" href="{{ route('admin.companies') }}" :current="$current === 'companies'">
                 Selskaper
             </flux:navlist.item>
+            <flux:navlist.item icon="puzzle-piece" href="{{ route('admin.modules') }}" :current="$current === 'modules'">
+                Moduler
+            </flux:navlist.item>
             <flux:navlist.item icon="cog-6-tooth" href="{{ route('admin.system') }}" :current="$current === 'system'">
                 System
             </flux:navlist.item>
