@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             OrderStatusSeeder::class,
             InvoiceStatusSeeder::class,
             PaymentMethodSeeder::class,
+            DemoSeeder::class,
         ]);
     }
 }
