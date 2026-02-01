@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Rules\ExistsInCompany;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AccountController extends Controller
 {
@@ -42,8 +43,13 @@ class AccountController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
-            'account_number' => 'required|string|max:10|unique:accounts,account_number',
+            'account_number' => [
+                'required', 'string', 'max:10',
+                Rule::unique('accounts', 'account_number')->where('company_id', $companyId),
+            ],
             'name' => 'required|string|max:255',
             'account_class' => 'required|in:1,2,3,4,5,6,7,8',
             'account_type' => 'required|in:asset,liability,equity,revenue,expense',
@@ -79,8 +85,13 @@ class AccountController extends Controller
 
     public function update(Request $request, Account $account)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
-            'account_number' => 'required|string|max:10|unique:accounts,account_number,'.$account->id,
+            'account_number' => [
+                'required', 'string', 'max:10',
+                Rule::unique('accounts', 'account_number')->where('company_id', $companyId)->ignore($account->id),
+            ],
             'name' => 'required|string|max:255',
             'account_class' => 'required|in:1,2,3,4,5,6,7,8',
             'account_type' => 'required|in:asset,liability,equity,revenue,expense',

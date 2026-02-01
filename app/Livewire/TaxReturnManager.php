@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\TaxReturn;
 use App\Services\TaxCalculationService;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class TaxReturnManager extends Component
@@ -18,8 +19,13 @@ class TaxReturnManager extends Component
 
     protected function rules(): array
     {
+        $companyId = auth()->user()->current_company_id;
+
         return [
-            'createYear' => 'required|integer|min:2000|max:2100|unique:tax_returns,fiscal_year',
+            'createYear' => [
+                'required', 'integer', 'min:2000', 'max:2100',
+                Rule::unique('tax_returns', 'fiscal_year')->where('company_id', $companyId),
+            ],
         ];
     }
 

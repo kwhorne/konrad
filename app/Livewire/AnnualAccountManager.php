@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\AnnualAccount;
 use App\Services\AnnualAccountService;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class AnnualAccountManager extends Component
@@ -20,8 +21,13 @@ class AnnualAccountManager extends Component
 
     protected function rules(): array
     {
+        $companyId = auth()->user()->current_company_id;
+
         return [
-            'createYear' => 'required|integer|min:2000|max:2100|unique:annual_accounts,fiscal_year',
+            'createYear' => [
+                'required', 'integer', 'min:2000', 'max:2100',
+                Rule::unique('annual_accounts', 'fiscal_year')->where('company_id', $companyId),
+            ],
         ];
     }
 

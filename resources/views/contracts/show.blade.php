@@ -417,7 +417,7 @@
                             Notater
                         </flux:heading>
                         <div class="prose dark:prose-invert max-w-none">
-                            {!! $contract->notes !!}
+                            {!! nl2br(e($contract->notes)) !!}
                         </div>
                     </div>
                 </flux:card>

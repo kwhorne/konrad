@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductGroup;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductGroupController extends Controller
 {
@@ -21,9 +22,14 @@ class ProductGroupController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:product_groups,code',
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('product_groups', 'code')->where('company_id', $companyId),
+            ],
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'sort_order' => 'nullable|integer|min:0',
@@ -50,9 +56,14 @@ class ProductGroupController extends Controller
 
     public function update(Request $request, ProductGroup $productGroup)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:product_groups,code,'.$productGroup->id,
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('product_groups', 'code')->where('company_id', $companyId)->ignore($productGroup->id),
+            ],
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'sort_order' => 'nullable|integer|min:0',

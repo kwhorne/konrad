@@ -6,6 +6,7 @@ use App\Models\ProductType;
 use App\Models\VatRate;
 use App\Rules\ExistsInCompany;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ProductTypeController extends Controller
 {
@@ -25,9 +26,14 @@ class ProductTypeController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:product_types,code',
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('product_types', 'code')->where('company_id', $companyId),
+            ],
             'vat_rate_id' => ['required', new ExistsInCompany('vat_rates')],
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
@@ -57,9 +63,14 @@ class ProductTypeController extends Controller
 
     public function update(Request $request, ProductType $productType)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:product_types,code,'.$productType->id,
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('product_types', 'code')->where('company_id', $companyId)->ignore($productType->id),
+            ],
             'vat_rate_id' => ['required', new ExistsInCompany('vat_rates')],
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',

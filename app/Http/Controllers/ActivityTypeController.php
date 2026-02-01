@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityType;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ActivityTypeController extends Controller
 {
@@ -21,8 +22,13 @@ class ActivityTypeController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:activity_types,name',
+            'name' => [
+                'required', 'string', 'max:255',
+                Rule::unique('activity_types', 'name')->where('company_id', $companyId),
+            ],
             'icon' => 'required|string|max:100',
             'color' => 'required|string|max:50',
             'description' => 'nullable|string',
@@ -51,8 +57,13 @@ class ActivityTypeController extends Controller
 
     public function update(Request $request, ActivityType $activityType)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:activity_types,name,'.$activityType->id,
+            'name' => [
+                'required', 'string', 'max:255',
+                Rule::unique('activity_types', 'name')->where('company_id', $companyId)->ignore($activityType->id),
+            ],
             'icon' => 'required|string|max:100',
             'color' => 'required|string|max:50',
             'description' => 'nullable|string',

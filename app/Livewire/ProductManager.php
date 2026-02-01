@@ -8,6 +8,7 @@ use App\Models\ProductType;
 use App\Models\Unit;
 use App\Rules\ExistsInCompany;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -48,14 +49,18 @@ class ProductManager extends Component
 
     protected function rules(): array
     {
-        $skuRule = 'required|string|max:100|unique:products,sku';
+        $companyId = auth()->user()->current_company_id;
+
+        $skuRule = Rule::unique('products', 'sku')
+            ->where('company_id', $companyId);
+
         if ($this->editingId) {
-            $skuRule .= ','.$this->editingId;
+            $skuRule->ignore($this->editingId);
         }
 
         return [
             'name' => 'required|string|max:255',
-            'sku' => $skuRule,
+            'sku' => ['required', 'string', 'max:100', $skuRule],
             'description' => 'nullable|string',
             'product_group_id' => ['nullable', new ExistsInCompany('product_groups')],
             'product_type_id' => ['required', new ExistsInCompany('product_types')],

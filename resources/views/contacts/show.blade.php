@@ -352,7 +352,7 @@
                         <div class="p-6">
                             @if($contact->notes)
                                 <div class="prose dark:prose-invert max-w-none prose-zinc prose-sm">
-                                    {!! $contact->notes !!}
+                                    {!! nl2br(e($contact->notes)) !!}
                                 </div>
                             @else
                                 <div class="text-zinc-400 dark:text-zinc-600">Ingen notater</div>

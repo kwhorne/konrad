@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\ShareClass;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class ShareClassManager extends Component
@@ -36,14 +37,16 @@ class ShareClassManager extends Component
 
     protected function rules(): array
     {
-        $codeRule = 'required|string|max:10|unique:share_classes,code';
+        $companyId = auth()->user()->current_company_id;
+
+        $codeRule = Rule::unique('share_classes', 'code')->where('company_id', $companyId);
         if ($this->editingId) {
-            $codeRule .= ','.$this->editingId;
+            $codeRule->ignore($this->editingId);
         }
 
         return [
             'name' => 'required|string|max:255',
-            'code' => $codeRule,
+            'code' => ['required', 'string', 'max:10', $codeRule],
             'isin' => 'nullable|string|max:12',
             'par_value' => 'required|numeric|min:0.01',
             'total_shares' => 'required|integer|min:0',

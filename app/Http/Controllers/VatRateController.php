@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\VatRate;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class VatRateController extends Controller
 {
@@ -21,9 +22,14 @@ class VatRateController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:vat_rates,code',
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('vat_rates', 'code')->where('company_id', $companyId),
+            ],
             'rate' => 'required|numeric|min:0|max:100',
             'description' => 'nullable|string',
             'is_default' => 'nullable|boolean',
@@ -57,9 +63,14 @@ class VatRateController extends Controller
 
     public function update(Request $request, VatRate $vatRate)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:vat_rates,code,'.$vatRate->id,
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('vat_rates', 'code')->where('company_id', $companyId)->ignore($vatRate->id),
+            ],
             'rate' => 'required|numeric|min:0|max:100',
             'description' => 'nullable|string',
             'is_default' => 'nullable|boolean',

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\ShareholderReport;
 use App\Services\ShareholderService;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class ShareholderReportManager extends Component
@@ -18,8 +19,13 @@ class ShareholderReportManager extends Component
 
     protected function rules(): array
     {
+        $companyId = auth()->user()->current_company_id;
+
         return [
-            'createYear' => 'required|integer|min:2000|max:2100|unique:shareholder_reports,year',
+            'createYear' => [
+                'required', 'integer', 'min:2000', 'max:2100',
+                Rule::unique('shareholder_reports', 'year')->where('company_id', $companyId),
+            ],
         ];
     }
 

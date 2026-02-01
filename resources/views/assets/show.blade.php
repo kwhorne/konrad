@@ -210,7 +210,7 @@
                                     Notater
                                 </flux:heading>
                                 <div class="prose dark:prose-invert max-w-none">
-                                    {!! $asset->notes !!}
+                                    {!! nl2br(e($asset->notes)) !!}
                                 </div>
                             </div>
                         </flux:card>

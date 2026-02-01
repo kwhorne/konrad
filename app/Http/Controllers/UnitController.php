@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UnitController extends Controller
 {
@@ -21,9 +22,14 @@ class UnitController extends Controller
 
     public function store(Request $request)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:units,code',
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('units', 'code')->where('company_id', $companyId),
+            ],
             'symbol' => 'nullable|string|max:20',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',
@@ -51,9 +57,14 @@ class UnitController extends Controller
 
     public function update(Request $request, Unit $unit)
     {
+        $companyId = auth()->user()->current_company_id;
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:50|unique:units,code,'.$unit->id,
+            'code' => [
+                'required', 'string', 'max:50',
+                Rule::unique('units', 'code')->where('company_id', $companyId)->ignore($unit->id),
+            ],
             'symbol' => 'nullable|string|max:20',
             'description' => 'nullable|string',
             'is_active' => 'nullable|boolean',

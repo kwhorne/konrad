@@ -407,7 +407,7 @@
                                             @endif
                                         </div>
                                         <div class="prose prose-sm dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400 line-clamp-3">
-                                            {!! $note->content !!}
+                                            {!! nl2br(e($note->content)) !!}
                                         </div>
                                         <flux:text class="text-xs text-zinc-400 dark:text-zinc-500 mt-3">
                                             Oppdatert {{ $note->updated_at->diffForHumans() }}

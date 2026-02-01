@@ -310,16 +310,25 @@
 
                                 <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-700">
                                     <div class="p-6 space-y-4">
-                                        <div class="text-center">
-                                            <flux:text class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-                                                Medlem siden {{ auth()->user()->created_at->format('M Y') }}
-                                            </flux:text>
+                                        <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
+                                            Bruker siden {{ auth()->user()->created_at->format('d.m.Y') }}
+                                        </flux:text>
+                                    </div>
+                                </flux:card>
 
-                                            <flux:button variant="ghost" class="w-full text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                                <flux:icon.exclamation-triangle class="h-4 w-4 mr-2" />
-                                                Slett konto
-                                            </flux:button>
+                                <flux:card class="bg-red-50 dark:bg-red-950/30 shadow-sm border border-red-200 dark:border-red-900">
+                                    <div class="p-6 space-y-4">
+                                        <div>
+                                            <flux:heading size="sm" class="text-red-700 dark:text-red-400">Faresone</flux:heading>
+                                            <flux:text class="text-sm text-red-600 dark:text-red-400 mt-1">
+                                                Sletting av kontoen din er permanent og kan ikke angres. All din personlige data vil bli fjernet.
+                                            </flux:text>
                                         </div>
+
+                                        <flux:button variant="danger">
+                                            <flux:icon.trash class="h-4 w-4 mr-2" />
+                                            Slett min konto permanent
+                                        </flux:button>
                                     </div>
                                 </flux:card>
                             </section>
