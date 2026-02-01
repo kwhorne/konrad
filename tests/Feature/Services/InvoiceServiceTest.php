@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
@@ -13,7 +14,19 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+function setupInvoiceContext(): array
+{
+    $user = User::factory()->create(['onboarding_completed' => true]);
+    $company = Company::factory()->withOwner($user)->create();
+    $user->update(['current_company_id' => $company->id]);
+    app()->instance('current.company', $company);
+
+    return ['user' => $user->fresh(), 'company' => $company];
+}
+
 beforeEach(function () {
+    ['user' => $this->user, 'company' => $this->company] = setupInvoiceContext();
+    $this->actingAs($this->user);
     $this->service = app(InvoiceService::class);
 });
 
@@ -63,10 +76,7 @@ it('gets default status', function () {
 });
 
 it('creates credit note from invoice', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
-    $contact = Contact::factory()->create();
+    $contact = Contact::factory()->create(['created_by' => $this->user->id]);
     InvoiceStatus::factory()->create(['code' => 'credited', 'name' => 'Kreditert']);
 
     $invoice = Invoice::factory()->create([
@@ -76,6 +86,7 @@ it('creates credit note from invoice', function () {
         'discount_total' => 100,
         'vat_total' => 225,
         'total' => 1125,
+        'created_by' => $this->user->id,
     ]);
 
     InvoiceLine::factory()->create([
@@ -118,9 +129,6 @@ it('marks invoice as sent', function () {
 });
 
 it('records payment and updates totals', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $paidStatus = InvoiceStatus::factory()->create(['code' => 'paid', 'name' => 'Betalt']);
     $paymentMethod = PaymentMethod::factory()->create();
 
@@ -128,6 +136,7 @@ it('records payment and updates totals', function () {
         'total' => 1000,
         'paid_amount' => 0,
         'balance' => 1000,
+        'created_by' => $this->user->id,
     ]);
 
     $payment = $this->service->recordPayment($invoice, [
@@ -148,9 +157,6 @@ it('records payment and updates totals', function () {
 });
 
 it('updates payment status to partially_paid', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $partialStatus = InvoiceStatus::factory()->create(['code' => 'partially_paid', 'name' => 'Delvis betalt']);
     $paymentMethod = PaymentMethod::factory()->create();
 
@@ -158,6 +164,7 @@ it('updates payment status to partially_paid', function () {
         'total' => 1000,
         'paid_amount' => 0,
         'balance' => 1000,
+        'created_by' => $this->user->id,
     ]);
 
     $this->service->recordPayment($invoice, [
@@ -174,21 +181,20 @@ it('updates payment status to partially_paid', function () {
 });
 
 it('deletes payment and updates totals', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $paymentMethod = PaymentMethod::factory()->create();
 
     $invoice = Invoice::factory()->create([
         'total' => 1000,
         'paid_amount' => 500,
         'balance' => 500,
+        'created_by' => $this->user->id,
     ]);
 
     $payment = InvoicePayment::factory()->create([
         'invoice_id' => $invoice->id,
         'payment_method_id' => $paymentMethod->id,
         'amount' => 500,
+        'created_by' => $this->user->id,
     ]);
 
     $this->service->deletePayment($payment);

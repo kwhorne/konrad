@@ -1,10 +1,20 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Shareholder;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->user = User::factory()->create(['onboarding_completed' => true]);
+    $this->company = Company::factory()->withOwner($this->user)->create();
+    $this->user->update(['current_company_id' => $this->company->id]);
+    app()->instance('current.company', $this->company);
+    $this->actingAs($this->user);
+});
 
 // Basic Creation
 test('shareholder can be created', function () {

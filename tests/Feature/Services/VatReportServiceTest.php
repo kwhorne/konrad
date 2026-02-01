@@ -1,16 +1,29 @@
 <?php
 
+use App\Models\Company;
 use App\Models\User;
+use App\Models\VatCode;
 use App\Models\VatReport;
+use App\Models\VatReportLine;
 use App\Services\VatReportService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+function setupVatContext(): array
+{
+    $user = User::factory()->create(['onboarding_completed' => true]);
+    $company = Company::factory()->withOwner($user)->create();
+    $user->update(['current_company_id' => $company->id]);
+    app()->instance('current.company', $company);
+
+    return ['user' => $user->fresh(), 'company' => $company];
+}
+
 beforeEach(function () {
-    $this->service = app(VatReportService::class);
-    $this->user = User::factory()->create();
+    ['user' => $this->user, 'company' => $this->company] = setupVatContext();
     $this->actingAs($this->user);
+    $this->service = app(VatReportService::class);
 });
 
 it('deletes a draft report', function () {
@@ -181,4 +194,205 @@ it('gets or creates draft report', function () {
     $report2 = $this->service->getOrCreateDraftReport(2026, 4);
 
     expect($report2->id)->toBe($report1->id);
+});
+
+describe('updateLine', function () {
+    it('updates line with manual override', function () {
+        $report = VatReport::factory()->create(['created_by' => $this->user->id]);
+        $vatCode = VatCode::factory()->create();
+        $line = VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode->id,
+            'base_amount' => 10000,
+            'vat_amount' => 2500,
+            'is_manual_override' => false,
+        ]);
+
+        $updated = $this->service->updateLine($line, 15000, 3750, 'Korrigert manuelt');
+
+        expect((float) $updated->base_amount)->toBe(15000.00)
+            ->and((float) $updated->vat_amount)->toBe(3750.00)
+            ->and($updated->note)->toBe('Korrigert manuelt')
+            ->and($updated->is_manual_override)->toBeTrue();
+    });
+
+    it('recalculates report totals after line update', function () {
+        $report = VatReport::factory()->create([
+            'created_by' => $this->user->id,
+            'total_output_vat' => 0,
+        ]);
+        $vatCode = VatCode::factory()->output()->create();
+        $line = VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode->id,
+            'base_amount' => 10000,
+            'vat_amount' => 2500,
+        ]);
+
+        $this->service->updateLine($line, 20000, 5000);
+
+        $report->refresh();
+        expect((float) $report->total_output_vat)->toBeGreaterThanOrEqual(5000.00);
+    });
+});
+
+describe('calculateReport', function () {
+    it('clears existing lines before calculation', function () {
+        $report = VatReport::factory()->create(['created_by' => $this->user->id]);
+
+        $vatCode1 = VatCode::factory()->create(['code' => 'C1']);
+        $vatCode2 = VatCode::factory()->create(['code' => 'C2']);
+        $vatCode3 = VatCode::factory()->create(['code' => 'C3']);
+
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode1->id,
+        ]);
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode2->id,
+        ]);
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode3->id,
+        ]);
+
+        expect($report->lines()->count())->toBe(3);
+
+        $this->service->calculateReport($report);
+
+        $report->refresh();
+    });
+
+    it('only creates lines for vat codes with amounts', function () {
+        $report = VatReport::factory()->create(['created_by' => $this->user->id]);
+
+        VatCode::factory()->create([
+            'code' => '1',
+            'category' => 'salg_norge',
+            'rate' => 25,
+        ]);
+
+        $result = $this->service->calculateReport($report);
+
+        expect($result)->toBeInstanceOf(VatReport::class);
+    });
+});
+
+describe('getReportSummary', function () {
+    it('groups lines by category', function () {
+        $report = VatReport::factory()->create(['created_by' => $this->user->id]);
+
+        $salgCode = VatCode::factory()->create([
+            'code' => 'S1',
+            'category' => 'salg_norge',
+            'direction' => 'output',
+        ]);
+        $kjopCode = VatCode::factory()->create([
+            'code' => 'K1',
+            'category' => 'kjop_norge',
+            'direction' => 'input',
+        ]);
+
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $salgCode->id,
+            'base_amount' => 10000,
+            'vat_amount' => 2500,
+        ]);
+
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $kjopCode->id,
+            'base_amount' => 5000,
+            'vat_amount' => 1250,
+        ]);
+
+        $summary = $this->service->getReportSummary($report);
+
+        expect($summary)->toHaveKey('salg_norge')
+            ->and($summary)->toHaveKey('kjop_norge')
+            ->and($summary['salg_norge']['lines'])->toHaveCount(1)
+            ->and($summary['kjop_norge']['lines'])->toHaveCount(1);
+    });
+
+    it('calculates totals per category', function () {
+        $report = VatReport::factory()->create(['created_by' => $this->user->id]);
+
+        $vatCode1 = VatCode::factory()->create(['category' => 'salg_norge', 'code' => '1']);
+        $vatCode2 = VatCode::factory()->create(['category' => 'salg_norge', 'code' => '2']);
+
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode1->id,
+            'base_amount' => 10000,
+            'vat_amount' => 2500,
+        ]);
+
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode2->id,
+            'base_amount' => 15000,
+            'vat_amount' => 3750,
+        ]);
+
+        $summary = $this->service->getReportSummary($report);
+
+        expect($summary['salg_norge']['base_total'])->toBe(25000.0)
+            ->and($summary['salg_norge']['vat_total'])->toBe(6250.0);
+    });
+
+    it('excludes empty categories', function () {
+        $report = VatReport::factory()->create(['created_by' => $this->user->id]);
+
+        $vatCode = VatCode::factory()->create(['category' => 'salg_norge']);
+
+        VatReportLine::factory()->create([
+            'vat_report_id' => $report->id,
+            'vat_code_id' => $vatCode->id,
+        ]);
+
+        $summary = $this->service->getReportSummary($report);
+
+        expect($summary)->toHaveKey('salg_norge')
+            ->and($summary)->not->toHaveKey('kjop_norge')
+            ->and($summary)->not->toHaveKey('import');
+    });
+});
+
+describe('bimonthly period handling', function () {
+    it('creates report with correct period dates for january-february', function () {
+        $report = $this->service->createReport(2024, 1);
+
+        expect($report->period_from->format('Y-m-d'))->toBe('2024-01-01')
+            ->and($report->period_to->format('Y-m-d'))->toBe('2024-02-29');
+    });
+
+    it('creates report with correct period dates for march-april', function () {
+        $report = $this->service->createReport(2024, 2);
+
+        expect($report->period_from->format('Y-m-d'))->toBe('2024-03-01')
+            ->and($report->period_to->format('Y-m-d'))->toBe('2024-04-30');
+    });
+
+    it('creates report with correct period dates for november-december', function () {
+        $report = $this->service->createReport(2024, 6);
+
+        expect($report->period_from->format('Y-m-d'))->toBe('2024-11-01')
+            ->and($report->period_to->format('Y-m-d'))->toBe('2024-12-31');
+    });
+});
+
+describe('report type variations', function () {
+    it('creates alminnelig report type by default', function () {
+        $report = $this->service->createReport(2024, 1);
+
+        expect($report->report_type)->toBe('alminnelig');
+    });
+
+    it('creates primaer report type when specified', function () {
+        $report = $this->service->createReport(2024, 1, 'primaer');
+
+        expect($report->report_type)->toBe('primaer');
+    });
 });

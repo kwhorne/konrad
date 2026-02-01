@@ -1,5 +1,25 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.0.2
+**Dato:** 1. februar 2026
+
+### Forbedret teststabilitet
+
+- **Deterministiske factories** - Factory-states for skatteberegninger og MVA-rapporter genererer nå unike verdier for å unngå konflikter
+- **Company context** - Forbedret oppsett av firmakontext i tester sikrer korrekt multi-tenancy isolering
+- **Policytest-fikser** - InvoicePolicyTest støtter nå komplett firmakontext
+
+### Interne forbedringer
+
+- **802 tester passerer** - Full testdekning på alle kritiske moduler
+- **Factories oppdatert** - TaxAdjustmentFactory, VatReportFactory og AnnualAccountNoteFactory med eksplisitte verdier
+
+### Tips
+
+Utviklere som skriver nye tester bør bruke `createTestCompanyContext()` helper-funksjonen fra `tests/Pest.php` for å sette opp firmakontext korrekt.
+
+---
+
 ## Versjon 1.0.1
 **Dato:** 30. januar 2026
 

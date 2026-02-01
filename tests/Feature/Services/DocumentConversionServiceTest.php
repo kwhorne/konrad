@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Invoice;
 use App\Models\Order;
@@ -14,15 +15,24 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+function setupConversionContext(): array
+{
+    $user = User::factory()->create(['onboarding_completed' => true]);
+    $company = Company::factory()->withOwner($user)->create();
+    $user->update(['current_company_id' => $company->id]);
+    app()->instance('current.company', $company);
+
+    return ['user' => $user->fresh(), 'company' => $company];
+}
+
 beforeEach(function () {
+    ['user' => $this->user, 'company' => $this->company] = setupConversionContext();
+    $this->actingAs($this->user);
     $this->service = app(DocumentConversionService::class);
 });
 
 it('converts quote to order', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
-    $contact = Contact::factory()->create();
+    $contact = Contact::factory()->create(['created_by' => $this->user->id]);
     QuoteStatus::factory()->create(['code' => 'sent', 'name' => 'Sendt']);
     QuoteStatus::factory()->create(['code' => 'converted', 'name' => 'Konvertert']);
 
@@ -35,6 +45,7 @@ it('converts quote to order', function () {
         'vat_total' => 225,
         'total' => 1125,
         'valid_until' => now()->addDays(30),
+        'created_by' => $this->user->id,
     ]);
 
     QuoteLine::factory()->create([
@@ -61,37 +72,30 @@ it('converts quote to order', function () {
 });
 
 it('throws exception when quote cannot be converted', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $draftStatus = QuoteStatus::factory()->create(['code' => 'draft', 'name' => 'Utkast']);
 
     $quote = Quote::factory()->create([
         'quote_status_id' => $draftStatus->id,
+        'created_by' => $this->user->id,
     ]);
 
     $this->service->convertQuoteToOrder($quote);
 })->throws(\InvalidArgumentException::class, 'Tilbudet kan ikke konverteres til ordre.');
 
 it('throws exception when quote is expired', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $sentStatus = QuoteStatus::factory()->create(['code' => 'sent', 'name' => 'Sendt']);
 
     $quote = Quote::factory()->create([
         'quote_status_id' => $sentStatus->id,
         'valid_until' => now()->subDays(1),
+        'created_by' => $this->user->id,
     ]);
 
     $this->service->convertQuoteToOrder($quote);
 })->throws(\InvalidArgumentException::class, 'Tilbudet kan ikke konverteres til ordre.');
 
 it('converts order to invoice', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
-    $contact = Contact::factory()->create();
+    $contact = Contact::factory()->create(['created_by' => $this->user->id]);
     OrderStatus::factory()->create(['code' => 'confirmed', 'name' => 'Bekreftet']);
     OrderStatus::factory()->create(['code' => 'invoiced', 'name' => 'Fakturert']);
 
@@ -104,6 +108,7 @@ it('converts order to invoice', function () {
         'discount_total' => 200,
         'vat_total' => 450,
         'total' => 2250,
+        'created_by' => $this->user->id,
     ]);
 
     OrderLine::factory()->create([
@@ -134,13 +139,11 @@ it('converts order to invoice', function () {
 });
 
 it('throws exception when order cannot be converted', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $draftStatus = OrderStatus::factory()->create(['code' => 'draft', 'name' => 'Utkast']);
 
     $order = Order::factory()->create([
         'order_status_id' => $draftStatus->id,
+        'created_by' => $this->user->id,
     ]);
 
     $this->service->convertOrderToInvoice($order);

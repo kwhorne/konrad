@@ -18,7 +18,7 @@ class VatReportFactory extends Factory
      */
     public function definition(): array
     {
-        $year = fake()->numberBetween(2020, 2026);
+        $year = fake()->unique()->numberBetween(2000, 2100);
         $period = fake()->numberBetween(1, 6);
         $dates = VatReport::getBimonthlyPeriodDates($year, $period);
 

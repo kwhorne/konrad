@@ -1,14 +1,28 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\Project;
 use App\Models\ProjectLine;
+use App\Models\User;
 use App\Services\ProjectService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
+function setupProjectContext(): array
+{
+    $user = User::factory()->create(['onboarding_completed' => true]);
+    $company = Company::factory()->withOwner($user)->create();
+    $user->update(['current_company_id' => $company->id]);
+    app()->instance('current.company', $company);
+
+    return ['user' => $user->fresh(), 'company' => $company];
+}
+
 beforeEach(function () {
+    ['user' => $this->user, 'company' => $this->company] = setupProjectContext();
+    $this->actingAs($this->user);
     $this->service = app(ProjectService::class);
 });
 

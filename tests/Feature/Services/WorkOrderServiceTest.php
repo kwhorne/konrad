@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\WorkOrder;
@@ -10,13 +11,15 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    $this->user = User::factory()->create(['onboarding_completed' => true]);
+    $this->company = Company::factory()->withOwner($this->user)->create();
+    $this->user->update(['current_company_id' => $this->company->id]);
+    app()->instance('current.company', $this->company);
+    $this->actingAs($this->user);
     $this->service = app(WorkOrderService::class);
 });
 
 it('creates a time entry line', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $workOrder = WorkOrder::factory()->create();
 
     $line = $this->service->saveLine($workOrder, [
@@ -27,7 +30,7 @@ it('creates a time entry line', function () {
         'unit_price' => 500,
         'discount_percent' => 0,
         'performed_at' => '2026-01-15',
-        'performed_by' => $user->id,
+        'performed_by' => $this->user->id,
     ]);
 
     expect($line)->toBeInstanceOf(WorkOrderLine::class);
@@ -35,7 +38,7 @@ it('creates a time entry line', function () {
     expect($line->description)->toBe('Development work');
     expect($line->quantity)->toBe('4.00');
     expect($line->unit_price)->toBe('500.00');
-    expect($line->performed_by)->toBe($user->id);
+    expect($line->performed_by)->toBe($this->user->id);
     expect($line->performed_at->format('Y-m-d'))->toBe('2026-01-15');
 });
 
@@ -106,14 +109,11 @@ it('populates line data from product', function () {
 });
 
 it('returns time entry defaults', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $defaults = $this->service->getTimeEntryDefaults();
 
     expect($defaults['line_type'])->toBe('time');
     expect($defaults['performed_at'])->toBe(date('Y-m-d'));
-    expect($defaults['performed_by'])->toBe($user->id);
+    expect($defaults['performed_by'])->toBe($this->user->id);
 });
 
 it('returns product entry defaults', function () {

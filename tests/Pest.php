@@ -41,7 +41,21 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+use App\Models\Company;
+use App\Models\User;
+
+/**
+ * Set up company context for tests that use models with BelongsToCompany trait.
+ * Use this global helper in tests to avoid repeating the setup code.
+ *
+ * @return array{user: User, company: Company}
+ */
+function createTestCompanyContext(): array
 {
-    // ..
+    $user = User::factory()->create(['onboarding_completed' => true]);
+    $company = Company::factory()->withOwner($user)->create();
+    $user->update(['current_company_id' => $company->id]);
+    app()->instance('current.company', $company);
+
+    return ['user' => $user->fresh(), 'company' => $company];
 }

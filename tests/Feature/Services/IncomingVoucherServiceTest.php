@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Account;
+use App\Models\Company;
 use App\Models\Contact;
 use App\Models\IncomingVoucher;
 use App\Models\User;
@@ -12,16 +13,25 @@ use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
+function setupVoucherContext(): array
+{
+    $user = User::factory()->create(['onboarding_completed' => true]);
+    $company = Company::factory()->withOwner($user)->create();
+    $user->update(['current_company_id' => $company->id]);
+    app()->instance('current.company', $company);
+
+    return ['user' => $user->fresh(), 'company' => $company];
+}
+
 beforeEach(function () {
+    ['user' => $this->user, 'company' => $this->company] = setupVoucherContext();
+    $this->actingAs($this->user);
     $this->service = app(IncomingVoucherService::class);
     Storage::fake('local');
     Queue::fake();
 });
 
 it('uploads files and creates incoming vouchers', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $files = [
         UploadedFile::fake()->create('invoice1.pdf', 100, 'application/pdf'),
         UploadedFile::fake()->create('invoice2.pdf', 150, 'application/pdf'),
@@ -34,7 +44,7 @@ it('uploads files and creates incoming vouchers', function () {
     expect($vouchers[0]->original_filename)->toBe('invoice1.pdf');
     expect($vouchers[0]->status)->toBe(IncomingVoucher::STATUS_PENDING);
     expect($vouchers[0]->source)->toBe(IncomingVoucher::SOURCE_UPLOAD);
-    expect($vouchers[0]->created_by)->toBe($user->id);
+    expect($vouchers[0]->created_by)->toBe($this->user->id);
 });
 
 it('updates suggestions on incoming voucher', function () {
@@ -61,9 +71,6 @@ it('updates suggestions on incoming voucher', function () {
 });
 
 it('attests a parsed voucher', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $voucher = IncomingVoucher::factory()->parsed()->create();
 
     $data = [
@@ -78,13 +85,10 @@ it('attests a parsed voucher', function () {
 
     expect($result)->toBeTrue();
     expect($voucher->fresh()->status)->toBe(IncomingVoucher::STATUS_ATTESTED);
-    expect($voucher->fresh()->attested_by)->toBe($user->id);
+    expect($voucher->fresh()->attested_by)->toBe($this->user->id);
 });
 
 it('cannot attest non-parsed voucher', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $voucher = IncomingVoucher::factory()->pending()->create();
 
     $result = $this->service->attest($voucher, []);
@@ -94,9 +98,6 @@ it('cannot attest non-parsed voucher', function () {
 });
 
 it('rejects a voucher with reason', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $voucher = IncomingVoucher::factory()->parsed()->create();
 
     $result = $this->service->reject($voucher, 'Invalid invoice');
@@ -104,13 +105,10 @@ it('rejects a voucher with reason', function () {
     expect($result)->toBeTrue();
     expect($voucher->fresh()->status)->toBe(IncomingVoucher::STATUS_REJECTED);
     expect($voucher->fresh()->rejection_reason)->toBe('Invalid invoice');
-    expect($voucher->fresh()->rejected_by)->toBe($user->id);
+    expect($voucher->fresh()->rejected_by)->toBe($this->user->id);
 });
 
 it('cannot reject approved voucher', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user);
-
     $voucher = IncomingVoucher::factory()->approved()->create();
 
     $result = $this->service->reject($voucher, 'Too late');

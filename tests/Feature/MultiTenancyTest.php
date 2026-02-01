@@ -282,8 +282,8 @@ describe('Company Middleware', function () {
         $owner->update(['current_company_id' => $company->id]);
         $member->update(['current_company_id' => $company->id]);
 
-        // Owner can access
-        $this->actingAs($owner)->get(route('company.users'))->assertOk();
+        // Owner can access (redirects to settings page)
+        $this->actingAs($owner)->get(route('company.users'))->assertRedirect(route('settings'));
 
         // Member cannot access
         $this->actingAs($member)->get(route('company.users'))->assertForbidden();
@@ -331,5 +331,132 @@ describe('Company Model', function () {
         $company->users()->attach($member2->id, ['role' => 'member', 'joined_at' => now()]);
 
         expect($company->members())->toHaveCount(2);
+    });
+});
+
+// Session-based Company Context Tests (Multi-tab Safety)
+describe('Session-based Company Context', function () {
+    test('switching company stores in session', function () {
+        $user = User::factory()->create(['onboarding_completed' => true]);
+        $company1 = Company::factory()->withOwner($user)->create();
+        $company2 = Company::factory()->create();
+        $company2->users()->attach($user->id, ['role' => 'member', 'joined_at' => now()]);
+        $user->update(['current_company_id' => $company1->id]);
+
+        $service = app(CompanyService::class);
+        $service->switchCompany($user, $company2);
+
+        expect(session(\App\Http\Middleware\SetCurrentCompany::SESSION_KEY))->toBe($company2->id);
+    });
+
+    test('session company takes priority over database', function () {
+        $user = User::factory()->create(['onboarding_completed' => true]);
+        $company1 = Company::factory()->withOwner($user)->create();
+        $company2 = Company::factory()->create();
+        $company2->users()->attach($user->id, ['role' => 'member', 'joined_at' => now()]);
+
+        // Set database to company1
+        $user->update(['current_company_id' => $company1->id]);
+
+        // Set session to company2 (simulating already switched in this browser session)
+        session([\App\Http\Middleware\SetCurrentCompany::SESSION_KEY => $company2->id]);
+
+        // Make request - middleware should use session value
+        $this->actingAs($user)->get(route('dashboard'));
+
+        expect(app('current.company')->id)->toBe($company2->id);
+    });
+
+    test('database company is used as fallback when no session', function () {
+        $user = User::factory()->create(['onboarding_completed' => true]);
+        $company = Company::factory()->withOwner($user)->create();
+        $user->update(['current_company_id' => $company->id]);
+
+        // Ensure no session value
+        session()->forget(\App\Http\Middleware\SetCurrentCompany::SESSION_KEY);
+
+        $this->actingAs($user)->get(route('dashboard'));
+
+        expect(app('current.company')->id)->toBe($company->id);
+    });
+});
+
+// Queue Job Company Context Tests
+describe('Queue Job Company Context', function () {
+    test('HasCompanyContext trait sets company context', function () {
+        $company = Company::factory()->create();
+
+        // Create a test job class inline
+        $job = new class($company->id)
+        {
+            use \App\Jobs\Concerns\HasCompanyContext;
+
+            public function __construct(int $companyId)
+            {
+                $this->setCompanyForJob($companyId);
+            }
+
+            public function handle(): \App\Models\Company
+            {
+                return $this->setCompanyContext();
+            }
+        };
+
+        $result = $job->handle();
+
+        expect($result->id)->toBe($company->id)
+            ->and(app('current.company')->id)->toBe($company->id);
+    });
+
+    test('HasCompanyContext throws for missing company', function () {
+        $job = new class(999999)
+        {
+            use \App\Jobs\Concerns\HasCompanyContext;
+
+            public function __construct(int $companyId)
+            {
+                $this->setCompanyForJob($companyId);
+            }
+
+            public function handle(): void
+            {
+                $this->setCompanyContext();
+            }
+        };
+
+        expect(fn () => $job->handle())->toThrow(\InvalidArgumentException::class);
+    });
+
+    test('withinCompanyContext restores previous context', function () {
+        $company1 = Company::factory()->create();
+        $company2 = Company::factory()->create();
+
+        // Set initial context
+        app()->instance('current.company', $company1);
+
+        $job = new class($company2->id)
+        {
+            use \App\Jobs\Concerns\HasCompanyContext;
+
+            public function __construct(int $companyId)
+            {
+                $this->setCompanyForJob($companyId);
+            }
+
+            public function executeInContext(): int
+            {
+                return $this->withinCompanyContext(function () {
+                    return app('current.company')->id;
+                });
+            }
+        };
+
+        $resultInContext = $job->executeInContext();
+
+        // Should have executed in company2 context
+        expect($resultInContext)->toBe($company2->id);
+
+        // But original context should be restored
+        expect(app('current.company')->id)->toBe($company1->id);
     });
 });

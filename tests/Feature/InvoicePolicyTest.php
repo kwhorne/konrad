@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -7,9 +8,25 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->admin = User::factory()->create(['is_admin' => true, 'is_economy' => false]);
-    $this->economyUser = User::factory()->create(['is_admin' => false, 'is_economy' => true]);
-    $this->regularUser = User::factory()->create(['is_admin' => false, 'is_economy' => false]);
+    $owner = User::factory()->create(['onboarding_completed' => true]);
+    $this->company = Company::factory()->withOwner($owner)->create();
+    app()->instance('current.company', $this->company);
+
+    $this->admin = User::factory()->create([
+        'is_admin' => true,
+        'is_economy' => false,
+        'current_company_id' => $this->company->id,
+    ]);
+    $this->economyUser = User::factory()->create([
+        'is_admin' => false,
+        'is_economy' => true,
+        'current_company_id' => $this->company->id,
+    ]);
+    $this->regularUser = User::factory()->create([
+        'is_admin' => false,
+        'is_economy' => false,
+        'current_company_id' => $this->company->id,
+    ]);
 });
 
 // viewAny tests
