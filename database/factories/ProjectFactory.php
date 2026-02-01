@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Contact;
 use App\Models\ProjectStatus;
 use App\Models\ProjectType;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -42,5 +43,12 @@ class ProjectFactory extends Factory
             'is_active' => true,
             'sort_order' => 0,
         ];
+    }
+
+    public function withManager(?User $user = null): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'manager_id' => $user?->id ?? User::factory(),
+        ]);
     }
 }

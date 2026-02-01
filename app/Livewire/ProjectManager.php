@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\ProjectLine;
 use App\Models\ProjectStatus;
 use App\Models\ProjectType;
+use App\Models\User;
 use App\Services\ProjectService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
@@ -38,6 +39,8 @@ class ProjectManager extends Component
     public $description = '';
 
     public $contact_id = '';
+
+    public $manager_id = '';
 
     public $project_type_id = '';
 
@@ -77,6 +80,7 @@ class ProjectManager extends Component
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'contact_id' => 'nullable|exists:contacts,id',
+            'manager_id' => 'nullable|exists:users,id',
             'project_type_id' => 'nullable|exists:project_types,id',
             'project_status_id' => 'nullable|exists:project_statuses,id',
             'start_date' => 'nullable|date',
@@ -155,6 +159,7 @@ class ProjectManager extends Component
             $this->name = $project->name;
             $this->description = $project->description;
             $this->contact_id = $project->contact_id ?? '';
+            $this->manager_id = $project->manager_id ?? '';
             $this->project_type_id = $project->project_type_id ?? '';
             $this->project_status_id = $project->project_status_id ?? '';
             $this->start_date = $project->start_date?->format('Y-m-d') ?? '';
@@ -190,6 +195,7 @@ class ProjectManager extends Component
             'name' => $this->name,
             'description' => $this->description,
             'contact_id' => $this->contact_id ?: null,
+            'manager_id' => $this->manager_id ?: null,
             'project_type_id' => $this->project_type_id ?: null,
             'project_status_id' => $this->project_status_id ?: null,
             'start_date' => $this->start_date ?: null,
@@ -301,6 +307,7 @@ class ProjectManager extends Component
         $this->name = '';
         $this->description = '';
         $this->contact_id = '';
+        $this->manager_id = '';
         $this->project_type_id = '';
         $this->project_status_id = '';
         $this->start_date = '';
@@ -325,7 +332,7 @@ class ProjectManager extends Component
 
     public function render()
     {
-        $query = Project::with(['contact', 'projectType', 'projectStatus', 'lines'])
+        $query = Project::with(['contact', 'manager', 'projectType', 'projectStatus', 'lines'])
             ->ordered();
 
         if ($this->search) {
@@ -354,6 +361,7 @@ class ProjectManager extends Component
             'projectStatuses' => ProjectStatus::active()->ordered()->get(),
             'contacts' => Contact::active()->ordered()->get(),
             'products' => Product::active()->ordered()->get(),
+            'users' => User::where('is_active', true)->orderBy('name')->get(),
         ]);
     }
 }

@@ -51,7 +51,7 @@ class ProjectStatusSeeder extends Seeder
         ];
 
         foreach ($statuses as $status) {
-            ProjectStatus::updateOrCreate(
+            ProjectStatus::withoutGlobalScopes()->updateOrCreate(
                 ['code' => $status['code']],
                 $status
             );

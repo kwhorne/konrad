@@ -46,7 +46,7 @@ class ProjectTypeSeeder extends Seeder
         ];
 
         foreach ($types as $type) {
-            ProjectType::updateOrCreate(
+            ProjectType::withoutGlobalScopes()->updateOrCreate(
                 ['code' => $type['code']],
                 $type
             );

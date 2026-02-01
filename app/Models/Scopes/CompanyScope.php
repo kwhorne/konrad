@@ -13,10 +13,17 @@ class CompanyScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
+        if (! app()->bound('current.company')) {
+            return;
+        }
+
         $company = app('current.company');
 
         if ($company) {
-            $builder->where($model->getTable().'.company_id', $company->id);
+            $builder->where(function ($query) use ($model, $company) {
+                $query->where($model->getTable().'.company_id', $company->id)
+                    ->orWhereNull($model->getTable().'.company_id');
+            });
         }
     }
 }

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Contact;
+use App\Models\IncomingVoucher;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Project;
 use App\Models\Quote;
+use App\Models\Timesheet;
 use App\Models\User;
 use App\Models\WorkOrder;
+use App\Services\TimesheetService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -84,8 +87,9 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function dashboard()
+    public function dashboard(TimesheetService $timesheetService)
     {
+        $user = Auth::user();
         $hour = now()->hour;
         $greeting = match (true) {
             $hour < 12 => 'morgen',
@@ -93,44 +97,77 @@ class AuthController extends Controller
             default => 'kveld'
         };
 
-        // Financial stats (customer invoices only)
-        $unpaidInvoices = Invoice::invoices()->unpaid()->sum('balance');
-        $overdueInvoices = Invoice::invoices()->overdue()->sum('balance');
-        $overdueInvoicesCount = Invoice::invoices()->overdue()->count();
+        // ===== TIMESHEET DATA (alle brukere) =====
+        $currentWeekStart = Carbon::now()->startOfWeek();
+        $myTimesheet = $timesheetService->getOrCreateTimesheet($user, $currentWeekStart);
+        $myHoursThisWeek = $myTimesheet->total_hours ?? 0;
+        $myTimesheetStatus = $myTimesheet->status;
 
-        // Feature-dependent stats
-        $stats = [];
-
-        if (config('features.sales')) {
-            $stats['activeQuotes'] = Quote::active()->whereHas('quoteStatus', fn ($q) => $q->whereIn('code', ['draft', 'sent']))->count();
-            $stats['activeQuotesValue'] = Quote::active()->whereHas('quoteStatus', fn ($q) => $q->whereIn('code', ['draft', 'sent']))->sum('total');
-            $stats['openOrders'] = Order::active()->whereHas('orderStatus', fn ($q) => $q->whereNotIn('code', ['completed', 'cancelled']))->count();
+        // Timesheets til godkjenning (for ledere)
+        $pendingTimesheets = [];
+        $pendingTimesheetsCount = 0;
+        if ($user->is_admin || $user->is_economy) {
+            $pendingTimesheets = Timesheet::where('status', Timesheet::STATUS_SUBMITTED)
+                ->with('user')
+                ->latest('submitted_at')
+                ->take(5)
+                ->get();
+            $pendingTimesheetsCount = Timesheet::where('status', Timesheet::STATUS_SUBMITTED)->count();
         }
 
-        if (config('features.projects')) {
+        // ===== ECONOMY DATA (for økonomi-brukere) =====
+        $unpaidInvoices = 0;
+        $overdueInvoices = 0;
+        $overdueInvoicesCount = 0;
+        $incomingVouchersCount = 0;
+
+        if ($user->is_admin || $user->is_economy) {
+            $unpaidInvoices = Invoice::invoices()->unpaid()->sum('balance');
+            $overdueInvoices = Invoice::invoices()->overdue()->sum('balance');
+            $overdueInvoicesCount = Invoice::invoices()->overdue()->count();
+            $incomingVouchersCount = IncomingVoucher::whereIn('status', ['pending', 'parsing', 'parsed'])->count();
+        }
+
+        // ===== SALES DATA (for salgs-brukere) =====
+        $stats = [];
+        if ($user->is_admin || $user->is_sales) {
+            if (config('features.sales')) {
+                $stats['activeQuotes'] = Quote::active()->whereHas('quoteStatus', fn ($q) => $q->whereIn('code', ['draft', 'sent']))->count();
+                $stats['activeQuotesValue'] = Quote::active()->whereHas('quoteStatus', fn ($q) => $q->whereIn('code', ['draft', 'sent']))->sum('total');
+                $stats['openOrders'] = Order::active()->whereHas('orderStatus', fn ($q) => $q->whereNotIn('code', ['completed', 'cancelled']))->count();
+            }
+        }
+
+        // ===== PROJECT DATA (for prosjekt-brukere) =====
+        if ($user->is_admin || config('features.projects')) {
             $stats['activeProjects'] = Project::active()->count();
         }
 
-        if (config('features.work_orders')) {
+        if ($user->is_admin || config('features.work_orders')) {
             $stats['openWorkOrders'] = WorkOrder::active()->whereHas('workOrderStatus', fn ($q) => $q->whereNotIn('code', ['completed', 'cancelled']))->count();
         }
 
-        if (config('features.contacts')) {
-            $stats['totalContacts'] = Contact::active()->count();
+        // Siste fakturaer (kun for økonomi/admin)
+        $recentInvoices = collect();
+        if ($user->is_admin || $user->is_economy || $user->is_sales) {
+            $recentInvoices = Invoice::invoices()
+                ->with(['contact', 'invoiceStatus'])
+                ->latest()
+                ->take(5)
+                ->get();
         }
-
-        // Recent customer invoices
-        $recentInvoices = Invoice::invoices()
-            ->with(['contact', 'invoiceStatus'])
-            ->latest()
-            ->take(5)
-            ->get();
 
         return view('app.dashboard', compact(
             'greeting',
+            'myHoursThisWeek',
+            'myTimesheetStatus',
+            'myTimesheet',
+            'pendingTimesheets',
+            'pendingTimesheetsCount',
             'unpaidInvoices',
             'overdueInvoices',
             'overdueInvoicesCount',
+            'incomingVouchersCount',
             'stats',
             'recentInvoices'
         ));

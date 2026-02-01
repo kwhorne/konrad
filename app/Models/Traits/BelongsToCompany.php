@@ -16,7 +16,7 @@ trait BelongsToCompany
         static::addGlobalScope(new CompanyScope);
 
         static::creating(function ($model) {
-            if (empty($model->company_id)) {
+            if (empty($model->company_id) && app()->bound('current.company')) {
                 $company = app('current.company');
                 if ($company) {
                     $model->company_id = $company->id;

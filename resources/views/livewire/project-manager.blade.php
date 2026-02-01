@@ -54,6 +54,9 @@
                                     Kontakt
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
+                                    Prosjektleder
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Type
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
@@ -90,6 +93,15 @@
                                             <flux:text class="text-zinc-400 dark:text-zinc-500 italic">
                                                 Ingen kontakt
                                             </flux:text>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($project->manager)
+                                            <flux:text class="text-zinc-600 dark:text-zinc-400">
+                                                {{ $project->manager->name }}
+                                            </flux:text>
+                                        @else
+                                            <flux:text class="text-zinc-400 dark:text-zinc-500 italic">-</flux:text>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -220,6 +232,19 @@
                         @endforeach
                     </flux:select>
                     @error('contact_id')
+                        <flux:error>{{ $message }}</flux:error>
+                    @enderror
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Prosjektleder</flux:label>
+                    <flux:select wire:model="manager_id">
+                        <option value="">Velg prosjektleder</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </flux:select>
+                    @error('manager_id')
                         <flux:error>{{ $message }}</flux:error>
                     @enderror
                 </flux:field>

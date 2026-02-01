@@ -17,6 +17,7 @@ class Project extends Model
         'name',
         'description',
         'contact_id',
+        'manager_id',
         'project_type_id',
         'project_status_id',
         'start_date',
@@ -64,6 +65,11 @@ class Project extends Model
     public function contact(): BelongsTo
     {
         return $this->belongsTo(Contact::class);
+    }
+
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'manager_id');
     }
 
     public function projectType(): BelongsTo

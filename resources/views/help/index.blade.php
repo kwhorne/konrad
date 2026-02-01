@@ -29,6 +29,10 @@
                                     <flux:icon.rocket-launch class="w-4 h-4" />
                                     Kom i gang
                                 </a>
+                                <a href="#dashboard" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.home class="w-4 h-4" />
+                                    Dashboard
+                                </a>
                                 <a href="#kontakter" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.users class="w-4 h-4" />
                                     Kontaktregister
@@ -174,6 +178,52 @@
                         </div>
                     </flux:card>
 
+                    {{-- Dashboard --}}
+                    <flux:card id="dashboard" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.home class="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Dashboard</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Dashboardet gir deg en personlig oversikt over det som er mest relevant for din rolle i bedriften.</p>
+
+                                <h4>Rollebasert innhold</h4>
+                                <p>Dashboardet tilpasser seg automatisk basert på din brukerrolle:</p>
+                                <ul>
+                                    <li><strong>Alle brukere</strong> - Ser egne timer denne uken og timeliste-status</li>
+                                    <li><strong>Okonomi og admin</strong> - Ser okonomiske nøkkeltall, forfalte fakturaer og bilag i innboks</li>
+                                    <li><strong>Salg</strong> - Ser aktive tilbud og åpne ordrer</li>
+                                    <li><strong>Prosjekt</strong> - Ser aktive prosjekter og åpne arbeidsordrer</li>
+                                </ul>
+
+                                <h4>Mine timer denne uken</h4>
+                                <p>Alle brukere ser et kort med timer registrert denne uken. Kortet viser:</p>
+                                <ul>
+                                    <li>Antall timer ført</li>
+                                    <li>Status på timelisten (utkast, sendt, godkjent)</li>
+                                    <li>Direktelink til timeregistrering</li>
+                                </ul>
+
+                                <h4>Timer til godkjenning</h4>
+                                <p>Ledere og økonomibrukere ser timelister som venter på godkjenning, med direktelink til godkjenningssiden.</p>
+
+                                <h4>Bilag i innboksen</h4>
+                                <p>Økonomibrukere ser antall bilag som venter på behandling i innboksen.</p>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Tips</flux:callout.heading>
+                                    <flux:callout.text>
+                                        Bruk snarveiene nederst på dashbordet for rask tilgang til de vanligste funksjonene.
+                                    </flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
                     {{-- Kontaktregister --}}
                     <flux:card id="kontakter" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
                         <div class="p-6">
@@ -306,10 +356,19 @@
                                 <ol>
                                     <li>Klikk <strong>Nytt prosjekt</strong></li>
                                     <li>Gi prosjektet et navn og velg kunde</li>
+                                    <li>Velg <strong>prosjektleder</strong> - personen som har hovedansvaret</li>
                                     <li>Velg prosjekttype og status</li>
                                     <li>Angi budsjett og estimerte timer</li>
                                     <li>Sett start- og sluttdato</li>
                                 </ol>
+
+                                <h4>Prosjektleder</h4>
+                                <p>Hver prosjekt kan ha en prosjektleder som er ansvarlig for gjennomforingen:</p>
+                                <ul>
+                                    <li>Prosjektleder vises i prosjektlisten for enkel oversikt</li>
+                                    <li>Velg fra listen over aktive ansatte i firmaet</li>
+                                    <li>Kan endres nar som helst ved a redigere prosjektet</li>
+                                </ul>
 
                                 <h4>Prosjektlinjer</h4>
                                 <p>Legg til produkter og tjenester som skal leveres i prosjektet:</p>
@@ -322,12 +381,29 @@
                                 <h4>Statuser</h4>
                                 <p>Folg prosjektets livssyklus:</p>
                                 <div class="not-prose flex flex-wrap gap-2 my-4">
-                                    <flux:badge color="zinc">Ny</flux:badge>
-                                    <flux:badge color="blue">Planlagt</flux:badge>
+                                    <flux:badge color="blue">Planlegging</flux:badge>
                                     <flux:badge color="yellow">Pagar</flux:badge>
                                     <flux:badge color="green">Fullfort</flux:badge>
+                                    <flux:badge color="zinc">Pause</flux:badge>
                                     <flux:badge color="red">Kansellert</flux:badge>
                                 </div>
+
+                                <h4>Prosjekttyper</h4>
+                                <p>Kategoriser prosjektene dine:</p>
+                                <ul>
+                                    <li><strong>Konsulentoppdrag</strong> - Radgivning og konsulentarbeid</li>
+                                    <li><strong>Utviklingsprosjekt</strong> - Programvareutvikling og tekniske prosjekter</li>
+                                    <li><strong>Supportavtale</strong> - Lopende support- og vedlikeholdsavtaler</li>
+                                    <li><strong>Implementering</strong> - Utrulling av systemer</li>
+                                    <li><strong>Opplæring</strong> - Kurs og opplæringsprosjekter</li>
+                                </ul>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Tips</flux:callout.heading>
+                                    <flux:callout.text>
+                                        Prosjektleder vises i prosjektlisten, slik at alle enkelt kan se hvem som er ansvarlig for hvert prosjekt.
+                                    </flux:callout.text>
+                                </flux:callout>
                             </div>
                         </div>
                     </flux:card>

@@ -82,7 +82,7 @@ test('analysis service calculates revenue correctly', function () {
 test('livewire component renders initial state', function () {
     \Livewire\Livewire::test(\App\Livewire\CompanyAnalysisManager::class)
         ->assertStatus(200)
-        ->assertSee('AI-drevet selskapsanalyse')
+        ->assertSee('Selskapsanalyse')
         ->assertSee('Start analyse');
 });
 

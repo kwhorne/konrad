@@ -1,5 +1,43 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.1.3
+**Dato:** 1. februar 2026
+
+### Prosjektleder
+
+- **Ny prosjektleder-felt** - Tilordne en ansatt som prosjektleder for hvert prosjekt
+- **Synlig i prosjektlisten** - Se hvem som er ansvarlig direkte i tabelloversikten
+- **Enkel tilordning** - Velg prosjektleder fra dropdown-meny når du oppretter eller redigerer et prosjekt
+
+### Prosjekttyper og statuser
+
+- **Ferdigdefinerte prosjekttyper** - Konsulentoppdrag, Utviklingsprosjekt, Supportavtale, Implementering og Opplæring
+- **Prosjektstatuser** - Planlegging, Pågår, Fullført, Pause og Kansellert med fargekoder
+- **Klart til bruk** - Alle nye selskaper får automatisk tilgang til standard typer og statuser
+
+### Tips
+
+Når du oppretter et nytt prosjekt, velg prosjektleder for å tydeliggjøre hvem som har ansvaret. Prosjektlederen vises i prosjektlisten slik at alle enkelt kan se hvem de skal kontakte.
+
+---
+
+## Versjon 1.1.2
+**Dato:** 1. februar 2026
+
+### Nytt dashbord
+
+- **Rollebasert innhold** - Dashbordet viser nå kun informasjon som er relevant for din rolle
+- **Mine timer denne uken** - Se hvor mange timer du har ført denne uken og status på timelisten
+- **Timer til godkjenning** - Ledere ser ventende timelister som trenger godkjenning
+- **Bilag i innboksen** - Økonomibrukere ser antall bilag som venter på behandling
+- **Renere design** - Fokusert og oversiktlig layout uten unødvendig informasjon
+
+### Tips
+
+Dashbordet tilpasser seg automatisk basert på din rolle. Økonomibrukere ser økonomirelatert informasjon, mens prosjektledere ser prosjektstatus og arbeidsordrer.
+
+---
+
 ## Versjon 1.1.1
 **Dato:** 1. februar 2026
 

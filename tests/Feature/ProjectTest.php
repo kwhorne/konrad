@@ -66,6 +66,27 @@ test('project belongs to project status', function () {
     expect($project->projectStatus->name)->toBe('Pågår');
 });
 
+test('project belongs to manager', function () {
+    $manager = User::factory()->create(['name' => 'Prosjektleder Hansen']);
+    $project = Project::factory()->create(['manager_id' => $manager->id]);
+
+    expect($project->manager->id)->toBe($manager->id);
+    expect($project->manager->name)->toBe('Prosjektleder Hansen');
+});
+
+test('project manager can be null', function () {
+    $project = Project::factory()->create(['manager_id' => null]);
+
+    expect($project->manager)->toBeNull();
+});
+
+test('project factory withManager state works', function () {
+    $manager = User::factory()->create();
+    $project = Project::factory()->withManager($manager)->create();
+
+    expect($project->manager_id)->toBe($manager->id);
+});
+
 // Budget Variance
 test('project budget variance is positive when under budget', function () {
     $project = Project::factory()->create(['budget' => 100000]);
