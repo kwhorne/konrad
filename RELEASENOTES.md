@@ -1,5 +1,29 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.2.0
+**Dato:** 1. februar 2026
+
+### Mine aktiviteter
+
+- **Ny personlig side** - Samlet oversikt over dine ventende oppgaver og oppfølgingspunkter
+- **Intelligente forslag** - Få intelligente prioriteringsforslag basert på dine aktiviteter, tilbud, fakturaer, arbeidsordrer og prosjekter
+- **Arbeidsmengde-score** - Visuell indikator (0-100) som viser hvor mye du har å gjøre
+- **Raske gevinster** - Se hvilke oppgaver som kan fullføres raskt
+- **Fokusområder** - Identifiser hvor du bør legge mest innsats
+- **Mine notater** - Personlige notater med rik tekst-editor som følger deg på tvers av selskaper
+- **Fest notater** - Pin viktige notater så de alltid vises øverst
+
+### Forbedret brukeropplevelse
+
+- **Flyout-panel for notater** - Elegant sidepanel for å opprette og redigere notater
+- **Ny navigasjon** - "Mine aktiviteter" er nå tilgjengelig direkte fra hovedmenyen
+
+### Tips
+
+Klikk på **Mine aktiviteter** i sidemenyen for å se dine ventende oppgaver. Bruk "Generer forslag"-knappen for å få Intelligente anbefalinger om hva du bør prioritere. Notatene dine er personlige og følger deg selv om du bytter mellom selskaper.
+
+---
+
 ## Versjon 1.1.3
 **Dato:** 1. februar 2026
 

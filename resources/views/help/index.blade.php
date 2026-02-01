@@ -33,6 +33,10 @@
                                     <flux:icon.home class="w-4 h-4" />
                                     Dashboard
                                 </a>
+                                <a href="#mine-aktiviteter" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.clipboard-document-list class="w-4 h-4" />
+                                    Mine aktiviteter
+                                </a>
                                 <a href="#kontakter" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.users class="w-4 h-4" />
                                     Kontaktregister
@@ -138,6 +142,7 @@
                                 <h5>App-panel (hovedmeny)</h5>
                                 <ul>
                                     <li><strong>Dashboard</strong> - Hovedoversikt over virksomheten</li>
+                                    <li><strong>Mine aktiviteter</strong> - Personlige oppgaver, forslag og notater</li>
                                     <li><strong>CRM</strong> - Kontakter, Varer, Tilbud, Ordrer, Faktura</li>
                                     <li><strong>Prosjekt</strong> - Prosjekter, Arbeidsordrer</li>
                                     <li><strong>Kontrakter</strong> - Kontraktsregister</li>
@@ -218,6 +223,63 @@
                                     <flux:callout.heading>Tips</flux:callout.heading>
                                     <flux:callout.text>
                                         Bruk snarveiene nederst på dashbordet for rask tilgang til de vanligste funksjonene.
+                                    </flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Mine aktiviteter --}}
+                    <flux:card id="mine-aktiviteter" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.clipboard-document-list class="w-5 h-5 text-cyan-600 dark:text-cyan-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Mine aktiviteter</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Mine aktiviteter gir deg en personlig oversikt over hva du bør følge opp, med Intelligente forslag og personlige notater.</p>
+
+                                <h4>Forslag til aktiviteter</h4>
+                                <p>Klikk <strong>Generer forslag</strong> for å få Intelligente anbefalinger basert på:</p>
+                                <ul>
+                                    <li><strong>Aktiviteter</strong> - Ventende oppgaver tildelt deg</li>
+                                    <li><strong>Tilbud</strong> - Utkast og sendte tilbud som venter på svar</li>
+                                    <li><strong>Arbeidsordrer</strong> - Åpne arbeidsordrer tildelt deg</li>
+                                    <li><strong>Prosjekter</strong> - Prosjekter der du er prosjektleder</li>
+                                    <li><strong>Fakturaer</strong> - Ubetalte fakturaer du har opprettet</li>
+                                </ul>
+
+                                <h4>Arbeidsmengde-score</h4>
+                                <p>En visuell indikator (0-100) som viser din totale arbeidsmengde. Høyere score betyr mer å gjøre:</p>
+                                <ul>
+                                    <li><strong>0-49</strong> - Rolig periode</li>
+                                    <li><strong>50-79</strong> - Normal arbeidsmengde</li>
+                                    <li><strong>80-100</strong> - Mye å gjøre</li>
+                                </ul>
+
+                                <h4>Raske gevinster og fokusområder</h4>
+                                <p>AI-en identifiserer:</p>
+                                <ul>
+                                    <li><strong>Raske gevinster</strong> - Oppgaver som kan fullføres raskt</li>
+                                    <li><strong>Fokusområder</strong> - Hvor du bør legge mest innsats</li>
+                                </ul>
+
+                                <h4>Mine notater</h4>
+                                <p>Skriv personlige notater med rik tekst-formatering:</p>
+                                <ul>
+                                    <li>Opprett notater via <strong>Nytt notat</strong>-knappen</li>
+                                    <li>Bruk overskrifter, lister, lenker og formatering</li>
+                                    <li>Fest viktige notater så de alltid vises øverst</li>
+                                    <li>Notatene følger deg på tvers av selskaper</li>
+                                </ul>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Tips</flux:callout.heading>
+                                    <flux:callout.text>
+                                        Notatene dine er personlige og følger deg selv om du bytter mellom selskaper. Bruk dem til huskelister, møtenotater eller annet du vil ha lett tilgjengelig.
                                     </flux:callout.text>
                                 </flux:callout>
                             </div>

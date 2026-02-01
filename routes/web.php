@@ -65,6 +65,7 @@ Route::middleware('auth')->group(function () {
     // Routes that require a company
     Route::middleware('company')->group(function () {
         Route::get('/app', [AuthController::class, 'dashboard'])->name('dashboard');
+        Route::get('/app/mine-aktiviteter', fn () => view('app.my-activities'))->name('my-activities');
         Route::get('/app/settings', [AuthController::class, 'settings'])->name('settings');
         Route::post('/app/settings/password', [AuthController::class, 'updatePassword'])->name('settings.password');
 

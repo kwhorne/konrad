@@ -24,6 +24,10 @@
             Dashboard
         </flux:sidebar.item>
 
+        <flux:sidebar.item icon="clipboard-document-list" href="{{ route('my-activities') }}" :current="$current === 'my-activities'">
+            Mine aktiviteter
+        </flux:sidebar.item>
+
         @if(config('features.sales') || config('features.contacts') || config('features.products'))
             <flux:sidebar.group expandable icon="user-group" heading="CRM" :expanded="in_array($current, ['contacts', 'products', 'quotes', 'orders', 'invoices'])">
                 @if(config('features.contacts'))
