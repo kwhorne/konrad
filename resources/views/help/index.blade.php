@@ -49,6 +49,10 @@
                                     <flux:icon.clock class="w-4 h-4" />
                                     Timeregistrering
                                 </a>
+                                <a href="#timerapporter" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 pl-7">
+                                    <flux:icon.chart-bar class="w-4 h-4" />
+                                    Timerapporter
+                                </a>
                                 <a href="#salg" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.shopping-cart class="w-4 h-4" />
                                     Salg
@@ -456,6 +460,33 @@
                                     <li>Se detaljer for hver timeseddel</li>
                                     <li>Godkjenn eller avvis med begrunnelse</li>
                                     <li>Du kan ikke godkjenne egne timer</li>
+                                </ul>
+
+                                <h4 id="timerapporter" class="scroll-mt-4">Timerapporter (for ledere)</h4>
+                                <p>Under <strong>Timer → Rapporter</strong> finner ledere oversikt over timer pa tvers av hele firmaet:</p>
+
+                                <p><strong>Rapporttyper:</strong></p>
+                                <ul>
+                                    <li><strong>Per prosjekt:</strong> Se totaltimer fordelt pa prosjekter. Klikk pa et prosjekt for a se hvilke ansatte som har jobbet pa det.</li>
+                                    <li><strong>Per arbeidsordre:</strong> Se timer per arbeidsordre med tilhorende prosjekt.</li>
+                                    <li><strong>Per ansatt:</strong> Oversikt over timer per medarbeider.</li>
+                                    <li><strong>Per uke:</strong> Se ukentlige totaler over tid.</li>
+                                </ul>
+
+                                <p><strong>Filtrering:</strong></p>
+                                <ul>
+                                    <li>Velg tidsperiode med hurtigvalg (denne uken, forrige maned, dette kvartalet, osv.)</li>
+                                    <li>Eller angi egendefinert fra- og til-dato</li>
+                                    <li>Velg <strong>Hele perioden</strong> for a se alle registrerte timer</li>
+                                </ul>
+
+                                <p><strong>Oppsummering:</strong></p>
+                                <p>Øverst pa rapportsiden vises alltid en oppsummering med:</p>
+                                <ul>
+                                    <li>Totalt antall timer i valgt periode</li>
+                                    <li>Fakturerbare timer</li>
+                                    <li>Ikke-fakturerbare timer</li>
+                                    <li>Antall ansatte og prosjekter</li>
                                 </ul>
 
                                 <div class="not-prose mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
