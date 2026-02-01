@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Project;
 use App\Models\Quote;
 use App\Models\Timesheet;
+use App\Models\TwoFactorIpWhitelist;
 use App\Models\User;
 use App\Models\WorkOrder;
 use App\Services\TimesheetService;
@@ -64,11 +65,48 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
+        // Check if user is locked for not enabling 2FA
+        if ($user && $user->isLockedForTwoFactor()) {
+            return back()->withErrors([
+                'email' => 'Din konto er låst fordi tofaktorautentisering ikke ble aktivert innen fristen. Kontakt support@konradoffice.no for å låse opp kontoen.',
+            ])->onlyInput('email');
+        }
+
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            $user = Auth::user();
+
             // Record last login
-            Auth::user()->recordLogin();
+            $user->recordLogin();
+
+            // Check if user should be locked (grace period expired)
+            if ($user->shouldBeLocked()) {
+                $user->lockForTwoFactor();
+                Auth::logout();
+                $request->session()->invalidate();
+
+                return back()->withErrors([
+                    'email' => 'Din konto er låst fordi tofaktorautentisering ikke ble aktivert innen fristen. Kontakt support@konradoffice.no for å låse opp kontoen.',
+                ])->onlyInput('email');
+            }
+
+            // Start grace period for new users without 2FA
+            if (! $user->hasEnabledTwoFactorAuthentication() && ! $user->two_factor_grace_period_ends_at) {
+                $user->startTwoFactorGracePeriod();
+            }
+
+            // Check if 2FA is enabled and IP is not whitelisted
+            if ($user->hasEnabledTwoFactorAuthentication() && ! TwoFactorIpWhitelist::isWhitelisted($request->ip())) {
+                // Store user ID in session for 2FA challenge
+                $request->session()->put('login.id', $user->id);
+                $request->session()->put('login.remember', $request->boolean('remember'));
+
+                // Logout user until 2FA is verified
+                Auth::logout();
+
+                return redirect()->route('two-factor.login');
+            }
 
             return redirect()->intended('app');
         }

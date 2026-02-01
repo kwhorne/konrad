@@ -39,6 +39,9 @@
             <flux:navlist.item icon="puzzle-piece" href="{{ route('admin.modules') }}" :current="$current === 'modules'">
                 Moduler
             </flux:navlist.item>
+            <flux:navlist.item icon="shield-check" href="{{ route('admin.two-factor-whitelist') }}" :current="$current === 'two-factor-whitelist'">
+                2FA IP-whitelist
+            </flux:navlist.item>
             <flux:navlist.item icon="cog-6-tooth" href="{{ route('admin.system') }}" :current="$current === 'system'">
                 System
             </flux:navlist.item>

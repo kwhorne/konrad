@@ -23,6 +23,7 @@ class HelpController extends Controller
             'rapporter',
             'mva',
             'innstillinger',
+            'sikkerhet',
             'selskap',
         ];
 

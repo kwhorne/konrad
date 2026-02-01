@@ -204,6 +204,11 @@
                                         </form>
                                     </div>
                                 </flux:card>
+
+                                <!-- Two-Factor Authentication -->
+                                <div class="mt-6">
+                                    <livewire:two-factor-manager />
+                                </div>
                             </section>
                         </div>
 

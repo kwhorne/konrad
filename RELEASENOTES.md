@@ -1,5 +1,28 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.4.1
+**Dato:** 1. februar 2026
+
+### Tofaktorautentisering (2FA)
+
+- **TOTP-basert 2FA** - Bruk Google Authenticator, Authy eller lignende apper for ekstra sikkerhet
+- **QR-kode oppsett** - Enkel aktivering via QR-kode i innstillingene
+- **Gjenopprettingskoder** - Engangskoder for tilgang hvis du mister autentiseringsappen
+- **5-dagers karensperiode** - Nye brukere får 5 dager til å aktivere 2FA før kontoen låses
+- **Påminnelsesbanner** - Vennlig påminnelse på alle sider med nedtelling
+
+### Admin IP-whitelist
+
+- **2FA-unntak for kontor** - Administratorer kan whiteliste IP-adresser som slipper 2FA-verifisering
+- **CIDR-støtte** - Støtter både enkelt-IP og IP-områder (f.eks. 192.168.1.0/24)
+- **Aktiver/deaktiver** - Slå IP-adresser av og på uten å slette dem
+
+### Tips
+
+Gå til **Innstillinger → Min konto → Sikkerhet** for å aktivere tofaktorautentisering. Skann QR-koden med autentiseringsappen din og bekreft med en kode. Husk å lagre gjenopprettingskodene et trygt sted - du trenger dem hvis du mister tilgang til autentiseringsappen.
+
+---
+
 ## Versjon 1.4.0
 **Dato:** 1. februar 2026
 

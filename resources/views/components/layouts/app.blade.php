@@ -16,6 +16,10 @@
         @fluxAppearance
     </head>
     <body>
+        @auth
+            <livewire:two-factor-reminder-banner />
+        @endauth
+
         {{ $slot }}
 
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">

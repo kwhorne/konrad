@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -36,6 +37,8 @@ class User extends Authenticatable
         'seen_version',
         'current_company_id',
         'onboarding_completed',
+        'two_factor_grace_period_ends_at',
+        'two_factor_locked_at',
     ];
 
     /**
@@ -67,6 +70,9 @@ class User extends Authenticatable
             'invitation_accepted_at' => 'datetime',
             'last_login_at' => 'datetime',
             'onboarding_completed' => 'boolean',
+            'two_factor_confirmed_at' => 'datetime',
+            'two_factor_grace_period_ends_at' => 'datetime',
+            'two_factor_locked_at' => 'datetime',
         ];
     }
 
@@ -297,5 +303,102 @@ class User extends Authenticatable
     public function getCurrentDepartmentIdAttribute(): ?int
     {
         return $this->departmentInCurrentCompany()?->id;
+    }
+
+    /**
+     * Check if 2FA is enabled for this user.
+     */
+    public function hasTwoFactorEnabled(): bool
+    {
+        return $this->two_factor_confirmed_at !== null;
+    }
+
+    /**
+     * Check if the user is within the grace period for 2FA setup.
+     */
+    public function isInTwoFactorGracePeriod(): bool
+    {
+        if ($this->hasTwoFactorEnabled()) {
+            return false;
+        }
+
+        if ($this->two_factor_grace_period_ends_at === null) {
+            return false;
+        }
+
+        return $this->two_factor_grace_period_ends_at->isFuture();
+    }
+
+    /**
+     * Check if the user is locked due to not setting up 2FA.
+     */
+    public function isLockedForTwoFactor(): bool
+    {
+        return $this->two_factor_locked_at !== null;
+    }
+
+    /**
+     * Start the 2FA grace period (5 days from now).
+     */
+    public function startTwoFactorGracePeriod(): void
+    {
+        if ($this->two_factor_grace_period_ends_at === null && ! $this->hasTwoFactorEnabled()) {
+            $this->update([
+                'two_factor_grace_period_ends_at' => now()->addDays(5),
+            ]);
+        }
+    }
+
+    /**
+     * Lock the user for not setting up 2FA.
+     */
+    public function lockForTwoFactor(): void
+    {
+        $this->update([
+            'two_factor_locked_at' => now(),
+        ]);
+    }
+
+    /**
+     * Unlock the user (called by admin after user contacts support).
+     */
+    public function unlockTwoFactor(): void
+    {
+        $this->update([
+            'two_factor_locked_at' => null,
+            'two_factor_grace_period_ends_at' => now()->addDays(5),
+        ]);
+    }
+
+    /**
+     * Get the number of days remaining in the grace period.
+     */
+    public function getTwoFactorGraceDaysRemainingAttribute(): ?int
+    {
+        if (! $this->isInTwoFactorGracePeriod()) {
+            return null;
+        }
+
+        return (int) now()->diffInDays($this->two_factor_grace_period_ends_at, false);
+    }
+
+    /**
+     * Check if the grace period has expired and the user should be locked.
+     */
+    public function shouldBeLocked(): bool
+    {
+        if ($this->hasTwoFactorEnabled()) {
+            return false;
+        }
+
+        if ($this->isLockedForTwoFactor()) {
+            return false;
+        }
+
+        if ($this->two_factor_grace_period_ends_at === null) {
+            return false;
+        }
+
+        return $this->two_factor_grace_period_ends_at->isPast();
     }
 }

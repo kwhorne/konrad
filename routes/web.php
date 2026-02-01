@@ -203,6 +203,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
             Route::get('/companies', fn () => view('admin.companies'))->name('companies');
             Route::get('/modules', fn () => view('admin.modules'))->name('modules');
+            Route::get('/two-factor-whitelist', fn () => view('admin.two-factor-whitelist'))->name('two-factor-whitelist');
             Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
             Route::get('/posts', fn () => view('admin.posts'))->name('posts');
         });

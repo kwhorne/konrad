@@ -105,6 +105,10 @@
                                     <flux:icon.cog-6-tooth class="w-4 h-4" />
                                     Innstillinger
                                 </a>
+                                <a href="#sikkerhet" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 pl-7">
+                                    <flux:icon.shield-check class="w-4 h-4" />
+                                    Sikkerhet og 2FA
+                                </a>
                                 <a href="#avdelinger" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 pl-7">
                                     <flux:icon.building-library class="w-4 h-4" />
                                     Avdelinger
@@ -1657,7 +1661,7 @@
                                 <p>Personlige innstillinger for din brukerkonto:</p>
                                 <ul>
                                     <li><strong>Profilinformasjon</strong> - Se navn og e-postadresse</li>
-                                    <li><strong>Sikkerhet</strong> - Endre passord</li>
+                                    <li><strong>Sikkerhet</strong> - Endre passord og administrer tofaktorautentisering (2FA)</li>
                                     <li><strong>Utseende</strong> - Velg lyst, morkt eller automatisk tema</li>
                                     <li><strong>Varsler</strong> - Administrer e-post- og push-varsler</li>
                                 </ul>
@@ -1679,6 +1683,49 @@
                                     <li>Tildel roller (medlem eller leder)</li>
                                     <li>Fjern brukere fra selskapet</li>
                                 </ul>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Sikkerhet og 2FA --}}
+                    <flux:card id="sikkerhet" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.shield-check class="w-5 h-5 text-green-600 dark:text-green-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Sikkerhet og tofaktorautentisering</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Tofaktorautentisering (2FA) gir et ekstra lag med sikkerhet for kontoen din ved a kreve bade passord og en engangskode fra en autentiseringsapp.</p>
+
+                                <h4>Aktivere tofaktorautentisering</h4>
+                                <ol>
+                                    <li>Ga til <strong>Innstillinger</strong> i sidemenyen</li>
+                                    <li>Under <strong>Sikkerhet</strong> klikker du <strong>Aktiver tofaktorautentisering</strong></li>
+                                    <li>Skann QR-koden med en autentiseringsapp (Google Authenticator, Authy, etc.)</li>
+                                    <li>Skriv inn bekreftelseskoden fra appen</li>
+                                    <li>Lagre gjenopprettingskodene et trygt sted</li>
+                                </ol>
+
+                                <h4>Gjenopprettingskoder</h4>
+                                <p>Nar du aktiverer 2FA far du 8 gjenopprettingskoder. Disse kan brukes en gang hver for a logge inn hvis du mister tilgang til autentiseringsappen. Lagre dem sikkert - de vises kun én gang!</p>
+
+                                <h4>Karensperiode</h4>
+                                <p>Alle brukere har en karensperiode pa 5 dager for a aktivere tofaktorautentisering. Du vil se en paminnelse pa toppen av skjermen med nedtelling. Etter 5 dager vil kontoen bli last hvis 2FA ikke er aktivert.</p>
+
+                                <h4>Last konto</h4>
+                                <p>Hvis kontoen din er last fordi du ikke aktiverte 2FA i tide, kontakt <strong>support@konradoffice.no</strong> for a fa kontoen last opp igjen.</p>
+
+                                <h4>Deaktivere tofaktorautentisering</h4>
+                                <p>Du kan deaktivere 2FA i innstillingene ved a klikke <strong>Deaktiver</strong> og bekrefte med passordet ditt. Merk at du vil fa en ny karensperiode og ma aktivere 2FA igjen innen 5 dager.</p>
+
+                                <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                                    <p class="text-green-800 dark:text-green-200 text-sm mb-0">
+                                        <strong>Tips:</strong> Bruk en sikker autentiseringsapp som Google Authenticator, Authy eller 1Password. Unnga SMS-basert 2FA da det er mindre sikkert.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </flux:card>
