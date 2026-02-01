@@ -1,6 +1,6 @@
 <x-layouts.public
     title="Konrad Office - Komplett forretningssystem for norske bedrifter"
-    description="Konrad Office samler fakturering, regnskap, prosjektstyring, timeregistrering, årsoppgjør og intelligent selskapsanalyse i ett system. Skreddersydd for norske SMB-bedrifter."
+    description="Konrad Office samler salg, lager, innkjøp, fakturering, regnskap, prosjektstyring, timeregistrering og intelligent selskapsanalyse i ett system. Skreddersydd for norske SMB-bedrifter."
     :open-modal="$openModal ?? null"
 >
     @php
@@ -10,7 +10,7 @@
             "name" => "Konrad Office",
             "applicationCategory" => "BusinessApplication",
             "operatingSystem" => "Web",
-            "description" => "Komplett forretningssystem med fakturering, regnskap, prosjektstyring, timeregistrering, årsoppgjør og intelligent selskapsanalyse for norske bedrifter",
+            "description" => "Komplett forretningssystem med salg, lager, innkjøp, fakturering, regnskap, prosjektstyring, timeregistrering og intelligent selskapsanalyse for norske bedrifter",
             "offers" => [
                 "@type" => "Offer",
                 "price" => "399",
@@ -43,7 +43,7 @@
                 <!-- Badge -->
                 <div class="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium mb-8">
                     <flux:icon.building-office class="w-4 h-4 mr-2" />
-                    Komplett forretningssystem for norske bedrifter
+                    Jobb smart, effektivt og dokumentert
                 </div>
 
                 <!-- Main Heading -->
@@ -56,7 +56,7 @@
 
                 <!-- Subtitle -->
                 <p class="text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto mb-12">
-                    Konrad Office er et komplett forretningssystem med salg, fakturering, regnskap,
+                    Konrad Office er et komplett forretningssystem med salg, lager/innkjøp, fakturering, regnskap,
                     prosjektstyring, timeregistrering og intelligent selskapsanalyse. Enkelt, oversiktlig og effektivt.
                 </p>
 
@@ -319,6 +319,38 @@
                                 <li class="flex items-center gap-2">
                                     <flux:icon.check class="w-4 h-4 text-emerald-500" />
                                     Varegrupper
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Module -->
+                <div class="p-8 rounded-2xl bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-teal-900/20 dark:to-cyan-900/20 border border-teal-200 dark:border-teal-800">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-teal-500 rounded-2xl flex items-center justify-center shrink-0">
+                            <flux:icon.archive-box class="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                                Lager
+                            </h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+                                Komplett lagerstyring med innkjøpsordrer, varemottak
+                                og varetelling for norsk lovkrav.
+                            </p>
+                            <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-teal-500" />
+                                    Lagerbeholdning og lokasjoner
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-teal-500" />
+                                    Innkjøpsordrer og varemottak
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-teal-500" />
+                                    Varetelling og avviksrapport
                                 </li>
                             </ul>
                         </div>
@@ -681,7 +713,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">12</div>
+                    <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">13</div>
                     <div class="text-zinc-600 dark:text-zinc-400">Hovedmoduler</div>
                 </div>
                 <div>
