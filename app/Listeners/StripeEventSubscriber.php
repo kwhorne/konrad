@@ -2,10 +2,12 @@
 
 namespace App\Listeners;
 
+use App\Mail\ModuleActivated;
 use App\Models\Company;
 use App\Models\Module;
 use App\Services\ModuleService;
 use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Cashier\Events\WebhookHandled;
 
 class StripeEventSubscriber
@@ -58,6 +60,9 @@ class StripeEventSubscriber
 
             // Enable or update module based on subscription status
             if (in_array($status, ['active', 'trialing'])) {
+                // Check if module was not previously enabled
+                $wasEnabled = $company->hasModule($module->slug);
+
                 $this->moduleService->enableForCompany(
                     $company,
                     $module,
@@ -66,6 +71,11 @@ class StripeEventSubscriber
                     $subscriptionId,
                     $status
                 );
+
+                // Send activation email if module was just enabled
+                if (! $wasEnabled) {
+                    $this->sendModuleActivatedEmail($company, $module);
+                }
             } elseif (in_array($status, ['past_due', 'unpaid'])) {
                 // Keep enabled but update status
                 $companyModule = $company->modules()->where('module_id', $module->id)->first();
@@ -160,6 +170,20 @@ class StripeEventSubscriber
                     'stripe_subscription_status' => 'past_due',
                 ]);
             });
+    }
+
+    protected function sendModuleActivatedEmail(Company $company, Module $module): void
+    {
+        // Send email to company owner(s)
+        $owners = $company->users()->wherePivot('role', 'owner')->get();
+
+        foreach ($owners as $owner) {
+            Mail::to($owner->email)->send(new ModuleActivated(
+                company: $company,
+                module: $module,
+                user: $owner,
+            ));
+        }
     }
 
     public function subscribe(Dispatcher $events): array

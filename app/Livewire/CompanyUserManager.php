@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Mail\CompanyUserInvitation;
 use App\Models\AccountingSettings;
+use App\Models\Company;
 use App\Models\User;
 use App\Services\CompanyService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -74,9 +77,12 @@ class CompanyUserManager extends Component
                 $this->inviteName ?: null
             );
 
+            // Send invitation email
+            $this->sendInvitationEmail($result['user'], $company, $this->inviteRole);
+
             $message = $result['is_new']
-                ? 'Bruker opprettet og lagt til i selskapet.'
-                : 'Bruker lagt til i selskapet.';
+                ? 'Bruker opprettet og invitasjon sendt.'
+                : 'Bruker lagt til og invitasjon sendt.';
 
             $this->dispatch('toast', message: $message, variant: 'success');
             $this->closeInviteModal();
@@ -190,6 +196,43 @@ class CompanyUserManager extends Component
         }
 
         $this->cancelRemove();
+    }
+
+    public function resendInvitation(int $userId): void
+    {
+        $company = app('current.company');
+
+        if (! auth()->user()->canManage($company)) {
+            $this->dispatch('toast', message: 'Du har ikke tilgang til å sende invitasjoner.', variant: 'danger');
+
+            return;
+        }
+
+        $user = $company->users()->find($userId);
+
+        if (! $user) {
+            $this->dispatch('toast', message: 'Bruker ikke funnet.', variant: 'danger');
+
+            return;
+        }
+
+        $role = $user->pivot->role ?? 'member';
+        $this->sendInvitationEmail($user, $company, $role);
+
+        $this->dispatch('toast', message: 'Invitasjon sendt på nytt til '.$user->email, variant: 'success');
+    }
+
+    protected function sendInvitationEmail(User $user, Company $company, string $role): void
+    {
+        $token = $user->generateInvitationToken();
+
+        Mail::to($user->email)->send(new CompanyUserInvitation(
+            user: $user,
+            company: $company,
+            token: $token,
+            role: $role,
+            invitedBy: auth()->user(),
+        ));
     }
 
     public function render()
