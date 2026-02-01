@@ -212,6 +212,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/transactions', fn () => view('inventory.transactions'))->name('transactions');
             Route::get('/locations', fn () => view('inventory.locations'))->name('locations');
             Route::get('/adjustments', fn () => view('inventory.adjustments'))->name('adjustments');
+            Route::get('/stock-counts', fn () => view('inventory.stock-counts.index'))->name('stock-counts.index');
+            Route::get('/stock-counts/{stockCount}', fn ($stockCount) => view('inventory.stock-counts.show', compact('stockCount')))->name('stock-counts.show');
         });
 
         // Purchasing routes

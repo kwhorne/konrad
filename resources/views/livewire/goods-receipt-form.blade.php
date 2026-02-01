@@ -37,7 +37,7 @@
 
                             <flux:field>
                                 <flux:label>Lagerlokasjon *</flux:label>
-                                <flux:select wire:model="stock_location_id" @if($purchaseOrder) disabled @endif>
+                                <flux:select wire:model="stock_location_id" :disabled="(bool) $purchaseOrder">
                                     <option value="">Velg lokasjon</option>
                                     @foreach($stockLocations as $location)
                                         <option value="{{ $location->id }}">{{ $location->name }}</option>

@@ -1,9 +1,33 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.3.2
+**Dato:** 1. februar 2026
+
+### Varetelling
+
+- **Tellesjon** - Opprett tellinger for hele eller deler av lageret
+- **Registrering** - Registrer talt antall for hvert produkt med avviksforklaring
+- **Avviksrapport** - Se forventet vs talt mengde med automatisk beregning av verdidifferanse
+- **Bokforing** - Automatisk opprettelse av lagerjusteringer ved avvik
+- **Dokumentasjon** - Full historikk over alle tellinger for revisjon
+
+### Lageroversikt med live data
+
+- **Nokkeltall** - Dashbordet viser na antall lagervarer, total lagerverdi, apne bestillinger og varer under bestillingspunkt
+- **Siste bevegelser** - Se de siste lagertransaksjonene direkte pa dashbordet
+- **Siste varemottak** - Rask tilgang til nylige varemottak med status og lenker
+- **Vektet verdi** - Total lagerverdi beregnes basert pa vektet gjennomsnittskost
+
+### Tips
+
+Ga til **Lager → Varetelling** for a opprette en ny telling. Velg lokasjon og start tellingen. Du kan raskt godkjenne produkter som stemmer med ett klikk, eller registrere avvikende antall med forklaring. Bokfor tellingen nar du er ferdig for a opprette lagerjusteringer automatisk. Husk at arlig varetelling er et lovkrav ved regnskapsarets slutt.
+
+---
+
 ## Versjon 1.3.0
 **Dato:** 1. februar 2026
 
-### Lager og innkjop
+### Lager og innkjøp
 
 - **Lagerhold** - Full lagerstyring med transaksjonsbasert sporing av alle varebevegelser
 - **Innkjopsordrer** - Opprett innkjopsordrer til leverandorer med godkjenningsflyt

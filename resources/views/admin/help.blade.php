@@ -41,6 +41,10 @@
                                     <flux:icon.squares-2x2 class="w-4 h-4" />
                                     Moduler
                                 </a>
+                                <a href="#lager" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.cube class="w-4 h-4" />
+                                    Lager og innkjop
+                                </a>
                                 <a href="#stamdata" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.circle-stack class="w-4 h-4" />
                                     Stamdata
@@ -254,11 +258,165 @@
                                             <div class="font-medium text-zinc-900 dark:text-white">Eiendeler</div>
                                             <div class="text-sm text-zinc-500">Eiendelsregister</div>
                                         </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="font-medium text-zinc-900 dark:text-white">Lager</div>
+                                            <div class="text-sm text-zinc-500">Lagerstyring og innkjop</div>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <h4>Aktivere/deaktivere moduler</h4>
                                 <p>Kontakt support for a endre hvilke moduler som er aktive for din bedrift.</p>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Lager og innkjop --}}
+                    <flux:card id="lager" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.cube class="w-5 h-5 text-teal-600 dark:text-teal-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Lager og innkjop</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Lagermodulen gir full lagerstyring med transaksjonsbasert sporing av alle varebevegelser.</p>
+
+                                <h4>Aktivere lagermodulen</h4>
+                                <p>Sett <code>INVENTORY_ENABLED=true</code> i <code>.env</code>-filen for a aktivere modulen. Etter aktivering vises <strong>Lager</strong> i sidemenyen.</p>
+
+                                <h4>Lageroversikt</h4>
+                                <p>Dashbordet viser:</p>
+                                <ul>
+                                    <li><strong>Lagervarer</strong> - Antall produkter merket som lagerfort</li>
+                                    <li><strong>Total verdi</strong> - Samlet lagerverdi basert pa vektet gjennomsnittskost</li>
+                                    <li><strong>Apne bestillinger</strong> - Innkjopsordrer som ikke er fullstendig mottatt</li>
+                                    <li><strong>Under bestillingspunkt</strong> - Varer som ma bestilles</li>
+                                </ul>
+
+                                <h4>Lagerlokasjoner</h4>
+                                <p>Opprett og administrer lagerlokasjoner med hierarkisk struktur:</p>
+                                <ul>
+                                    <li><strong>Lager</strong> - Hovedlokasjoner (f.eks. Hovedlager, Servicebil)</li>
+                                    <li><strong>Sone</strong> - Omrader innenfor et lager</li>
+                                    <li><strong>Hylle</strong> - Spesifikke plasser</li>
+                                </ul>
+
+                                <h4>Lagerforte produkter</h4>
+                                <p>For a aktivere lagerforing pa et produkt:</p>
+                                <ol>
+                                    <li>Ga til produktet i vareregisteret</li>
+                                    <li>Huk av for <strong>Lagerfort</strong></li>
+                                    <li>Angi eventuelt bestillingspunkt og bestillingsantall</li>
+                                </ol>
+
+                                <h4>Innkjopsordrer</h4>
+                                <p>Opprett bestillinger til leverandorer:</p>
+                                <ol>
+                                    <li>Ga til <strong>Lager > Innkjopsordrer</strong></li>
+                                    <li>Klikk <strong>Ny innkjopsordre</strong></li>
+                                    <li>Velg leverandor og mottakslager</li>
+                                    <li>Legg til produkter og mengder</li>
+                                    <li>Send ordren til leverandor</li>
+                                </ol>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Ordrestatuser</div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="zinc">Utkast</flux:badge>
+                                            <span>Ordren er under utarbeidelse</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="blue">Sendt</flux:badge>
+                                            <span>Ordren er sendt til leverandor</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="amber">Delvis mottatt</flux:badge>
+                                            <span>Noe av ordren er mottatt</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="green">Mottatt</flux:badge>
+                                            <span>Hele ordren er mottatt</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Varemottak</h4>
+                                <p>Registrer mottatte varer:</p>
+                                <ol>
+                                    <li>Ga til <strong>Lager > Varemottak</strong></li>
+                                    <li>Velg innkjopsordre eller opprett fritstaende mottak</li>
+                                    <li>Angi mottatt antall for hver linje</li>
+                                    <li>Klikk <strong>Bokfor</strong> for a oppdatere lagerbeholdningen</li>
+                                </ol>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Vektet gjennomsnittskost</flux:callout.heading>
+                                    <flux:callout.text>Systemet beregner automatisk vektet gjennomsnittskost nar varer mottas. Denne kostnaden brukes ved varekostnadsberegning ved salg.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Varetelling</h4>
+                                <p>Arlig varetelling er pakrevd for a dokumentere lagerbeholdningen. Slik gjennomforer du en telling:</p>
+                                <ol>
+                                    <li>Ga til <strong>Lager > Varetelling</strong></li>
+                                    <li>Klikk <strong>Ny varetelling</strong> og velg lokasjon</li>
+                                    <li>Start tellingen - alle lagerforte produkter lastes inn med forventet beholdning</li>
+                                    <li>Registrer talt antall for hvert produkt</li>
+                                    <li>Fullfør tellingen når alle produkter er talt</li>
+                                    <li>Bokfor for a opprette lagerjusteringer for alle avvik</li>
+                                </ol>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Tellestatuser</div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="zinc">Utkast</flux:badge>
+                                            <span>Tellingen er opprettet, men ikke startet</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="blue">Pagar</flux:badge>
+                                            <span>Telling er i gang</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="amber">Fullfort</flux:badge>
+                                            <span>Alle produkter er talt, klar for bokforing</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="green">Bokfort</flux:badge>
+                                            <span>Lagerjusteringer er opprettet</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Lovkrav</flux:callout.heading>
+                                    <flux:callout.text>Bokforingsloven krever arlig varetelling ved regnskapsarets slutt. Tellingen ma dokumenteres og oppbevares.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Lagerjusteringer</h4>
+                                <p>For a justere beholdning manuelt (f.eks. ved opptelling eller svinn):</p>
+                                <ol>
+                                    <li>Ga til <strong>Lager > Justering</strong></li>
+                                    <li>Velg produkt og lokasjon</li>
+                                    <li>Angi ny beholdning eller differanse</li>
+                                    <li>Oppgi arsak for justeringen</li>
+                                </ol>
+
+                                <h4>Automatisk lagerhandtering</h4>
+                                <p>Systemet handterer lager automatisk i salgsflyt:</p>
+                                <ul>
+                                    <li><strong>Reservering</strong> - Varer reserveres nar ordre bekreftes</li>
+                                    <li><strong>Uttak</strong> - Beholdning reduseres nar ordre faktureres</li>
+                                    <li><strong>Varekostnad</strong> - COGS bokfores basert pa vektet gjennomsnittskost</li>
+                                </ul>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Negativ beholdning</flux:callout.heading>
+                                    <flux:callout.text>Som standard tillater ikke systemet negativ lagerbeholdning. Dette kan endres i lagerinnstillingene hvis nodvendig.</flux:callout.text>
+                                </flux:callout>
                             </div>
                         </div>
                     </flux:card>

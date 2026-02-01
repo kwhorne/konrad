@@ -121,6 +121,9 @@
                 <flux:sidebar.item href="{{ route('purchasing.goods-receipts.index') }}" :current="$current === 'goods-receipts'">
                     Varemottak
                 </flux:sidebar.item>
+                <flux:sidebar.item href="{{ route('inventory.stock-counts.index') }}" :current="$current === 'stock-counts'">
+                    Varetelling
+                </flux:sidebar.item>
                 <flux:sidebar.item href="{{ route('inventory.locations') }}" :current="$current === 'stock-locations'">
                     Lokasjoner
                 </flux:sidebar.item>

@@ -21,55 +21,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <div class="p-4">
-                        <flux:text class="text-xs font-medium text-zinc-500">Lagervarer</flux:text>
-                        <flux:heading size="xl" class="mt-1">-</flux:heading>
-                        <flux:text class="text-xs text-zinc-400">Lagerforte produkter</flux:text>
-                    </div>
-                </flux:card>
-
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <div class="p-4">
-                        <flux:text class="text-xs font-medium text-zinc-500">Total verdi</flux:text>
-                        <flux:heading size="xl" class="mt-1">-</flux:heading>
-                        <flux:text class="text-xs text-zinc-400">Vektet gjennomsnitt</flux:text>
-                    </div>
-                </flux:card>
-
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <div class="p-4">
-                        <flux:text class="text-xs font-medium text-zinc-500">Apne bestillinger</flux:text>
-                        <flux:heading size="xl" class="mt-1">-</flux:heading>
-                        <flux:text class="text-xs text-zinc-400">Innkjopsordrer</flux:text>
-                    </div>
-                </flux:card>
-
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <div class="p-4">
-                        <flux:text class="text-xs font-medium text-zinc-500">Under bestillingspunkt</flux:text>
-                        <flux:heading size="xl" class="mt-1">-</flux:heading>
-                        <flux:text class="text-xs text-zinc-400">Varer som ma bestilles</flux:text>
-                    </div>
-                </flux:card>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <div class="p-4">
-                        <flux:heading size="base" class="mb-4">Siste bevegelser</flux:heading>
-                        <flux:text class="text-zinc-500 text-sm">Ingen bevegelser enna</flux:text>
-                    </div>
-                </flux:card>
-
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <div class="p-4">
-                        <flux:heading size="base" class="mb-4">Siste varemottak</flux:heading>
-                        <flux:text class="text-zinc-500 text-sm">Ingen varemottak enna</flux:text>
-                    </div>
-                </flux:card>
-            </div>
+            <livewire:inventory-dashboard />
         </flux:main>
     </div>
 </x-layouts.app>
