@@ -6,6 +6,7 @@ use App\Livewire\Traits\HasStatusColorMapping;
 use App\Models\Contact;
 use App\Models\Product;
 use App\Models\Project;
+use App\Models\ProjectAttachment;
 use App\Models\ProjectLine;
 use App\Models\ProjectStatus;
 use App\Models\ProjectType;
@@ -14,12 +15,14 @@ use App\Rules\ExistsInCompany;
 use App\Rules\UserInCompany;
 use App\Services\ProjectService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Str;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class ProjectManager extends Component
 {
-    use AuthorizesRequests, HasStatusColorMapping, WithPagination;
+    use AuthorizesRequests, HasStatusColorMapping, WithFileUploads, WithPagination;
 
     public $showModal = false;
 
@@ -75,6 +78,11 @@ class ProjectManager extends Component
     public $currentProjectId = null;
 
     public $projectLines = [];
+
+    // Attachment properties
+    public $uploadedFiles = [];
+
+    public $existingAttachments = [];
 
     protected function rules(): array
     {
@@ -171,6 +179,7 @@ class ProjectManager extends Component
             $this->is_active = $project->is_active;
             $this->currentProjectId = $id;
             $this->loadProjectLines();
+            $this->loadAttachments();
         }
 
         $this->showModal = true;
@@ -303,6 +312,64 @@ class ProjectManager extends Component
         }
     }
 
+    private function loadAttachments(): void
+    {
+        if ($this->currentProjectId) {
+            $this->existingAttachments = ProjectAttachment::where('project_id', $this->currentProjectId)
+                ->orderByDesc('created_at')
+                ->get()
+                ->toArray();
+        } else {
+            $this->existingAttachments = [];
+        }
+    }
+
+    public function saveAttachments(): void
+    {
+        if (! $this->currentProjectId || empty($this->uploadedFiles)) {
+            return;
+        }
+
+        $project = Project::findOrFail($this->currentProjectId);
+        $this->authorize('update', $project);
+
+        foreach ($this->uploadedFiles as $file) {
+            $filename = Str::uuid().'.'.$file->getClientOriginalExtension();
+            $path = $file->storeAs('project-attachments/'.$this->currentProjectId, $filename, 'public');
+
+            ProjectAttachment::create([
+                'project_id' => $this->currentProjectId,
+                'filename' => $filename,
+                'original_filename' => $file->getClientOriginalName(),
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+                'path' => $path,
+                'uploaded_by' => auth()->id(),
+            ]);
+        }
+
+        $this->uploadedFiles = [];
+        $this->loadAttachments();
+        session()->flash('success', 'Vedlegg ble lastet opp.');
+    }
+
+    public function removeUploadedFile($index): void
+    {
+        if (isset($this->uploadedFiles[$index])) {
+            unset($this->uploadedFiles[$index]);
+            $this->uploadedFiles = array_values($this->uploadedFiles);
+        }
+    }
+
+    public function deleteAttachment($attachmentId): void
+    {
+        $attachment = ProjectAttachment::findOrFail($attachmentId);
+        $this->authorize('update', $attachment->project);
+
+        $attachment->delete();
+        $this->loadAttachments();
+    }
+
     private function resetForm(): void
     {
         $this->editingId = null;
@@ -319,6 +386,8 @@ class ProjectManager extends Component
         $this->is_active = true;
         $this->currentProjectId = null;
         $this->projectLines = [];
+        $this->uploadedFiles = [];
+        $this->existingAttachments = [];
         $this->resetValidation();
     }
 
@@ -335,6 +404,7 @@ class ProjectManager extends Component
     public function render()
     {
         $query = Project::with(['contact', 'manager', 'projectType', 'projectStatus', 'lines'])
+            ->withCount('attachments')
             ->ordered();
 
         if ($this->search) {

@@ -87,6 +87,11 @@ class Project extends Model
         return $this->hasMany(ProjectLine::class)->orderBy('sort_order');
     }
 
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(ProjectAttachment::class)->orderByDesc('created_at');
+    }
+
     public function getTotalAttribute(): float
     {
         return $this->lines->sum(fn ($line) => $line->line_total);

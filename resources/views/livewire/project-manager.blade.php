@@ -47,6 +47,9 @@
                     <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700">
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider w-12">
+                                    <flux:icon.paper-clip class="w-4 h-4 mx-auto" />
+                                </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">
                                     Prosjekt
                                 </th>
@@ -76,6 +79,13 @@
                         <tbody class="bg-white dark:bg-zinc-900 divide-y divide-zinc-200 dark:divide-zinc-700">
                             @foreach($projects as $project)
                                 <tr wire:key="project-{{ $project->id }}" class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                                    <td class="px-6 py-4 text-center">
+                                        @if($project->attachments_count > 0)
+                                            <flux:tooltip content="{{ $project->attachments_count }} vedlegg">
+                                                <flux:icon.paper-clip class="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+                                            </flux:tooltip>
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-4">
                                         <div>
                                             <flux:text class="font-medium text-zinc-900 dark:text-white">
@@ -371,6 +381,82 @@
                     @else
                         <flux:text class="text-zinc-500 dark:text-zinc-400 text-center py-4">
                             Ingen prosjektlinjer ennå. Klikk "Legg til linje" for å legge til produkter.
+                        </flux:text>
+                    @endif
+                </div>
+
+                <flux:separator />
+
+                {{-- Attachments Section --}}
+                <div>
+                    <flux:heading size="md" class="mb-4">Vedlegg</flux:heading>
+
+                    <flux:file-upload wire:model="uploadedFiles" multiple>
+                        <flux:file-upload.dropzone
+                            heading="Slipp filer her eller klikk for å velge"
+                            text="PDF, Word, Excel, bilder opptil 10MB"
+                        />
+                    </flux:file-upload>
+
+                    {{-- Pending uploads --}}
+                    @if(count($uploadedFiles) > 0)
+                        <div class="mt-3 flex flex-col gap-2">
+                            @foreach($uploadedFiles as $index => $file)
+                                <flux:file-item
+                                    wire:key="upload-{{ $index }}"
+                                    :heading="$file->getClientOriginalName()"
+                                    :size="$file->getSize()"
+                                    :image="str_starts_with($file->getMimeType(), 'image/') ? $file->temporaryUrl() : null"
+                                >
+                                    <x-slot name="actions">
+                                        <flux:file-item.remove wire:click="removeUploadedFile({{ $index }})" aria-label="Fjern fil" />
+                                    </x-slot>
+                                </flux:file-item>
+                            @endforeach
+                        </div>
+                        <div class="mt-3">
+                            <flux:button wire:click="saveAttachments" variant="primary" size="sm">
+                                <flux:icon.arrow-up-tray class="w-4 h-4 mr-1" />
+                                Last opp {{ count($uploadedFiles) }} {{ count($uploadedFiles) === 1 ? 'fil' : 'filer' }}
+                            </flux:button>
+                        </div>
+                    @endif
+
+                    {{-- Existing attachments --}}
+                    @if(count($existingAttachments) > 0)
+                        <div class="mt-4 space-y-2">
+                            <flux:text class="text-sm font-medium text-zinc-700 dark:text-zinc-300">Eksisterende vedlegg</flux:text>
+                            @foreach($existingAttachments as $attachment)
+                                <div wire:key="attachment-{{ $attachment['id'] }}" class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                                    <div class="flex items-center gap-3">
+                                        @if(str_starts_with($attachment['mime_type'], 'image/'))
+                                            <img src="{{ Storage::url($attachment['path']) }}" alt="{{ $attachment['original_filename'] }}" class="w-10 h-10 object-cover rounded" />
+                                        @else
+                                            <flux:icon.document class="w-10 h-10 text-zinc-400" />
+                                        @endif
+                                        <div>
+                                            <flux:text class="font-medium text-zinc-900 dark:text-white text-sm">
+                                                {{ $attachment['original_filename'] }}
+                                            </flux:text>
+                                            <flux:text class="text-xs text-zinc-500 dark:text-zinc-400">
+                                                {{ number_format($attachment['size'] / 1024, 1) }} KB
+                                            </flux:text>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ Storage::url($attachment['path']) }}" target="_blank" class="text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+                                            <flux:icon.arrow-down-tray class="w-4 h-4" />
+                                        </a>
+                                        <flux:button wire:click="deleteAttachment({{ $attachment['id'] }})" wire:confirm="Er du sikker på at du vil slette dette vedlegget?" variant="ghost" size="sm" class="text-red-600 hover:text-red-700">
+                                            <flux:icon.trash class="w-4 h-4" />
+                                        </flux:button>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @elseif(count($uploadedFiles) === 0)
+                        <flux:text class="text-zinc-500 dark:text-zinc-400 text-center py-4 mt-3">
+                            Ingen vedlegg ennå.
                         </flux:text>
                     @endif
                 </div>

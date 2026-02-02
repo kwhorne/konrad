@@ -1,5 +1,24 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.4.4
+**Dato:** 2. februar 2026
+
+### Prosjektvedlegg
+
+- **Filopplasting** - Last opp dokumenter direkte til prosjekter med drag-and-drop
+- **Flere filer** - Støtte for å laste opp flere filer samtidig
+- **Filtyper** - Støtter PDF, Word, Excel, bilder og andre dokumentformater
+- **Forhåndsvisning** - Bilder vises med miniatyrbilder, andre filer med filtype-ikon
+- **Vedleggsindikator** - Prosjektlisten viser binders-ikon for prosjekter med vedlegg
+- **Last ned** - Klikk for å laste ned vedlegg direkte fra prosjektvisningen
+- **Sletting** - Fjern vedlegg med bekreftelsesdialog
+
+### Tips
+
+Åpne et prosjekt via **Prosjekter**-menyen og rull ned til seksjonen **Vedlegg**. Dra og slipp filer i dropzonen eller klikk for å velge filer fra datamaskinen. Filer vises med navn og størrelse før du klikker **Last opp**. Eksisterende vedlegg vises under med mulighet for nedlasting og sletting.
+
+---
+
 ## Versjon 1.4.3
 **Dato:** 2. februar 2026
 

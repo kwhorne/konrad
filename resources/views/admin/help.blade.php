@@ -41,6 +41,10 @@
                                     <flux:icon.squares-2x2 class="w-4 h-4" />
                                     Moduler
                                 </a>
+                                <a href="#prosjekter" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.folder class="w-4 h-4" />
+                                    Prosjekter
+                                </a>
                                 <a href="#lager" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.cube class="w-4 h-4" />
                                     Lager og innkjøp
@@ -282,7 +286,61 @@
                                 </div>
 
                                 <h4>Aktivere/deaktivere moduler</h4>
-                                <p>Kontakt support for åendre hvilke moduler som er aktive for din bedrift.</p>
+                                <p>Kontakt support for å endre hvilke moduler som er aktive for din bedrift.</p>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Prosjekter --}}
+                    <flux:card id="prosjekter" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.folder class="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Prosjekter</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Prosjektmodulen lar deg organisere arbeid, budsjetter og dokumenter per prosjekt.</p>
+
+                                <h4>Opprette prosjekt</h4>
+                                <ol>
+                                    <li>Gå til <strong>Prosjekter</strong> i hovedmenyen</li>
+                                    <li>Klikk <strong>Nytt prosjekt</strong></li>
+                                    <li>Fyll inn prosjektnavn og eventuelt beskrivelse</li>
+                                    <li>Velg kontakt, prosjektleder, type og status</li>
+                                    <li>Sett datoer og budsjett om ønskelig</li>
+                                    <li>Klikk <strong>Opprett</strong></li>
+                                </ol>
+
+                                <h4>Prosjektlinjer</h4>
+                                <p>Legg til produkter og tjenester på prosjektet for å spore kostnader:</p>
+                                <ul>
+                                    <li>Åpne et eksisterende prosjekt</li>
+                                    <li>Klikk <strong>Legg til linje</strong></li>
+                                    <li>Velg produkt eller skriv manuell beskrivelse</li>
+                                    <li>Angi antall, pris og eventuell rabatt</li>
+                                </ul>
+
+                                <h4>Prosjektvedlegg</h4>
+                                <p>Last opp dokumenter tilknyttet prosjektet:</p>
+                                <ul>
+                                    <li><strong>Dra og slipp</strong> - Dra filer direkte inn i dropzonen</li>
+                                    <li><strong>Klikk for å velge</strong> - Velg filer fra datamaskinen</li>
+                                    <li><strong>Flere filer</strong> - Last opp flere filer samtidig</li>
+                                    <li><strong>Filtyper</strong> - PDF, Word, Excel, bilder og mer</li>
+                                    <li><strong>Maks størrelse</strong> - Opptil 10 MB per fil</li>
+                                </ul>
+                                <p>Vedlegg vises med filnavn og størrelse. Bilder får miniatyrvisning. Klikk på nedlastingsikonet for å laste ned, eller søppelbøtten for å slette.</p>
+
+                                <h4>Vedleggsindikator</h4>
+                                <p>I prosjektlisten vises et <strong>binders-ikon</strong> for prosjekter som har ett eller flere vedlegg. Hold musepekeren over ikonet for å se antall vedlegg.</p>
+
+                                <flux:callout variant="info" icon="information-circle" class="not-prose my-4">
+                                    <flux:callout.heading>Tips</flux:callout.heading>
+                                    <flux:callout.text>Bruk prosjektvedlegg til å lagre kontrakter, tegninger, spesifikasjoner og annen prosjektdokumentasjon samlet på ett sted.</flux:callout.text>
+                                </flux:callout>
                             </div>
                         </div>
                     </flux:card>
