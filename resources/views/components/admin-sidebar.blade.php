@@ -58,7 +58,7 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="book-open" href="{{ route('admin.help') }}" :current="$current === 'help'">
-            Hjelp
+            Dokumentasjon
         </flux:navlist.item>
     </flux:navlist>
 

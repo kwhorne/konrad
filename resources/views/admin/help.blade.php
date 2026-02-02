@@ -69,6 +69,18 @@
                                     <flux:icon.cog-6-tooth class="w-4 h-4" />
                                     System
                                 </a>
+                                <a href="#koer" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.queue-list class="w-4 h-4" />
+                                    Køer og jobber
+                                </a>
+                                <a href="#scheduler" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.clock class="w-4 h-4" />
+                                    Planlagte oppgaver
+                                </a>
+                                <a href="#miljovariabler" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.variable class="w-4 h-4" />
+                                    Miljøvariabler
+                                </a>
                                 <a href="#sikkerhet" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.shield-check class="w-4 h-4" />
                                     Sikkerhet
@@ -142,8 +154,8 @@
                                 <ol>
                                     <li>Administrator sender invitasjon via e-post</li>
                                     <li>Mottaker får en unik lenke som er gyldig i 7 dager</li>
-                                    <li>Ved første besok oppretter mottaker passord</li>
-                                    <li>Brukeren er na aktiv i systemet</li>
+                                    <li>Ved første besøk oppretter mottaker passord</li>
+                                    <li>Brukeren er nå aktiv i systemet</li>
                                 </ol>
 
                                 <h4>Invitasjonsstatus</h4>
@@ -198,7 +210,7 @@
 
                                 <h4>Bankopplysninger</h4>
                                 <ul>
-                                    <li><strong>Kontonummer</strong> - Vises pa fakturaer for betaling</li>
+                                    <li><strong>Kontonummer</strong> - Vises på fakturaer for betaling</li>
                                     <li><strong>IBAN/SWIFT</strong> - For utenlandske betalinger</li>
                                 </ul>
 
@@ -296,7 +308,7 @@
                                 <ul>
                                     <li><strong>Lagervarer</strong> - Antall produkter merket som lagerført</li>
                                     <li><strong>Total verdi</strong> - Samlet lagerverdi basert på vektet gjennomsnittskost</li>
-                                    <li><strong>Åpne bestillinger</strong> - Innkjopsordrer som ikke er fullstendig mottatt</li>
+                                    <li><strong>Åpne bestillinger</strong> - Innkjøpsordrer som ikke er fullstendig mottatt</li>
                                     <li><strong>Under bestillingspunkt</strong> - Varer som må bestilles</li>
                                 </ul>
 
@@ -309,17 +321,17 @@
                                 </ul>
 
                                 <h4>Lagerforte produkter</h4>
-                                <p>For a aktivere lagerforing på et produkt:</p>
+                                <p>For å aktivere lagerforing på et produkt:</p>
                                 <ol>
                                     <li>Gå til produktet i vareregisteret</li>
                                     <li>Huk av for <strong>Lagerfort</strong></li>
                                     <li>Angi eventuelt bestillingspunkt og bestillingsantall</li>
                                 </ol>
 
-                                <h4>Innkjopsordrer</h4>
+                                <h4>Innkjøpsordrer</h4>
                                 <p>Opprett bestillinger til leverandører:</p>
                                 <ol>
-                                    <li>Gå til <strong>Lager > Innkjopsordrer</strong></li>
+                                    <li>Gå til <strong>Lager > Innkjøpsordrer</strong></li>
                                     <li>Klikk <strong>Ny innkjøpsordre</strong></li>
                                     <li>Velg leverandør og mottakslager</li>
                                     <li>Legg til produkter og mengder</li>
@@ -401,7 +413,7 @@
                                 </flux:callout>
 
                                 <h4>Lagerjusteringer</h4>
-                                <p>For a justere beholdning manuelt (f.eks. ved opptelling eller svinn):</p>
+                                <p>For å justere beholdning manuelt (f.eks. ved opptelling eller svinn):</p>
                                 <ol>
                                     <li>Gå til <strong>Lager > Justering</strong></li>
                                     <li>Velg produkt og lokasjon</li>
@@ -412,9 +424,9 @@
                                 <h4>Automatisk lagerhåndtering</h4>
                                 <p>Systemet håndterer lager automatisk i salgsflyt:</p>
                                 <ul>
-                                    <li><strong>Reservering</strong> - Varer reserveres nar ordre bekreftes</li>
-                                    <li><strong>Uttak</strong> - Beholdning reduseres nar ordre faktureres</li>
-                                    <li><strong>Varekostnad</strong> - COGS bokfores basert på vektet gjennomsnittskost</li>
+                                    <li><strong>Reservering</strong> - Varer reserveres når ordre bekreftes</li>
+                                    <li><strong>Uttak</strong> - Beholdning reduseres når ordre faktureres</li>
+                                    <li><strong>Varekostnad</strong> - COGS bokføres basert på vektet gjennomsnittskost</li>
                                 </ul>
 
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
@@ -581,7 +593,7 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Kontoplanen er basert pa norsk standard NS 4102 og er ferdig konfigurert.</p>
+                                <p>Kontoplanen er basert på norsk standard NS 4102 og er ferdig konfigurert.</p>
 
                                 <h4>Kontoplanen er organisert i klasser</h4>
                                 <div class="not-prose my-4">
@@ -672,7 +684,7 @@
                                 <ul>
                                     <li><strong>Aksjeklasser</strong> - Opprett og administrer A-, B-aksjer etc.</li>
                                     <li><strong>Transaksjonstyper</strong> - Stiftelse, emisjon, overdragelse, splitt, innløsning</li>
-                                    <li><strong>Ervervsmater</strong> - Stiftelse, kjop, arv, gave, fusjon</li>
+                                    <li><strong>Ervervsmåter</strong> - Stiftelse, kjøp, arv, gave, fusjon</li>
                                     <li><strong>Standardverdier</strong> - Pålydende per aksje, valuta</li>
                                 </ul>
 
@@ -729,7 +741,7 @@
                                 </ul>
 
                                 <h4>Størrelseskategorier</h4>
-                                <p>Selskaper klassifiseres basert pa to av tre kriterier:</p>
+                                <p>Selskaper klassifiseres basert på to av tre kriterier:</p>
                                 <div class="not-prose my-4">
                                     <div class="overflow-x-auto">
                                         <table class="min-w-full text-sm">
@@ -767,7 +779,7 @@
 
                                 <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
                                     <flux:callout.heading>Automatisk klassifisering</flux:callout.heading>
-                                    <flux:callout.text>Systemet beregner automatisk selskapsstørrelse basert pa regnskapstall og justerer kravene til årsregnskapet deretter.</flux:callout.text>
+                                    <flux:callout.text>Systemet beregner automatisk selskapsstørrelse basert på regnskapstall og justerer kravene til årsregnskapet deretter.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>
@@ -848,7 +860,7 @@
 
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Sertifikatgyldighet</flux:callout.heading>
-                                    <flux:callout.text>Sertifikater utløper typisk etter 2-3 år. Systemet varsler 30 dager for utløp. Sørg for åfornye i god tid.</flux:callout.text>
+                                    <flux:callout.text>Sertifikater utløper typisk etter 2-3 år. Systemet varsler 30 dager for utløp. Sørg for for ånye i god tid.</flux:callout.text>
                                 </flux:callout>
 
                                 <h4>Miljøer</h4>
@@ -889,7 +901,7 @@
                                 <ul>
                                     <li>Alle administratorer</li>
                                     <li>Spesifikke brukere</li>
-                                    <li>Eksterne e-postadresser (f.eks. regnskapsforer)</li>
+                                    <li>Eksterne e-postadresser (f.eks. regnskapsfører)</li>
                                 </ul>
 
                                 <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
@@ -911,29 +923,431 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Systemsiden gir deg oversikt over teknisk informasjon og vedlikeholdsverktøy.</p>
+                                <p>Systemsiden gir deg oversikt over teknisk informasjon, versjoner og vedlikeholdsverktøy.</p>
 
                                 <h4>Systeminformasjon</h4>
                                 <ul>
-                                    <li>Laravel- og PHP-versjon</li>
-                                    <li>Miljø (production/development)</li>
-                                    <li>Debug-modus status</li>
+                                    <li><strong>Konrad Office-versjon</strong> - Nåværende applikasjonsversjon</li>
+                                    <li><strong>Laravel-versjon</strong> - Rammeverkets versjon</li>
+                                    <li><strong>PHP-versjon</strong> - Serverens PHP-versjon</li>
+                                    <li><strong>Miljø</strong> - production, staging eller development</li>
+                                    <li><strong>Debug-modus</strong> - Viser detaljerte feilmeldinger (kun development)</li>
                                 </ul>
 
-                                <h4>Vedlikeholdsverktøy</h4>
+                                <h4>Cache-håndtering</h4>
+                                <p>Systemet bruker flere cache-lag for ytelse:</p>
                                 <ul>
-                                    <li><strong>Tom cache</strong> - Fjern midlertidige filer</li>
-                                    <li><strong>Sikkerhetskopi</strong> - Ta backup av database</li>
-                                    <li><strong>Se logger</strong> - Sjekk feilmeldinger</li>
+                                    <li><strong>Applikasjonscache</strong> - Mellomlagring av beregninger og spørringer</li>
+                                    <li><strong>Konfigurasjonscache</strong> - Kompilerte innstillinger</li>
+                                    <li><strong>Rutecache</strong> - Kompilerte URL-ruter</li>
+                                    <li><strong>Visningscache</strong> - Kompilerte Blade-maler</li>
                                 </ul>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Cache-kommandoer</div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan cache:clear
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan config:clear
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan route:clear
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan view:clear
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Database</h4>
+                                <ul>
+                                    <li><strong>Tilkobling</strong> - MySQL/MariaDB eller PostgreSQL</li>
+                                    <li><strong>Migrasjoner</strong> - Databaseskjema-versjoner</li>
+                                    <li><strong>Seeders</strong> - Grunndata og testdata</li>
+                                </ul>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Database-kommandoer</div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan migrate --force
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan db:seed --class=ProductionSeeder
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <h4>Vedlikeholdsmodus</h4>
-                                <p>Aktiver vedlikeholdsmodus når du skal gjore større endringer:</p>
+                                <p>Aktiver vedlikeholdsmodus når du skal gjøre større endringer:</p>
                                 <ul>
                                     <li>Brukere ser en "under vedlikehold"-melding</li>
-                                    <li>Administratorer kan fortsatt logge inn</li>
+                                    <li>Administratorer kan fortsatt logge inn med secret-token</li>
                                     <li>Deaktiver når du er ferdig</li>
                                 </ul>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Vedlikeholdskommandoer</div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan down --secret="token123"
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan up
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Logging</h4>
+                                <p>Logger finnes i <code>storage/logs/</code>:</p>
+                                <ul>
+                                    <li><strong>laravel.log</strong> - Hovedlogg for applikasjonsfeil</li>
+                                    <li><strong>worker.log</strong> - Logger fra køprosesser</li>
+                                    <li><strong>scheduler.log</strong> - Logger fra planlagte oppgaver</li>
+                                </ul>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Loggrotasjon</flux:callout.heading>
+                                    <flux:callout.text>Logger roteres automatisk daglig og beholdes i 14 dager. Gamle logger slettes automatisk for å spare diskplass.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Køer og jobber --}}
+                    <flux:card id="koer" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.queue-list class="w-5 h-5 text-violet-600 dark:text-violet-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Køer og bakgrunnsjobber</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Køsystemet håndterer tidkrevende oppgaver i bakgrunnen uten å blokkere brukergrensesnittet.</p>
+
+                                <h4>Hva prosesseres i køer?</h4>
+                                <ul>
+                                    <li><strong>E-post</strong> - Utsending av fakturaer, påminnelser og varsler</li>
+                                    <li><strong>PDF-generering</strong> - Oppretting av fakturaer og rapporter</li>
+                                    <li><strong>Dokumentparsing</strong> - OCR og AI-analyse av bilag</li>
+                                    <li><strong>Altinn-innsending</strong> - Elektronisk innsending til myndigheter</li>
+                                    <li><strong>Import/eksport</strong> - Store data-operasjoner</li>
+                                </ul>
+
+                                <h4>Køkonfigurasjon</h4>
+                                <p>Køer konfigureres via miljøvariabler:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            QUEUE_CONNECTION=database
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p>Tilgjengelige drivere:</p>
+                                <ul>
+                                    <li><strong>database</strong> - Bruker databasetabellen <code>jobs</code> (anbefalt)</li>
+                                    <li><strong>redis</strong> - Bruker Redis for raskere prosessering</li>
+                                    <li><strong>sync</strong> - Kjører jobber umiddelbart (kun for testing)</li>
+                                </ul>
+
+                                <h4>Starte køprosessor (worker)</h4>
+                                <p>Køprosessoren må kjøre kontinuerlig for å behandle jobber:</p>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Manuell start (utvikling)</div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan queue:work --tries=3 --timeout=300
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Supervisor-konfigurasjon (produksjon)</h4>
+                                <p>I produksjon bør køprosessoren administreres av Supervisor:</p>
+
+                                <div class="not-prose my-4">
+                                    <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs overflow-x-auto">
+<pre>[program:konrad-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/konrad/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/konrad/storage/logs/worker.log</pre>
+                                    </div>
+                                </div>
+
+                                <h4>Supervisor-kommandoer</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            sudo supervisorctl reread
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            sudo supervisorctl update
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            sudo supervisorctl start konrad-worker:*
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            sudo supervisorctl status
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Feilede jobber</h4>
+                                <p>Jobber som feiler etter flere forsøk lagres i <code>failed_jobs</code>-tabellen:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan queue:failed
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan queue:retry all
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan queue:flush
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Viktig</flux:callout.heading>
+                                    <flux:callout.text>Etter kodeendringer må køprosessoren restartes for å laste ny kode: <code>php artisan queue:restart</code></flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Planlagte oppgaver --}}
+                    <flux:card id="scheduler" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.clock class="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Planlagte oppgaver (Scheduler)</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Scheduler kjører automatiske oppgaver på definerte tidspunkter.</p>
+
+                                <h4>Planlagte oppgaver i Konrad Office</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Purring på ubetalte fakturaer</span>
+                                            <span class="font-mono text-zinc-500">Daglig 08:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Varsel om forfalte leverandørfakturaer</span>
+                                            <span class="font-mono text-zinc-500">Daglig 07:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Opprydding av utløpte sesjoner</span>
+                                            <span class="font-mono text-zinc-500">Daglig 03:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sletting av gamle midlertidige filer</span>
+                                            <span class="font-mono text-zinc-500">Daglig 04:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Oppdatering av valutakurser</span>
+                                            <span class="font-mono text-zinc-500">Daglig 06:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Database-backup</span>
+                                            <span class="font-mono text-zinc-500">Daglig 02:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sjekk av bestillingspunkt (lager)</span>
+                                            <span class="font-mono text-zinc-500">Daglig 09:00</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Altinn-fristpåminnelser</span>
+                                            <span class="font-mono text-zinc-500">Ukentlig mandag</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Cron-konfigurasjon</h4>
+                                <p>Scheduler krever ett cron-oppføring som kjører hvert minutt:</p>
+
+                                <div class="not-prose my-4">
+                                    <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs overflow-x-auto">
+                                        * * * * * cd /var/www/konrad && php artisan schedule:run >> /dev/null 2>&1
+                                    </div>
+                                </div>
+
+                                <h4>Verifisere scheduler</h4>
+                                <p>Se hvilke oppgaver som er planlagt:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan schedule:list
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Manuell kjøring</h4>
+                                <p>Kjør en planlagt oppgave manuelt for testing:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan schedule:run
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan schedule:test
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Lokal utvikling</flux:callout.heading>
+                                    <flux:callout.text>Under utvikling kan du bruke <code>php artisan schedule:work</code> i stedet for cron. Denne kommandoen kjører scheduler hvert minutt i terminalen.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Miljøvariabler --}}
+                    <flux:card id="miljovariabler" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.variable class="w-5 h-5 text-sky-600 dark:text-sky-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Miljøvariabler</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Miljøvariabler konfigureres i <code>.env</code>-filen i applikasjonens rotmappe.</p>
+
+                                <h4>Grunnleggende innstillinger</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">APP_NAME</span>
+                                            <span class="text-zinc-500 ml-2">Applikasjonsnavn</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">APP_ENV</span>
+                                            <span class="text-zinc-500 ml-2">production, staging, local</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">APP_DEBUG</span>
+                                            <span class="text-zinc-500 ml-2">true/false - vis detaljerte feil</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">APP_URL</span>
+                                            <span class="text-zinc-500 ml-2">https://konrad.example.com</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Database</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">DB_CONNECTION</span>
+                                            <span class="text-zinc-500 ml-2">mysql, pgsql</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">DB_HOST</span>
+                                            <span class="text-zinc-500 ml-2">Databaseserver</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">DB_DATABASE</span>
+                                            <span class="text-zinc-500 ml-2">Databasenavn</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">DB_USERNAME</span>
+                                            <span class="text-zinc-500 ml-2">Brukernavn</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">DB_PASSWORD</span>
+                                            <span class="text-zinc-500 ml-2">Passord</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>E-post</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">MAIL_MAILER</span>
+                                            <span class="text-zinc-500 ml-2">smtp, mailgun, ses</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">MAIL_HOST</span>
+                                            <span class="text-zinc-500 ml-2">SMTP-server</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">MAIL_FROM_ADDRESS</span>
+                                            <span class="text-zinc-500 ml-2">Avsenderadresse</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Fillagring</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">FILESYSTEM_DISK</span>
+                                            <span class="text-zinc-500 ml-2">local, s3</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">AWS_ACCESS_KEY_ID</span>
+                                            <span class="text-zinc-500 ml-2">For S3-lagring</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">AWS_BUCKET</span>
+                                            <span class="text-zinc-500 ml-2">S3-bøttenavn</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Modulspesifikke innstillinger</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">INVENTORY_ENABLED</span>
+                                            <span class="text-zinc-500 ml-2">true/false - Aktiver lagermodul</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">OPENAI_API_KEY</span>
+                                            <span class="text-zinc-500 ml-2">For AI-basert bilagsparsing</span>
+                                        </div>
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span class="font-mono text-sky-600 dark:text-sky-400">ALTINN_ENVIRONMENT</span>
+                                            <span class="text-zinc-500 ml-2">test, production</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Sikkerhet</flux:callout.heading>
+                                    <flux:callout.text>Aldri commit .env-filen til versjonskontroll. Den inneholder sensitive data som passord og API-nøkler. Bruk .env.example som mal.</flux:callout.text>
+                                </flux:callout>
+
+                                <h4>Etter endringer</h4>
+                                <p>Etter endringer i .env må du tømme konfigurasjonscache:</p>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-2 bg-zinc-100 dark:bg-zinc-800 rounded font-mono text-xs">
+                                            php artisan config:clear
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </flux:card>
