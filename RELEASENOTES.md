@@ -1,5 +1,34 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.4.2
+**Dato:** 2. februar 2026
+
+### Multi-tenancy: Flere selskaper per bruker
+
+- **Selskapsoppretting** - Nye brukere går gjennom en onboarding-wizard for å opprette sitt første selskap
+- **Brønnøysund-integrasjon** - Søk på organisasjonsnummer og hent firmainformasjon automatisk
+- **Selskapsveksler** - Brukere som tilhører flere selskaper kan enkelt bytte mellom dem via profilmenyen
+- **Roller per selskap** - Eier, leder eller medlem med ulike rettigheter per selskap
+- **Brukeradministrasjon** - Eiere og ledere kan invitere brukere til selskapet via e-post
+- **Full dataisolering** - All forretningsdata er isolert per selskap med automatisk filtrering
+
+### Selskapsinnstillinger
+
+- **Selskapsprofil** - Rediger selskapsinformasjon, logo og bankopplysninger
+- **Dokumentmaler** - Tilpass faktura- og tilbudsvilkår, dokumentfooter
+- **Standardverdier** - Sett betalingsfrist og tilbudsgyldighet for selskapet
+
+### Forbedret brukerdokumentasjon
+
+- **Kompakt header** - Hjelpesiden har nå en mer kompakt header med mindre luft
+- **Norske tegn** - All dokumentasjon bruker nå korrekte norske tegn (æøå)
+
+### Tips
+
+Klikk på **Innstillinger** i sidemenyen for å administrere selskapet ditt. Under fanen **Selskap** kan du redigere selskapsinformasjon og dokumentmaler. Under fanen **Brukere** kan eiere og ledere invitere nye brukere og administrere roller. Hvis du tilhører flere selskaper, kan du bytte mellom dem via profilmenyen øverst til høyre.
+
+---
+
 ## Versjon 1.4.1
 **Dato:** 1. februar 2026
 
