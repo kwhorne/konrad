@@ -43,7 +43,11 @@
                                 </a>
                                 <a href="#lager" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.cube class="w-4 h-4" />
-                                    Lager og innkjop
+                                    Lager og innkjøp
+                                </a>
+                                <a href="#bankavstemming" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.scale class="w-4 h-4" />
+                                    Bankavstemming
                                 </a>
                                 <a href="#stamdata" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.circle-stack class="w-4 h-4" />
@@ -53,9 +57,9 @@
                                     <flux:icon.table-cells class="w-4 h-4" />
                                     Kontoplan
                                 </a>
-                                <a href="#arsoppgjor" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                <a href="#årsoppgjør" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.document-check class="w-4 h-4" />
-                                    Arsoppgjor
+                                    Årsoppgjør
                                 </a>
                                 <a href="#altinn-admin" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.paper-airplane class="w-4 h-4" />
@@ -98,7 +102,7 @@
                                 <h4>Opprette ny bruker</h4>
                                 <p>Nye brukere opprettes via invitasjonssystemet:</p>
                                 <ol>
-                                    <li>Ga til <strong>Administrasjon > Brukere</strong></li>
+                                    <li>Gå til <strong>Administrasjon > Brukere</strong></li>
                                     <li>Klikk <strong>Inviter bruker</strong></li>
                                     <li>Fyll inn e-postadresse</li>
                                     <li>Velg om brukeren skal være administrator</li>
@@ -109,13 +113,13 @@
                                 <ul>
                                     <li><strong>Deaktiver</strong> - Brukeren kan ikke logge inn, men data beholdes</li>
                                     <li><strong>Aktiver</strong> - Gjenopprett tilgang for deaktivert bruker</li>
-                                    <li><strong>Gjor til admin</strong> - Gi administratorrettigheter</li>
+                                    <li><strong>Gjør til admin</strong> - Gi administratorrettigheter</li>
                                     <li><strong>Fjern admin</strong> - Fjern administratorrettigheter</li>
                                 </ul>
 
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Viktig</flux:callout.heading>
-                                    <flux:callout.text>Det ma alltid være minst én aktiv administrator i systemet.</flux:callout.text>
+                                    <flux:callout.text>Det må alltid være minst én aktiv administrator i systemet.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>
@@ -137,8 +141,8 @@
                                 <h4>Slik fungerer det</h4>
                                 <ol>
                                     <li>Administrator sender invitasjon via e-post</li>
-                                    <li>Mottaker far en unik lenke som er gyldig i 7 dager</li>
-                                    <li>Ved forste besok oppretter mottaker passord</li>
+                                    <li>Mottaker får en unik lenke som er gyldig i 7 dager</li>
+                                    <li>Ved første besok oppretter mottaker passord</li>
                                     <li>Brukeren er na aktiv i systemet</li>
                                 </ol>
 
@@ -154,18 +158,18 @@
                                             <span>Bruker har opprettet konto</span>
                                         </div>
                                         <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
-                                            <flux:badge color="red">Utlopt</flux:badge>
+                                            <flux:badge color="red">Utløpt</flux:badge>
                                             <span>Invitasjonen er ikke lenger gyldig</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <h4>Send invitasjon pa nytt</h4>
-                                <p>Hvis en invitasjon har utlopt eller brukeren ikke mottok e-posten:</p>
+                                <h4>Send invitasjon på nytt</h4>
+                                <p>Hvis en invitasjon har utløpt eller brukeren ikke mottok e-posten:</p>
                                 <ol>
                                     <li>Finn invitasjonen i listen</li>
-                                    <li>Klikk pa menyknappen</li>
-                                    <li>Velg <strong>Send pa nytt</strong></li>
+                                    <li>Klikk på menyknappen</li>
+                                    <li>Velg <strong>Send på nytt</strong></li>
                                 </ol>
                             </div>
                         </div>
@@ -182,11 +186,11 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Konfigurer informasjonen som vises pa dokumenter og i systemet.</p>
+                                <p>Konfigurer informasjonen som vises på dokumenter og i systemet.</p>
 
                                 <h4>Firmainformasjon</h4>
                                 <ul>
-                                    <li><strong>Firmanavn</strong> - Vises pa alle dokumenter</li>
+                                    <li><strong>Firmanavn</strong> - Vises på alle dokumenter</li>
                                     <li><strong>Organisasjonsnummer</strong> - Vises i bunntekst</li>
                                     <li><strong>Adresse</strong> - Brukes som avsenderadresse</li>
                                     <li><strong>Telefon og e-post</strong> - Kontaktinformasjon</li>
@@ -199,7 +203,7 @@
                                 </ul>
 
                                 <h4>Logo</h4>
-                                <p>Last opp firmalogo som vises pa:</p>
+                                <p>Last opp firmalogo som vises på:</p>
                                 <ul>
                                     <li>Tilbud og ordrebekreftelser</li>
                                     <li>Fakturaer og kreditnotaer</li>
@@ -208,7 +212,7 @@
 
                                 <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
                                     <flux:callout.heading>Tips</flux:callout.heading>
-                                    <flux:callout.text>Bruk en logo med transparent bakgrunn (PNG) for best resultat pa dokumenter.</flux:callout.text>
+                                    <flux:callout.text>Bruk en logo med transparent bakgrunn (PNG) for best resultat på dokumenter.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>
@@ -232,7 +236,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                                             <div class="font-medium text-zinc-900 dark:text-white">Kontaktregister</div>
-                                            <div class="text-sm text-zinc-500">Kunder og leverandorer</div>
+                                            <div class="text-sm text-zinc-500">Kunder og leverandører</div>
                                         </div>
                                         <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                                             <div class="font-medium text-zinc-900 dark:text-white">Vareregister</div>
@@ -260,66 +264,66 @@
                                         </div>
                                         <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                                             <div class="font-medium text-zinc-900 dark:text-white">Lager</div>
-                                            <div class="text-sm text-zinc-500">Lagerstyring og innkjop</div>
+                                            <div class="text-sm text-zinc-500">Lagerstyring og innkjøp</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <h4>Aktivere/deaktivere moduler</h4>
-                                <p>Kontakt support for a endre hvilke moduler som er aktive for din bedrift.</p>
+                                <p>Kontakt support for åendre hvilke moduler som er aktive for din bedrift.</p>
                             </div>
                         </div>
                     </flux:card>
 
-                    {{-- Lager og innkjop --}}
+                    {{-- Lager og innkjøp --}}
                     <flux:card id="lager" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
                         <div class="p-6">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="w-10 h-10 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center">
                                     <flux:icon.cube class="w-5 h-5 text-teal-600 dark:text-teal-400" />
                                 </div>
-                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Lager og innkjop</flux:heading>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Lager og innkjøp</flux:heading>
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
                                 <p>Lagermodulen gir full lagerstyring med transaksjonsbasert sporing av alle varebevegelser.</p>
 
                                 <h4>Aktivere lagermodulen</h4>
-                                <p>Sett <code>INVENTORY_ENABLED=true</code> i <code>.env</code>-filen for a aktivere modulen. Etter aktivering vises <strong>Lager</strong> i sidemenyen.</p>
+                                <p>Sett <code>INVENTORY_ENABLED=true</code> i <code>.env</code>-filen for åaktivere modulen. Etter aktivering vises <strong>Lager</strong> i sidemenyen.</p>
 
                                 <h4>Lageroversikt</h4>
                                 <p>Dashbordet viser:</p>
                                 <ul>
-                                    <li><strong>Lagervarer</strong> - Antall produkter merket som lagerfort</li>
-                                    <li><strong>Total verdi</strong> - Samlet lagerverdi basert pa vektet gjennomsnittskost</li>
-                                    <li><strong>Apne bestillinger</strong> - Innkjopsordrer som ikke er fullstendig mottatt</li>
-                                    <li><strong>Under bestillingspunkt</strong> - Varer som ma bestilles</li>
+                                    <li><strong>Lagervarer</strong> - Antall produkter merket som lagerført</li>
+                                    <li><strong>Total verdi</strong> - Samlet lagerverdi basert på vektet gjennomsnittskost</li>
+                                    <li><strong>Åpne bestillinger</strong> - Innkjopsordrer som ikke er fullstendig mottatt</li>
+                                    <li><strong>Under bestillingspunkt</strong> - Varer som må bestilles</li>
                                 </ul>
 
                                 <h4>Lagerlokasjoner</h4>
                                 <p>Opprett og administrer lagerlokasjoner med hierarkisk struktur:</p>
                                 <ul>
                                     <li><strong>Lager</strong> - Hovedlokasjoner (f.eks. Hovedlager, Servicebil)</li>
-                                    <li><strong>Sone</strong> - Omrader innenfor et lager</li>
+                                    <li><strong>Sone</strong> - Områder innenfor et lager</li>
                                     <li><strong>Hylle</strong> - Spesifikke plasser</li>
                                 </ul>
 
                                 <h4>Lagerforte produkter</h4>
-                                <p>For a aktivere lagerforing pa et produkt:</p>
+                                <p>For a aktivere lagerforing på et produkt:</p>
                                 <ol>
-                                    <li>Ga til produktet i vareregisteret</li>
+                                    <li>Gå til produktet i vareregisteret</li>
                                     <li>Huk av for <strong>Lagerfort</strong></li>
                                     <li>Angi eventuelt bestillingspunkt og bestillingsantall</li>
                                 </ol>
 
                                 <h4>Innkjopsordrer</h4>
-                                <p>Opprett bestillinger til leverandorer:</p>
+                                <p>Opprett bestillinger til leverandører:</p>
                                 <ol>
-                                    <li>Ga til <strong>Lager > Innkjopsordrer</strong></li>
-                                    <li>Klikk <strong>Ny innkjopsordre</strong></li>
-                                    <li>Velg leverandor og mottakslager</li>
+                                    <li>Gå til <strong>Lager > Innkjopsordrer</strong></li>
+                                    <li>Klikk <strong>Ny innkjøpsordre</strong></li>
+                                    <li>Velg leverandør og mottakslager</li>
                                     <li>Legg til produkter og mengder</li>
-                                    <li>Send ordren til leverandor</li>
+                                    <li>Send ordren til leverandør</li>
                                 </ol>
 
                                 <div class="not-prose my-4">
@@ -331,7 +335,7 @@
                                         </div>
                                         <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
                                             <flux:badge color="blue">Sendt</flux:badge>
-                                            <span>Ordren er sendt til leverandor</span>
+                                            <span>Ordren er sendt til leverandør</span>
                                         </div>
                                         <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
                                             <flux:badge color="amber">Delvis mottatt</flux:badge>
@@ -347,26 +351,26 @@
                                 <h4>Varemottak</h4>
                                 <p>Registrer mottatte varer:</p>
                                 <ol>
-                                    <li>Ga til <strong>Lager > Varemottak</strong></li>
-                                    <li>Velg innkjopsordre eller opprett fritstaende mottak</li>
+                                    <li>Gå til <strong>Lager > Varemottak</strong></li>
+                                    <li>Velg innkjøpsordre eller opprett frittstående mottak</li>
                                     <li>Angi mottatt antall for hver linje</li>
-                                    <li>Klikk <strong>Bokfor</strong> for a oppdatere lagerbeholdningen</li>
+                                    <li>Klikk <strong>Bokfør</strong> for åoppdatere lagerbeholdningen</li>
                                 </ol>
 
                                 <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
                                     <flux:callout.heading>Vektet gjennomsnittskost</flux:callout.heading>
-                                    <flux:callout.text>Systemet beregner automatisk vektet gjennomsnittskost nar varer mottas. Denne kostnaden brukes ved varekostnadsberegning ved salg.</flux:callout.text>
+                                    <flux:callout.text>Systemet beregner automatisk vektet gjennomsnittskost når varer mottas. Denne kostnaden brukes ved varekostnadsberegning ved salg.</flux:callout.text>
                                 </flux:callout>
 
                                 <h4>Varetelling</h4>
-                                <p>Arlig varetelling er pakrevd for a dokumentere lagerbeholdningen. Slik gjennomforer du en telling:</p>
+                                <p>Årlig varetelling er påkrevd for ådokumentere lagerbeholdningen. Slik gjennomfører du en telling:</p>
                                 <ol>
-                                    <li>Ga til <strong>Lager > Varetelling</strong></li>
+                                    <li>Gå til <strong>Lager > Varetelling</strong></li>
                                     <li>Klikk <strong>Ny varetelling</strong> og velg lokasjon</li>
-                                    <li>Start tellingen - alle lagerforte produkter lastes inn med forventet beholdning</li>
+                                    <li>Start tellingen - alle lagerførte produkter lastes inn med forventet beholdning</li>
                                     <li>Registrer talt antall for hvert produkt</li>
                                     <li>Fullfør tellingen når alle produkter er talt</li>
-                                    <li>Bokfor for a opprette lagerjusteringer for alle avvik</li>
+                                    <li>Bokfør for åopprette lagerjusteringer for alle avvik</li>
                                 </ol>
 
                                 <div class="not-prose my-4">
@@ -377,15 +381,15 @@
                                             <span>Tellingen er opprettet, men ikke startet</span>
                                         </div>
                                         <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
-                                            <flux:badge color="blue">Pagar</flux:badge>
+                                            <flux:badge color="blue">Pågår</flux:badge>
                                             <span>Telling er i gang</span>
                                         </div>
                                         <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
-                                            <flux:badge color="amber">Fullfort</flux:badge>
-                                            <span>Alle produkter er talt, klar for bokforing</span>
+                                            <flux:badge color="amber">Fullført</flux:badge>
+                                            <span>Alle produkter er talt, klar for bokføring</span>
                                         </div>
                                         <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
-                                            <flux:badge color="green">Bokfort</flux:badge>
+                                            <flux:badge color="green">Bokført</flux:badge>
                                             <span>Lagerjusteringer er opprettet</span>
                                         </div>
                                     </div>
@@ -393,29 +397,122 @@
 
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Lovkrav</flux:callout.heading>
-                                    <flux:callout.text>Bokforingsloven krever arlig varetelling ved regnskapsarets slutt. Tellingen ma dokumenteres og oppbevares.</flux:callout.text>
+                                    <flux:callout.text>Bokføringsloven krever årlig varetelling ved regnskapsårets slutt. Tellingen må dokumenteres og oppbevares.</flux:callout.text>
                                 </flux:callout>
 
                                 <h4>Lagerjusteringer</h4>
                                 <p>For a justere beholdning manuelt (f.eks. ved opptelling eller svinn):</p>
                                 <ol>
-                                    <li>Ga til <strong>Lager > Justering</strong></li>
+                                    <li>Gå til <strong>Lager > Justering</strong></li>
                                     <li>Velg produkt og lokasjon</li>
                                     <li>Angi ny beholdning eller differanse</li>
-                                    <li>Oppgi arsak for justeringen</li>
+                                    <li>Oppgi årsak for justeringen</li>
                                 </ol>
 
-                                <h4>Automatisk lagerhandtering</h4>
-                                <p>Systemet handterer lager automatisk i salgsflyt:</p>
+                                <h4>Automatisk lagerhåndtering</h4>
+                                <p>Systemet håndterer lager automatisk i salgsflyt:</p>
                                 <ul>
                                     <li><strong>Reservering</strong> - Varer reserveres nar ordre bekreftes</li>
                                     <li><strong>Uttak</strong> - Beholdning reduseres nar ordre faktureres</li>
-                                    <li><strong>Varekostnad</strong> - COGS bokfores basert pa vektet gjennomsnittskost</li>
+                                    <li><strong>Varekostnad</strong> - COGS bokfores basert på vektet gjennomsnittskost</li>
                                 </ul>
 
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Negativ beholdning</flux:callout.heading>
-                                    <flux:callout.text>Som standard tillater ikke systemet negativ lagerbeholdning. Dette kan endres i lagerinnstillingene hvis nodvendig.</flux:callout.text>
+                                    <flux:callout.text>Som standard tillater ikke systemet negativ lagerbeholdning. Dette kan endres i lagerinnstillingene hvis nødvendig.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Bankavstemming --}}
+                    <flux:card id="bankavstemming" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.scale class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Bankavstemming</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Bankavstemmingsmodulen lar deg importere kontoutskrifter fra banken og matche transaksjoner mot bilag i regnskapet.</p>
+
+                                <h4>Støttede banker</h4>
+                                <div class="not-prose my-4">
+                                    <div class="flex flex-wrap gap-2">
+                                        <flux:badge color="blue">DNB</flux:badge>
+                                        <flux:badge color="blue">Nordea</flux:badge>
+                                        <flux:badge color="blue">SpareBank 1</flux:badge>
+                                        <flux:badge color="blue">Sbanken</flux:badge>
+                                    </div>
+                                </div>
+
+                                <h4>Slik gjør du en avstemming</h4>
+                                <ol>
+                                    <li>Gå til <strong>Økonomi → Bankavstemming</strong></li>
+                                    <li>Velg bankkonto fra kontoplanen</li>
+                                    <li>Last opp CSV-fil fra nettbanken</li>
+                                    <li>Klikk <strong>Start auto-matching</strong></li>
+                                    <li>Gjennomgå matchede og umatchede transaksjoner</li>
+                                    <li>Fullfør avstemmingen</li>
+                                </ol>
+
+                                <h4>Automatisk matching</h4>
+                                <p>Systemet forsøker å matche banktransaksjoner automatisk basert på:</p>
+                                <ul>
+                                    <li><strong>KID-referanse</strong> - Norske KID-nummer på innbetalinger</li>
+                                    <li><strong>Beløp og dato</strong> - Matching mot åpne fakturaer og leverandørfakturaer</li>
+                                    <li><strong>Beskrivelse</strong> - Gjenkjenning av kontaktinformasjon</li>
+                                </ul>
+
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="font-medium text-zinc-900 dark:text-white mb-2">Transaksjonsstatus</div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="zinc">Umatchet</flux:badge>
+                                            <span>Ingen match funnet - krever manuell behandling</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="blue">Auto-matchet</flux:badge>
+                                            <span>Systemet har funnet en sannsynlig match</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="green">Bekreftet</flux:badge>
+                                            <span>Match er bekreftet av bruker</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <flux:badge color="amber">Ignorert</flux:badge>
+                                            <span>Transaksjonen krever ikke bilag</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Manuell matching</h4>
+                                <p>For umatchede transaksjoner kan du:</p>
+                                <ul>
+                                    <li><strong>Søk etter match</strong> - Finn faktura eller leverandørfaktura manuelt</li>
+                                    <li><strong>Opprett kladd-bilag</strong> - Lag et nytt bilag for transaksjonen</li>
+                                    <li><strong>Ignorer</strong> - Marker transaksjonen som håndtert uten bilag</li>
+                                </ul>
+
+                                <h4>Kladd-bilag</h4>
+                                <p>Når du oppretter et kladd-bilag fyller systemet automatisk inn:</p>
+                                <ul>
+                                    <li>Beløp fra banktransaksjonen</li>
+                                    <li>Dato fra transaksjonen</li>
+                                    <li>Beskrivelse fra banken</li>
+                                </ul>
+                                <p>Du velger selv konto og eventuell kontakt.</p>
+
+                                <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
+                                    <flux:callout.heading>Tips</flux:callout.heading>
+                                    <flux:callout.text>Eksporter CSV fra nettbanken din for perioden du vil avstemme. De fleste banker har en eksport-funksjon under kontoutskrift eller transaksjoner.</flux:callout.text>
+                                </flux:callout>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Lovkrav</flux:callout.heading>
+                                    <flux:callout.text>Bokføringsloven krever regelmessig avstemming av bankkonti. Alle transaksjoner på bankkontoen skal kunne dokumenteres med bilag.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>
@@ -432,7 +529,7 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Stamdata er grunnleggende oppsett som brukes pa tvers av systemet.</p>
+                                <p>Stamdata er grunnleggende oppsett som brukes på tvers av systemet.</p>
 
                                 <h4>Varegrupper og -typer</h4>
                                 <ul>
@@ -444,13 +541,13 @@
                                 <p>Standard norske MVA-satser er forhåndskonfigurert:</p>
                                 <ul>
                                     <li>25% - Standard sats</li>
-                                    <li>15% - Naringsmidler</li>
+                                    <li>15% - Næringsmidler</li>
                                     <li>12% - Transport, kultur, kino</li>
-                                    <li>0% - Fritatt/utenfor avgiftsomradet</li>
+                                    <li>0% - Fritatt/utenfor avgiftsområdet</li>
                                 </ul>
 
                                 <h4>Enheter</h4>
-                                <p>Malenheter for produkter og tjenester:</p>
+                                <p>Målenheter for produkter og tjenester:</p>
                                 <ul>
                                     <li>stk (stykk)</li>
                                     <li>timer</li>
@@ -462,7 +559,7 @@
                                 <p>Typer for kontaktaktiviteter:</p>
                                 <ul>
                                     <li>Telefonsamtale</li>
-                                    <li>Mote</li>
+                                    <li>Møte</li>
                                     <li>E-post</li>
                                     <li>Notat</li>
                                 </ul>
@@ -507,7 +604,7 @@
                                         </div>
                                         <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
                                             <span class="font-medium">Klasse 5</span>
-                                            <span>Lonn og personal (5000-5999)</span>
+                                            <span>Lønn og personal (5000-5999)</span>
                                         </div>
                                         <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
                                             <span class="font-medium">Klasse 6-7</span>
@@ -535,33 +632,33 @@
                         </div>
                     </flux:card>
 
-                    {{-- Arsoppgjor --}}
-                    <flux:card id="arsoppgjor" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                    {{-- Årsoppgjør --}}
+                    <flux:card id="årsoppgjør" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
                         <div class="p-6">
                             <div class="flex items-center gap-3 mb-4">
                                 <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
                                     <flux:icon.document-check class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                 </div>
-                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Arsoppgjor</flux:heading>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Årsoppgjør</flux:heading>
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Arsoppgjorsmodulen inneholder verktoy for a utarbeide obligatoriske rapporter til norske myndigheter. Her konfigurerer du oppsett og standardverdier.</p>
+                                <p>Årsoppgjørsmodulen inneholder verktøy for åutarbeide obligatoriske rapporter til norske myndigheter. Her konfigurerer du oppsett og standardverdier.</p>
 
                                 <h4>Moduloversikt</h4>
                                 <div class="not-prose my-4">
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         <div class="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg border border-indigo-200 dark:border-indigo-800">
-                                            <div class="font-medium text-indigo-800 dark:text-indigo-200">Aksjonaerregister</div>
-                                            <div class="text-sm text-indigo-600 dark:text-indigo-400">Aksjonaerer, transaksjoner, utbytte</div>
+                                            <div class="font-medium text-indigo-800 dark:text-indigo-200">Aksjonærregister</div>
+                                            <div class="text-sm text-indigo-600 dark:text-indigo-400">Aksjonærer, transaksjoner, utbytte</div>
                                         </div>
                                         <div class="p-3 bg-rose-50 dark:bg-rose-900/20 rounded-lg border border-rose-200 dark:border-rose-800">
                                             <div class="font-medium text-rose-800 dark:text-rose-200">Skatt</div>
                                             <div class="text-sm text-rose-600 dark:text-rose-400">Justeringer, utsatt skatt, saldoavskrivning</div>
                                         </div>
                                         <div class="p-3 bg-sky-50 dark:bg-sky-900/20 rounded-lg border border-sky-200 dark:border-sky-800">
-                                            <div class="font-medium text-sky-800 dark:text-sky-200">Arsregnskap</div>
-                                            <div class="text-sm text-sky-600 dark:text-sky-400">Noter, kontantstrom, XBRL</div>
+                                            <div class="font-medium text-sky-800 dark:text-sky-200">Årsregnskap</div>
+                                            <div class="text-sm text-sky-600 dark:text-sky-400">Noter, kontantstrøm, XBRL</div>
                                         </div>
                                         <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
                                             <div class="font-medium text-emerald-800 dark:text-emerald-200">Altinn-dashboard</div>
@@ -570,13 +667,13 @@
                                     </div>
                                 </div>
 
-                                <h4>Aksjonaerregister - Administrasjon</h4>
+                                <h4>Aksjonærregister - Administrasjon</h4>
                                 <p>Konfigurasjon av aksjeklasser og standardverdier:</p>
                                 <ul>
                                     <li><strong>Aksjeklasser</strong> - Opprett og administrer A-, B-aksjer etc.</li>
-                                    <li><strong>Transaksjonstyper</strong> - Stiftelse, emisjon, overdragelse, splitt, innlosning</li>
+                                    <li><strong>Transaksjonstyper</strong> - Stiftelse, emisjon, overdragelse, splitt, innløsning</li>
                                     <li><strong>Ervervsmater</strong> - Stiftelse, kjop, arv, gave, fusjon</li>
-                                    <li><strong>Standardverdier</strong> - Palydende per aksje, valuta</li>
+                                    <li><strong>Standardverdier</strong> - Pålydende per aksje, valuta</li>
                                 </ul>
 
                                 <h4>Skatt - Administrasjon</h4>
@@ -622,16 +719,16 @@
                                     </div>
                                 </div>
 
-                                <h4>Arsregnskap - Administrasjon</h4>
-                                <p>Konfigurasjon av arsregnskap:</p>
+                                <h4>Årsregnskap - Administrasjon</h4>
+                                <p>Konfigurasjon av årsregnskap:</p>
                                 <ul>
                                     <li><strong>Notemaler</strong> - Standardtekster for noter</li>
                                     <li><strong>Regnskapsprinsipper</strong> - Mal for regnskapsprinsipp-note</li>
-                                    <li><strong>Storrelsesgrenser</strong> - Terskelverdier for sma/mellomstore/store</li>
+                                    <li><strong>Størrelsesgrenser</strong> - Terskelverdier for små/mellomstore/store</li>
                                     <li><strong>Revisorinformasjon</strong> - Standardverdier for revisor</li>
                                 </ul>
 
-                                <h4>Storrelseskategorier</h4>
+                                <h4>Størrelseskategorier</h4>
                                 <p>Selskaper klassifiseres basert pa to av tre kriterier:</p>
                                 <div class="not-prose my-4">
                                     <div class="overflow-x-auto">
@@ -646,7 +743,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr class="border-b border-zinc-200 dark:border-zinc-700">
-                                                    <td class="p-2 font-medium">Sma</td>
+                                                    <td class="p-2 font-medium">Små</td>
                                                     <td class="p-2 text-right">< 70 MNOK</td>
                                                     <td class="p-2 text-right">< 35 MNOK</td>
                                                     <td class="p-2 text-right">< 50</td>
@@ -670,7 +767,7 @@
 
                                 <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
                                     <flux:callout.heading>Automatisk klassifisering</flux:callout.heading>
-                                    <flux:callout.text>Systemet beregner automatisk selskapsstorrelse basert pa regnskapstall og justerer kravene til arsregnskapet deretter.</flux:callout.text>
+                                    <flux:callout.text>Systemet beregner automatisk selskapsstørrelse basert pa regnskapstall og justerer kravene til årsregnskapet deretter.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>
@@ -687,7 +784,7 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Konfigurer Altinn-integrasjonen for elektronisk innsending av arsoppgjorsdata til norske myndigheter.</p>
+                                <p>Konfigurer Altinn-integrasjonen for elektronisk innsending av årsoppgjørsdata til norske myndigheter.</p>
 
                                 <h4>Obligatoriske innsendinger</h4>
                                 <div class="not-prose my-4">
@@ -695,7 +792,7 @@
                                         <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                                             <div class="flex justify-between items-center">
                                                 <div>
-                                                    <div class="font-medium text-zinc-900 dark:text-white">Aksjonaerregisteroppgaven (RF-1086)</div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Aksjonærregisteroppgaven (RF-1086)</div>
                                                     <div class="text-sm text-zinc-500">Til Skatteetaten</div>
                                                 </div>
                                                 <div class="text-right">
@@ -719,7 +816,7 @@
                                         <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
                                             <div class="flex justify-between items-center">
                                                 <div>
-                                                    <div class="font-medium text-zinc-900 dark:text-white">Arsregnskap</div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Årsregnskap</div>
                                                     <div class="text-sm text-zinc-500">Til Regnskapsregisteret</div>
                                                 </div>
                                                 <div class="text-right">
@@ -744,18 +841,18 @@
                                 <p>Administrer virksomhetssertifikater:</p>
                                 <ul>
                                     <li><strong>Last opp</strong> - Last opp nytt sertifikat (.p12 eller .pfx)</li>
-                                    <li><strong>Gyldighet</strong> - Se utlopsdato og status</li>
-                                    <li><strong>Forny</strong> - Erstatt utlopende sertifikat</li>
+                                    <li><strong>Gyldighet</strong> - Se utløpsdato og status</li>
+                                    <li><strong>Forny</strong> - Erstatt utløpende sertifikat</li>
                                     <li><strong>Slett</strong> - Fjern gammelt sertifikat</li>
                                 </ul>
 
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Sertifikatgyldighet</flux:callout.heading>
-                                    <flux:callout.text>Sertifikater utloper typisk etter 2-3 ar. Systemet varsler 30 dager for utlop. Sorg for a fornye i god tid.</flux:callout.text>
+                                    <flux:callout.text>Sertifikater utløper typisk etter 2-3 år. Systemet varsler 30 dager for utløp. Sørg for åfornye i god tid.</flux:callout.text>
                                 </flux:callout>
 
-                                <h4>Miljoer</h4>
-                                <p>Altinn har to miljoer:</p>
+                                <h4>Miljøer</h4>
+                                <p>Altinn har to miljøer:</p>
                                 <div class="not-prose my-4">
                                     <div class="grid grid-cols-2 gap-4">
                                         <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
@@ -770,25 +867,25 @@
                                 </div>
 
                                 <h4>Konfigurasjon</h4>
-                                <p>Innstillinger som ma konfigureres:</p>
+                                <p>Innstillinger som må konfigureres:</p>
                                 <ul>
-                                    <li><strong>Miljo</strong> - Velg test eller produksjon</li>
+                                    <li><strong>Miljø</strong> - Velg test eller produksjon</li>
                                     <li><strong>Klient-ID</strong> - Fra Maskinporten-registrering</li>
                                     <li><strong>Sertifikat</strong> - Virksomhetssertifikat</li>
                                     <li><strong>Sertifikatpassord</strong> - Passord for sertifikatet (kryptert)</li>
                                 </ul>
 
-                                <h4>Fristpaminnelser</h4>
+                                <h4>Fristpåminnelser</h4>
                                 <p>Konfigurer e-postvarsler for kommende frister:</p>
                                 <ul>
-                                    <li><strong>30 dager for</strong> - Forste paminning</li>
-                                    <li><strong>14 dager for</strong> - Oppfolgingspaminning</li>
+                                    <li><strong>30 dager for</strong> - Første påminnelse</li>
+                                    <li><strong>14 dager for</strong> - Oppfølgingspåminnelse</li>
                                     <li><strong>7 dager for</strong> - Hastevarsel</li>
                                     <li><strong>1 dag for</strong> - Kritisk frist</li>
                                 </ul>
 
                                 <h4>Mottakere av varsler</h4>
-                                <p>Velg hvem som skal motta fristpaminnelser:</p>
+                                <p>Velg hvem som skal motta fristpåminnelser:</p>
                                 <ul>
                                     <li>Alle administratorer</li>
                                     <li>Spesifikke brukere</li>
@@ -797,7 +894,7 @@
 
                                 <flux:callout variant="info" icon="light-bulb" class="not-prose my-4">
                                     <flux:callout.heading>Testmodus</flux:callout.heading>
-                                    <flux:callout.text>Bruk alltid testmiljoet (TT02) for a verifisere at innsendinger fungerer for du bytter til produksjon. Testinnsendinger behandles ikke av myndighetene.</flux:callout.text>
+                                    <flux:callout.text>Bruk alltid testmiljøet (TT02) for åverifisere at innsendinger fungerer før du bytter til produksjon. Testinnsendinger behandles ikke av myndighetene.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>
@@ -814,16 +911,16 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Systemsiden gir deg oversikt over teknisk informasjon og vedlikeholdsverktoy.</p>
+                                <p>Systemsiden gir deg oversikt over teknisk informasjon og vedlikeholdsverktøy.</p>
 
                                 <h4>Systeminformasjon</h4>
                                 <ul>
                                     <li>Laravel- og PHP-versjon</li>
-                                    <li>Miljo (production/development)</li>
+                                    <li>Miljø (production/development)</li>
                                     <li>Debug-modus status</li>
                                 </ul>
 
-                                <h4>Vedlikeholdsverktoy</h4>
+                                <h4>Vedlikeholdsverktøy</h4>
                                 <ul>
                                     <li><strong>Tom cache</strong> - Fjern midlertidige filer</li>
                                     <li><strong>Sikkerhetskopi</strong> - Ta backup av database</li>
@@ -831,11 +928,11 @@
                                 </ul>
 
                                 <h4>Vedlikeholdsmodus</h4>
-                                <p>Aktiver vedlikeholdsmodus nar du skal gjore storre endringer:</p>
+                                <p>Aktiver vedlikeholdsmodus når du skal gjore større endringer:</p>
                                 <ul>
                                     <li>Brukere ser en "under vedlikehold"-melding</li>
                                     <li>Administratorer kan fortsatt logge inn</li>
-                                    <li>Deaktiver nar du er ferdig</li>
+                                    <li>Deaktiver når du er ferdig</li>
                                 </ul>
                             </div>
                         </div>
@@ -852,7 +949,7 @@
                             </div>
 
                             <div class="prose prose-zinc dark:prose-invert max-w-none">
-                                <p>Viktige sikkerhetstiltak for a beskytte bedriftens data.</p>
+                                <p>Viktige sikkerhetstiltak for åbeskytte bedriftens data.</p>
 
                                 <h4>Anbefalinger</h4>
                                 <ul>
@@ -873,9 +970,9 @@
 
                                 <h4>Ved sikkerhetshendelse</h4>
                                 <ol>
-                                    <li>Deaktiver berort bruker umiddelbart</li>
+                                    <li>Deaktiver berørt bruker umiddelbart</li>
                                     <li>Sjekk aktivitetsloggen</li>
-                                    <li>Bytt passord pa admin-kontoer</li>
+                                    <li>Bytt passord på admin-kontoer</li>
                                     <li>Kontakt support ved behov</li>
                                 </ol>
                             </div>

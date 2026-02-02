@@ -64,6 +64,9 @@
             <flux:navlist.item icon="table-cells" href="{{ route('economy.accounts') }}" :current="$current === 'accounts'">
                 Kontoplan
             </flux:navlist.item>
+            <flux:navlist.item icon="scale" href="{{ route('economy.bank-reconciliation') }}" :current="$current === 'bank-reconciliation'">
+                Bankavstemming
+            </flux:navlist.item>
         </flux:navlist.group>
 
         <flux:navlist.group expandable heading="Årsoppgjør" class="grid">

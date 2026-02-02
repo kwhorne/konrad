@@ -255,6 +255,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/annual-accounts', [EconomyController::class, 'annualAccounts'])->name('annual-accounts');
             Route::get('/altinn', [EconomyController::class, 'altinn'])->name('altinn');
             Route::get('/analysis', fn () => view('economy.analysis'))->name('analysis');
+            Route::get('/bank-reconciliation', fn () => view('economy.bank-reconciliation'))->name('bank-reconciliation');
         });
     }); // End of company middleware group
 });

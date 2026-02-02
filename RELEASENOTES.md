@@ -1,5 +1,30 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.4.3
+**Dato:** 2. februar 2026
+
+### Bankavstemming
+
+- **CSV-import fra bank** - Last opp kontoutskrifter fra DNB, Nordea, SpareBank 1 og Sbanken
+- **Auto-deteksjon av format** - Systemet gjenkjenner bankformat automatisk basert på CSV-struktur
+- **Automatisk matching** - Transaksjoner matches mot fakturabetalinger og leverandørfakturaer
+- **KID-matching** - Norske KID-referanser brukes for presis matching av innbetalinger
+- **Manuell matching** - Søk og match umatchede transaksjoner mot åpne poster
+- **Kladd-bilag** - Opprett nye bilag direkte fra banktransaksjoner
+- **Full sporbarhet** - Se hvilke transaksjoner som er matchet mot hvilke bilag
+
+### Forbedret tegnstøtte
+
+- **Norske tegn i CSV** - Forbedret håndtering av æ, ø og å i importerte filer
+- **Automatisk encoding-deteksjon** - Støtter UTF-8, ISO-8859-1 og Windows-1252
+- **BOM-håndtering** - Fjerner automatisk BOM fra filer
+
+### Tips
+
+Gå til **Økonomi → Bankavstemming** for å importere en kontoutskrift. Velg bankkonto og last opp CSV-filen. Systemet forsøker automatisk å matche transaksjoner mot fakturaer og leverandørfakturaer. For umatchede transaksjoner kan du enten søke manuelt etter en match, eller opprette et kladd-bilag som bokføres automatisk.
+
+---
+
 ## Versjon 1.4.2
 **Dato:** 2. februar 2026
 
