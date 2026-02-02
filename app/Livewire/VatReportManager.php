@@ -101,15 +101,15 @@ class VatReportManager extends Component
     }
 
     #[Computed]
-    public function availableYears(VatReportService $service): array
+    public function availableYears(): array
     {
-        return $service->getAvailableYears();
+        return app(VatReportService::class)->getAvailableYears();
     }
 
     #[Computed]
-    public function availablePeriods(VatReportService $service): Collection
+    public function availablePeriods(): Collection
     {
-        return $service->getAvailablePeriods($this->createYear);
+        return app(VatReportService::class)->getAvailablePeriods($this->createYear);
     }
 
     public function openCreateModal(): void
