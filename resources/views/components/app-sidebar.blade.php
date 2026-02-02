@@ -142,11 +142,6 @@
             </flux:sidebar.item>
         @endif
 
-        @if(auth()->user()->is_admin)
-            <flux:sidebar.item icon="shield-check" href="{{ route('admin.users') }}">
-                Administrasjon
-            </flux:sidebar.item>
-        @endif
     </flux:sidebar.nav>
 
     <flux:spacer />
@@ -169,6 +164,14 @@
             </flux:menu.item>
 
             <flux:menu.separator />
+
+            @if(auth()->user()->is_admin)
+                <flux:menu.item icon="shield-check" href="{{ route('admin.users') }}">
+                    Administrasjon
+                </flux:menu.item>
+
+                <flux:menu.separator />
+            @endif
 
             <flux:menu.item icon="arrow-right-start-on-rectangle" onclick="document.getElementById('logout-form').submit();">
                 Logg ut
