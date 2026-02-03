@@ -358,7 +358,7 @@
                                 @if(auth()->user()->is_admin || auth()->user()->is_economy)
                                     <flux:button href="{{ route('economy.dashboard') }}" variant="ghost" class="justify-start">
                                         <flux:icon.calculator class="h-4 w-4 mr-2 text-green-600" />
-                                        Okonomi
+                                        Økonomi
                                     </flux:button>
                                 @endif
                             </div>

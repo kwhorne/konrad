@@ -107,7 +107,7 @@ class AltinnCertificate extends Model
             return null;
         }
 
-        return now()->diffInDays($this->valid_to, false);
+        return (int) now()->diffInDays($this->valid_to, false);
     }
 
     public function activate(): void

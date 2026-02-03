@@ -111,8 +111,10 @@ class VoucherManager extends Component
         return $service->isBalanced($this->workingLines);
     }
 
-    public function openModal(?int $id, VoucherService $service): void
+    public function openModal(?int $id = null, ?VoucherService $service = null): void
     {
+        $service ??= app(VoucherService::class);
+
         if ($id) {
             $voucher = Voucher::with('lines.account', 'lines.contact')->findOrFail($id);
             $this->authorize('view', $voucher);

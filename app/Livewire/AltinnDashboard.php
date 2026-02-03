@@ -175,7 +175,7 @@ class AltinnDashboard extends Component
 
         foreach ($deadlines as $deadline) {
             if ($deadline['status']['code'] !== 'accepted' && $deadline['deadline']->isFuture()) {
-                $daysUntil = now()->diffInDays($deadline['deadline'], false);
+                $daysUntil = (int) now()->diffInDays($deadline['deadline'], false);
                 $deadline['days_until'] = $daysUntil;
                 $deadline['urgency'] = $this->getUrgencyLevel($daysUntil);
                 $upcoming[] = $deadline;
@@ -195,7 +195,7 @@ class AltinnDashboard extends Component
 
         foreach ($deadlines as $deadline) {
             if ($deadline['status']['code'] !== 'accepted' && $deadline['deadline']->isPast()) {
-                $daysPast = now()->diffInDays($deadline['deadline']);
+                $daysPast = (int) now()->diffInDays($deadline['deadline']);
                 $deadline['days_past'] = $daysPast;
                 $overdue[] = $deadline;
             }

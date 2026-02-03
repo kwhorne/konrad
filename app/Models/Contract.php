@@ -64,7 +64,7 @@ class Contract extends Model
 
     public function getDaysUntilExpiryAttribute(): int
     {
-        return now()->diffInDays($this->end_date, false);
+        return (int) now()->diffInDays($this->end_date, false);
     }
 
     public function getIsExpiringSoonAttribute(): bool

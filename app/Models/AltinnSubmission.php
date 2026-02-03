@@ -268,7 +268,7 @@ class AltinnSubmission extends Model
             return null;
         }
 
-        return now()->diffInDays($deadline, false);
+        return (int) now()->diffInDays($deadline, false);
     }
 
     public function getIsOverdueAttribute(): bool

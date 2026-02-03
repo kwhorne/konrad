@@ -149,7 +149,7 @@ class TaxReturn extends Model
 
     public function getDaysUntilDeadline(): int
     {
-        return now()->diffInDays($this->getDeadline(), false);
+        return (int) now()->diffInDays($this->getDeadline(), false);
     }
 
     public function isOverdue(): bool
