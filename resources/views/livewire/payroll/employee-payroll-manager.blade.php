@@ -7,9 +7,15 @@
             icon="magnifying-glass"
             class="w-full sm:w-80"
         />
-        <flux:button wire:click="openCreateModal" icon="plus" variant="primary">
-            Legg til ansatt
-        </flux:button>
+        <div class="flex gap-2">
+            <flux:button wire:click="fetchAllTaxCards" icon="arrow-path" variant="ghost" wire:loading.attr="disabled">
+                <span wire:loading.remove wire:target="fetchAllTaxCards">Hent alle skattekort</span>
+                <span wire:loading wire:target="fetchAllTaxCards">Henter...</span>
+            </flux:button>
+            <flux:button wire:click="openCreateModal" icon="plus" variant="primary">
+                Legg til ansatt
+            </flux:button>
+        </div>
     </div>
 
     <!-- Employees Table -->

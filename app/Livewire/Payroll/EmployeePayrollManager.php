@@ -289,6 +289,33 @@ class EmployeePayrollManager extends Component
         $this->fetchTaxCard($this->editingId);
     }
 
+    public function fetchAllTaxCards(): void
+    {
+        try {
+            $service = app(SkattekortService::class);
+
+            if (! $service->isAvailable()) {
+                session()->flash('error', 'Skattekort API er ikke konfigurert. Kontakt administrator.');
+
+                return;
+            }
+
+            $result = $service->syncAllEmployees();
+
+            if ($result['success'] > 0 && $result['failed'] === 0) {
+                session()->flash('success', "Hentet skattekort for {$result['success']} ansatte.");
+            } elseif ($result['success'] > 0 && $result['failed'] > 0) {
+                session()->flash('warning', "Hentet skattekort for {$result['success']} ansatte. {$result['failed']} feilet.");
+            } elseif ($result['failed'] > 0) {
+                session()->flash('error', "Kunne ikke hente skattekort. {$result['failed']} feilet.");
+            } else {
+                session()->flash('info', 'Ingen ansatte med personnummer å hente skattekort for.');
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
     public function render()
     {
         $company = app('current.company');
