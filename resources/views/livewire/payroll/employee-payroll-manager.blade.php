@@ -284,7 +284,7 @@
                 <div x-show="$wire.activeTab === 'personal'" class="space-y-4">
                     <flux:callout icon="shield-check" variant="warning" class="mb-4">
                         <flux:callout.heading>Sensitiv informasjon</flux:callout.heading>
-                        <flux:callout.text>Denne informasjonen behandles konfidensielt og er kun tilgjengelig for administratorer.</flux:callout.text>
+                        <flux:callout.text>Denne informasjonen behandles konfidensielt og er kun tilgjengelig for lønnsansvarlige og administratorer.</flux:callout.text>
                     </flux:callout>
 
                     <div class="grid grid-cols-2 gap-4">
