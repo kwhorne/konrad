@@ -94,54 +94,59 @@
         @endif
     </flux:card>
 
-    <!-- Create/Edit Modal -->
-    <flux:modal wire:model="showModal" class="max-w-3xl">
-        <div class="p-6">
-            <flux:heading size="lg" class="mb-6">
-                {{ $isEditing ? 'Rediger ansattoppsett' : 'Legg til ansatt i lonnsystemet' }}
-            </flux:heading>
+    <!-- Create/Edit Flyout -->
+    <flux:modal wire:model="showModal" variant="flyout" class="w-[32rem]">
+        <div class="flex flex-col h-full">
+            <div class="p-6 border-b border-zinc-200 dark:border-zinc-700">
+                <flux:heading size="lg">
+                    {{ $isEditing ? 'Rediger ansattoppsett' : 'Legg til ansatt i lonnsystemet' }}
+                </flux:heading>
+                <flux:text class="mt-1">{{ $isEditing ? 'Oppdater informasjon for den ansatte.' : 'Fyll ut informasjon for den nye ansatte.' }}</flux:text>
+            </div>
 
-            <form wire:submit="save">
-                @if(!$isEditing)
-                    <flux:field class="mb-6">
-                        <flux:label>Velg ansatt</flux:label>
-                        <flux:select wire:model="userId">
-                            <flux:select.option value="">Velg en ansatt...</flux:select.option>
-                            @foreach($availableUsers as $user)
-                                <flux:select.option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</flux:select.option>
-                            @endforeach
-                        </flux:select>
-                        <flux:error name="userId" />
-                    </flux:field>
-                @endif
-
-                <flux:tabs wire:model.live="activeTab" class="mb-6">
-                    <flux:tab name="employment" icon="briefcase">Ansettelse</flux:tab>
-                    <flux:tab name="salary" icon="currency-dollar">Lonn og skatt</flux:tab>
-                    <flux:tab name="personal" icon="user">Personlig info</flux:tab>
-                    <flux:tab name="emergency" icon="phone">Parorende</flux:tab>
-                </flux:tabs>
-
-                <!-- Ansettelse Tab -->
-                <div x-show="$wire.activeTab === 'employment'" class="space-y-4">
-                    <div class="grid grid-cols-3 gap-4">
+            <form wire:submit="save" class="flex flex-col flex-1 overflow-hidden">
+                <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                    @if(!$isEditing)
                         <flux:field>
-                            <flux:label>Ansattnummer</flux:label>
-                            <flux:input wire:model="ansattnummer" placeholder="f.eks. 1001" />
-                            <flux:error name="ansattnummer" />
+                            <flux:label>Velg ansatt</flux:label>
+                            <flux:select wire:model="userId">
+                                <flux:select.option value="">Velg en ansatt...</flux:select.option>
+                                @foreach($availableUsers as $user)
+                                    <flux:select.option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</flux:select.option>
+                                @endforeach
+                            </flux:select>
+                            <flux:error name="userId" />
                         </flux:field>
+                    @endif
+
+                    <flux:tabs wire:model.live="activeTab" variant="segmented">
+                        <flux:tab name="employment">Ansettelse</flux:tab>
+                        <flux:tab name="salary">Lonn</flux:tab>
+                        <flux:tab name="personal">Personlig</flux:tab>
+                        <flux:tab name="emergency">Parorende</flux:tab>
+                    </flux:tabs>
+
+                    <!-- Ansettelse Tab -->
+                    <div x-show="$wire.activeTab === 'employment'" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>Ansattnummer</flux:label>
+                                <flux:input wire:model="ansattnummer" placeholder="f.eks. 1001" />
+                                <flux:error name="ansattnummer" />
+                            </flux:field>
+                            <flux:field>
+                                <flux:label>Fodselsdato</flux:label>
+                                <flux:input type="date" wire:model="birthDate" />
+                                <flux:error name="birthDate" />
+                            </flux:field>
+                        </div>
+
                         <flux:field>
                             <flux:label>Personnummer</flux:label>
                             <flux:input wire:model="personnummer" placeholder="11 siffer" maxlength="11" type="password" autocomplete="off" />
-                            <flux:description>Brukes for a hente skattekort</flux:description>
+                            <flux:description>Brukes for a hente skattekort fra Skatteetaten</flux:description>
                             <flux:error name="personnummer" />
                         </flux:field>
-                        <flux:field>
-                            <flux:label>Fodselsdato</flux:label>
-                            <flux:input type="date" wire:model="birthDate" />
-                            <flux:error name="birthDate" />
-                        </flux:field>
-                    </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <flux:field>
@@ -303,7 +308,7 @@
                         <flux:input wire:model="addressStreet" placeholder="Gatenavn 123" />
                         <flux:error name="addressStreet" />
                     </flux:field>
-                    <div class="grid grid-cols-3 gap-4">
+                    <div class="grid grid-cols-2 gap-4">
                         <flux:field>
                             <flux:label>Postnummer</flux:label>
                             <flux:input wire:model="addressPostalCode" placeholder="0000" maxlength="10" />
@@ -314,17 +319,17 @@
                             <flux:input wire:model="addressCity" placeholder="Oslo" />
                             <flux:error name="addressCity" />
                         </flux:field>
-                        <flux:field>
-                            <flux:label>Land</flux:label>
-                            <flux:select wire:model="addressCountry">
-                                <flux:select.option value="NO">Norge</flux:select.option>
-                                <flux:select.option value="SE">Sverige</flux:select.option>
-                                <flux:select.option value="DK">Danmark</flux:select.option>
-                                <flux:select.option value="FI">Finland</flux:select.option>
-                            </flux:select>
-                            <flux:error name="addressCountry" />
-                        </flux:field>
                     </div>
+                    <flux:field>
+                        <flux:label>Land</flux:label>
+                        <flux:select wire:model="addressCountry">
+                            <flux:select.option value="NO">Norge</flux:select.option>
+                            <flux:select.option value="SE">Sverige</flux:select.option>
+                            <flux:select.option value="DK">Danmark</flux:select.option>
+                            <flux:select.option value="FI">Finland</flux:select.option>
+                        </flux:select>
+                        <flux:error name="addressCountry" />
+                    </flux:field>
                 </div>
 
                 <!-- Parorende Tab -->
@@ -361,11 +366,15 @@
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-zinc-200 dark:border-zinc-700">
-                    <flux:button wire:click="closeModal" variant="ghost">Avbryt</flux:button>
-                    <flux:button type="submit" variant="primary">
-                        {{ $isEditing ? 'Lagre endringer' : 'Legg til ansatt' }}
-                    </flux:button>
+                </div>
+
+                <div class="p-6 border-t border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
+                    <div class="flex justify-end gap-3">
+                        <flux:button wire:click="closeModal" variant="ghost">Avbryt</flux:button>
+                        <flux:button type="submit" variant="primary">
+                            {{ $isEditing ? 'Lagre endringer' : 'Legg til ansatt' }}
+                        </flux:button>
+                    </div>
                 </div>
             </form>
         </div>
