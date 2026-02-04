@@ -18,25 +18,11 @@ Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 Route::get('/llms.txt', [SitemapController::class, 'llmsTxt'])->name('llms-txt');
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-
-Route::get('/priser', function () {
-    return view('pricing');
-})->name('pricing');
-
-Route::get('/kontakt', function () {
-    return view('contact');
-})->name('contact');
-
-Route::get('/om-oss', function () {
-    return view('about');
-})->name('about');
-
-Route::get('/bestill', function () {
-    return view('order');
-})->name('order');
+Route::view('/', 'welcome')->name('welcome');
+Route::view('/priser', 'pricing')->name('pricing');
+Route::view('/kontakt', 'contact')->name('contact');
+Route::view('/om-oss', 'about')->name('about');
+Route::view('/bestill', 'order')->name('order');
 
 // Blog routes
 Route::get('/innsikt', [BlogController::class, 'index'])->name('blog.index');
@@ -60,7 +46,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     // Onboarding routes (must be before company middleware)
     Route::prefix('onboarding')->name('onboarding.')->group(function () {
-        Route::get('/', fn () => view('app.onboarding'))->name('index');
+        Route::view('/', 'app.onboarding')->name('index');
     });
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -68,14 +54,14 @@ Route::middleware('auth')->group(function () {
     // Routes that require a company
     Route::middleware('company')->group(function () {
         Route::get('/app', [AuthController::class, 'dashboard'])->name('dashboard');
-        Route::get('/app/mine-aktiviteter', fn () => view('app.my-activities'))->name('my-activities');
+        Route::view('/app/mine-aktiviteter', 'app.my-activities')->name('my-activities');
         Route::get('/app/settings', [AuthController::class, 'settings'])->name('settings');
         Route::post('/app/settings/password', [AuthController::class, 'updatePassword'])->name('settings.password');
 
         // Company settings routes - redirects to settings page with tabs
         Route::prefix('company')->name('company.')->middleware('company.manager')->group(function () {
-            Route::get('/settings', fn () => redirect()->route('settings'))->name('settings');
-            Route::get('/users', fn () => redirect()->route('settings'))->name('users');
+            Route::redirect('/settings', '/app/settings')->name('settings');
+            Route::redirect('/users', '/app/settings')->name('users');
         });
 
         // Subscription routes (for company owners/managers)
@@ -203,41 +189,41 @@ Route::middleware('auth')->group(function () {
             Route::get('/users', [AuthController::class, 'adminUsers'])->name('users');
             Route::get('/analytics', [AuthController::class, 'adminAnalytics'])->name('analytics');
             Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
-            Route::get('/companies', fn () => view('admin.companies'))->name('companies');
-            Route::get('/modules', fn () => view('admin.modules'))->name('modules');
-            Route::get('/two-factor-whitelist', fn () => view('admin.two-factor-whitelist'))->name('two-factor-whitelist');
+            Route::view('/companies', 'admin.companies')->name('companies');
+            Route::view('/modules', 'admin.modules')->name('modules');
+            Route::view('/two-factor-whitelist', 'admin.two-factor-whitelist')->name('two-factor-whitelist');
             Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
-            Route::get('/posts', fn () => view('admin.posts'))->name('posts');
+            Route::view('/posts', 'admin.posts')->name('posts');
         });
 
         // Timesheet routes
         Route::prefix('timer')->name('timesheets.')->group(function () {
-            Route::get('/', fn () => view('timesheets.index'))->name('index');
-            Route::get('/historikk', fn () => view('timesheets.history'))->name('history');
-            Route::get('/godkjenning', fn () => view('timesheets.approval'))->name('approval')->middleware('company.manager');
-            Route::get('/rapporter', fn () => view('timesheets.reports'))->name('reports')->middleware('company.manager');
+            Route::view('/', 'timesheets.index')->name('index');
+            Route::view('/historikk', 'timesheets.history')->name('history');
+            Route::view('/godkjenning', 'timesheets.approval')->name('approval')->middleware('company.manager');
+            Route::view('/rapporter', 'timesheets.reports')->name('reports')->middleware('company.manager');
         });
 
         // Inventory routes
         Route::middleware(['feature:inventory'])->prefix('inventory')->name('inventory.')->group(function () {
-            Route::get('/', fn () => view('inventory.dashboard'))->name('dashboard');
-            Route::get('/stock-levels', fn () => view('inventory.stock-levels'))->name('stock-levels');
-            Route::get('/transactions', fn () => view('inventory.transactions'))->name('transactions');
-            Route::get('/locations', fn () => view('inventory.locations'))->name('locations');
-            Route::get('/adjustments', fn () => view('inventory.adjustments'))->name('adjustments');
-            Route::get('/stock-counts', fn () => view('inventory.stock-counts.index'))->name('stock-counts.index');
+            Route::view('/', 'inventory.dashboard')->name('dashboard');
+            Route::view('/stock-levels', 'inventory.stock-levels')->name('stock-levels');
+            Route::view('/transactions', 'inventory.transactions')->name('transactions');
+            Route::view('/locations', 'inventory.locations')->name('locations');
+            Route::view('/adjustments', 'inventory.adjustments')->name('adjustments');
+            Route::view('/stock-counts', 'inventory.stock-counts.index')->name('stock-counts.index');
             Route::get('/stock-counts/{stockCount}', fn ($stockCount) => view('inventory.stock-counts.show', compact('stockCount')))->name('stock-counts.show');
         });
 
         // Purchasing routes
         Route::middleware(['feature:inventory'])->prefix('purchasing')->name('purchasing.')->group(function () {
-            Route::get('/purchase-orders', fn () => view('purchasing.purchase-orders.index'))->name('purchase-orders.index');
-            Route::get('/purchase-orders/create', fn () => view('purchasing.purchase-orders.create'))->name('purchase-orders.create');
+            Route::view('/purchase-orders', 'purchasing.purchase-orders.index')->name('purchase-orders.index');
+            Route::view('/purchase-orders/create', 'purchasing.purchase-orders.create')->name('purchase-orders.create');
             Route::get('/purchase-orders/{purchaseOrder}', fn ($purchaseOrder) => view('purchasing.purchase-orders.show', compact('purchaseOrder')))->name('purchase-orders.show');
             Route::get('/purchase-orders/{purchaseOrder}/edit', fn ($purchaseOrder) => view('purchasing.purchase-orders.edit', compact('purchaseOrder')))->name('purchase-orders.edit');
 
-            Route::get('/goods-receipts', fn () => view('purchasing.goods-receipts.index'))->name('goods-receipts.index');
-            Route::get('/goods-receipts/create', fn () => view('purchasing.goods-receipts.create'))->name('goods-receipts.create');
+            Route::view('/goods-receipts', 'purchasing.goods-receipts.index')->name('goods-receipts.index');
+            Route::view('/goods-receipts/create', 'purchasing.goods-receipts.create')->name('goods-receipts.create');
             Route::get('/goods-receipts/{goodsReceipt}', fn ($goodsReceipt) => view('purchasing.goods-receipts.show', compact('goodsReceipt')))->name('goods-receipts.show');
         });
 
@@ -270,8 +256,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/tax', [EconomyController::class, 'tax'])->name('tax');
             Route::get('/annual-accounts', [EconomyController::class, 'annualAccounts'])->name('annual-accounts');
             Route::get('/altinn', [EconomyController::class, 'altinn'])->name('altinn');
-            Route::get('/analysis', fn () => view('economy.analysis'))->name('analysis');
-            Route::get('/bank-reconciliation', fn () => view('economy.bank-reconciliation'))->name('bank-reconciliation');
+            Route::view('/analysis', 'economy.analysis')->name('analysis');
+            Route::view('/bank-reconciliation', 'economy.bank-reconciliation')->name('bank-reconciliation');
         });
     }); // End of company middleware group
 });

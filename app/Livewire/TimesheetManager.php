@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Exceptions\TimesheetValidationException;
 use App\Models\Project;
 use App\Models\Timesheet;
-use App\Models\TimesheetEntry;
 use App\Models\WorkOrder;
 use App\Services\TimesheetService;
 use Carbon\Carbon;
@@ -156,12 +155,9 @@ class TimesheetManager extends Component
         $entryId = $row['entry_ids'][$date] ?? null;
 
         if ($hours === null || $hours === 0.0) {
-            // Delete entry if exists
+            // Delete entry if exists - use scoped query to prevent IDOR
             if ($entryId) {
-                $entry = TimesheetEntry::find($entryId);
-                if ($entry) {
-                    $entry->delete();
-                }
+                $this->timesheet->entries()->where('id', $entryId)->delete();
             }
         } else {
             try {
@@ -237,11 +233,10 @@ class TimesheetManager extends Component
             return;
         }
 
-        // Delete all entries for this row
-        foreach ($row['entry_ids'] as $entryId) {
-            if ($entryId) {
-                TimesheetEntry::find($entryId)?->delete();
-            }
+        // Delete all entries for this row - use scoped query to prevent IDOR
+        $entryIds = array_filter($row['entry_ids']);
+        if (! empty($entryIds)) {
+            $this->timesheet->entries()->whereIn('id', $entryIds)->delete();
         }
 
         $this->timesheet->refresh();
