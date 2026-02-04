@@ -16,20 +16,20 @@
         body {
             font-family: DejaVu Sans, sans-serif;
             font-size: 9pt;
-            line-height: 1.5;
+            line-height: 1.35;
             color: #374151;
             background: #fff;
         }
         .page {
-            padding: 40px 50px;
+            padding: 30px 40px;
             min-height: 100%;
         }
 
         /* Header with accent bar */
         .header-bar {
-            height: 6px;
+            height: 5px;
             background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
-            margin: -40px -50px 30px -50px;
+            margin: -30px -40px 20px -40px;
         }
         .credit-note .header-bar {
             background: linear-gradient(90deg, #7c3aed 0%, #a855f7 100%);
@@ -37,7 +37,7 @@
 
         /* Header layout */
         .header {
-            margin-bottom: 35px;
+            margin-bottom: 20px;
         }
         .header-table {
             width: 100%;
@@ -53,15 +53,15 @@
             text-align: right;
         }
         .company-logo {
-            max-height: 60px;
-            max-width: 200px;
-            margin-bottom: 10px;
+            max-height: 50px;
+            max-width: 180px;
+            margin-bottom: 6px;
         }
         .company-name {
-            font-size: 20pt;
+            font-size: 16pt;
             font-weight: bold;
             color: #4f46e5;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             letter-spacing: -0.5px;
         }
         .credit-note .company-name {
@@ -73,17 +73,17 @@
             line-height: 1.6;
         }
         .document-type {
-            font-size: 28pt;
+            font-size: 22pt;
             font-weight: bold;
             color: #111827;
             letter-spacing: -1px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
         .document-number {
-            font-size: 13pt;
+            font-size: 11pt;
             font-weight: 600;
             color: #4f46e5;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         .credit-note .document-number {
             color: #7c3aed;
@@ -106,10 +106,10 @@
 
         /* Info section */
         .info-section {
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             background: #f9fafb;
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 6px;
+            padding: 12px 15px;
         }
         .info-table {
             width: 100%;
@@ -117,23 +117,23 @@
         }
         .info-cell {
             vertical-align: top;
-            padding-right: 25px;
+            padding-right: 15px;
         }
         .info-cell:last-child {
             padding-right: 0;
         }
         .info-label {
-            font-size: 7.5pt;
+            font-size: 7pt;
             font-weight: bold;
             text-transform: uppercase;
             color: #9ca3af;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .info-value {
-            font-size: 9.5pt;
+            font-size: 9pt;
             color: #111827;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         .info-value strong {
             font-weight: 600;
@@ -141,50 +141,50 @@
 
         /* Document title */
         .document-title {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
             border-bottom: 1px solid #e5e7eb;
         }
         .document-title-label {
-            font-size: 7.5pt;
+            font-size: 7pt;
             font-weight: bold;
             text-transform: uppercase;
             color: #9ca3af;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .document-title-value {
-            font-size: 13pt;
+            font-size: 11pt;
             font-weight: 600;
             color: #111827;
         }
         .document-description {
-            font-size: 9pt;
+            font-size: 8.5pt;
             color: #6b7280;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         /* Items table */
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         .items-table th {
             background-color: #111827;
             color: #fff;
-            padding: 12px 10px;
+            padding: 8px 8px;
             text-align: left;
-            font-size: 8pt;
+            font-size: 7.5pt;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
         .items-table th:first-child {
-            border-radius: 6px 0 0 0;
+            border-radius: 4px 0 0 0;
         }
         .items-table th:last-child {
-            border-radius: 0 6px 0 0;
+            border-radius: 0 4px 0 0;
         }
         .items-table th.right {
             text-align: right;
@@ -193,10 +193,10 @@
             text-align: center;
         }
         .items-table td {
-            padding: 14px 10px;
+            padding: 8px 8px;
             border-bottom: 1px solid #e5e7eb;
             vertical-align: top;
-            font-size: 9pt;
+            font-size: 8.5pt;
         }
         .items-table tr:last-child td {
             border-bottom: none;
@@ -213,13 +213,13 @@
         }
         .items-table .muted {
             color: #6b7280;
-            font-size: 8.5pt;
+            font-size: 8pt;
         }
 
         /* Totals */
         .totals-wrapper {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
         .totals-table {
             width: 100%;
@@ -234,11 +234,11 @@
         }
         .totals-box {
             background: #f9fafb;
-            border-radius: 8px;
-            padding: 15px 20px;
+            border-radius: 6px;
+            padding: 10px 15px;
         }
         .totals-row {
-            padding: 6px 0;
+            padding: 4px 0;
         }
         .totals-row-table {
             width: 100%;
@@ -247,25 +247,25 @@
         .totals-label {
             text-align: left;
             color: #6b7280;
-            font-size: 9pt;
+            font-size: 8.5pt;
         }
         .totals-value {
             text-align: right;
             font-weight: 600;
-            font-size: 9.5pt;
+            font-size: 9pt;
             color: #111827;
         }
         .totals-divider {
             border-top: 2px solid #111827;
-            margin: 10px 0;
+            margin: 6px 0;
         }
         .grand-total .totals-label {
-            font-size: 11pt;
+            font-size: 10pt;
             font-weight: 600;
             color: #111827;
         }
         .grand-total .totals-value {
-            font-size: 14pt;
+            font-size: 12pt;
             font-weight: bold;
             color: #4f46e5;
         }
@@ -275,73 +275,73 @@
 
         /* VAT Summary */
         .vat-summary {
-            font-size: 8pt;
+            font-size: 7.5pt;
             color: #6b7280;
-            margin-bottom: 25px;
-            padding: 12px 15px;
+            margin-bottom: 15px;
+            padding: 8px 12px;
             background: #fafafa;
-            border-radius: 6px;
+            border-radius: 4px;
         }
         .vat-summary-title {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: #374151;
         }
 
         /* Footer info boxes */
         .footer {
-            margin-top: 35px;
-            padding-top: 20px;
+            margin-top: 20px;
+            padding-top: 12px;
             border-top: 2px solid #e5e7eb;
         }
         .footer-boxes {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
         .footer-box {
             width: 33.33%;
-            padding: 15px;
+            padding: 10px;
             background: #f9fafb;
             border: 1px solid #e5e7eb;
             vertical-align: top;
         }
         .footer-box:first-child {
-            border-radius: 8px 0 0 8px;
+            border-radius: 4px 0 0 4px;
         }
         .footer-box:last-child {
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 4px 4px 0;
         }
         .footer-label {
-            font-size: 7.5pt;
+            font-size: 7pt;
             font-weight: bold;
             text-transform: uppercase;
             color: #9ca3af;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .footer-value {
-            font-size: 11pt;
+            font-size: 9.5pt;
             font-weight: 600;
             color: #111827;
         }
 
         /* Bank info for invoices */
         .bank-info {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 12px;
+            padding: 12px;
             background: #eff6ff;
-            border-radius: 8px;
-            border-left: 4px solid #4f46e5;
+            border-radius: 4px;
+            border-left: 3px solid #4f46e5;
         }
         .bank-info-title {
-            font-size: 9pt;
+            font-size: 8.5pt;
             font-weight: bold;
             color: #1d4ed8;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
         .bank-info-row {
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         .bank-info-label {
             font-weight: 600;
@@ -350,16 +350,16 @@
 
         /* Terms */
         .terms {
-            font-size: 8pt;
+            font-size: 7.5pt;
             color: #6b7280;
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 12px;
+            padding: 10px;
             background: #fafafa;
-            border-radius: 6px;
+            border-radius: 4px;
         }
         .terms-title {
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             color: #374151;
         }
 
