@@ -199,6 +199,10 @@
                             </li>
                             <li class="flex items-center gap-3 text-sm text-orange-600 dark:text-orange-400 font-medium">
                                 <flux:icon.check class="w-5 h-5 text-orange-500 shrink-0" />
+                                Lønn med A-melding
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-orange-600 dark:text-orange-400 font-medium">
+                                <flux:icon.check class="w-5 h-5 text-orange-500 shrink-0" />
                                 Dedikert URL og database
                             </li>
                             <li class="flex items-center gap-3 text-sm text-orange-600 dark:text-orange-400 font-medium">

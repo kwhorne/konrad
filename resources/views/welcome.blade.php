@@ -1,6 +1,6 @@
 <x-layouts.public
     title="Konrad Office - Komplett forretningssystem for norske bedrifter"
-    description="Konrad Office samler salg, lager, innkjøp, fakturering, regnskap, prosjektstyring, timeregistrering og intelligent selskapsanalyse i ett system. Skreddersydd for norske SMB-bedrifter."
+    description="Konrad Office samler salg, lager, innkjøp, fakturering, regnskap, lønn, prosjektstyring, timeregistrering og intelligent selskapsanalyse i ett system. Skreddersydd for norske SMB-bedrifter."
     :open-modal="$openModal ?? null"
 >
     @php
@@ -10,7 +10,7 @@
             "name" => "Konrad Office",
             "applicationCategory" => "BusinessApplication",
             "operatingSystem" => "Web",
-            "description" => "Komplett forretningssystem med salg, lager, innkjøp, fakturering, regnskap, prosjektstyring, timeregistrering og intelligent selskapsanalyse for norske bedrifter",
+            "description" => "Komplett forretningssystem med salg, lager, innkjøp, fakturering, regnskap, lønn, prosjektstyring, timeregistrering og intelligent selskapsanalyse for norske bedrifter",
             "offers" => [
                 "@type" => "Offer",
                 "price" => "399",
@@ -57,7 +57,7 @@
                 <!-- Subtitle -->
                 <p class="text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto mb-12">
                     Konrad Office er et komplett forretningssystem med salg, lager/innkjøp, fakturering, regnskap,
-                    prosjektstyring, timeregistrering og intelligent selskapsanalyse. Enkelt, oversiktlig og effektivt.
+                    lønn, prosjektstyring, timeregistrering og intelligent selskapsanalyse. Enkelt, oversiktlig og effektivt.
                 </p>
 
                 <!-- CTA Buttons -->
@@ -549,6 +549,41 @@
                     </div>
                 </div>
 
+                <!-- Payroll Module -->
+                <div class="p-8 rounded-2xl bg-gradient-to-br from-lime-50 to-green-50 dark:from-lime-900/20 dark:to-green-900/20 border border-lime-200 dark:border-lime-800">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 bg-lime-500 rounded-2xl flex items-center justify-center shrink-0">
+                            <flux:icon.banknotes class="w-7 h-7 text-white" />
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-2">
+                                Lønn
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-lime-500 to-green-500 text-white">
+                                    Ny
+                                </span>
+                            </h3>
+                            <p class="text-zinc-600 dark:text-zinc-400 mb-4">
+                                Komplett norsk lønnssystem med skattetrekk,
+                                feriepenger og A-melding.
+                            </p>
+                            <ul class="space-y-2 text-sm text-zinc-600 dark:text-zinc-400">
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-lime-500" />
+                                    Lønnskjøring og lønnsslipper
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-lime-500" />
+                                    Skattetrekk og feriepenger
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <flux:icon.check class="w-4 h-4 text-lime-500" />
+                                    A-melding og AGA
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- My Activities Module -->
                 <div class="p-8 rounded-2xl bg-gradient-to-br from-fuchsia-50 to-pink-50 dark:from-fuchsia-900/20 dark:to-pink-900/20 border border-fuchsia-200 dark:border-fuchsia-800">
                     <div class="flex items-start gap-4">
@@ -713,7 +748,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">13</div>
+                    <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">14</div>
                     <div class="text-zinc-600 dark:text-zinc-400">Hovedmoduler</div>
                 </div>
                 <div>
