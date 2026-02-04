@@ -189,12 +189,19 @@
                     <div>
                         <flux:field>
                             <flux:label>Kategori</flux:label>
-                            <flux:select wire:model="post_category_id">
-                                <option value="">Velg kategori...</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </flux:select>
+                            <div class="flex gap-2">
+                                <div class="flex-1">
+                                    <flux:select wire:model="post_category_id">
+                                        <option value="">Velg kategori...</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </flux:select>
+                                </div>
+                                <flux:button wire:click="openCategoryModal" type="button" variant="ghost" size="sm" title="Opprett ny kategori">
+                                    <flux:icon.plus class="w-5 h-5" />
+                                </flux:button>
+                            </div>
                             <flux:error name="post_category_id" />
                         </flux:field>
                     </div>
@@ -293,6 +300,37 @@
                     </flux:button>
                     <flux:button variant="primary" type="submit">
                         {{ $editingId ? 'Lagre endringer' : 'Opprett artikkel' }}
+                    </flux:button>
+                </div>
+            </form>
+        </div>
+    </flux:modal>
+
+    {{-- Create Category Modal --}}
+    <flux:modal wire:model="showCategoryModal" class="w-full max-w-md">
+        <div class="p-6">
+            <flux:heading size="lg" class="mb-6">
+                Ny kategori
+            </flux:heading>
+
+            <form wire:submit="createCategory" class="space-y-4">
+                <flux:field>
+                    <flux:label>Kategorinavn *</flux:label>
+                    <flux:input wire:model="newCategoryName" placeholder="F.eks. Nyheter, Tips, Guider..." />
+                    <flux:error name="newCategoryName" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Beskrivelse</flux:label>
+                    <flux:textarea wire:model="newCategoryDescription" rows="2" placeholder="Kort beskrivelse av kategorien..." />
+                </flux:field>
+
+                <div class="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-700">
+                    <flux:button wire:click="closeCategoryModal" variant="ghost" type="button">
+                        Avbryt
+                    </flux:button>
+                    <flux:button variant="primary" type="submit">
+                        Opprett kategori
                     </flux:button>
                 </div>
             </form>

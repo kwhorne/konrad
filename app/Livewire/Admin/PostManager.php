@@ -47,6 +47,13 @@ class PostManager extends Component
 
     public ?string $meta_description = null;
 
+    // Category modal
+    public bool $showCategoryModal = false;
+
+    public string $newCategoryName = '';
+
+    public ?string $newCategoryDescription = null;
+
     protected function rules(): array
     {
         $slugRule = 'required|string|max:255|unique:posts,slug';
@@ -183,6 +190,39 @@ class PostManager extends Component
             $this->featured_image = null;
         }
         $this->existing_image = null;
+    }
+
+    public function openCategoryModal(): void
+    {
+        $this->newCategoryName = '';
+        $this->newCategoryDescription = null;
+        $this->showCategoryModal = true;
+    }
+
+    public function closeCategoryModal(): void
+    {
+        $this->showCategoryModal = false;
+        $this->newCategoryName = '';
+        $this->newCategoryDescription = null;
+    }
+
+    public function createCategory(): void
+    {
+        $this->validate([
+            'newCategoryName' => 'required|string|max:255|unique:post_categories,name',
+        ], [
+            'newCategoryName.required' => 'Kategorinavn er påkrevd.',
+            'newCategoryName.unique' => 'Denne kategorien finnes allerede.',
+        ]);
+
+        $category = PostCategory::create([
+            'name' => $this->newCategoryName,
+            'slug' => Str::slug($this->newCategoryName),
+            'description' => $this->newCategoryDescription,
+        ]);
+
+        $this->post_category_id = $category->id;
+        $this->closeCategoryModal();
     }
 
     private function resetForm(): void
