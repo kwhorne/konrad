@@ -133,10 +133,10 @@ class PayTypeManager extends Component
         if ($this->isEditing) {
             $payType = PayType::findOrFail($this->editingId);
             $payType->update($data);
-            session()->flash('success', 'Lonnsart oppdatert.');
+            session()->flash('success', 'Lønnsart oppdatert.');
         } else {
             PayType::create($data);
-            session()->flash('success', 'Lonnsart opprettet.');
+            session()->flash('success', 'Lønnsart opprettet.');
         }
 
         $this->closeModal();
@@ -146,7 +146,7 @@ class PayTypeManager extends Component
     {
         $payType = PayType::findOrFail($id);
         $payType->delete();
-        session()->flash('success', 'Lonnsart slettet.');
+        session()->flash('success', 'Lønnsart slettet.');
     }
 
     public function seedDefaultPayTypes(): void
@@ -159,7 +159,7 @@ class PayTypeManager extends Component
             ['code' => '200', 'name' => 'Overtid 50%', 'category' => 'overtid', 'overtid_faktor' => 1.5, 'sort_order' => 3],
             ['code' => '210', 'name' => 'Overtid 100%', 'category' => 'overtid', 'overtid_faktor' => 2.0, 'sort_order' => 4],
             ['code' => '300', 'name' => 'Bonus', 'category' => 'bonus', 'sort_order' => 5],
-            ['code' => '400', 'name' => 'Kveldsrillegg', 'category' => 'tillegg', 'sort_order' => 6],
+            ['code' => '400', 'name' => 'Kveldstillegg', 'category' => 'tillegg', 'sort_order' => 6],
             ['code' => '410', 'name' => 'Helgetillegg', 'category' => 'tillegg', 'sort_order' => 7],
             ['code' => '500', 'name' => 'Fagforeningstrekk', 'category' => 'trekk', 'is_taxable' => false, 'is_aga_basis' => false, 'is_vacation_basis' => false, 'is_otp_basis' => false, 'sort_order' => 8],
             ['code' => '600', 'name' => 'Firmabil', 'category' => 'naturalytelse', 'sort_order' => 9],
@@ -180,7 +180,7 @@ class PayTypeManager extends Component
             );
         }
 
-        session()->flash('success', 'Standard lonnsarter opprettet.');
+        session()->flash('success', 'Standard lønnsarter opprettet.');
     }
 
     public function render()

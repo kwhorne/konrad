@@ -64,7 +64,7 @@ class PayrollRunManager extends Component
             ->exists();
 
         if ($existing) {
-            session()->flash('error', 'Det finnes allerede en lonnskjoring for denne perioden.');
+            session()->flash('error', 'Det finnes allerede en lønnskjøring for denne perioden.');
 
             return null;
         }
@@ -77,7 +77,7 @@ class PayrollRunManager extends Component
             Carbon::parse($this->newPaymentDate)
         );
 
-        session()->flash('success', 'Lonnskjoring opprettet.');
+        session()->flash('success', 'Lønnskjøring opprettet.');
         $this->closeCreateModal();
 
         return redirect()->route('payroll.runs.show', $run);
@@ -88,7 +88,7 @@ class PayrollRunManager extends Component
         $run = PayrollRun::findOrFail($id);
 
         if ($run->status !== PayrollRun::STATUS_DRAFT) {
-            session()->flash('error', 'Kan kun beregne lonnskjoringer med status Utkast.');
+            session()->flash('error', 'Kan kun beregne lønnskjøringer med status Utkast.');
 
             return;
         }
@@ -96,7 +96,7 @@ class PayrollRunManager extends Component
         $payrollService = app(PayrollService::class);
         $payrollService->calculatePayroll($run);
 
-        session()->flash('success', 'Lonnskjoring beregnet.');
+        session()->flash('success', 'Lønnskjøring beregnet.');
     }
 
     public function deleteRun(int $id): void
@@ -104,13 +104,13 @@ class PayrollRunManager extends Component
         $run = PayrollRun::findOrFail($id);
 
         if (! $run->is_editable) {
-            session()->flash('error', 'Kan ikke slette en godkjent eller utbetalt lonnskjoring.');
+            session()->flash('error', 'Kan ikke slette en godkjent eller utbetalt lønnskjøring.');
 
             return;
         }
 
         $run->delete();
-        session()->flash('success', 'Lonnskjoring slettet.');
+        session()->flash('success', 'Lønnskjøring slettet.');
     }
 
     public function render()

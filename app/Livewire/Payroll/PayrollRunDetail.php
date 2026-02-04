@@ -19,7 +19,7 @@ class PayrollRunDetail extends Component
     public function calculate(): void
     {
         if ($this->run->status !== PayrollRun::STATUS_DRAFT) {
-            session()->flash('error', 'Kan kun beregne lonnskjoringer med status Utkast.');
+            session()->flash('error', 'Kan kun beregne lønnskjøringer med status Utkast.');
 
             return;
         }
@@ -28,13 +28,13 @@ class PayrollRunDetail extends Component
         $payrollService->calculatePayroll($this->run);
         $this->run->refresh();
 
-        session()->flash('success', 'Lonnskjoring beregnet.');
+        session()->flash('success', 'Lønnskjøring beregnet.');
     }
 
     public function approve(): void
     {
         if ($this->run->status !== PayrollRun::STATUS_CALCULATED) {
-            session()->flash('error', 'Kan kun godkjenne beregnede lonnskjoringer.');
+            session()->flash('error', 'Kan kun godkjenne beregnede lønnskjøringer.');
 
             return;
         }
@@ -43,13 +43,13 @@ class PayrollRunDetail extends Component
         $payrollService->approveRun($this->run, auth()->user());
         $this->run->refresh();
 
-        session()->flash('success', 'Lonnskjoring godkjent.');
+        session()->flash('success', 'Lønnskjøring godkjent.');
     }
 
     public function markAsPaid(): void
     {
         if ($this->run->status !== PayrollRun::STATUS_APPROVED) {
-            session()->flash('error', 'Kan kun markere godkjente lonnskjoringer som utbetalt.');
+            session()->flash('error', 'Kan kun markere godkjente lønnskjøringer som utbetalt.');
 
             return;
         }
@@ -58,7 +58,7 @@ class PayrollRunDetail extends Component
         $payrollService->markAsPaid($this->run);
         $this->run->refresh();
 
-        session()->flash('success', 'Lonnskjoring markert som utbetalt.');
+        session()->flash('success', 'Lønnskjøring markert som utbetalt.');
     }
 
     public function render()

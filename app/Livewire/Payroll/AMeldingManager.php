@@ -37,7 +37,7 @@ class AMeldingManager extends Component
     public function generateReport(): void
     {
         if (! $this->selectedRunId) {
-            session()->flash('error', 'Velg en lonnskjoring.');
+            session()->flash('error', 'Velg en lønnskjøring.');
 
             return;
         }
