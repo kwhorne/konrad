@@ -55,6 +55,7 @@
                 <flux:select.option value="">Alle roller</flux:select.option>
                 <flux:select.option value="admin">Administratorer</flux:select.option>
                 <flux:select.option value="economy">Økonomi</flux:select.option>
+                <flux:select.option value="payroll">Lønn</flux:select.option>
                 <flux:select.option value="user">Brukere</flux:select.option>
             </flux:select>
 
@@ -109,7 +110,10 @@
                                 @if($user->is_economy)
                                     <flux:badge color="emerald">Økonomi</flux:badge>
                                 @endif
-                                @if(!$user->is_admin && !$user->is_economy)
+                                @if($user->is_payroll)
+                                    <flux:badge color="amber">Lønn</flux:badge>
+                                @endif
+                                @if(!$user->is_admin && !$user->is_economy && !$user->is_payroll)
                                     <flux:badge color="zinc">Bruker</flux:badge>
                                 @endif
                             </div>
@@ -214,6 +218,7 @@
                 <div class="flex flex-col gap-4">
                     <flux:checkbox wire:model="is_admin" label="Administrator" description="Gi tilgang til admin-panelet" />
                     <flux:checkbox wire:model="is_economy" label="Økonomi" description="Gi tilgang til økonomi-panelet" />
+                    <flux:checkbox wire:model="is_payroll" label="Lønn" description="Gi tilgang til lønns-panelet" />
                     <flux:checkbox wire:model="is_active" label="Aktiv" description="Brukeren kan logge inn" />
                 </div>
 
@@ -244,6 +249,7 @@
                 <div class="flex flex-col gap-4">
                     <flux:checkbox wire:model="is_admin" label="Administrator" description="Gi tilgang til admin-panelet" />
                     <flux:checkbox wire:model="is_economy" label="Økonomi" description="Gi tilgang til økonomi-panelet" />
+                    <flux:checkbox wire:model="is_payroll" label="Lønn" description="Gi tilgang til lønns-panelet" />
                     <flux:checkbox wire:model="is_active" label="Aktiv" description="Brukeren kan logge inn" />
                 </div>
             </div>
