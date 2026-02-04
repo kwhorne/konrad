@@ -95,15 +95,15 @@
     </flux:card>
 
     <!-- Create/Edit Modal -->
-    <flux:modal wire:model="showModal" class="max-w-2xl">
+    <flux:modal wire:model="showModal" class="max-w-3xl">
         <div class="p-6">
             <flux:heading size="lg" class="mb-6">
                 {{ $isEditing ? 'Rediger ansattoppsett' : 'Legg til ansatt i lonnsystemet' }}
             </flux:heading>
 
-            <form wire:submit="save" class="space-y-6">
+            <form wire:submit="save">
                 @if(!$isEditing)
-                    <flux:field>
+                    <flux:field class="mb-6">
                         <flux:label>Velg ansatt</flux:label>
                         <flux:select wire:model="userId">
                             <flux:select.option value="">Velg en ansatt...</flux:select.option>
@@ -115,131 +115,253 @@
                     </flux:field>
                 @endif
 
-                <div class="grid grid-cols-2 gap-4">
-                    <flux:field>
-                        <flux:label>Ansattnummer</flux:label>
-                        <flux:input wire:model="ansattnummer" placeholder="f.eks. 1001" />
-                        <flux:error name="ansattnummer" />
-                    </flux:field>
-                    <flux:field>
-                        <flux:label>Stilling</flux:label>
-                        <flux:input wire:model="stilling" placeholder="f.eks. Utvikler" />
-                        <flux:error name="stilling" />
-                    </flux:field>
-                </div>
+                <flux:tabs wire:model.live="activeTab" class="mb-6">
+                    <flux:tab name="employment" icon="briefcase">Ansettelse</flux:tab>
+                    <flux:tab name="salary" icon="currency-dollar">Lonn og skatt</flux:tab>
+                    <flux:tab name="personal" icon="user">Personlig info</flux:tab>
+                    <flux:tab name="emergency" icon="phone">Parorende</flux:tab>
+                </flux:tabs>
 
-                <div class="grid grid-cols-3 gap-4">
-                    <flux:field>
-                        <flux:label>Ansatt fra</flux:label>
-                        <flux:input type="date" wire:model="ansattFra" />
-                        <flux:error name="ansattFra" />
-                    </flux:field>
-                    <flux:field>
-                        <flux:label>Ansatt til</flux:label>
-                        <flux:input type="date" wire:model="ansattTil" />
-                        <flux:error name="ansattTil" />
-                    </flux:field>
-                    <flux:field>
-                        <flux:label>Stillingsprosent</flux:label>
-                        <flux:input type="number" wire:model="stillingsprosent" step="0.01" min="0" max="100" />
-                        <flux:error name="stillingsprosent" />
-                    </flux:field>
-                </div>
-
-                <flux:separator />
-
-                <flux:heading size="sm">Lonn</flux:heading>
-                <div class="grid grid-cols-2 gap-4">
-                    <flux:field>
-                        <flux:label>Lonnstype</flux:label>
-                        <flux:select wire:model.live="lonnType">
-                            <flux:select.option value="fast">Fastlonn</flux:select.option>
-                            <flux:select.option value="time">Timelonn</flux:select.option>
-                        </flux:select>
-                        <flux:error name="lonnType" />
-                    </flux:field>
-                    @if($lonnType === 'fast')
+                <!-- Ansettelse Tab -->
+                <div x-show="$wire.activeTab === 'employment'" class="space-y-4">
+                    <div class="grid grid-cols-3 gap-4">
                         <flux:field>
-                            <flux:label>Manedslonn (kr)</flux:label>
-                            <flux:input type="number" wire:model="maanedslonn" step="0.01" min="0" />
-                            <flux:error name="maanedslonn" />
+                            <flux:label>Ansattnummer</flux:label>
+                            <flux:input wire:model="ansattnummer" placeholder="f.eks. 1001" />
+                            <flux:error name="ansattnummer" />
                         </flux:field>
-                    @else
                         <flux:field>
-                            <flux:label>Timelonn (kr)</flux:label>
-                            <flux:input type="number" wire:model="timelonn" step="0.01" min="0" />
-                            <flux:error name="timelonn" />
+                            <flux:label>Personnummer</flux:label>
+                            <flux:input wire:model="personnummer" placeholder="11 siffer" maxlength="11" type="password" autocomplete="off" />
+                            <flux:description>Brukes for a hente skattekort</flux:description>
+                            <flux:error name="personnummer" />
                         </flux:field>
-                    @endif
+                        <flux:field>
+                            <flux:label>Fodselsdato</flux:label>
+                            <flux:input type="date" wire:model="birthDate" />
+                            <flux:error name="birthDate" />
+                        </flux:field>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:field>
+                            <flux:label>Stilling</flux:label>
+                            <flux:input wire:model="stilling" placeholder="f.eks. Utvikler" />
+                            <flux:error name="stilling" />
+                        </flux:field>
+                        <flux:field>
+                            <flux:label>Stillingsprosent</flux:label>
+                            <flux:input type="number" wire:model="stillingsprosent" step="0.01" min="0" max="100" />
+                            <flux:error name="stillingsprosent" />
+                        </flux:field>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:field>
+                            <flux:label>Ansatt fra</flux:label>
+                            <flux:input type="date" wire:model="ansattFra" />
+                            <flux:error name="ansattFra" />
+                        </flux:field>
+                        <flux:field>
+                            <flux:label>Ansatt til</flux:label>
+                            <flux:input type="date" wire:model="ansattTil" />
+                            <flux:error name="ansattTil" />
+                        </flux:field>
+                    </div>
+
+                    <flux:checkbox wire:model="isActive" label="Aktiv i lonnsystemet" />
                 </div>
 
-                <flux:separator />
+                <!-- Lonn og skatt Tab -->
+                <div x-show="$wire.activeTab === 'salary'" class="space-y-6">
+                    <div>
+                        <flux:heading size="sm" class="mb-3">Lonn</flux:heading>
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>Lonnstype</flux:label>
+                                <flux:select wire:model.live="lonnType">
+                                    <flux:select.option value="fast">Fastlonn</flux:select.option>
+                                    <flux:select.option value="time">Timelonn</flux:select.option>
+                                </flux:select>
+                                <flux:error name="lonnType" />
+                            </flux:field>
+                            @if($lonnType === 'fast')
+                                <flux:field>
+                                    <flux:label>Manedslonn (kr)</flux:label>
+                                    <flux:input type="number" wire:model="maanedslonn" step="0.01" min="0" />
+                                    <flux:error name="maanedslonn" />
+                                </flux:field>
+                            @else
+                                <flux:field>
+                                    <flux:label>Timelonn (kr)</flux:label>
+                                    <flux:input type="number" wire:model="timelonn" step="0.01" min="0" />
+                                    <flux:error name="timelonn" />
+                                </flux:field>
+                            @endif
+                        </div>
 
-                <flux:heading size="sm">Skatt</flux:heading>
-                <div class="grid grid-cols-2 gap-4">
+                        <flux:field class="mt-4">
+                            <flux:label>Kontonummer</flux:label>
+                            <flux:input wire:model="kontonummer" placeholder="11 siffer" maxlength="11" />
+                            <flux:error name="kontonummer" />
+                        </flux:field>
+                    </div>
+
+                    <flux:separator />
+
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <flux:heading size="sm">Skatt</flux:heading>
+                            @if($isEditing && $personnummer)
+                                <flux:button wire:click="fetchTaxCardForCurrent" size="sm" variant="ghost" icon="arrow-path">
+                                    Hent skattekort
+                                </flux:button>
+                            @endif
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>Skattetype</flux:label>
+                                <flux:select wire:model.live="skattType">
+                                    <flux:select.option value="tabelltrekk">Tabelltrekk</flux:select.option>
+                                    <flux:select.option value="prosenttrekk">Prosenttrekk</flux:select.option>
+                                    <flux:select.option value="kildeskatt">Kildeskatt</flux:select.option>
+                                    <flux:select.option value="frikort">Frikort</flux:select.option>
+                                </flux:select>
+                                <flux:error name="skattType" />
+                            </flux:field>
+                            @if($skattType === 'tabelltrekk')
+                                <flux:field>
+                                    <flux:label>Skattetabell</flux:label>
+                                    <flux:input wire:model="skattetabell" placeholder="f.eks. 7100" />
+                                    <flux:error name="skattetabell" />
+                                </flux:field>
+                            @elseif($skattType === 'prosenttrekk')
+                                <flux:field>
+                                    <flux:label>Skatteprosent</flux:label>
+                                    <flux:input type="number" wire:model="skatteprosent" step="0.01" min="0" max="100" />
+                                    <flux:error name="skatteprosent" />
+                                </flux:field>
+                            @elseif($skattType === 'frikort')
+                                <flux:field>
+                                    <flux:label>Frikortbelop (kr)</flux:label>
+                                    <flux:input type="number" wire:model="frikortBelop" step="0.01" min="0" />
+                                    <flux:error name="frikortBelop" />
+                                </flux:field>
+                            @endif
+                        </div>
+                    </div>
+
+                    <flux:separator />
+
+                    <div>
+                        <flux:heading size="sm" class="mb-3">Feriepenger og pensjon</flux:heading>
+                        <div class="grid grid-cols-2 gap-4">
+                            <flux:field>
+                                <flux:label>Feriepengeprosent</flux:label>
+                                <flux:input type="number" wire:model="feriepengerProsent" step="0.1" min="0" max="20" />
+                                <flux:error name="feriepengerProsent" />
+                            </flux:field>
+                            <flux:field>
+                                <flux:label>OTP-prosent</flux:label>
+                                <flux:input type="number" wire:model="otpProsent" step="0.1" min="2" max="7" />
+                                <flux:error name="otpProsent" />
+                            </flux:field>
+                        </div>
+                        <div class="flex flex-wrap gap-6 mt-4">
+                            <flux:checkbox wire:model="ferie5Uker" label="5 ukers ferie (tariffestet)" />
+                            <flux:checkbox wire:model="over60" label="Over 60 ar" />
+                            <flux:checkbox wire:model="otpEnabled" label="OTP aktivert" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personlig info Tab -->
+                <div x-show="$wire.activeTab === 'personal'" class="space-y-4">
+                    <flux:callout icon="shield-check" variant="warning" class="mb-4">
+                        <flux:callout.heading>Sensitiv informasjon</flux:callout.heading>
+                        <flux:callout.text>Denne informasjonen behandles konfidensielt og er kun tilgjengelig for administratorer.</flux:callout.text>
+                    </flux:callout>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:field>
+                            <flux:label>Privat e-post</flux:label>
+                            <flux:input type="email" wire:model="personalEmail" placeholder="privat@eksempel.no" />
+                            <flux:error name="personalEmail" />
+                        </flux:field>
+                        <flux:field>
+                            <flux:label>Telefon</flux:label>
+                            <flux:input wire:model="phone" placeholder="+47 123 45 678" />
+                            <flux:error name="phone" />
+                        </flux:field>
+                    </div>
+
+                    <flux:separator />
+
+                    <flux:heading size="sm">Adresse</flux:heading>
                     <flux:field>
-                        <flux:label>Skattetype</flux:label>
-                        <flux:select wire:model.live="skattType">
-                            <flux:select.option value="tabelltrekk">Tabelltrekk</flux:select.option>
-                            <flux:select.option value="prosenttrekk">Prosenttrekk</flux:select.option>
-                            <flux:select.option value="kildeskatt">Kildeskatt</flux:select.option>
-                            <flux:select.option value="frikort">Frikort</flux:select.option>
-                        </flux:select>
-                        <flux:error name="skattType" />
+                        <flux:label>Gateadresse</flux:label>
+                        <flux:input wire:model="addressStreet" placeholder="Gatenavn 123" />
+                        <flux:error name="addressStreet" />
                     </flux:field>
-                    @if($skattType === 'tabelltrekk')
+                    <div class="grid grid-cols-3 gap-4">
                         <flux:field>
-                            <flux:label>Skattetabell</flux:label>
-                            <flux:input wire:model="skattetabell" placeholder="f.eks. 7100" />
-                            <flux:error name="skattetabell" />
+                            <flux:label>Postnummer</flux:label>
+                            <flux:input wire:model="addressPostalCode" placeholder="0000" maxlength="10" />
+                            <flux:error name="addressPostalCode" />
                         </flux:field>
-                    @elseif($skattType === 'prosenttrekk')
                         <flux:field>
-                            <flux:label>Skatteprosent</flux:label>
-                            <flux:input type="number" wire:model="skatteprosent" step="0.01" min="0" max="100" />
-                            <flux:error name="skatteprosent" />
+                            <flux:label>Poststed</flux:label>
+                            <flux:input wire:model="addressCity" placeholder="Oslo" />
+                            <flux:error name="addressCity" />
                         </flux:field>
-                    @elseif($skattType === 'frikort')
                         <flux:field>
-                            <flux:label>Frikortbelop (kr)</flux:label>
-                            <flux:input type="number" wire:model="frikortBelop" step="0.01" min="0" />
-                            <flux:error name="frikortBelop" />
+                            <flux:label>Land</flux:label>
+                            <flux:select wire:model="addressCountry">
+                                <flux:select.option value="NO">Norge</flux:select.option>
+                                <flux:select.option value="SE">Sverige</flux:select.option>
+                                <flux:select.option value="DK">Danmark</flux:select.option>
+                                <flux:select.option value="FI">Finland</flux:select.option>
+                            </flux:select>
+                            <flux:error name="addressCountry" />
                         </flux:field>
-                    @endif
+                    </div>
                 </div>
 
-                <flux:separator />
+                <!-- Parorende Tab -->
+                <div x-show="$wire.activeTab === 'emergency'" class="space-y-4">
+                    <flux:callout icon="exclamation-triangle" class="mb-4">
+                        <flux:callout.heading>Nodkontakt</flux:callout.heading>
+                        <flux:callout.text>Person som skal kontaktes ved nodssituasjon.</flux:callout.text>
+                    </flux:callout>
 
-                <flux:heading size="sm">Feriepenger og pensjon</flux:heading>
-                <div class="grid grid-cols-2 gap-4">
                     <flux:field>
-                        <flux:label>Feriepengeprosent</flux:label>
-                        <flux:input type="number" wire:model="feriepengerProsent" step="0.1" min="0" max="20" />
-                        <flux:error name="feriepengerProsent" />
+                        <flux:label>Navn</flux:label>
+                        <flux:input wire:model="emergencyContactName" placeholder="Fullt navn" />
+                        <flux:error name="emergencyContactName" />
                     </flux:field>
-                    <flux:field>
-                        <flux:label>OTP-prosent</flux:label>
-                        <flux:input type="number" wire:model="otpProsent" step="0.1" min="2" max="7" />
-                        <flux:error name="otpProsent" />
-                    </flux:field>
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:field>
+                            <flux:label>Relasjon</flux:label>
+                            <flux:select wire:model="emergencyContactRelation">
+                                <flux:select.option value="">Velg relasjon...</flux:select.option>
+                                <flux:select.option value="ektefelle">Ektefelle</flux:select.option>
+                                <flux:select.option value="samboer">Samboer</flux:select.option>
+                                <flux:select.option value="forelder">Forelder</flux:select.option>
+                                <flux:select.option value="barn">Barn</flux:select.option>
+                                <flux:select.option value="sosken">Sosken</flux:select.option>
+                                <flux:select.option value="annen">Annen</flux:select.option>
+                            </flux:select>
+                            <flux:error name="emergencyContactRelation" />
+                        </flux:field>
+                        <flux:field>
+                            <flux:label>Telefon</flux:label>
+                            <flux:input wire:model="emergencyContactPhone" placeholder="+47 123 45 678" />
+                            <flux:error name="emergencyContactPhone" />
+                        </flux:field>
+                    </div>
                 </div>
-                <div class="flex flex-wrap gap-6">
-                    <flux:checkbox wire:model="ferie5Uker" label="5 ukers ferie (tariffestet)" />
-                    <flux:checkbox wire:model="over60" label="Over 60 ar" />
-                    <flux:checkbox wire:model="otpEnabled" label="OTP aktivert" />
-                </div>
 
-                <flux:separator />
-
-                <flux:field>
-                    <flux:label>Kontonummer</flux:label>
-                    <flux:input wire:model="kontonummer" placeholder="11 siffer" maxlength="11" />
-                    <flux:error name="kontonummer" />
-                </flux:field>
-
-                <flux:checkbox wire:model="isActive" label="Aktiv i lonnsystemet" />
-
-                <div class="flex justify-end gap-3 pt-4">
+                <div class="flex justify-end gap-3 pt-6 mt-6 border-t border-zinc-200 dark:border-zinc-700">
                     <flux:button wire:click="closeModal" variant="ghost">Avbryt</flux:button>
                     <flux:button type="submit" variant="primary">
                         {{ $isEditing ? 'Lagre endringer' : 'Legg til ansatt' }}

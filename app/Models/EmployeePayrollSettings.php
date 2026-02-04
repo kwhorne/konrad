@@ -27,6 +27,17 @@ class EmployeePayrollSettings extends Model
     protected $fillable = [
         'user_id',
         'ansattnummer',
+        'personnummer',
+        'personal_email',
+        'phone',
+        'address_street',
+        'address_postal_code',
+        'address_city',
+        'address_country',
+        'birth_date',
+        'emergency_contact_name',
+        'emergency_contact_relation',
+        'emergency_contact_phone',
         'ansatt_fra',
         'ansatt_til',
         'stillingsprosent',
@@ -43,6 +54,7 @@ class EmployeePayrollSettings extends Model
         'skattekort_gyldig_fra',
         'skattekort_gyldig_til',
         'skattekort_hentet_at',
+        'skattekort_data',
         'feriepenger_prosent',
         'ferie_5_uker',
         'over_60',
@@ -57,6 +69,7 @@ class EmployeePayrollSettings extends Model
     protected function casts(): array
     {
         return [
+            'birth_date' => 'date',
             'ansatt_fra' => 'date',
             'ansatt_til' => 'date',
             'stillingsprosent' => 'decimal:2',
@@ -69,6 +82,7 @@ class EmployeePayrollSettings extends Model
             'skattekort_gyldig_fra' => 'date',
             'skattekort_gyldig_til' => 'date',
             'skattekort_hentet_at' => 'datetime',
+            'skattekort_data' => 'array',
             'feriepenger_prosent' => 'decimal:2',
             'ferie_5_uker' => 'boolean',
             'over_60' => 'boolean',
@@ -176,6 +190,27 @@ class EmployeePayrollSettings extends Model
         }
 
         return max(0, $this->frikort_belop - $this->frikort_brukt);
+    }
+
+    /**
+     * Get full address as a single string.
+     */
+    public function getFullAddressAttribute(): ?string
+    {
+        $parts = array_filter([
+            $this->address_street,
+            trim(($this->address_postal_code ?? '').' '.($this->address_city ?? '')),
+        ]);
+
+        return $parts ? implode(', ', $parts) : null;
+    }
+
+    /**
+     * Calculate age from birth date.
+     */
+    public function getAgeAttribute(): ?int
+    {
+        return $this->birth_date?->age;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Livewire\Payroll;
 
 use App\Models\EmployeePayrollSettings;
 use App\Models\User;
+use App\Services\Payroll\SkattekortService;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,6 +24,33 @@ class EmployeePayrollManager extends Component
     public ?int $userId = null;
 
     public ?string $ansattnummer = null;
+
+    public ?string $personnummer = null;
+
+    // Personal info
+    public ?string $personalEmail = null;
+
+    public ?string $phone = null;
+
+    public ?string $addressStreet = null;
+
+    public ?string $addressPostalCode = null;
+
+    public ?string $addressCity = null;
+
+    public string $addressCountry = 'NO';
+
+    public ?string $birthDate = null;
+
+    // Emergency contact
+    public ?string $emergencyContactName = null;
+
+    public ?string $emergencyContactRelation = null;
+
+    public ?string $emergencyContactPhone = null;
+
+    // Current tab in modal
+    public string $activeTab = 'employment';
 
     public ?string $ansattFra = null;
 
@@ -67,6 +95,17 @@ class EmployeePayrollManager extends Component
         return [
             'userId' => 'required|exists:users,id',
             'ansattnummer' => 'nullable|string|max:20',
+            'personnummer' => ['nullable', 'string', 'size:11', 'regex:/^\d{11}$/'],
+            'personalEmail' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'addressStreet' => 'nullable|string|max:255',
+            'addressPostalCode' => 'nullable|string|max:10',
+            'addressCity' => 'nullable|string|max:100',
+            'addressCountry' => 'nullable|string|size:2',
+            'birthDate' => 'nullable|date|before:today',
+            'emergencyContactName' => 'nullable|string|max:255',
+            'emergencyContactRelation' => 'nullable|string|max:100',
+            'emergencyContactPhone' => 'nullable|string|max:20',
             'ansattFra' => 'nullable|date',
             'ansattTil' => 'nullable|date|after_or_equal:ansattFra',
             'stillingsprosent' => 'required|numeric|min:0|max:100',
@@ -97,8 +136,10 @@ class EmployeePayrollManager extends Component
     public function openCreateModal(): void
     {
         $this->reset([
-            'editingId', 'userId', 'ansattnummer', 'ansattFra', 'ansattTil',
-            'stillingsprosent', 'stilling', 'lonnType', 'maanedslonn', 'timelonn',
+            'editingId', 'userId', 'ansattnummer', 'personnummer',
+            'personalEmail', 'phone', 'addressStreet', 'addressPostalCode', 'addressCity',
+            'birthDate', 'emergencyContactName', 'emergencyContactRelation', 'emergencyContactPhone',
+            'ansattFra', 'ansattTil', 'stillingsprosent', 'stilling', 'lonnType', 'maanedslonn', 'timelonn',
             'aarslonn', 'skattType', 'skattetabell', 'skatteprosent', 'frikortBelop',
             'feriepengerProsent', 'ferie5Uker', 'over60', 'otpEnabled', 'otpProsent',
             'kontonummer', 'isActive',
@@ -108,6 +149,8 @@ class EmployeePayrollManager extends Component
         $this->otpProsent = 2.0;
         $this->otpEnabled = true;
         $this->isActive = true;
+        $this->addressCountry = 'NO';
+        $this->activeTab = 'employment';
         $this->isEditing = false;
         $this->showModal = true;
     }
@@ -119,6 +162,17 @@ class EmployeePayrollManager extends Component
         $this->editingId = $id;
         $this->userId = $settings->user_id;
         $this->ansattnummer = $settings->ansattnummer;
+        $this->personnummer = $settings->personnummer;
+        $this->personalEmail = $settings->personal_email;
+        $this->phone = $settings->phone;
+        $this->addressStreet = $settings->address_street;
+        $this->addressPostalCode = $settings->address_postal_code;
+        $this->addressCity = $settings->address_city;
+        $this->addressCountry = $settings->address_country ?? 'NO';
+        $this->birthDate = $settings->birth_date?->format('Y-m-d');
+        $this->emergencyContactName = $settings->emergency_contact_name;
+        $this->emergencyContactRelation = $settings->emergency_contact_relation;
+        $this->emergencyContactPhone = $settings->emergency_contact_phone;
         $this->ansattFra = $settings->ansatt_fra?->format('Y-m-d');
         $this->ansattTil = $settings->ansatt_til?->format('Y-m-d');
         $this->stillingsprosent = (float) $settings->stillingsprosent;
@@ -156,6 +210,17 @@ class EmployeePayrollManager extends Component
         $data = [
             'user_id' => $this->userId,
             'ansattnummer' => $this->ansattnummer,
+            'personnummer' => $this->personnummer,
+            'personal_email' => $this->personalEmail,
+            'phone' => $this->phone,
+            'address_street' => $this->addressStreet,
+            'address_postal_code' => $this->addressPostalCode,
+            'address_city' => $this->addressCity,
+            'address_country' => $this->addressCountry,
+            'birth_date' => $this->birthDate,
+            'emergency_contact_name' => $this->emergencyContactName,
+            'emergency_contact_relation' => $this->emergencyContactRelation,
+            'emergency_contact_phone' => $this->emergencyContactPhone,
             'ansatt_fra' => $this->ansattFra,
             'ansatt_til' => $this->ansattTil,
             'stillingsprosent' => $this->stillingsprosent,
@@ -194,6 +259,34 @@ class EmployeePayrollManager extends Component
         $settings = EmployeePayrollSettings::findOrFail($id);
         $settings->delete();
         session()->flash('success', 'Ansattoppsett slettet.');
+    }
+
+    public function fetchTaxCard(int $id): void
+    {
+        $settings = EmployeePayrollSettings::findOrFail($id);
+
+        try {
+            $service = app(SkattekortService::class);
+            $result = $service->fetchTaxCard($settings);
+
+            session()->flash('success', 'Skattekort hentet. Trekktype: '.ucfirst($result['trekktype'] ?? 'ukjent'));
+
+            // Refresh the form data if we're editing this employee
+            if ($this->editingId === $id) {
+                $this->openEditModal($id);
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+    }
+
+    public function fetchTaxCardForCurrent(): void
+    {
+        if (! $this->editingId) {
+            return;
+        }
+
+        $this->fetchTaxCard($this->editingId);
     }
 
     public function render()

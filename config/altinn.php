@@ -31,6 +31,8 @@ return [
             'aksjonaerregister' => 'skatteetaten:aksjonaerregister',
             'skattemelding' => 'skatteetaten:skattemelding',
             'arsregnskap' => 'brreg:arsregnskap',
+            'skattekort' => 'skatteetaten:skattekort',
+            'amelding' => 'skatteetaten:amelding.write',
         ],
     ],
 
