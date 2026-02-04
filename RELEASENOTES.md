@@ -1,5 +1,34 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.4.5
+**Dato:** 4. februar 2026
+
+### Forbedret dokumenthåndtering fra kontaktkortet
+
+- **Dokumentvisning** - Klikk på et tilbud, ordre eller faktura i kontaktkortet for å se detaljer i en elegant flyout-modal
+- **Endre tilbudsstatus** - Endre status direkte fra modalen uten å forlate kontaktkortet
+- **Send e-post** - Send tilbud på e-post direkte fra dokumentmodalen med ett klikk
+- **Sendt-indikator** - Se når dokumentet sist ble sendt og send på nytt om nødvendig
+
+### Kompakt PDF-layout
+
+- **Bedre plassutnyttelse** - Tilbud, ordrer og fakturaer med få linjer får nå plass på én side
+- **Redusert mellomrom** - Marginer, padding og fontstørrelser er optimalisert for bedre lesbarhet
+- **Profesjonelt utseende** - Dokumentene ser fortsatt profesjonelle ut, bare mer kompakte
+
+### Feilrettinger
+
+- **Dager vises som hele tall** - Frister og forfallsdager viser nå "3 dager" i stedet for "3.505..."
+- **Norske tegn** - "Økonomi" vises nå korrekt i dashboard-snarveier
+- **Notatvisning** - Notater med rik tekst rendres nå korrekt i stedet for å vise HTML-tagger
+- **VoucherManager** - Fikset feil ved åpning av bilagsregistrering
+
+### Tips
+
+Åpne en kontakt og gå til **Dokumenter**-fanen. Klikk på et tilbud for å se detaljene. I modalen kan du endre status via dropdown-menyen og sende tilbudet på e-post med ett klikk. E-posten inkluderer tilbudet som PDF-vedlegg.
+
+---
+
 ## Versjon 1.4.4
 **Dato:** 2. februar 2026
 

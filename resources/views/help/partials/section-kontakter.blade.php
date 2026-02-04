@@ -73,9 +73,18 @@
                             <li>Legg til linjer med produkter fra vareregisteret</li>
                         </ol>
 
+                        <p><strong>Dokumentdetaljer og hurtighandlinger:</strong></p>
+                        <ul>
+                            <li>Klikk på et dokument i listen for å se detaljer i en flyout-modal</li>
+                            <li>For tilbud: Endre status direkte fra modalen via dropdown-menyen</li>
+                            <li>Send dokumentet på e-post med ett klikk - PDF vedlegges automatisk</li>
+                            <li>Se når dokumentet sist ble sendt og send på nytt om nødvendig</li>
+                            <li>Forhåndsvis eller last ned PDF direkte fra modalen</li>
+                        </ul>
+
                         <flux:callout variant="success" icon="light-bulb" class="not-prose my-4">
-                            <flux:callout.heading>Tips: Opprett og legg til linjer</flux:callout.heading>
-                            <flux:callout.text>Når du oppretter et nytt dokument, forblir modalen åpen så du kan legge til varelinjer med en gang.</flux:callout.text>
+                            <flux:callout.heading>Tips: Rask oppfølging</flux:callout.heading>
+                            <flux:callout.text>Klikk på et tilbud for å se detaljene, endre status til "Sendt" og send e-post - alt uten å forlate kontaktkortet.</flux:callout.text>
                         </flux:callout>
                     </div>
                 </flux:accordion.content>

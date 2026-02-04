@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Mail\DocumentMail;
 use App\Models\Contact;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Quote;
+use App\Models\QuoteStatus;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class ContactDocumentsManager extends Component
@@ -18,6 +21,8 @@ class ContactDocumentsManager extends Component
 
     public ?int $detailId = null;
 
+    public ?int $selectedStatusId = null;
+
     public function mount(int $contactId): void
     {
         $this->contactId = $contactId;
@@ -27,6 +32,13 @@ class ContactDocumentsManager extends Component
     {
         $this->detailType = $type;
         $this->detailId = $id;
+
+        // Set the current status for quote
+        if ($type === 'quote') {
+            $quote = Quote::find($id);
+            $this->selectedStatusId = $quote?->quote_status_id;
+        }
+
         $this->showDetailModal = true;
     }
 
@@ -35,6 +47,60 @@ class ContactDocumentsManager extends Component
         $this->showDetailModal = false;
         $this->detailType = null;
         $this->detailId = null;
+        $this->selectedStatusId = null;
+    }
+
+    public function updateQuoteStatus(): void
+    {
+        if ($this->detailType !== 'quote' || ! $this->detailId || ! $this->selectedStatusId) {
+            return;
+        }
+
+        $quote = Quote::find($this->detailId);
+        if ($quote) {
+            $quote->update(['quote_status_id' => $this->selectedStatusId]);
+            $this->dispatch('$refresh');
+        }
+    }
+
+    public function sendQuoteEmail(): void
+    {
+        if ($this->detailType !== 'quote' || ! $this->detailId) {
+            return;
+        }
+
+        $quote = Quote::with('contact')->find($this->detailId);
+        if (! $quote) {
+            return;
+        }
+
+        $email = $quote->contact?->email;
+        if (! $email) {
+            session()->flash('error', 'Kontakten har ingen e-postadresse.');
+
+            return;
+        }
+
+        Mail::to($email)->send(new DocumentMail($quote));
+
+        $quote->update(['sent_at' => now()]);
+
+        // Update status to 'sent' if it exists
+        $sentStatus = QuoteStatus::where('code', 'sent')->first();
+        if ($sentStatus) {
+            $quote->update(['quote_status_id' => $sentStatus->id]);
+            $this->selectedStatusId = $sentStatus->id;
+        }
+
+        $this->dispatch('$refresh');
+        session()->flash('success', 'Tilbudet ble sendt til '.$email);
+    }
+
+    public function getQuoteStatusesProperty()
+    {
+        return QuoteStatus::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
     }
 
     public function getContactProperty(): Contact

@@ -226,18 +226,25 @@
                     <div>
                         <span class="text-zinc-500 dark:text-zinc-400">Status</span>
                         <div class="mt-1">
-                            @php
-                                $status = match($detailType) {
-                                    'quote' => $this->selectedDocument->quoteStatus,
-                                    'order' => $this->selectedDocument->orderStatus,
-                                    'invoice' => $this->selectedDocument->invoiceStatus,
-                                    default => null
-                                };
-                            @endphp
-                            @if($status)
-                                <flux:badge size="sm" :color="$status->color ?? 'zinc'">
-                                    {{ $status->name }}
-                                </flux:badge>
+                            @if($detailType === 'quote')
+                                <flux:select wire:model="selectedStatusId" wire:change="updateQuoteStatus" size="sm" class="w-full">
+                                    @foreach($this->quoteStatuses as $status)
+                                        <flux:select.option value="{{ $status->id }}">{{ $status->name }}</flux:select.option>
+                                    @endforeach
+                                </flux:select>
+                            @else
+                                @php
+                                    $status = match($detailType) {
+                                        'order' => $this->selectedDocument->orderStatus,
+                                        'invoice' => $this->selectedDocument->invoiceStatus,
+                                        default => null
+                                    };
+                                @endphp
+                                @if($status)
+                                    <flux:badge size="sm" :color="$status->color ?? 'zinc'">
+                                        {{ $status->name }}
+                                    </flux:badge>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -345,31 +352,57 @@
                 <flux:separator />
 
                 {{-- Actions --}}
-                <div class="flex justify-between">
-                    <flux:button type="button" wire:click="closeDetail" variant="ghost">Lukk</flux:button>
-                    <div class="flex gap-2">
-                        @if($detailType === 'quote')
-                            <flux:button href="{{ route('quotes.preview', $this->selectedDocument) }}" target="_blank" variant="outline" icon="eye">
-                                Forhandsvis
+                <div class="flex flex-col gap-3">
+                    @if($detailType === 'quote')
+                        <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                            <div>
+                                <flux:text class="font-medium text-zinc-900 dark:text-white">Send på e-post</flux:text>
+                                <flux:text class="text-xs text-zinc-500 dark:text-zinc-400">
+                                    @if($this->selectedDocument->sent_at)
+                                        Sist sendt {{ $this->selectedDocument->sent_at->format('d.m.Y H:i') }}
+                                    @else
+                                        Ikke sendt ennå
+                                    @endif
+                                </flux:text>
+                            </div>
+                            <flux:button
+                                wire:click="sendQuoteEmail"
+                                wire:confirm="Send tilbudet til {{ $this->contact->email ?? 'kunden' }}?"
+                                variant="{{ $this->selectedDocument->sent_at ? 'outline' : 'primary' }}"
+                                icon="paper-airplane"
+                                size="sm"
+                            >
+                                {{ $this->selectedDocument->sent_at ? 'Send på nytt' : 'Send e-post' }}
                             </flux:button>
-                            <flux:button href="{{ route('quotes.pdf', $this->selectedDocument) }}" target="_blank" variant="primary" icon="document-arrow-down">
-                                Last ned PDF
-                            </flux:button>
-                        @elseif($detailType === 'order')
-                            <flux:button href="{{ route('orders.preview', $this->selectedDocument) }}" target="_blank" variant="outline" icon="eye">
-                                Forhandsvis
-                            </flux:button>
-                            <flux:button href="{{ route('orders.pdf', $this->selectedDocument) }}" target="_blank" variant="primary" icon="document-arrow-down">
-                                Last ned PDF
-                            </flux:button>
-                        @elseif($detailType === 'invoice')
-                            <flux:button href="{{ route('invoices.preview', $this->selectedDocument) }}" target="_blank" variant="outline" icon="eye">
-                                Forhandsvis
-                            </flux:button>
-                            <flux:button href="{{ route('invoices.pdf', $this->selectedDocument) }}" target="_blank" variant="primary" icon="document-arrow-down">
-                                Last ned PDF
-                            </flux:button>
-                        @endif
+                        </div>
+                    @endif
+
+                    <div class="flex justify-between">
+                        <flux:button type="button" wire:click="closeDetail" variant="ghost">Lukk</flux:button>
+                        <div class="flex gap-2">
+                            @if($detailType === 'quote')
+                                <flux:button href="{{ route('quotes.preview', $this->selectedDocument) }}" target="_blank" variant="outline" icon="eye">
+                                    Forhåndsvis
+                                </flux:button>
+                                <flux:button href="{{ route('quotes.pdf', $this->selectedDocument) }}" target="_blank" variant="primary" icon="document-arrow-down">
+                                    Last ned PDF
+                                </flux:button>
+                            @elseif($detailType === 'order')
+                                <flux:button href="{{ route('orders.preview', $this->selectedDocument) }}" target="_blank" variant="outline" icon="eye">
+                                    Forhåndsvis
+                                </flux:button>
+                                <flux:button href="{{ route('orders.pdf', $this->selectedDocument) }}" target="_blank" variant="primary" icon="document-arrow-down">
+                                    Last ned PDF
+                                </flux:button>
+                            @elseif($detailType === 'invoice')
+                                <flux:button href="{{ route('invoices.preview', $this->selectedDocument) }}" target="_blank" variant="outline" icon="eye">
+                                    Forhåndsvis
+                                </flux:button>
+                                <flux:button href="{{ route('invoices.pdf', $this->selectedDocument) }}" target="_blank" variant="primary" icon="document-arrow-down">
+                                    Last ned PDF
+                                </flux:button>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
