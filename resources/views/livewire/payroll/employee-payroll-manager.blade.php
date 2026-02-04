@@ -71,6 +71,11 @@
                                     <flux:menu.item wire:click="openEditModal({{ $employee->id }})" icon="pencil">
                                         Rediger
                                     </flux:menu.item>
+                                    @if($employee->personnummer)
+                                        <flux:menu.item wire:click="fetchTaxCard({{ $employee->id }})" icon="arrow-path">
+                                            Hent skattekort
+                                        </flux:menu.item>
+                                    @endif
                                     <flux:menu.separator />
                                     <flux:menu.item wire:click="delete({{ $employee->id }})" wire:confirm="Er du sikker på at du vil slette dette oppsettet?" icon="trash" variant="danger">
                                         Slett
