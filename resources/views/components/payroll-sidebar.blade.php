@@ -20,7 +20,7 @@
         </div>
     </a>
 
-    <flux:input as="button" variant="filled" placeholder="Sok..." icon="magnifying-glass" />
+    <flux:input as="button" variant="filled" placeholder="Søk..." icon="magnifying-glass" />
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="home" href="{{ route('payroll.dashboard') }}" :current="$current === 'payroll-dashboard'">
@@ -34,20 +34,20 @@
                 Ansatte
             </flux:navlist.item>
             <flux:navlist.item icon="list-bullet" href="{{ route('payroll.pay-types') }}" :current="$current === 'pay-types'">
-                Lonnsarter
+                Lønnsarter
             </flux:navlist.item>
         </flux:navlist.group>
 
-        <flux:navlist.group expandable heading="Lonnskjoring" class="grid">
+        <flux:navlist.group expandable heading="Lønnskjøring" class="grid">
             <flux:navlist.item icon="calculator" href="{{ route('payroll.runs') }}" :current="$current === 'runs'">
-                Lonnskjoringer
+                Lønnskjøringer
             </flux:navlist.item>
             <flux:navlist.item icon="document-text" href="{{ route('payroll.payslips') }}" :current="$current === 'payslips'">
-                Lonnsslipper
+                Lønnsslipper
             </flux:navlist.item>
         </flux:navlist.group>
 
-        <flux:navlist.group expandable heading="Arlig" class="grid">
+        <flux:navlist.group expandable heading="Årlig" class="grid">
             <flux:navlist.item icon="sun" href="{{ route('payroll.holiday-pay') }}" :current="$current === 'holiday-pay'">
                 Feriepenger
             </flux:navlist.item>
