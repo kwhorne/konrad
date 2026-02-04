@@ -28,12 +28,10 @@
             "wordCount" => str_word_count(strip_tags($post->body ?? '')),
             "inLanguage" => "nb-NO"
         ];
-        if ($post->author) {
-            $articleSchema["author"] = [
-                "@type" => "Person",
-                "name" => $post->author->name
-            ];
-        }
+        $articleSchema["author"] = [
+            "@type" => "Organization",
+            "name" => "Konrad Office AS"
+        ];
         if ($post->featured_image) {
             $articleSchema["image"] = Storage::url($post->featured_image);
         }
@@ -71,17 +69,15 @@
                     </h1>
 
                     <div class="flex flex-wrap items-center gap-4 text-zinc-600 dark:text-zinc-400 mb-8">
-                        @if($post->author)
-                            <div class="flex items-center gap-2">
-                                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center">
-                                    <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">
-                                        {{ substr($post->author->name, 0, 2) }}
-                                    </span>
-                                </div>
-                                <span>{{ $post->author->name }}</span>
+                        <div class="flex items-center gap-2">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center">
+                                <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">
+                                    KO
+                                </span>
                             </div>
-                            <span class="hidden sm:inline">&middot;</span>
-                        @endif
+                            <span>Konrad Office AS</span>
+                        </div>
+                        <span class="hidden sm:inline">&middot;</span>
                         <time datetime="{{ $post->published_at?->toDateString() }}">
                             {{ $post->published_at?->format('d. F Y') ?? $post->created_at->format('d. F Y') }}
                         </time>

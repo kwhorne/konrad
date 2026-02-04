@@ -136,16 +136,14 @@
                                             <!-- Author & Read More -->
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-2">
-                                                    @if($post->author)
-                                                        <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center">
-                                                            <span class="text-xs font-medium text-indigo-600 dark:text-indigo-400">
-                                                                {{ substr($post->author->name, 0, 2) }}
-                                                            </span>
-                                                        </div>
-                                                        <span class="text-sm text-zinc-500 dark:text-zinc-400">
-                                                            {{ $post->author->name }}
+                                                    <div class="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center">
+                                                        <span class="text-xs font-medium text-indigo-600 dark:text-indigo-400">
+                                                            KO
                                                         </span>
-                                                    @endif
+                                                    </div>
+                                                    <span class="text-sm text-zinc-500 dark:text-zinc-400">
+                                                        Konrad Office AS
+                                                    </span>
                                                 </div>
                                                 <flux:button
                                                     variant="ghost"
