@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 // SEO routes
 Route::get('/sitemap.xml', [SitemapController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
+Route::get('/llms.txt', [SitemapController::class, 'llmsTxt'])->name('llms-txt');
 
 Route::get('/', function () {
     return view('welcome');
