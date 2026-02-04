@@ -15,9 +15,10 @@
     </div>
 
     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             @if($stockLevels->count() > 0)
-                <div class="overflow-x-auto">
+                {{-- Desktop: Table --}}
+                <div class="hidden lg:block overflow-x-auto">
                     <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700">
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
@@ -76,6 +77,57 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                {{-- Mobile: Cards --}}
+                <div class="lg:hidden space-y-3">
+                    @foreach($stockLevels as $level)
+                        @php
+                            $available = $level->quantity_on_hand - $level->quantity_reserved;
+                            $isBelowReorder = $level->product?->reorder_point && $available <= $level->product->reorder_point;
+                        @endphp
+                        <div wire:key="level-card-{{ $level->id }}" class="p-4 rounded-lg border {{ $isBelowReorder ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' : 'bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700' }}">
+                            <div class="flex items-start justify-between gap-3 mb-3">
+                                <div class="flex-1 min-w-0">
+                                    <flux:text class="font-medium text-zinc-900 dark:text-white truncate">{{ $level->product?->name ?? 'Ukjent' }}</flux:text>
+                                    @if($level->product?->sku)
+                                        <flux:text class="text-sm text-zinc-500">{{ $level->product->sku }}</flux:text>
+                                    @endif
+                                </div>
+                                @if($isBelowReorder)
+                                    <flux:badge color="amber" size="sm">Lavt</flux:badge>
+                                @endif
+                            </div>
+
+                            @if($level->stockLocation?->name)
+                                <div class="text-sm text-zinc-600 dark:text-zinc-400 mb-3">
+                                    <flux:icon.map-pin class="w-4 h-4 inline-block mr-1" />
+                                    {{ $level->stockLocation->name }}
+                                </div>
+                            @endif
+
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div>
+                                    <span class="text-zinc-500 dark:text-zinc-400">På lager:</span>
+                                    <span class="ml-1 font-medium text-zinc-900 dark:text-white">{{ number_format($level->quantity_on_hand, 2, ',', ' ') }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-zinc-500 dark:text-zinc-400">Tilgjengelig:</span>
+                                    <span class="ml-1 font-medium {{ $isBelowReorder ? 'text-amber-600 dark:text-amber-400' : 'text-zinc-900 dark:text-white' }}">{{ number_format($available, 2, ',', ' ') }}</span>
+                                </div>
+                                @if($level->quantity_reserved > 0)
+                                    <div>
+                                        <span class="text-zinc-500 dark:text-zinc-400">Reservert:</span>
+                                        <span class="ml-1 text-amber-600 dark:text-amber-400">{{ number_format($level->quantity_reserved, 2, ',', ' ') }}</span>
+                                    </div>
+                                @endif
+                                <div>
+                                    <span class="text-zinc-500 dark:text-zinc-400">Verdi:</span>
+                                    <span class="ml-1 font-medium text-zinc-900 dark:text-white">{{ number_format($level->total_value ?? 0, 2, ',', ' ') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
                 <div class="mt-4">

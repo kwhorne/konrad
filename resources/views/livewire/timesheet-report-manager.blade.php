@@ -78,7 +78,7 @@
 
     {{-- Summary cards --}}
     @if(isset($data['summary']))
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-4">
                 <div class="text-sm text-zinc-500 dark:text-zinc-400">Totalt timer</div>
                 <div class="text-2xl font-bold text-zinc-900 dark:text-white">{{ number_format($data['summary']['total_hours'], 1) }}</div>

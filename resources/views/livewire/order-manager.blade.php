@@ -39,9 +39,10 @@
 
     {{-- Orders table --}}
     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
-        <div class="p-6">
+        <div class="p-4 sm:p-6">
             @if($orders->count() > 0)
-                <div class="overflow-x-auto">
+                {{-- Desktop: Table --}}
+                <div class="hidden lg:block overflow-x-auto">
                     <table class="min-w-full divide-y divide-zinc-200 dark:divide-zinc-700">
                         <thead class="bg-zinc-50 dark:bg-zinc-800">
                             <tr>
@@ -130,6 +131,77 @@
                         </tbody>
                     </table>
                 </div>
+
+                {{-- Mobile: Cards --}}
+                <div class="lg:hidden space-y-3">
+                    @foreach($orders as $order)
+                        <div wire:key="order-card-{{ $order->id }}" class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                            <div class="flex items-start justify-between gap-3 mb-3">
+                                <div class="flex-1 min-w-0">
+                                    <flux:text class="font-medium text-zinc-900 dark:text-white truncate">{{ $order->title }}</flux:text>
+                                    <div class="flex items-center gap-2 mt-1 flex-wrap">
+                                        <flux:badge variant="outline" size="sm">{{ $order->order_number }}</flux:badge>
+                                        @if($order->orderStatus)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{ $this->getStatusColorClass($order->orderStatus->color) }}">
+                                                {{ $order->orderStatus->name }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <flux:dropdown align="end">
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="touch-target" />
+                                    <flux:menu>
+                                        <flux:menu.item wire:click="openModal({{ $order->id }})" icon="pencil">Rediger</flux:menu.item>
+                                        @if($order->can_convert)
+                                            <flux:menu.item wire:click="convertToInvoice({{ $order->id }})" wire:confirm="Konverter ordren til faktura?" icon="banknotes">Konverter til faktura</flux:menu.item>
+                                        @endif
+                                        <flux:menu.item onclick="event.preventDefault(); if(confirm('Send ordren til {{ $order->contact?->email ?? 'kunden' }}?')) { document.getElementById('send-order-mobile-{{ $order->id }}').submit(); }" icon="paper-airplane">
+                                            {{ $order->sent_at ? 'Send på nytt' : 'Send på e-post' }}
+                                        </flux:menu.item>
+                                        <form id="send-order-mobile-{{ $order->id }}" action="{{ route('orders.send', $order) }}" method="POST" class="hidden">@csrf</form>
+                                        <flux:menu.item href="{{ route('orders.preview', $order) }}" icon="eye" target="_blank">Forhandsvis</flux:menu.item>
+                                        <flux:menu.item href="{{ route('orders.pdf', $order) }}" icon="document-arrow-down" target="_blank">Last ned PDF</flux:menu.item>
+                                        <flux:menu.separator />
+                                        <flux:menu.item wire:click="delete({{ $order->id }})" wire:confirm="Er du sikker på at du vil slette denne ordren?" icon="trash" variant="danger">Slett</flux:menu.item>
+                                    </flux:menu>
+                                </flux:dropdown>
+                            </div>
+
+                            @if($order->contact)
+                                <div class="text-sm text-zinc-600 dark:text-zinc-400 mb-3">
+                                    {{ $order->customer_name }}
+                                    @if($order->customer_reference)
+                                        <span class="text-zinc-500">(Ref: {{ $order->customer_reference }})</span>
+                                    @endif
+                                </div>
+                            @endif
+
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div>
+                                    <span class="text-zinc-500 dark:text-zinc-400">Ordredato:</span>
+                                    <span class="ml-1 text-zinc-900 dark:text-white">{{ $order->order_date?->format('d.m.Y') }}</span>
+                                </div>
+                                @if($order->delivery_date)
+                                    <div>
+                                        <span class="text-zinc-500 dark:text-zinc-400">Levering:</span>
+                                        <span class="ml-1 text-zinc-900 dark:text-white">{{ $order->delivery_date->format('d.m.Y') }}</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+                                <div>
+                                    <span class="text-zinc-500 dark:text-zinc-400 text-sm">Total:</span>
+                                    <span class="ml-1 font-medium text-zinc-900 dark:text-white">{{ number_format($order->total, 2, ',', ' ') }} kr</span>
+                                </div>
+                                @if($order->sent_at)
+                                    <flux:badge color="green" size="sm">Sendt</flux:badge>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
                 <div class="mt-6">{{ $orders->links() }}</div>
             @else
                 <div class="text-center py-12">
@@ -183,7 +255,7 @@
                     <flux:textarea wire:model="description" rows="2" placeholder="Beskrivelse..."></flux:textarea>
                 </flux:field>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <flux:field>
                         <flux:label>Kunde *</flux:label>
                         <flux:select wire:model.live="contact_id">
@@ -206,7 +278,7 @@
                     </flux:field>
                 </div>
 
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <flux:field>
                         <flux:label>Status</flux:label>
                         <flux:select wire:model="order_status_id">
@@ -238,9 +310,9 @@
                     <flux:text class="font-medium text-zinc-700 dark:text-zinc-300">Kundeadresse</flux:text>
                     <flux:input wire:model="customer_name" type="text" placeholder="Firmanavn" />
                     <flux:input wire:model="customer_address" type="text" placeholder="Adresse" />
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-1 xs:grid-cols-3 gap-2">
                         <flux:input wire:model="customer_postal_code" type="text" placeholder="Postnr" />
-                        <flux:input wire:model="customer_city" type="text" placeholder="Sted" class="col-span-2" />
+                        <flux:input wire:model="customer_city" type="text" placeholder="Sted" class="xs:col-span-2" />
                     </div>
                 </div>
 
@@ -248,9 +320,9 @@
                 <div class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg space-y-3">
                     <flux:text class="font-medium text-zinc-700 dark:text-zinc-300">Leveringsadresse</flux:text>
                     <flux:input wire:model="delivery_address" type="text" placeholder="Adresse" />
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-1 xs:grid-cols-3 gap-2">
                         <flux:input wire:model="delivery_postal_code" type="text" placeholder="Postnr" />
-                        <flux:input wire:model="delivery_city" type="text" placeholder="Sted" class="col-span-2" />
+                        <flux:input wire:model="delivery_city" type="text" placeholder="Sted" class="xs:col-span-2" />
                     </div>
                 </div>
 
@@ -339,7 +411,7 @@
                     @error('line_description')<flux:error>{{ $message }}</flux:error>@enderror
                 </flux:field>
 
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <flux:field>
                         <flux:label>Antall *</flux:label>
                         <flux:input wire:model="line_quantity" type="number" step="0.01" min="0.01" />
@@ -354,7 +426,7 @@
                     </flux:field>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <flux:field>
                         <flux:label>Rabatt %</flux:label>
                         <flux:input wire:model="line_discount_percent" type="number" step="0.01" min="0" max="100" />

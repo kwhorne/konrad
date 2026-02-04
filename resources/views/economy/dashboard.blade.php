@@ -39,18 +39,18 @@
                             <div class="text-3xl font-bold text-zinc-900 dark:text-white mb-4">
                                 {{ number_format($customerBalance, 2, ',', ' ') }} <span class="text-lg font-normal text-zinc-500">NOK</span>
                             </div>
-                            <div class="grid grid-cols-3 gap-2 text-sm">
-                                <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
-                                    <div class="text-green-600 dark:text-green-400 font-medium">{{ number_format($customerAging['1-30']['total'], 0, ',', ' ') }}</div>
-                                    <div class="text-xs text-zinc-500">1-30 dager</div>
+                            <div class="grid grid-cols-3 gap-1 sm:gap-2 text-sm">
+                                <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-1.5 sm:p-2 text-center">
+                                    <div class="text-green-600 dark:text-green-400 font-medium text-xs sm:text-sm truncate">{{ number_format($customerAging['1-30']['total'], 0, ',', ' ') }}</div>
+                                    <div class="text-xs text-zinc-500 truncate">1-30 d</div>
                                 </div>
-                                <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-2 text-center">
-                                    <div class="text-yellow-600 dark:text-yellow-400 font-medium">{{ number_format($customerAging['31-60']['total'], 0, ',', ' ') }}</div>
-                                    <div class="text-xs text-zinc-500">31-60 dager</div>
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-1.5 sm:p-2 text-center">
+                                    <div class="text-yellow-600 dark:text-yellow-400 font-medium text-xs sm:text-sm truncate">{{ number_format($customerAging['31-60']['total'], 0, ',', ' ') }}</div>
+                                    <div class="text-xs text-zinc-500 truncate">31-60 d</div>
                                 </div>
-                                <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-2 text-center">
-                                    <div class="text-red-600 dark:text-red-400 font-medium">{{ number_format($customerAging['90+']['total'], 0, ',', ' ') }}</div>
-                                    <div class="text-xs text-zinc-500">90+ dager</div>
+                                <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-1.5 sm:p-2 text-center">
+                                    <div class="text-red-600 dark:text-red-400 font-medium text-xs sm:text-sm truncate">{{ number_format($customerAging['90+']['total'], 0, ',', ' ') }}</div>
+                                    <div class="text-xs text-zinc-500 truncate">90+ d</div>
                                 </div>
                             </div>
                         </div>
@@ -76,18 +76,18 @@
                             <div class="text-3xl font-bold text-zinc-900 dark:text-white mb-4">
                                 {{ number_format($supplierBalance, 2, ',', ' ') }} <span class="text-lg font-normal text-zinc-500">NOK</span>
                             </div>
-                            <div class="grid grid-cols-3 gap-2 text-sm">
-                                <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
-                                    <div class="text-green-600 dark:text-green-400 font-medium">{{ number_format($supplierAging['1-30']['total'], 0, ',', ' ') }}</div>
-                                    <div class="text-xs text-zinc-500">1-30 dager</div>
+                            <div class="grid grid-cols-3 gap-1 sm:gap-2 text-sm">
+                                <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-1.5 sm:p-2 text-center">
+                                    <div class="text-green-600 dark:text-green-400 font-medium text-xs sm:text-sm truncate">{{ number_format($supplierAging['1-30']['total'], 0, ',', ' ') }}</div>
+                                    <div class="text-xs text-zinc-500 truncate">1-30 d</div>
                                 </div>
-                                <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-2 text-center">
-                                    <div class="text-yellow-600 dark:text-yellow-400 font-medium">{{ number_format($supplierAging['31-60']['total'], 0, ',', ' ') }}</div>
-                                    <div class="text-xs text-zinc-500">31-60 dager</div>
+                                <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-1.5 sm:p-2 text-center">
+                                    <div class="text-yellow-600 dark:text-yellow-400 font-medium text-xs sm:text-sm truncate">{{ number_format($supplierAging['31-60']['total'], 0, ',', ' ') }}</div>
+                                    <div class="text-xs text-zinc-500 truncate">31-60 d</div>
                                 </div>
-                                <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-2 text-center">
-                                    <div class="text-red-600 dark:text-red-400 font-medium">{{ number_format($supplierAging['90+']['total'], 0, ',', ' ') }}</div>
-                                    <div class="text-xs text-zinc-500">90+ dager</div>
+                                <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-1.5 sm:p-2 text-center">
+                                    <div class="text-red-600 dark:text-red-400 font-medium text-xs sm:text-sm truncate">{{ number_format($supplierAging['90+']['total'], 0, ',', ' ') }}</div>
+                                    <div class="text-xs text-zinc-500 truncate">90+ d</div>
                                 </div>
                             </div>
                         </div>
@@ -103,9 +103,9 @@
             <!-- Quick Links -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <flux:heading size="lg" class="text-zinc-900 dark:text-white mb-4">Økonomi</flux:heading>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                             <a href="{{ route('economy.vouchers') }}" class="flex items-center gap-3 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
                                 <flux:icon.document-plus class="w-6 h-6 text-emerald-500" />
                                 <div>
@@ -139,9 +139,9 @@
                 </flux:card>
 
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
-                    <div class="p-6">
+                    <div class="p-4 sm:p-6">
                         <flux:heading size="lg" class="text-zinc-900 dark:text-white mb-4">Årsoppgjør</flux:heading>
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                             @if(config('features.shareholders'))
                                 <a href="{{ route('economy.shareholders') }}" class="flex items-center gap-3 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
                                     <flux:icon.users class="w-6 h-6 text-indigo-500" />

@@ -12,6 +12,18 @@
 
 @theme {
     --font-sans: Inter, sans-serif;
+
+    /* Extra breakpoint for small mobile devices */
+    --breakpoint-xs: 30rem; /* 480px */
+
+    /* Touch-friendly minimum size (44px) */
+    --spacing-touch: 2.75rem;
+}
+
+/* Touch target utility for interactive elements */
+.touch-target {
+    min-height: var(--spacing-touch);
+    min-width: var(--spacing-touch);
 }
 
 /* Release notes modal styling */

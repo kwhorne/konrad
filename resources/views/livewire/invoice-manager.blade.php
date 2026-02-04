@@ -54,113 +54,209 @@
 
     <!-- Table -->
     <flux:card>
-        <flux:table>
-            <flux:table.columns>
-                <flux:table.column>Nummer</flux:table.column>
-                <flux:table.column>Tittel</flux:table.column>
-                <flux:table.column>Kunde</flux:table.column>
-                <flux:table.column>Dato</flux:table.column>
-                <flux:table.column>Forfall</flux:table.column>
-                <flux:table.column class="text-right">Total</flux:table.column>
-                <flux:table.column class="text-right">Betalt</flux:table.column>
-                <flux:table.column>Status</flux:table.column>
-                <flux:table.column></flux:table.column>
-            </flux:table.columns>
+        {{-- Desktop: Table --}}
+        <div class="hidden lg:block">
+            <flux:table>
+                <flux:table.columns>
+                    <flux:table.column>Nummer</flux:table.column>
+                    <flux:table.column>Tittel</flux:table.column>
+                    <flux:table.column>Kunde</flux:table.column>
+                    <flux:table.column>Dato</flux:table.column>
+                    <flux:table.column>Forfall</flux:table.column>
+                    <flux:table.column class="text-right">Total</flux:table.column>
+                    <flux:table.column class="text-right">Betalt</flux:table.column>
+                    <flux:table.column>Status</flux:table.column>
+                    <flux:table.column></flux:table.column>
+                </flux:table.columns>
 
-            <flux:table.rows>
-                @forelse ($invoices as $invoice)
-                    <flux:table.row wire:key="invoice-{{ $invoice->id }}">
-                        <flux:table.cell>
-                            <div class="flex items-center gap-2">
+                <flux:table.rows>
+                    @forelse ($invoices as $invoice)
+                        <flux:table.row wire:key="invoice-{{ $invoice->id }}">
+                            <flux:table.cell>
+                                <div class="flex items-center gap-2">
+                                    @if ($invoice->is_credit_note)
+                                        <flux:badge color="purple" size="sm">K</flux:badge>
+                                    @endif
+                                    <span class="font-medium">{{ $invoice->invoice_number }}</span>
+                                </div>
+                            </flux:table.cell>
+                            <flux:table.cell>{{ $invoice->title }}</flux:table.cell>
+                            <flux:table.cell>
+                                {{ $invoice->contact?->company_name ?? $invoice->customer_name }}
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                {{ $invoice->invoice_date?->format('d.m.Y') }}
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                @if ($invoice->due_date)
+                                    <span @class([
+                                        'text-red-600 dark:text-red-400 font-medium' => $invoice->is_overdue,
+                                    ])>
+                                        {{ $invoice->due_date->format('d.m.Y') }}
+                                    </span>
+                                @endif
+                            </flux:table.cell>
+                            <flux:table.cell class="text-right font-medium">
+                                kr {{ number_format($invoice->total, 2, ',', ' ') }}
+                            </flux:table.cell>
+                            <flux:table.cell class="text-right">
+                                @if ($invoice->paid_amount > 0)
+                                    <span @class([
+                                        'text-green-600 dark:text-green-400' => $invoice->balance == 0,
+                                        'text-yellow-600 dark:text-yellow-400' => $invoice->balance > 0,
+                                    ])>
+                                        kr {{ number_format($invoice->paid_amount, 2, ',', ' ') }}
+                                    </span>
+                                @else
+                                    <span class="text-zinc-400">-</span>
+                                @endif
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                @if ($invoice->invoiceStatus)
+                                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {{ $this->getStatusColorClass($invoice->invoiceStatus->color) }}">
+                                        {{ $invoice->invoiceStatus->name }}
+                                    </span>
+                                @endif
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                <flux:dropdown align="end">
+                                    <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                    <flux:menu>
+                                        <flux:menu.item wire:click="openModal({{ $invoice->id }})" icon="pencil">
+                                            Rediger
+                                        </flux:menu.item>
+                                        <flux:menu.item onclick="event.preventDefault(); if(confirm('Send {{ $invoice->is_credit_note ? 'kreditnotaen' : 'fakturaen' }} til {{ $invoice->contact?->email ?? 'kunden' }}?')) { document.getElementById('send-invoice-{{ $invoice->id }}').submit(); }" icon="paper-airplane">
+                                            {{ $invoice->sent_at ? 'Send på nytt' : 'Send på e-post' }}
+                                        </flux:menu.item>
+                                        <form id="send-invoice-{{ $invoice->id }}" action="{{ route('invoices.send', $invoice) }}" method="POST" class="hidden">@csrf</form>
+                                        @if (!$invoice->is_credit_note)
+                                            <flux:menu.item wire:click="createCreditNote({{ $invoice->id }})" icon="arrow-uturn-left">
+                                                Opprett kreditnota
+                                            </flux:menu.item>
+                                        @endif
+                                        <flux:menu.item href="{{ route('invoices.preview', $invoice) }}" icon="eye" target="_blank">
+                                            Forhandsvis
+                                        </flux:menu.item>
+                                        <flux:menu.item href="{{ route('invoices.pdf', $invoice) }}" icon="document-arrow-down" target="_blank">
+                                            Last ned PDF
+                                        </flux:menu.item>
+                                        <flux:menu.separator />
+                                        <flux:menu.item wire:click="delete({{ $invoice->id }})" wire:confirm="Er du sikker på at du vil slette denne fakturaen?" icon="trash" variant="danger">
+                                            Slett
+                                        </flux:menu.item>
+                                    </flux:menu>
+                                </flux:dropdown>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @empty
+                        <flux:table.row>
+                            <flux:table.cell colspan="9" class="text-center text-zinc-500 dark:text-zinc-400">
+                                Ingen fakturaer funnet.
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @endforelse
+                </flux:table.rows>
+            </flux:table>
+
+            @if ($invoices->hasPages())
+                <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-700">
+                    {{ $invoices->links() }}
+                </div>
+            @endif
+        </div>
+
+        {{-- Mobile: Cards --}}
+        <div class="lg:hidden p-4 space-y-3">
+            @forelse ($invoices as $invoice)
+                <div wire:key="invoice-card-{{ $invoice->id }}" class="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700">
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 flex-wrap">
                                 @if ($invoice->is_credit_note)
                                     <flux:badge color="purple" size="sm">K</flux:badge>
                                 @endif
-                                <span class="font-medium">{{ $invoice->invoice_number }}</span>
+                                <span class="font-medium text-zinc-900 dark:text-white">{{ $invoice->invoice_number }}</span>
+                                @if ($invoice->invoiceStatus)
+                                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {{ $this->getStatusColorClass($invoice->invoiceStatus->color) }}">
+                                        {{ $invoice->invoiceStatus->name }}
+                                    </span>
+                                @endif
                             </div>
-                        </flux:table.cell>
-                        <flux:table.cell>{{ $invoice->title }}</flux:table.cell>
-                        <flux:table.cell>
-                            {{ $invoice->contact?->company_name ?? $invoice->customer_name }}
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            {{ $invoice->invoice_date?->format('d.m.Y') }}
-                        </flux:table.cell>
-                        <flux:table.cell>
+                            <flux:text class="text-sm text-zinc-600 dark:text-zinc-400 mt-1 truncate">{{ $invoice->title }}</flux:text>
+                        </div>
+                        <flux:dropdown align="end">
+                            <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" class="touch-target" />
+                            <flux:menu>
+                                <flux:menu.item wire:click="openModal({{ $invoice->id }})" icon="pencil">Rediger</flux:menu.item>
+                                <flux:menu.item onclick="event.preventDefault(); if(confirm('Send {{ $invoice->is_credit_note ? 'kreditnotaen' : 'fakturaen' }} til {{ $invoice->contact?->email ?? 'kunden' }}?')) { document.getElementById('send-invoice-mobile-{{ $invoice->id }}').submit(); }" icon="paper-airplane">
+                                    {{ $invoice->sent_at ? 'Send på nytt' : 'Send på e-post' }}
+                                </flux:menu.item>
+                                <form id="send-invoice-mobile-{{ $invoice->id }}" action="{{ route('invoices.send', $invoice) }}" method="POST" class="hidden">@csrf</form>
+                                @if (!$invoice->is_credit_note)
+                                    <flux:menu.item wire:click="createCreditNote({{ $invoice->id }})" icon="arrow-uturn-left">Opprett kreditnota</flux:menu.item>
+                                @endif
+                                <flux:menu.item href="{{ route('invoices.preview', $invoice) }}" icon="eye" target="_blank">Forhandsvis</flux:menu.item>
+                                <flux:menu.item href="{{ route('invoices.pdf', $invoice) }}" icon="document-arrow-down" target="_blank">Last ned PDF</flux:menu.item>
+                                <flux:menu.separator />
+                                <flux:menu.item wire:click="delete({{ $invoice->id }})" wire:confirm="Er du sikker på at du vil slette denne fakturaen?" icon="trash" variant="danger">Slett</flux:menu.item>
+                            </flux:menu>
+                        </flux:dropdown>
+                    </div>
+
+                    <div class="text-sm text-zinc-600 dark:text-zinc-400 mb-3">
+                        {{ $invoice->contact?->company_name ?? $invoice->customer_name }}
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <span class="text-zinc-500 dark:text-zinc-400">Dato:</span>
+                            <span class="ml-1 text-zinc-900 dark:text-white">{{ $invoice->invoice_date?->format('d.m.Y') }}</span>
+                        </div>
+                        <div>
+                            <span class="text-zinc-500 dark:text-zinc-400">Forfall:</span>
                             @if ($invoice->due_date)
                                 <span @class([
+                                    'ml-1',
                                     'text-red-600 dark:text-red-400 font-medium' => $invoice->is_overdue,
+                                    'text-zinc-900 dark:text-white' => !$invoice->is_overdue,
                                 ])>
                                     {{ $invoice->due_date->format('d.m.Y') }}
                                 </span>
                             @endif
-                        </flux:table.cell>
-                        <flux:table.cell class="text-right font-medium">
-                            kr {{ number_format($invoice->total, 2, ',', ' ') }}
-                        </flux:table.cell>
-                        <flux:table.cell class="text-right">
-                            @if ($invoice->paid_amount > 0)
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+                        <div>
+                            <span class="text-zinc-500 dark:text-zinc-400 text-sm">Total:</span>
+                            <span class="ml-1 font-medium text-zinc-900 dark:text-white">kr {{ number_format($invoice->total, 2, ',', ' ') }}</span>
+                        </div>
+                        @if ($invoice->paid_amount > 0)
+                            <div>
+                                <span class="text-zinc-500 dark:text-zinc-400 text-sm">Betalt:</span>
                                 <span @class([
+                                    'ml-1 font-medium',
                                     'text-green-600 dark:text-green-400' => $invoice->balance == 0,
                                     'text-yellow-600 dark:text-yellow-400' => $invoice->balance > 0,
                                 ])>
                                     kr {{ number_format($invoice->paid_amount, 2, ',', ' ') }}
                                 </span>
-                            @else
-                                <span class="text-zinc-400">-</span>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            @if ($invoice->invoiceStatus)
-                                <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {{ $this->getStatusColorClass($invoice->invoiceStatus->color) }}">
-                                    {{ $invoice->invoiceStatus->name }}
-                                </span>
-                            @endif
-                        </flux:table.cell>
-                        <flux:table.cell>
-                            <flux:dropdown align="end">
-                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
-                                <flux:menu>
-                                    <flux:menu.item wire:click="openModal({{ $invoice->id }})" icon="pencil">
-                                        Rediger
-                                    </flux:menu.item>
-                                    <flux:menu.item onclick="event.preventDefault(); if(confirm('Send {{ $invoice->is_credit_note ? 'kreditnotaen' : 'fakturaen' }} til {{ $invoice->contact?->email ?? 'kunden' }}?')) { document.getElementById('send-invoice-{{ $invoice->id }}').submit(); }" icon="paper-airplane">
-                                        {{ $invoice->sent_at ? 'Send på nytt' : 'Send på e-post' }}
-                                    </flux:menu.item>
-                                    <form id="send-invoice-{{ $invoice->id }}" action="{{ route('invoices.send', $invoice) }}" method="POST" class="hidden">@csrf</form>
-                                    @if (!$invoice->is_credit_note)
-                                        <flux:menu.item wire:click="createCreditNote({{ $invoice->id }})" icon="arrow-uturn-left">
-                                            Opprett kreditnota
-                                        </flux:menu.item>
-                                    @endif
-                                    <flux:menu.item href="{{ route('invoices.preview', $invoice) }}" icon="eye" target="_blank">
-                                        Forhandsvis
-                                    </flux:menu.item>
-                                    <flux:menu.item href="{{ route('invoices.pdf', $invoice) }}" icon="document-arrow-down" target="_blank">
-                                        Last ned PDF
-                                    </flux:menu.item>
-                                    <flux:menu.separator />
-                                    <flux:menu.item wire:click="delete({{ $invoice->id }})" wire:confirm="Er du sikker på at du vil slette denne fakturaen?" icon="trash" variant="danger">
-                                        Slett
-                                    </flux:menu.item>
-                                </flux:menu>
-                            </flux:dropdown>
-                        </flux:table.cell>
-                    </flux:table.row>
-                @empty
-                    <flux:table.row>
-                        <flux:table.cell colspan="9" class="text-center text-zinc-500 dark:text-zinc-400">
-                            Ingen fakturaer funnet.
-                        </flux:table.cell>
-                    </flux:table.row>
-                @endforelse
-            </flux:table.rows>
-        </flux:table>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-8 text-zinc-500 dark:text-zinc-400">
+                    Ingen fakturaer funnet.
+                </div>
+            @endforelse
 
-        @if ($invoices->hasPages())
-            <div class="mt-4 border-t border-zinc-200 pt-4 dark:border-zinc-700">
-                {{ $invoices->links() }}
-            </div>
-        @endif
+            @if ($invoices->hasPages())
+                <div class="pt-4 border-t border-zinc-200 dark:border-zinc-700">
+                    {{ $invoices->links() }}
+                </div>
+            @endif
+        </div>
     </flux:card>
 
     <!-- Invoice Modal -->
@@ -199,7 +295,7 @@
                 </div>
 
                 <!-- Status and Dates -->
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <flux:select wire:model="invoice_status_id" label="Status">
                         <flux:select.option value="">Velg status</flux:select.option>
                         @foreach ($statuses as $status)
@@ -234,11 +330,11 @@
 
                     <flux:input wire:model="customer_address" label="Adresse" placeholder="Gateadresse" />
 
-                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                    <div class="grid grid-cols-1 xs:grid-cols-3 gap-4">
                         <flux:input wire:model="customer_postal_code" label="Postnr" placeholder="0000" />
-                        <flux:input wire:model="customer_city" label="Sted" placeholder="Sted" />
-                        <flux:input wire:model="customer_country" label="Land" placeholder="Norge" />
+                        <flux:input wire:model="customer_city" label="Sted" placeholder="Sted" class="xs:col-span-2" />
                     </div>
+                    <flux:input wire:model="customer_country" label="Land" placeholder="Norge" />
                 </div>
 
                 <!-- Lines Section (only when editing) -->
@@ -381,13 +477,13 @@
 
                 <flux:textarea wire:model="line_description" label="Beskrivelse" rows="2" required />
 
-                <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <flux:input wire:model="line_quantity" type="number" step="0.01" label="Antall" required />
                     <flux:input wire:model="line_unit" label="Enhet" placeholder="stk" required />
                     <flux:input wire:model="line_unit_price" type="number" step="0.01" label="Enhetspris" required />
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <flux:input wire:model="line_discount_percent" type="number" step="0.01" min="0" max="100" label="Rabatt %" />
 
                     <flux:select wire:model.live="line_vat_rate_id" label="MVA-sats">

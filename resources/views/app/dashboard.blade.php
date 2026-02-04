@@ -17,15 +17,15 @@
             {{-- Mine timer denne uken --}}
             <div class="mb-6">
                 <flux:card class="bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
+                    <div class="p-4 sm:p-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div>
                                 <flux:text class="text-sm font-medium text-white/80">
                                     Mine timer denne uken
                                 </flux:text>
                                 <div class="flex items-baseline gap-2 mt-1">
-                                    <span class="text-4xl font-bold text-white">{{ number_format($myHoursThisWeek, 1, ',', ' ') }}</span>
-                                    <span class="text-lg text-white/70">timer</span>
+                                    <span class="text-3xl sm:text-4xl font-bold text-white">{{ number_format($myHoursThisWeek, 1, ',', ' ') }}</span>
+                                    <span class="text-base sm:text-lg text-white/70">timer</span>
                                 </div>
                                 <div class="mt-2">
                                     @php
@@ -42,8 +42,8 @@
                                     </flux:badge>
                                 </div>
                             </div>
-                            <div class="text-right">
-                                <flux:button href="{{ route('timesheets.index') }}" class="bg-white/20 hover:bg-white/30 text-white border-white/30">
+                            <div class="sm:text-right">
+                                <flux:button href="{{ route('timesheets.index') }}" class="bg-white/20 hover:bg-white/30 text-white border-white/30 w-full sm:w-auto justify-center">
                                     <flux:icon.clock class="w-4 h-4 mr-2" />
                                     Registrer timer
                                 </flux:button>
@@ -110,7 +110,7 @@
 
                     {{-- Utestående og forfalt (kun for okonomi/admin) --}}
                     @if(auth()->user()->is_admin || auth()->user()->is_economy)
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                             <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
                                 <div class="p-4">
                                     <div class="flex items-center justify-between">
@@ -184,7 +184,7 @@
 
                     {{-- Aktive prosjekter og arbeidsordrer --}}
                     @if(config('features.projects') || config('features.work_orders'))
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                             @if(config('features.projects') && isset($stats['activeProjects']))
                                 <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
                                     <div class="p-4">
@@ -280,7 +280,7 @@
                     {{-- Tilbud og ordrer (kun for salg/admin) --}}
                     @if((auth()->user()->is_admin || auth()->user()->is_sales) && config('features.sales'))
                         @if(isset($stats['activeQuotes']) || isset($stats['openOrders']))
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
                                 @if(isset($stats['activeQuotes']))
                                     <flux:card class="bg-white dark:bg-zinc-900 shadow-sm">
                                         <div class="p-4">
@@ -335,7 +335,7 @@
                             <flux:heading size="base" level="2" class="text-zinc-900 dark:text-white mb-3">
                                 Snarveier
                             </flux:heading>
-                            <div class="grid grid-cols-2 gap-2">
+                            <div class="grid grid-cols-1 xs:grid-cols-2 gap-2">
                                 <flux:button href="{{ route('timesheets.index') }}" variant="ghost" class="justify-start">
                                     <flux:icon.clock class="h-4 w-4 mr-2 text-indigo-600" />
                                     Timer
