@@ -66,6 +66,7 @@
                             <option value="timeregistrering">Timeregistrering</option>
                             <option value="salg">Salg</option>
                             <option value="okonomi">Økonomi</option>
+                            <option value="lonn">Lønn</option>
                             <option value="selskapsanalyse">Selskapsanalyse</option>
                             <option value="innboks">Innboks</option>
                             <option value="rapporter">Rapporter</option>
@@ -236,6 +237,12 @@
                                                    class="block py-1.5 text-sm hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
                                                     MVA-meldinger
                                                 </a>
+                                                <a href="#lonn" @click.prevent="scrollToSection('lonn')"
+                                                   x-show="!searchQuery || 'lønn payroll lønnskjøring feriepenger skatt'.includes(searchQuery.toLowerCase())"
+                                                   :class="activeSection === 'lonn' ? 'text-violet-600 dark:text-violet-400 font-medium' : 'text-zinc-600 dark:text-zinc-400'"
+                                                   class="block py-1.5 text-sm hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                                                    Lønn
+                                                </a>
                                             </nav>
                                         </flux:accordion.content>
                                     </flux:accordion.item>
@@ -347,6 +354,7 @@
                     @include('help.partials.section-innboks')
                     @include('help.partials.section-rapporter')
                     @include('help.partials.section-mva')
+                    @include('help.partials.section-lonn')
                     @include('help.partials.section-aksjonaerregister')
                     @include('help.partials.section-skatt')
                     @include('help.partials.section-arsregnskap')

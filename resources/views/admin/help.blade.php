@@ -53,6 +53,10 @@
                                     <flux:icon.scale class="w-4 h-4" />
                                     Bankavstemming
                                 </a>
+                                <a href="#lonn" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
+                                    <flux:icon.banknotes class="w-4 h-4" />
+                                    Lønn
+                                </a>
                                 <a href="#stamdata" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300">
                                     <flux:icon.circle-stack class="w-4 h-4" />
                                     Stamdata
@@ -583,6 +587,121 @@
                                 <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
                                     <flux:callout.heading>Lovkrav</flux:callout.heading>
                                     <flux:callout.text>Bokføringsloven krever regelmessig avstemming av bankkonti. Alle transaksjoner på bankkontoen skal kunne dokumenteres med bilag.</flux:callout.text>
+                                </flux:callout>
+                            </div>
+                        </div>
+                    </flux:card>
+
+                    {{-- Lønn --}}
+                    <flux:card id="lonn" class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 scroll-mt-4">
+                        <div class="p-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                                    <flux:icon.banknotes class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                                </div>
+                                <flux:heading size="lg" class="text-zinc-900 dark:text-white">Lønn</flux:heading>
+                            </div>
+
+                            <div class="prose prose-zinc dark:prose-invert max-w-none">
+                                <p>Lønnssystemet håndterer alle aspekter av norsk lønnsadministrasjon.</p>
+
+                                <h4>Tilgang</h4>
+                                <p>Lønnsmodulen krever <strong>lønn</strong> eller <strong>admin</strong>-rolle. Tilgang gis via brukeradministrasjonen.</p>
+
+                                <h4>Hovedfunksjoner</h4>
+                                <ul>
+                                    <li><strong>Ansatte</strong> - Lønnsoppsett per ansatt (lønn, skatt, feriepenger, OTP)</li>
+                                    <li><strong>Lønnsarter</strong> - Definisjon av lønnskomponenter</li>
+                                    <li><strong>Lønnskjøring</strong> - Månedlig beregning og utbetaling</li>
+                                    <li><strong>Lønnsslipper</strong> - Generering av lønnsslipper</li>
+                                    <li><strong>Feriepenger</strong> - Avsetning og utbetaling</li>
+                                    <li><strong>A-melding</strong> - Rapportering til Skatteetaten</li>
+                                </ul>
+
+                                <h4>Innstillinger</h4>
+                                <p>Følgende må konfigureres i lønnsinnstillinger:</p>
+                                <ul>
+                                    <li><strong>AGA-sone</strong> - Arbeidsgiveravgift-sone (1, 1a, 2, 3, 4, 4a eller 5)</li>
+                                    <li><strong>Standard lønnsarter</strong> - Aktiver relevante lønnsarter</li>
+                                    <li><strong>OTP-prosent</strong> - Selskapets pensjonssats (2-7%)</li>
+                                </ul>
+
+                                <h4>AGA-soner</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-1 text-sm">
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 1 (de fleste områder)</span>
+                                            <span class="font-mono">14,1%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 1a (fribeløp 500 000)</span>
+                                            <span class="font-mono">10,6%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 2</span>
+                                            <span class="font-mono">10,6%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 3</span>
+                                            <span class="font-mono">6,4%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 4</span>
+                                            <span class="font-mono">5,1%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 4a</span>
+                                            <span class="font-mono">7,9%</span>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-zinc-100 dark:bg-zinc-800 rounded">
+                                            <span>Sone 5 (Finnmark/Nord-Troms)</span>
+                                            <span class="font-mono">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h4>Frister</h4>
+                                <div class="not-prose my-4">
+                                    <div class="space-y-2 text-sm">
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">A-melding</div>
+                                                    <div class="text-sm text-zinc-500">Til Skatteetaten</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-medium text-zinc-900 dark:text-white">5. hver måned</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Forskuddstrekk</div>
+                                                    <div class="text-sm text-zinc-500">Innbetaling til Skatteetaten</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Første virkedag etter utbetaling (fra 2026)</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="p-3 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                                            <div class="flex justify-between items-center">
+                                                <div>
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Arbeidsgiveravgift</div>
+                                                    <div class="text-sm text-zinc-500">Innbetaling til Skatteetaten</div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-medium text-zinc-900 dark:text-white">Annenhver måned</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <flux:callout variant="warning" icon="exclamation-triangle" class="not-prose my-4">
+                                    <flux:callout.heading>Nye regler fra 2026</flux:callout.heading>
+                                    <flux:callout.text>Fra 2026 må forskuddstrekk betales første virkedag etter lønnsutbetaling. Sørg for at lønn godkjennes i god tid før utbetalingsdato.</flux:callout.text>
                                 </flux:callout>
                             </div>
                         </div>

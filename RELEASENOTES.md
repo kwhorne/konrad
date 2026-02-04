@@ -1,5 +1,46 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.5.0
+**Dato:** 4. februar 2026
+
+### Lønnssystem (ny modul)
+
+Konrad Office har nå et komplett norsk lønnssystem som følger alle norske lover og regler.
+
+- **Ansattoppsett** - Registrer ansatte med lønn, skattekort, feriepenger og OTP-innstillinger
+- **Lønnsarter** - Definer lønnsarter med riktig behandling av skatt, AGA og feriepenger
+- **Lønnskjøring** - Opprett månedlige lønnskjøringer med automatisk beregning
+- **Forskuddstrekk** - Støtte for tabelltrekk, prosenttrekk, kildeskatt og frikort
+- **Feriepenger** - Automatisk beregning og avsetning av feriepenger (10,2%, 12% eller 14,3%)
+- **Arbeidsgiveravgift** - Beregning av AGA basert på sone (0-14,1%)
+- **OTP** - Obligatorisk tjenestepensjon med støtte for 2-7% og tak på 12G
+- **Lønnsslipper** - Generer lønnsslipper for ansatte
+- **A-melding** - Forberedelse for rapportering til Skatteetaten (kommer snart)
+
+### Arbeidsgiveravgift-soner
+
+Systemet støtter alle norske AGA-soner med korrekte satser:
+- Sone 1: 14,1%
+- Sone 1a: 10,6% (med fribeløp på 500 000 kr)
+- Sone 2: 10,6%
+- Sone 3: 6,4%
+- Sone 4: 5,1%
+- Sone 4a: 7,9%
+- Sone 5: 0%
+
+### Skatteberegning
+
+- **Tabelltrekk** - Beregning basert på skattetabeller (6xxx, 7xxx, 8xxx)
+- **Prosenttrekk** - Fast prosentsats på bruttoinntekt
+- **Kildeskatt** - 25% flat skatt for utenlandske arbeidstakere
+- **Frikort** - Støtte for frikort med automatisk sporing av brukt beløp
+
+### Tips
+
+Gå til **Lønn** i sidemenyen for å komme i gang med lønnsmodulen. Start med å sette opp ansatte under **Ansatte**, deretter definer lønnsartene bedriften bruker under **Lønnsarter**. Opprett så en lønnskjøring under **Lønnskjøring** for å beregne og utbetale lønn.
+
+---
+
 ## Versjon 1.4.5
 **Dato:** 4. februar 2026
 

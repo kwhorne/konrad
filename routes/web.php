@@ -7,6 +7,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\EconomyController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TaxController;
@@ -237,6 +238,20 @@ Route::middleware('auth')->group(function () {
             Route::get('/goods-receipts', fn () => view('purchasing.goods-receipts.index'))->name('goods-receipts.index');
             Route::get('/goods-receipts/create', fn () => view('purchasing.goods-receipts.create'))->name('goods-receipts.create');
             Route::get('/goods-receipts/{goodsReceipt}', fn ($goodsReceipt) => view('purchasing.goods-receipts.show', compact('goodsReceipt')))->name('goods-receipts.show');
+        });
+
+        // Payroll routes - accessible by payroll users and admins
+        Route::middleware('payroll')->prefix('lonn')->name('payroll.')->group(function () {
+            Route::get('/', [PayrollController::class, 'dashboard'])->name('dashboard');
+            Route::get('/ansatte', [PayrollController::class, 'employees'])->name('employees');
+            Route::get('/lonnsarter', [PayrollController::class, 'payTypes'])->name('pay-types');
+            Route::get('/lonnskjoring', [PayrollController::class, 'runs'])->name('runs');
+            Route::get('/lonnskjoring/{payrollRun}', [PayrollController::class, 'showRun'])->name('runs.show');
+            Route::get('/lonnsslipper', [PayrollController::class, 'payslips'])->name('payslips');
+            Route::get('/feriepenger', [PayrollController::class, 'holidayPay'])->name('holiday-pay');
+            Route::get('/a-melding', [PayrollController::class, 'aMelding'])->name('a-melding');
+            Route::get('/rapporter', [PayrollController::class, 'reports'])->name('reports');
+            Route::get('/innstillinger', [PayrollController::class, 'settings'])->name('settings');
         });
 
         // Economy routes - accessible by economy users and admins

@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'economy' => \App\Http\Middleware\EconomyMiddleware::class,
+            'payroll' => \App\Http\Middleware\PayrollMiddleware::class,
             'feature' => \App\Http\Middleware\CheckFeatureEnabled::class,
             'company' => \App\Http\Middleware\EnsureUserBelongsToCompany::class,
             'company.manager' => \App\Http\Middleware\CompanyManager::class,

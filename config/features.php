@@ -23,5 +23,6 @@ return [
     'shareholders' => env('SHAREHOLDERS_ENABLED', false),
     'altinn' => env('ALTINN_ENABLED', false),
     'inventory' => env('INVENTORY_ENABLED', false),
+    'payroll' => env('PAYROLL_ENABLED', false),
 
 ];

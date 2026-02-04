@@ -19,6 +19,7 @@ class HelpController extends Controller
             'arbeidsordrer',
             'salg',
             'okonomi',
+            'lonn',
             'innboks',
             'rapporter',
             'mva',
