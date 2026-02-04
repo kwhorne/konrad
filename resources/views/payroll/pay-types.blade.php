@@ -1,4 +1,4 @@
-<x-layouts.payroll title="Lonnsarter">
+<x-layouts.payroll title="Lønnsarter">
     <div class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
         <x-payroll-sidebar current="pay-types" />
         <x-app-header current="pay-types" />
@@ -10,10 +10,10 @@
                 </div>
                 <div>
                     <flux:heading size="xl" level="1" class="text-zinc-900 dark:text-white">
-                        Lonnsarter
+                        Lønnsarter
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Administrer lonnsarter og satser
+                        Administrer lønnsarter og satser
                     </flux:text>
                 </div>
             </div>

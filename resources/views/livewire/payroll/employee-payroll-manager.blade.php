@@ -3,7 +3,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <flux:input
             wire:model.live.debounce.300ms="search"
-            placeholder="Sok etter ansatt..."
+            placeholder="Søk etter ansatt..."
             icon="magnifying-glass"
             class="w-full sm:w-80"
         />
@@ -19,8 +19,8 @@
                 <flux:table.column>Ansatt</flux:table.column>
                 <flux:table.column>Ansattnr</flux:table.column>
                 <flux:table.column>Stilling</flux:table.column>
-                <flux:table.column>Lonnstype</flux:table.column>
-                <flux:table.column>Lonn</flux:table.column>
+                <flux:table.column>Lønnstype</flux:table.column>
+                <flux:table.column>Lønn</flux:table.column>
                 <flux:table.column>Status</flux:table.column>
                 <flux:table.column></flux:table.column>
             </flux:table.columns>
@@ -66,7 +66,7 @@
                                         Rediger
                                     </flux:menu.item>
                                     <flux:menu.separator />
-                                    <flux:menu.item wire:click="delete({{ $employee->id }})" wire:confirm="Er du sikker pa at du vil slette dette oppsettet?" icon="trash" variant="danger">
+                                    <flux:menu.item wire:click="delete({{ $employee->id }})" wire:confirm="Er du sikker på at du vil slette dette oppsettet?" icon="trash" variant="danger">
                                         Slett
                                     </flux:menu.item>
                                 </flux:menu>
@@ -77,9 +77,9 @@
                     <flux:table.row>
                         <flux:table.cell colspan="7" class="text-center py-8">
                             <flux:icon.users class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-600 mb-3" />
-                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen ansatte i lonnsystemet enna</flux:text>
+                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen ansatte i lønnssystemet ennå</flux:text>
                             <flux:button wire:click="openCreateModal" variant="ghost" size="sm" class="mt-2">
-                                Legg til forste ansatt
+                                Legg til første ansatt
                             </flux:button>
                         </flux:table.cell>
                     </flux:table.row>
@@ -99,7 +99,7 @@
         <div class="flex flex-col h-full">
             <div class="p-6 border-b border-zinc-200 dark:border-zinc-700">
                 <flux:heading size="lg">
-                    {{ $isEditing ? 'Rediger ansattoppsett' : 'Legg til ansatt i lonnsystemet' }}
+                    {{ $isEditing ? 'Rediger ansattoppsett' : 'Legg til ansatt i lønnssystemet' }}
                 </flux:heading>
                 <flux:text class="mt-1">{{ $isEditing ? 'Oppdater informasjon for den ansatte.' : 'Fyll ut informasjon for den nye ansatte.' }}</flux:text>
             </div>
@@ -121,9 +121,9 @@
 
                     <flux:tabs wire:model.live="activeTab" variant="segmented">
                         <flux:tab name="employment">Ansettelse</flux:tab>
-                        <flux:tab name="salary">Lonn</flux:tab>
+                        <flux:tab name="salary">Lønn</flux:tab>
                         <flux:tab name="personal">Personlig</flux:tab>
-                        <flux:tab name="emergency">Parorende</flux:tab>
+                        <flux:tab name="emergency">Pårørende</flux:tab>
                     </flux:tabs>
 
                     <!-- Ansettelse Tab -->
@@ -135,7 +135,7 @@
                                 <flux:error name="ansattnummer" />
                             </flux:field>
                             <flux:field>
-                                <flux:label>Fodselsdato</flux:label>
+                                <flux:label>Fødselsdato</flux:label>
                                 <flux:input type="date" wire:model="birthDate" />
                                 <flux:error name="birthDate" />
                             </flux:field>
@@ -144,7 +144,7 @@
                         <flux:field>
                             <flux:label>Personnummer</flux:label>
                             <flux:input wire:model="personnummer" placeholder="11 siffer" maxlength="11" type="password" autocomplete="off" />
-                            <flux:description>Brukes for a hente skattekort fra Skatteetaten</flux:description>
+                            <flux:description>Brukes for å hente skattekort fra Skatteetaten</flux:description>
                             <flux:error name="personnummer" />
                         </flux:field>
 
@@ -174,31 +174,31 @@
                         </flux:field>
                     </div>
 
-                    <flux:checkbox wire:model="isActive" label="Aktiv i lonnsystemet" />
+                    <flux:checkbox wire:model="isActive" label="Aktiv i lønnssystemet" />
                 </div>
 
-                <!-- Lonn og skatt Tab -->
+                <!-- Lønn og skatt Tab -->
                 <div x-show="$wire.activeTab === 'salary'" class="space-y-6">
                     <div>
-                        <flux:heading size="sm" class="mb-3">Lonn</flux:heading>
+                        <flux:heading size="sm" class="mb-3">Lønn</flux:heading>
                         <div class="grid grid-cols-2 gap-4">
                             <flux:field>
-                                <flux:label>Lonnstype</flux:label>
+                                <flux:label>Lønnstype</flux:label>
                                 <flux:select wire:model.live="lonnType">
-                                    <flux:select.option value="fast">Fastlonn</flux:select.option>
-                                    <flux:select.option value="time">Timelonn</flux:select.option>
+                                    <flux:select.option value="fast">Fastlønn</flux:select.option>
+                                    <flux:select.option value="time">Timelønn</flux:select.option>
                                 </flux:select>
                                 <flux:error name="lonnType" />
                             </flux:field>
                             @if($lonnType === 'fast')
                                 <flux:field>
-                                    <flux:label>Manedslonn (kr)</flux:label>
+                                    <flux:label>Månedslønn (kr)</flux:label>
                                     <flux:input type="number" wire:model="maanedslonn" step="0.01" min="0" />
                                     <flux:error name="maanedslonn" />
                                 </flux:field>
                             @else
                                 <flux:field>
-                                    <flux:label>Timelonn (kr)</flux:label>
+                                    <flux:label>Timelønn (kr)</flux:label>
                                     <flux:input type="number" wire:model="timelonn" step="0.01" min="0" />
                                     <flux:error name="timelonn" />
                                 </flux:field>
@@ -248,7 +248,7 @@
                                 </flux:field>
                             @elseif($skattType === 'frikort')
                                 <flux:field>
-                                    <flux:label>Frikortbelop (kr)</flux:label>
+                                    <flux:label>Frikortbeløp (kr)</flux:label>
                                     <flux:input type="number" wire:model="frikortBelop" step="0.01" min="0" />
                                     <flux:error name="frikortBelop" />
                                 </flux:field>
@@ -274,7 +274,7 @@
                         </div>
                         <div class="flex flex-wrap gap-6 mt-4">
                             <flux:checkbox wire:model="ferie5Uker" label="5 ukers ferie (tariffestet)" />
-                            <flux:checkbox wire:model="over60" label="Over 60 ar" />
+                            <flux:checkbox wire:model="over60" label="Over 60 år" />
                             <flux:checkbox wire:model="otpEnabled" label="OTP aktivert" />
                         </div>
                     </div>
@@ -332,11 +332,11 @@
                     </flux:field>
                 </div>
 
-                <!-- Parorende Tab -->
+                <!-- Pårørende Tab -->
                 <div x-show="$wire.activeTab === 'emergency'" class="space-y-4">
                     <flux:callout icon="exclamation-triangle" class="mb-4">
-                        <flux:callout.heading>Nodkontakt</flux:callout.heading>
-                        <flux:callout.text>Person som skal kontaktes ved nodssituasjon.</flux:callout.text>
+                        <flux:callout.heading>Nødkontakt</flux:callout.heading>
+                        <flux:callout.text>Person som skal kontaktes ved nødssituasjon.</flux:callout.text>
                     </flux:callout>
 
                     <flux:field>
@@ -353,7 +353,7 @@
                                 <flux:select.option value="samboer">Samboer</flux:select.option>
                                 <flux:select.option value="forelder">Forelder</flux:select.option>
                                 <flux:select.option value="barn">Barn</flux:select.option>
-                                <flux:select.option value="sosken">Sosken</flux:select.option>
+                                <flux:select.option value="sosken">Søsken</flux:select.option>
                                 <flux:select.option value="annen">Annen</flux:select.option>
                             </flux:select>
                             <flux:error name="emergencyContactRelation" />

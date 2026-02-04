@@ -1,4 +1,4 @@
-<x-layouts.payroll title="Lonnskjoring">
+<x-layouts.payroll title="Lønnskjøring">
     <div class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
         <x-payroll-sidebar current="runs" />
         <x-app-header current="runs" />

@@ -13,7 +13,7 @@
                         Ansatte
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Administrer ansattoppsett for lonn
+                        Administrer ansattoppsett for lønn
                     </flux:text>
                 </div>
             </div>

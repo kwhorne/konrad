@@ -13,7 +13,7 @@
 
     <!-- Info Callout -->
     <flux:callout icon="information-circle" variant="info" class="mb-6">
-        A-meldingen skal sendes til Skatteetaten innen den 5. i maneden etter lonnsperioden.
+        A-meldingen skal sendes til Skatteetaten innen den 5. i måneden etter lønnsperioden.
     </flux:callout>
 
     <!-- Reports Table -->
@@ -59,7 +59,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="6" class="text-center py-8">
                             <flux:icon.cloud-arrow-up class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-600 mb-3" />
-                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen A-meldinger enna</flux:text>
+                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen A-meldinger ennå</flux:text>
                         </flux:table.cell>
                     </flux:table.row>
                 @endforelse
@@ -80,7 +80,7 @@
 
             <form wire:submit="generateReport" class="space-y-4">
                 <flux:field>
-                    <flux:label>Velg lonnskjoring</flux:label>
+                    <flux:label>Velg lønnskjøring</flux:label>
                     <flux:select wire:model="selectedRunId">
                         <flux:select.option value="">Velg...</flux:select.option>
                         @foreach($availableRuns as $run)
@@ -91,7 +91,7 @@
 
                 @if($availableRuns->isEmpty())
                     <flux:callout icon="exclamation-triangle" variant="warning">
-                        Ingen utbetalte lonnskjoringer uten A-melding funnet.
+                        Ingen utbetalte lønnskjøringer uten A-melding funnet.
                     </flux:callout>
                 @endif
 

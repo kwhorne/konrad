@@ -13,7 +13,7 @@
                         Innstillinger
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Konfigurer lonnsmodul og integrasjoner
+                        Konfigurer lønnsmodul og integrasjoner
                     </flux:text>
                 </div>
             </div>

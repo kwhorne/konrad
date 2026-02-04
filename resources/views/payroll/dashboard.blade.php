@@ -1,4 +1,4 @@
-<x-layouts.payroll title="Lonn Dashboard">
+<x-layouts.payroll title="Lønn Dashboard">
     <div class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
         <x-payroll-sidebar current="payroll-dashboard" />
         <x-app-header current="payroll-dashboard" />
@@ -10,10 +10,10 @@
                 </div>
                 <div>
                     <flux:heading size="xl" level="1" class="text-zinc-900 dark:text-white">
-                        Lonn
+                        Lønn
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Lonnskjoring, feriepenger og rapportering
+                        Lønnskjøring, feriepenger og rapportering
                     </flux:text>
                 </div>
             </div>

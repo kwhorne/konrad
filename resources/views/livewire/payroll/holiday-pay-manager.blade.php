@@ -30,7 +30,7 @@
         </flux:card>
         <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
             <div class="p-4 text-center">
-                <div class="text-sm text-zinc-500 mb-1">Gjenstaaende</div>
+                <div class="text-sm text-zinc-500 mb-1">Gjenstående</div>
                 <div class="text-xl font-bold text-green-600 dark:text-green-400">{{ number_format($totals['gjenstaaende'], 0, ',', ' ') }}</div>
             </div>
         </flux:card>
@@ -44,7 +44,7 @@
                 <flux:table.column class="text-right">Grunnlag</flux:table.column>
                 <flux:table.column class="text-right">Opptjent</flux:table.column>
                 <flux:table.column class="text-right">Utbetalt</flux:table.column>
-                <flux:table.column class="text-right">Gjenstaaende</flux:table.column>
+                <flux:table.column class="text-right">Gjenstående</flux:table.column>
             </flux:table.columns>
             <flux:table.rows>
                 @forelse($balances as $balance)
@@ -64,7 +64,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="5" class="text-center py-8">
                             <flux:icon.sun class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-600 mb-3" />
-                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen feriepengeopptjening for dette aret</flux:text>
+                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen feriepengeopptjening for dette året</flux:text>
                         </flux:table.cell>
                     </flux:table.row>
                 @endforelse

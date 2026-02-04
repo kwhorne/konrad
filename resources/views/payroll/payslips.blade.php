@@ -1,4 +1,4 @@
-<x-layouts.payroll title="Lonnsslipper">
+<x-layouts.payroll title="Lønnsslipper">
     <div class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
         <x-payroll-sidebar current="payslips" />
         <x-app-header current="payslips" />
@@ -10,10 +10,10 @@
                 </div>
                 <div>
                     <flux:heading size="xl" level="1" class="text-zinc-900 dark:text-white">
-                        Lonnsslipper
+                        Lønnsslipper
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Se og last ned lonnsslipper
+                        Se og last ned lønnsslipper
                     </flux:text>
                 </div>
             </div>

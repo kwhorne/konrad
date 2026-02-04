@@ -1,4 +1,4 @@
-<x-layouts.payroll title="Lonnskjoringer">
+<x-layouts.payroll title="Lønnskjøringer">
     <div class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
         <x-payroll-sidebar current="runs" />
         <x-app-header current="runs" />
@@ -10,10 +10,10 @@
                 </div>
                 <div>
                     <flux:heading size="xl" level="1" class="text-zinc-900 dark:text-white">
-                        Lonnskjoringer
+                        Lønnskjøringer
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Opprett og administrer lonnskjoringer
+                        Opprett og administrer lønnskjøringer
                     </flux:text>
                 </div>
             </div>

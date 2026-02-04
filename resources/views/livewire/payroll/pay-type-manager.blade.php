@@ -3,16 +3,16 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <flux:input
             wire:model.live.debounce.300ms="search"
-            placeholder="Sok etter lonnsart..."
+            placeholder="Søk etter lønnsart..."
             icon="magnifying-glass"
             class="w-full sm:w-80"
         />
         <div class="flex gap-2">
             <flux:button wire:click="seedDefaultPayTypes" variant="ghost">
-                Opprett standard lonnsarter
+                Opprett standard lønnsarter
             </flux:button>
             <flux:button wire:click="openCreateModal" icon="plus" variant="primary">
-                Ny lonnsart
+                Ny lønnsart
             </flux:button>
         </div>
     </div>
@@ -80,7 +80,7 @@
                                         Rediger
                                     </flux:menu.item>
                                     <flux:menu.separator />
-                                    <flux:menu.item wire:click="delete({{ $payType->id }})" wire:confirm="Er du sikker pa at du vil slette denne lonnsarten?" icon="trash" variant="danger">
+                                    <flux:menu.item wire:click="delete({{ $payType->id }})" wire:confirm="Er du sikker på at du vil slette denne lønnsarten?" icon="trash" variant="danger">
                                         Slett
                                     </flux:menu.item>
                                 </flux:menu>
@@ -91,9 +91,9 @@
                     <flux:table.row>
                         <flux:table.cell colspan="9" class="text-center py-8">
                             <flux:icon.list-bullet class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-600 mb-3" />
-                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen lonnsarter opprettet enna</flux:text>
+                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen lønnsarter opprettet ennå</flux:text>
                             <flux:button wire:click="seedDefaultPayTypes" variant="ghost" size="sm" class="mt-2">
-                                Opprett standard lonnsarter
+                                Opprett standard lønnsarter
                             </flux:button>
                         </flux:table.cell>
                     </flux:table.row>
@@ -112,7 +112,7 @@
     <flux:modal wire:model="showModal" class="max-w-lg">
         <div class="p-6">
             <flux:heading size="lg" class="mb-6">
-                {{ $isEditing ? 'Rediger lonnsart' : 'Ny lonnsart' }}
+                {{ $isEditing ? 'Rediger lønnsart' : 'Ny lønnsart' }}
             </flux:heading>
 
             <form wire:submit="save" class="space-y-4">
@@ -131,7 +131,7 @@
 
                 <flux:field>
                     <flux:label>Navn</flux:label>
-                    <flux:input wire:model="name" placeholder="f.eks. Fastlonn" />
+                    <flux:input wire:model="name" placeholder="f.eks. Fastlønn" />
                     <flux:error name="name" />
                 </flux:field>
 
@@ -181,7 +181,7 @@
                 <div class="flex justify-end gap-3 pt-4">
                     <flux:button wire:click="closeModal" variant="ghost">Avbryt</flux:button>
                     <flux:button type="submit" variant="primary">
-                        {{ $isEditing ? 'Lagre endringer' : 'Opprett lonnsart' }}
+                        {{ $isEditing ? 'Lagre endringer' : 'Opprett lønnsart' }}
                     </flux:button>
                 </div>
             </form>

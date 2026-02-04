@@ -38,10 +38,10 @@
 
                     <flux:separator />
 
-                    <flux:heading size="sm">Grunnbelop (G)</flux:heading>
+                    <flux:heading size="sm">Grunnbeløp (G)</flux:heading>
 
                     <flux:callout icon="information-circle" variant="info">
-                        Grunnbelopet (G) oppdateres arlig 1. mai. Gjeldende G-belop er <strong>130 160 kr</strong> (fra mai 2025).
+                        Grunnbeløpet (G) oppdateres årlig 1. mai. Gjeldende G-beløp er <strong>130 160 kr</strong> (fra mai 2025).
                     </flux:callout>
 
                     <div class="flex justify-end pt-4">

@@ -11,10 +11,10 @@
     <!-- YTD Summary -->
     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700 mb-6">
         <div class="p-6">
-            <flux:heading size="lg" class="text-zinc-900 dark:text-white mb-4">Arsoversikt {{ $selectedYear }}</flux:heading>
+            <flux:heading size="lg" class="text-zinc-900 dark:text-white mb-4">Årsoversikt {{ $selectedYear }}</flux:heading>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <div class="text-center p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                    <div class="text-sm text-zinc-500 mb-1">Bruttolonn</div>
+                    <div class="text-sm text-zinc-500 mb-1">Bruttolønn</div>
                     <div class="text-lg font-semibold text-zinc-900 dark:text-white">{{ number_format($ytdTotals['bruttolonn'], 0, ',', ' ') }}</div>
                 </div>
                 <div class="text-center p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
@@ -22,7 +22,7 @@
                     <div class="text-lg font-semibold text-zinc-900 dark:text-white">{{ number_format($ytdTotals['forskuddstrekk'], 0, ',', ' ') }}</div>
                 </div>
                 <div class="text-center p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-                    <div class="text-sm text-zinc-500 mb-1">Nettolonn</div>
+                    <div class="text-sm text-zinc-500 mb-1">Nettolønn</div>
                     <div class="text-lg font-semibold text-zinc-900 dark:text-white">{{ number_format($ytdTotals['nettolonn'], 0, ',', ' ') }}</div>
                 </div>
                 <div class="text-center p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
@@ -44,14 +44,14 @@
     <!-- Monthly Breakdown -->
     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
         <div class="p-4 border-b border-zinc-200 dark:border-zinc-700">
-            <flux:heading size="lg" class="text-zinc-900 dark:text-white">Manedsvis oversikt</flux:heading>
+            <flux:heading size="lg" class="text-zinc-900 dark:text-white">Månedsvis oversikt</flux:heading>
         </div>
         <flux:table>
             <flux:table.columns>
-                <flux:table.column>Maned</flux:table.column>
-                <flux:table.column class="text-right">Bruttolonn</flux:table.column>
+                <flux:table.column>Måned</flux:table.column>
+                <flux:table.column class="text-right">Bruttolønn</flux:table.column>
                 <flux:table.column class="text-right">Forskuddstrekk</flux:table.column>
-                <flux:table.column class="text-right">Nettolonn</flux:table.column>
+                <flux:table.column class="text-right">Nettolønn</flux:table.column>
                 <flux:table.column class="text-right">Arb.giveravgift</flux:table.column>
                 <flux:table.column class="text-right">OTP</flux:table.column>
             </flux:table.columns>

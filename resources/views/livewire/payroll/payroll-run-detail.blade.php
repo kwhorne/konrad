@@ -18,7 +18,7 @@
         <div class="flex gap-2">
             @if($run->status === 'draft')
                 <flux:button wire:click="calculate" variant="primary" icon="calculator">
-                    Beregn lonn
+                    Beregn lønn
                 </flux:button>
             @elseif($run->status === 'calculated')
                 <flux:button wire:click="approve" variant="primary" icon="check">
@@ -42,7 +42,7 @@
         </flux:card>
         <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
             <div class="p-4 text-center">
-                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Bruttolonn</div>
+                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Bruttolønn</div>
                 <div class="text-2xl font-bold text-zinc-900 dark:text-white">{{ number_format($run->total_bruttolonn, 0, ',', ' ') }}</div>
             </div>
         </flux:card>
@@ -54,7 +54,7 @@
         </flux:card>
         <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
             <div class="p-4 text-center">
-                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Nettolonn</div>
+                <div class="text-sm text-zinc-500 dark:text-zinc-400 mb-1">Nettolønn</div>
                 <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ number_format($run->total_nettolonn, 0, ',', ' ') }}</div>
             </div>
         </flux:card>
@@ -75,12 +75,12 @@
     <!-- Entries Table -->
     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
         <div class="p-4 border-b border-zinc-200 dark:border-zinc-700">
-            <flux:heading size="lg" class="text-zinc-900 dark:text-white">Lonnslinjer per ansatt</flux:heading>
+            <flux:heading size="lg" class="text-zinc-900 dark:text-white">Lønnslinjer per ansatt</flux:heading>
         </div>
         <flux:table>
             <flux:table.columns>
                 <flux:table.column>Ansatt</flux:table.column>
-                <flux:table.column class="text-right">Grunnlonn</flux:table.column>
+                <flux:table.column class="text-right">Grunnlønn</flux:table.column>
                 <flux:table.column class="text-right">Overtid</flux:table.column>
                 <flux:table.column class="text-right">Brutto</flux:table.column>
                 <flux:table.column class="text-right">Skatt</flux:table.column>
@@ -109,7 +109,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="8" class="text-center py-8">
                             <flux:text class="text-zinc-500 dark:text-zinc-400">
-                                Ingen lonnslinjer enna. Klikk "Beregn lonn" for a beregne.
+                                Ingen lønnslinjer ennå. Klikk "Beregn lønn" for å beregne.
                             </flux:text>
                         </flux:table.cell>
                     </flux:table.row>

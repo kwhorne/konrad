@@ -32,7 +32,7 @@
                     <flux:table.row>
                         <flux:table.cell colspan="6" class="text-center py-8">
                             <flux:icon.document-text class="w-12 h-12 mx-auto text-zinc-400 dark:text-zinc-600 mb-3" />
-                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen lonnsslipper enna</flux:text>
+                            <flux:text class="text-zinc-500 dark:text-zinc-400">Ingen lønnsslipper ennå</flux:text>
                         </flux:table.cell>
                     </flux:table.row>
                 @endforelse

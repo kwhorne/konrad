@@ -7,7 +7,7 @@
             @endforeach
         </flux:select>
         <flux:button wire:click="openCreateModal" icon="plus" variant="primary">
-            Ny lonnskjoring
+            Ny lønnskjøring
         </flux:button>
     </div>
 
@@ -23,11 +23,11 @@
 
                     <div class="space-y-2 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-zinc-500">Bruttolonn</span>
+                            <span class="text-zinc-500">Bruttolønn</span>
                             <span class="font-medium text-zinc-900 dark:text-white">{{ number_format($run->total_bruttolonn, 0, ',', ' ') }} kr</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-zinc-500">Nettolonn</span>
+                            <span class="text-zinc-500">Nettolønn</span>
                             <span class="font-medium text-zinc-900 dark:text-white">{{ number_format($run->total_nettolonn, 0, ',', ' ') }} kr</span>
                         </div>
                         <div class="flex justify-between">
@@ -51,7 +51,7 @@
                                 Beregn
                             </flux:button>
                         @endif
-                        <flux:button wire:click="deleteRun({{ $run->id }})" wire:confirm="Er du sikker pa at du vil slette denne lonnskjoringen?" size="sm" variant="ghost" icon="trash" class="text-red-600 dark:text-red-400">
+                        <flux:button wire:click="deleteRun({{ $run->id }})" wire:confirm="Er du sikker på at du vil slette denne lønnskjøringen?" size="sm" variant="ghost" icon="trash" class="text-red-600 dark:text-red-400">
                             Slett
                         </flux:button>
                     </div>
@@ -62,12 +62,12 @@
                 <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
                     <div class="p-12 text-center">
                         <flux:icon.calculator class="w-16 h-16 mx-auto text-zinc-400 dark:text-zinc-600 mb-4" />
-                        <flux:heading size="lg" class="text-zinc-900 dark:text-white mb-2">Ingen lonnskjoringer</flux:heading>
+                        <flux:heading size="lg" class="text-zinc-900 dark:text-white mb-2">Ingen lønnskjøringer</flux:heading>
                         <flux:text class="text-zinc-500 dark:text-zinc-400 mb-4">
-                            Opprett din forste lonnskjoring for a komme i gang.
+                            Opprett din første lønnskjøring for å komme i gang.
                         </flux:text>
                         <flux:button wire:click="openCreateModal" icon="plus" variant="primary">
-                            Opprett lonnskjoring
+                            Opprett lønnskjøring
                         </flux:button>
                     </div>
                 </flux:card>
@@ -84,12 +84,12 @@
     <!-- Create Modal -->
     <flux:modal wire:model="showCreateModal" class="max-w-md">
         <div class="p-6">
-            <flux:heading size="lg" class="mb-6">Ny lonnskjoring</flux:heading>
+            <flux:heading size="lg" class="mb-6">Ny lønnskjøring</flux:heading>
 
             <form wire:submit="createRun" class="space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <flux:field>
-                        <flux:label>Ar</flux:label>
+                        <flux:label>År</flux:label>
                         <flux:select wire:model="newYear">
                             @for($y = now()->year - 1; $y <= now()->year + 1; $y++)
                                 <flux:select.option value="{{ $y }}">{{ $y }}</flux:select.option>
@@ -98,7 +98,7 @@
                         <flux:error name="newYear" />
                     </flux:field>
                     <flux:field>
-                        <flux:label>Maned</flux:label>
+                        <flux:label>Måned</flux:label>
                         <flux:select wire:model.live="newMonth">
                             @foreach($months as $num => $name)
                                 <flux:select.option value="{{ $num }}">{{ $name }}</flux:select.option>

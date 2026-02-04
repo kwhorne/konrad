@@ -13,7 +13,7 @@
                         Rapporter
                     </flux:heading>
                     <flux:text class="mt-1 text-base text-zinc-600 dark:text-zinc-400">
-                        Lonnsrapporter og statistikk
+                        Lønnsrapporter og statistikk
                     </flux:text>
                 </div>
             </div>
