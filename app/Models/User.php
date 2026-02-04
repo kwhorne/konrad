@@ -403,4 +403,12 @@ class User extends Authenticatable
 
         return $this->two_factor_grace_period_ends_at->isPast();
     }
+
+    /**
+     * Get all payroll entries for this user.
+     */
+    public function payrollEntries(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PayrollEntry::class);
+    }
 }

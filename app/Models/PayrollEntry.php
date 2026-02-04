@@ -35,6 +35,7 @@ class PayrollEntry extends Model
         'skatteprosent_brukt',
         'a_melding_data',
         'notes',
+        'payslip_sent_at',
     ];
 
     protected function casts(): array
@@ -58,6 +59,7 @@ class PayrollEntry extends Model
             'otp_belop' => 'decimal:2',
             'skatteprosent_brukt' => 'decimal:2',
             'a_melding_data' => 'array',
+            'payslip_sent_at' => 'datetime',
         ];
     }
 
