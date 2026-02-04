@@ -1,6 +1,10 @@
 <?php
 
+use App\Models\EmployeePayrollSettings;
 use App\Services\Payroll\SkattekortService;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
 
 describe('SkattekortService personnummer validation', function () {
     test('validates correct personnummer', function () {
@@ -66,4 +70,165 @@ describe('SkattekortService configuration', function () {
         // Without proper configuration, it should report not available
         expect($service->isAvailable())->toBeFalse();
     });
+});
+
+describe('SkattekortService tax card processing', function () {
+    beforeEach(function () {
+        ['user' => $this->user, 'company' => $this->company] = createTestCompanyContext();
+    });
+
+    test('updates employee settings for tabelltrekk', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+            'skatt_type' => 'prosenttrekk',
+            'skattetabell' => null,
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $taxCardData = [
+            'trekktype' => 'tabelltrekk',
+            'tabellnummer' => '7100',
+            'gyldig_fra' => '2026-01-01',
+            'gyldig_til' => '2026-12-31',
+        ];
+
+        $service->updateEmployeeFromTaxCard($employee, $taxCardData);
+
+        $employee->refresh();
+
+        expect($employee->skatt_type)->toBe('tabelltrekk')
+            ->and($employee->skattetabell)->toBe('7100')
+            ->and($employee->skattekort_hentet_at)->not->toBeNull();
+    });
+
+    test('updates employee settings for prosenttrekk', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+            'skatt_type' => 'tabelltrekk',
+            'skatteprosent' => null,
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $taxCardData = [
+            'trekktype' => 'prosenttrekk',
+            'trekkprosent' => 35.5,
+            'gyldig_fra' => '2026-01-01',
+            'gyldig_til' => '2026-12-31',
+        ];
+
+        $service->updateEmployeeFromTaxCard($employee, $taxCardData);
+
+        $employee->refresh();
+
+        expect($employee->skatt_type)->toBe('prosenttrekk')
+            ->and((float) $employee->skatteprosent)->toBe(35.5);
+    });
+
+    test('updates employee settings for frikort', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+            'skatt_type' => 'tabelltrekk',
+            'frikort_belop' => null,
+            'frikort_brukt' => 5000,
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $taxCardData = [
+            'trekktype' => 'frikort',
+            'frikortbeloep' => 65000,
+            'gyldig_fra' => '2026-01-01',
+            'gyldig_til' => '2026-12-31',
+        ];
+
+        $service->updateEmployeeFromTaxCard($employee, $taxCardData);
+
+        $employee->refresh();
+
+        expect($employee->skatt_type)->toBe('frikort')
+            ->and((float) $employee->frikort_belop)->toBe(65000.0)
+            ->and((float) $employee->frikort_brukt)->toBe(0.0); // Reset on new frikort
+    });
+
+    test('updates employee settings for kildeskatt', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+            'skatt_type' => 'tabelltrekk',
+            'skatteprosent' => null,
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $taxCardData = [
+            'trekktype' => 'kildeskatt',
+            'trekkprosent' => 50,
+            'gyldig_fra' => '2026-01-01',
+            'gyldig_til' => '2026-12-31',
+        ];
+
+        $service->updateEmployeeFromTaxCard($employee, $taxCardData);
+
+        $employee->refresh();
+
+        expect($employee->skatt_type)->toBe('kildeskatt')
+            ->and((float) $employee->skatteprosent)->toBe(50.0);
+    });
+
+    test('stores raw tax card data', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $taxCardData = [
+            'raw_response' => ['some' => 'data'],
+            'trekktype' => 'tabelltrekk',
+            'tabellnummer' => '7100',
+        ];
+
+        $service->updateEmployeeFromTaxCard($employee, $taxCardData);
+
+        $employee->refresh();
+
+        expect($employee->skattekort_data)->toBeArray()
+            ->and($employee->skattekort_data['trekktype'])->toBe('tabelltrekk');
+    });
+});
+
+describe('SkattekortService fetchTaxCard validation', function () {
+    beforeEach(function () {
+        ['user' => $this->user, 'company' => $this->company] = createTestCompanyContext();
+    });
+
+    test('throws exception when personnummer is missing', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+            'personnummer' => null,
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $service->fetchTaxCard($employee);
+    })->throws(\RuntimeException::class, 'Personnummer mangler for den ansatte.');
+
+    test('throws exception when personnummer is invalid', function () {
+        $employee = EmployeePayrollSettings::factory()->create([
+            'company_id' => $this->company->id,
+            'user_id' => $this->user->id,
+            'personnummer' => '12345678901', // Invalid control digits
+        ]);
+
+        $service = app(SkattekortService::class);
+
+        $service->fetchTaxCard($employee);
+    })->throws(\RuntimeException::class, 'Ugyldig personnummer format.');
 });

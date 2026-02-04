@@ -9,7 +9,17 @@ use Illuminate\Support\Facades\Log;
 
 class SkattekortService
 {
+    /**
+     * Maskinporten scope for Skattekort API.
+     *
+     * @see https://skatteetaten.github.io/api-dokumentasjon/api/skattekort
+     */
     private const SCOPE = 'skatteetaten:skattekort';
+
+    /**
+     * Skattekort API path (Skattekortoppslag for arbeidsgiver).
+     */
+    private const API_PATH = '/api/innkreving/skattekortoppslag/v1/arbeidsgiver/hent';
 
     public function __construct(
         private MaskinportenService $maskinporten,
@@ -19,12 +29,20 @@ class SkattekortService
     /**
      * Fetch tax card from Skatteetaten API for an employee.
      *
+     * API: Skattekortoppslag for arbeidsgiver
+     *
+     * @see https://skatteetaten.github.io/api-dokumentasjon/api/skattekort
+     *
      * @throws \RuntimeException
      */
     public function fetchTaxCard(EmployeePayrollSettings $settings): array
     {
         if (! $settings->personnummer) {
             throw new \RuntimeException('Personnummer mangler for den ansatte.');
+        }
+
+        if (! $this->validatePersonnummer($settings->personnummer)) {
+            throw new \RuntimeException('Ugyldig personnummer format.');
         }
 
         if (! $this->maskinporten->isConfigured()) {
@@ -44,26 +62,40 @@ class SkattekortService
             throw new \RuntimeException('Bedriftens organisasjonsnummer mangler.');
         }
 
+        // Clean org number (remove spaces and dashes)
+        $orgnr = preg_replace('/[^0-9]/', '', $orgnr);
+
+        $requestBody = [
+            'inntektsaar' => (int) now()->year,
+            'personidentifikator' => $settings->personnummer,
+            'arbeidsgiveridentifikator' => [
+                'organisasjonsnummer' => $orgnr,
+            ],
+        ];
+
+        Log::info('Skattekort API request', [
+            'endpoint' => $endpoint.self::API_PATH,
+            'employee_id' => $settings->id,
+            'inntektsaar' => $requestBody['inntektsaar'],
+        ]);
+
         $response = Http::withToken($accessToken)
             ->withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
+                'Korrelasjonsid' => $this->generateCorrelationId(),
             ])
-            ->post("{$endpoint}/api/skatteoppgjoer/v1/hentskattekort", [
-                'inntektsaar' => now()->year,
-                'personidentifikator' => $settings->personnummer,
-                'arbeidsgiveridentifikator' => [
-                    'organisasjonsnummer' => $orgnr,
-                ],
-            ]);
+            ->timeout(30)
+            ->retry(3, 1000, function ($exception, $request) {
+                // Retry on connection errors or 5xx responses
+                return $exception instanceof \Illuminate\Http\Client\ConnectionException
+                    || ($exception instanceof \Illuminate\Http\Client\RequestException
+                        && $exception->response->serverError());
+            })
+            ->post($endpoint.self::API_PATH, $requestBody);
 
         if (! $response->successful()) {
-            Log::error('Skattekort API error', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-                'employee_id' => $settings->id,
-            ]);
-
+            $this->logApiError($response, $settings);
             throw new \RuntimeException(
                 'Kunne ikke hente skattekort: '.$this->parseErrorMessage($response)
             );
@@ -71,19 +103,63 @@ class SkattekortService
 
         $data = $response->json();
 
+        Log::info('Skattekort API response', [
+            'employee_id' => $settings->id,
+            'has_skattekort' => isset($data['skattekort']),
+        ]);
+
         return $this->processTaxCardResponse($data, $settings);
     }
 
     /**
      * Process the tax card response and update employee settings.
+     *
+     * Response structure from Skatteetaten:
+     * {
+     *   "arbeidsgiveridentifikator": { "organisasjonsnummer": "..." },
+     *   "arbeidstaker": { "personidentifikator": "..." },
+     *   "skattekort": {
+     *     "utstedtDato": "2024-01-01",
+     *     "skattekortidentifikator": 12345,
+     *     "resultatPaaForespoersel": "skattekortOpplysningerOK",
+     *     "forskuddstrekk": [
+     *       {
+     *         "trekkode": "tabelltrekk|prosenttrekk|frikort|trekkpliktig",
+     *         "tabellnummer": "7100",
+     *         "prosentsats": 25.0,
+     *         "frikortbeloep": 65000,
+     *         "trekkprosent": 50,
+     *         "gyldigFraOgMed": "2024-01-01",
+     *         "gyldigTilOgMed": "2024-12-31"
+     *       }
+     *     ]
+     *   }
+     * }
      */
     protected function processTaxCardResponse(array $data, EmployeePayrollSettings $settings): array
     {
-        $taxCard = $data['skattekort'] ?? $data;
+        // Check for error response
+        if (isset($data['feilmelding']) || isset($data['error'])) {
+            throw new \RuntimeException(
+                $data['feilmelding'] ?? $data['error'] ?? 'Ukjent feil fra Skatteetaten'
+            );
+        }
 
-        // Extract relevant information from the response
+        $skattekort = $data['skattekort'] ?? null;
+
+        // Check result status
+        $resultat = $skattekort['resultatPaaForespoersel'] ?? null;
+        if ($resultat && $resultat !== 'skattekortOpplysningerOK') {
+            throw new \RuntimeException(
+                $this->translateResultCode($resultat)
+            );
+        }
+
+        // Initialize result
         $result = [
             'raw_response' => $data,
+            'skattekort_id' => $skattekort['skattekortidentifikator'] ?? null,
+            'utstedt_dato' => $skattekort['utstedtDato'] ?? null,
             'trekktype' => null,
             'tabellnummer' => null,
             'trekkprosent' => null,
@@ -92,28 +168,79 @@ class SkattekortService
             'gyldig_til' => null,
         ];
 
-        // Parse based on trekk type
-        $trekk = $taxCard['forskuddstrekk'] ?? $taxCard['trekkode'] ?? null;
+        // Process forskuddstrekk (tax deduction rules)
+        $forskuddstrekk = $skattekort['forskuddstrekk'] ?? [];
 
-        if (isset($trekk['tabelltrekk'])) {
-            $result['trekktype'] = 'tabelltrekk';
-            $result['tabellnummer'] = $trekk['tabelltrekk']['tabellnummer'] ?? null;
-        } elseif (isset($trekk['prosenttrekk'])) {
-            $result['trekktype'] = 'prosenttrekk';
-            $result['trekkprosent'] = $trekk['prosenttrekk']['prosentsats'] ?? null;
-        } elseif (isset($trekk['frikort'])) {
-            $result['trekktype'] = 'frikort';
-            $result['frikortbeloep'] = $trekk['frikort']['frikortbeloep'] ?? null;
+        // Use the first (primary) forskuddstrekk entry
+        $trekk = $forskuddstrekk[0] ?? null;
+
+        if ($trekk) {
+            $trekkode = $trekk['trekkode'] ?? null;
+
+            switch ($trekkode) {
+                case 'tabelltrekk':
+                    $result['trekktype'] = 'tabelltrekk';
+                    $result['tabellnummer'] = $trekk['tabellnummer'] ?? null;
+                    // Some table-based deductions also have a percentage for 6-digit tables
+                    if (isset($trekk['prosentsats'])) {
+                        $result['trekkprosent'] = (float) $trekk['prosentsats'];
+                    }
+                    break;
+
+                case 'prosenttrekk':
+                    $result['trekktype'] = 'prosenttrekk';
+                    $result['trekkprosent'] = (float) ($trekk['prosentsats'] ?? 0);
+                    break;
+
+                case 'frikort':
+                    $result['trekktype'] = 'frikort';
+                    $result['frikortbeloep'] = (float) ($trekk['frikortbeloep'] ?? 0);
+                    break;
+
+                case 'trekkpliktig':
+                    // "trekkpliktig" means source tax (kildeskatt) - typically 50%
+                    $result['trekktype'] = 'kildeskatt';
+                    $result['trekkprosent'] = (float) ($trekk['trekkprosent'] ?? $trekk['prosentsats'] ?? 50);
+                    break;
+
+                default:
+                    Log::warning('Unknown trekkode from Skatteetaten', [
+                        'trekkode' => $trekkode,
+                        'employee_id' => $settings->id,
+                    ]);
+                    // Default to percentage deduction if we have a rate
+                    if (isset($trekk['prosentsats'])) {
+                        $result['trekktype'] = 'prosenttrekk';
+                        $result['trekkprosent'] = (float) $trekk['prosentsats'];
+                    }
+            }
+
+            // Extract validity dates
+            $result['gyldig_fra'] = $trekk['gyldigFraOgMed'] ?? null;
+            $result['gyldig_til'] = $trekk['gyldigTilOgMed'] ?? null;
         }
-
-        // Extract validity dates
-        $result['gyldig_fra'] = $taxCard['gyldigFraOgMed'] ?? null;
-        $result['gyldig_til'] = $taxCard['gyldigTilOgMed'] ?? null;
 
         // Update the employee settings with the new tax card data
         $this->updateEmployeeFromTaxCard($settings, $result);
 
         return $result;
+    }
+
+    /**
+     * Translate result code from Skatteetaten to Norwegian message.
+     */
+    protected function translateResultCode(string $code): string
+    {
+        return match ($code) {
+            'skattekortOpplysningerOK' => 'OK',
+            'ugyldigPersonidentifikator' => 'Ugyldig personnummer.',
+            'personenFinnesIkke' => 'Personen finnes ikke i Folkeregisteret.',
+            'skattekortFinnesIkke' => 'Skattekort finnes ikke for inntektsåret.',
+            'arbeidsgiverHarIkkeTilgang' => 'Arbeidsgiver har ikke tilgang til skattekortet.',
+            'feilIRequest' => 'Feil i forespørselen.',
+            'tekniskFeil' => 'Teknisk feil hos Skatteetaten. Prøv igjen senere.',
+            default => "Ukjent svar fra Skatteetaten: {$code}",
+        };
     }
 
     /**
@@ -127,40 +254,62 @@ class SkattekortService
         ];
 
         // Set tax type and related fields
-        switch ($taxCardData['trekktype']) {
+        switch ($taxCardData['trekktype'] ?? null) {
             case 'tabelltrekk':
                 $updateData['skatt_type'] = EmployeePayrollSettings::SKATT_TYPE_TABELLTREKK;
-                if ($taxCardData['tabellnummer']) {
+                if (! empty($taxCardData['tabellnummer'])) {
                     $updateData['skattetabell'] = $taxCardData['tabellnummer'];
+                }
+                // Some 6-digit tables also have percentage
+                if (! empty($taxCardData['trekkprosent'])) {
+                    $updateData['skatteprosent'] = $taxCardData['trekkprosent'];
                 }
                 break;
 
             case 'prosenttrekk':
                 $updateData['skatt_type'] = EmployeePayrollSettings::SKATT_TYPE_PROSENTTREKK;
-                if ($taxCardData['trekkprosent']) {
+                if (! empty($taxCardData['trekkprosent'])) {
                     $updateData['skatteprosent'] = $taxCardData['trekkprosent'];
                 }
                 break;
 
             case 'frikort':
                 $updateData['skatt_type'] = EmployeePayrollSettings::SKATT_TYPE_FRIKORT;
-                if ($taxCardData['frikortbeloep']) {
+                if (! empty($taxCardData['frikortbeloep'])) {
                     $updateData['frikort_belop'] = $taxCardData['frikortbeloep'];
-                    // Reset used amount at start of year
+                    // Reset used amount when new frikort is received
                     $updateData['frikort_brukt'] = 0;
                 }
                 break;
+
+            case 'kildeskatt':
+                $updateData['skatt_type'] = EmployeePayrollSettings::SKATT_TYPE_KILDESKATT;
+                if (! empty($taxCardData['trekkprosent'])) {
+                    $updateData['skatteprosent'] = $taxCardData['trekkprosent'];
+                }
+                break;
+
+            default:
+                Log::warning('No trekktype in tax card data', [
+                    'employee_id' => $settings->id,
+                    'data' => $taxCardData,
+                ]);
         }
 
         // Set validity dates
-        if ($taxCardData['gyldig_fra']) {
+        if (! empty($taxCardData['gyldig_fra'])) {
             $updateData['skattekort_gyldig_fra'] = $taxCardData['gyldig_fra'];
         }
-        if ($taxCardData['gyldig_til']) {
+        if (! empty($taxCardData['gyldig_til'])) {
             $updateData['skattekort_gyldig_til'] = $taxCardData['gyldig_til'];
         }
 
         $settings->update($updateData);
+
+        Log::info('Employee tax settings updated', [
+            'employee_id' => $settings->id,
+            'skatt_type' => $updateData['skatt_type'] ?? 'unknown',
+        ]);
     }
 
     /**
@@ -224,10 +373,49 @@ class SkattekortService
     {
         $body = $response->json() ?? [];
 
+        // Skatteetaten specific error fields
+        if (isset($body['feilmelding'])) {
+            return $body['feilmelding'];
+        }
+
+        if (isset($body['skattekort']['resultatPaaForespoersel'])) {
+            return $this->translateResultCode($body['skattekort']['resultatPaaForespoersel']);
+        }
+
         return $body['melding']
             ?? $body['message']
             ?? $body['error']
+            ?? $body['kode']
             ?? "HTTP {$response->status()}";
+    }
+
+    /**
+     * Generate a correlation ID for API request tracking.
+     */
+    protected function generateCorrelationId(): string
+    {
+        return sprintf(
+            '%s-%s-%s',
+            config('app.name', 'konrad'),
+            now()->format('YmdHis'),
+            bin2hex(random_bytes(4))
+        );
+    }
+
+    /**
+     * Log API error details.
+     */
+    protected function logApiError($response, EmployeePayrollSettings $settings): void
+    {
+        $body = $response->json() ?? [];
+
+        Log::error('Skattekort API error', [
+            'status' => $response->status(),
+            'body' => $body,
+            'employee_id' => $settings->id,
+            'user_id' => $settings->user_id,
+            'endpoint' => $this->getEndpoint().self::API_PATH,
+        ]);
     }
 
     /**
