@@ -5,12 +5,13 @@ namespace App\Livewire\Payroll;
 use App\Models\AMeldingReport;
 use App\Models\PayrollRun;
 use App\Services\Payroll\AMeldingService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class AMeldingManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public ?int $filterYear = null;
 
@@ -36,6 +37,8 @@ class AMeldingManager extends Component
 
     public function generateReport(): void
     {
+        $this->authorize('create', AMeldingReport::class);
+
         if (! $this->selectedRunId) {
             session()->flash('error', 'Velg en lønnskjøring.');
 
@@ -54,6 +57,7 @@ class AMeldingManager extends Component
     public function downloadXml(int $id): void
     {
         $report = AMeldingReport::findOrFail($id);
+        $this->authorize('view', $report);
 
         // Would trigger download - placeholder for now
         session()->flash('success', 'XML lastes ned...');

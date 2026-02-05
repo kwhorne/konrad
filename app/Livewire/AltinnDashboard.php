@@ -7,10 +7,13 @@ use App\Models\AnnualAccount;
 use App\Models\ShareholderReport;
 use App\Models\TaxReturn;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class AltinnDashboard extends Component
 {
+    use AuthorizesRequests;
+
     public $selectedYear;
 
     public $showSubmissionModal = false;
@@ -19,6 +22,7 @@ class AltinnDashboard extends Component
 
     public function mount()
     {
+        $this->authorize('viewAny', AltinnSubmission::class);
         $this->selectedYear = now()->year;
     }
 
@@ -29,6 +33,8 @@ class AltinnDashboard extends Component
 
     public function viewSubmission($id)
     {
+        $submission = AltinnSubmission::findOrFail($id);
+        $this->authorize('view', $submission);
         $this->viewingSubmissionId = $id;
         $this->showSubmissionModal = true;
     }
@@ -138,8 +144,10 @@ class AltinnDashboard extends Component
     public function getSubmissionHistory(): \Illuminate\Database\Eloquent\Collection
     {
         return AltinnSubmission::with('submittable')
-            ->where('year', $this->selectedYear - 1)
-            ->orWhere('year', $this->selectedYear)
+            ->where(function ($query) {
+                $query->where('year', $this->selectedYear - 1)
+                    ->orWhere('year', $this->selectedYear);
+            })
             ->orderBy('created_at', 'desc')
             ->limit(20)
             ->get();
