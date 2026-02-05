@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Module;
+use Flux\Flux;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -131,7 +132,7 @@ class ModuleAdminManager extends Component
             $message = 'Modul opprettet';
         }
 
-        $this->dispatch('toast', message: $message, variant: 'success');
+        Flux::toast(text: $message, variant: 'success');
         $this->closeModal();
     }
 
@@ -157,7 +158,7 @@ class ModuleAdminManager extends Component
 
         // Check if module is in use by any companies
         if ($module->companyModules()->exists()) {
-            $this->dispatch('toast', message: 'Kan ikke slette modul som er i bruk av selskaper', variant: 'danger');
+            Flux::toast(text: 'Kan ikke slette modul som er i bruk av selskaper', variant: 'danger');
             $this->cancelDelete();
 
             return;
@@ -165,7 +166,7 @@ class ModuleAdminManager extends Component
 
         $module->delete();
 
-        $this->dispatch('toast', message: 'Modul slettet', variant: 'success');
+        Flux::toast(text: 'Modul slettet', variant: 'success');
         $this->cancelDelete();
     }
 
@@ -175,7 +176,7 @@ class ModuleAdminManager extends Component
         $module->update(['is_active' => ! $module->is_active]);
 
         $status = $module->is_active ? 'aktivert' : 'deaktivert';
-        $this->dispatch('toast', message: "Modul {$status}", variant: 'success');
+        Flux::toast(text: "Modul {$status}", variant: 'success');
     }
 
     protected function resetForm(): void

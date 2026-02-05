@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\PurchaseOrder;
 use App\Services\PurchaseOrderService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -34,9 +35,9 @@ class PurchaseOrderShow extends Component
         try {
             $service->submitForApproval($this->purchaseOrder);
             $this->purchaseOrder->refresh();
-            $this->dispatch('toast', message: 'Innkjopsordre sendt til godkjenning', type: 'success');
+            Flux::toast(text: 'Innkjopsordre sendt til godkjenning', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -47,9 +48,9 @@ class PurchaseOrderShow extends Component
         try {
             $service->approve($this->purchaseOrder);
             $this->purchaseOrder->refresh();
-            $this->dispatch('toast', message: 'Innkjopsordre godkjent', type: 'success');
+            Flux::toast(text: 'Innkjopsordre godkjent', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -60,9 +61,9 @@ class PurchaseOrderShow extends Component
         try {
             $service->markAsSent($this->purchaseOrder);
             $this->purchaseOrder->refresh();
-            $this->dispatch('toast', message: 'Innkjopsordre merket som sendt', type: 'success');
+            Flux::toast(text: 'Innkjopsordre merket som sendt', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -73,9 +74,9 @@ class PurchaseOrderShow extends Component
         try {
             $service->cancel($this->purchaseOrder);
             $this->purchaseOrder->refresh();
-            $this->dispatch('toast', message: 'Innkjopsordre kansellert', type: 'success');
+            Flux::toast(text: 'Innkjopsordre kansellert', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

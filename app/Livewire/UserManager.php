@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Mail\UserInvitation;
 use App\Models\User;
+use Flux\Flux;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules\Password;
@@ -173,7 +174,7 @@ class UserManager extends Component
         }
 
         $this->closeModals();
-        $this->dispatch('toast', message: 'Bruker opprettet', variant: 'success');
+        Flux::toast(text: 'Bruker opprettet', variant: 'success');
     }
 
     public function updateUser(): void
@@ -194,7 +195,7 @@ class UserManager extends Component
         ]);
 
         $this->closeModals();
-        $this->dispatch('toast', message: 'Bruker oppdatert', variant: 'success');
+        Flux::toast(text: 'Bruker oppdatert', variant: 'success');
     }
 
     public function updatePassword(): void
@@ -207,7 +208,7 @@ class UserManager extends Component
         $user->update(['password' => Hash::make($this->password)]);
 
         $this->closeModals();
-        $this->dispatch('toast', message: 'Passord oppdatert', variant: 'success');
+        Flux::toast(text: 'Passord oppdatert', variant: 'success');
     }
 
     public function sendInvitation(): void
@@ -216,7 +217,7 @@ class UserManager extends Component
         $this->sendInvitationEmail($user);
 
         $this->closeModals();
-        $this->dispatch('toast', message: 'Invitasjon sendt til '.$user->email, variant: 'success');
+        Flux::toast(text: 'Invitasjon sendt til '.$user->email, variant: 'success');
     }
 
     public function resendInvitation(int $userId): void
@@ -224,7 +225,7 @@ class UserManager extends Component
         $user = User::findOrFail($userId);
         $this->sendInvitationEmail($user);
 
-        $this->dispatch('toast', message: 'Invitasjon sendt på nytt til '.$user->email, variant: 'success');
+        Flux::toast(text: 'Invitasjon sendt på nytt til '.$user->email, variant: 'success');
     }
 
     protected function sendInvitationEmail(User $user): void
@@ -240,7 +241,7 @@ class UserManager extends Component
 
         // Prevent deactivating yourself
         if ($user->id === auth()->id()) {
-            $this->dispatch('toast', message: 'Du kan ikke deaktivere din egen konto', variant: 'danger');
+            Flux::toast(text: 'Du kan ikke deaktivere din egen konto', variant: 'danger');
 
             return;
         }
@@ -248,7 +249,7 @@ class UserManager extends Component
         $user->update(['is_active' => ! $user->is_active]);
 
         $status = $user->is_active ? 'aktivert' : 'deaktivert';
-        $this->dispatch('toast', message: "Bruker {$status}", variant: 'success');
+        Flux::toast(text: "Bruker {$status}", variant: 'success');
     }
 
     public function toggleAdmin(int $userId): void
@@ -257,7 +258,7 @@ class UserManager extends Component
 
         // Prevent removing admin from yourself
         if ($user->id === auth()->id()) {
-            $this->dispatch('toast', message: 'Du kan ikke endre din egen adminrolle', variant: 'danger');
+            Flux::toast(text: 'Du kan ikke endre din egen adminrolle', variant: 'danger');
 
             return;
         }
@@ -265,7 +266,7 @@ class UserManager extends Component
         $user->update(['is_admin' => ! $user->is_admin]);
 
         $role = $user->is_admin ? 'administrator' : 'bruker';
-        $this->dispatch('toast', message: "Bruker er nå {$role}", variant: 'success');
+        Flux::toast(text: "Bruker er nå {$role}", variant: 'success');
     }
 
     public function deleteUser(int $userId): void
@@ -274,13 +275,13 @@ class UserManager extends Component
 
         // Prevent deleting yourself
         if ($user->id === auth()->id()) {
-            $this->dispatch('toast', message: 'Du kan ikke slette din egen konto', variant: 'danger');
+            Flux::toast(text: 'Du kan ikke slette din egen konto', variant: 'danger');
 
             return;
         }
 
         $user->delete();
-        $this->dispatch('toast', message: 'Bruker slettet', variant: 'success');
+        Flux::toast(text: 'Bruker slettet', variant: 'success');
     }
 
     public function render()

@@ -9,6 +9,7 @@ use App\Models\PurchaseOrder;
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
 use App\Services\GoodsReceiptService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -131,7 +132,7 @@ class GoodsReceiptForm extends Component
                 ->toArray();
 
             if (empty($lineQuantities)) {
-                $this->dispatch('toast', message: 'Angi mottatt antall for minst en linje', type: 'error');
+                Flux::toast(text: 'Angi mottatt antall for minst en linje', variant: 'danger');
 
                 return;
             }
@@ -146,15 +147,15 @@ class GoodsReceiptForm extends Component
                     'receipt_date' => $this->receipt_date,
                 ]);
 
-                $this->dispatch('toast', message: 'Varemottak opprettet', type: 'success');
+                Flux::toast(text: 'Varemottak opprettet', variant: 'success');
                 $this->redirect(route('purchasing.goods-receipts.show', $receipt), navigate: true);
             } catch (\InvalidArgumentException $e) {
-                $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+                Flux::toast(text: $e->getMessage(), variant: 'danger');
             }
         } else {
             // Create standalone receipt
             if (empty($this->manualLines)) {
-                $this->dispatch('toast', message: 'Legg til minst en linje', type: 'error');
+                Flux::toast(text: 'Legg til minst en linje', variant: 'danger');
 
                 return;
             }
@@ -179,10 +180,10 @@ class GoodsReceiptForm extends Component
                     'receipt_date' => $this->receipt_date,
                 ]);
 
-                $this->dispatch('toast', message: 'Varemottak opprettet', type: 'success');
+                Flux::toast(text: 'Varemottak opprettet', variant: 'success');
                 $this->redirect(route('purchasing.goods-receipts.show', $receipt), navigate: true);
             } catch (\InvalidArgumentException $e) {
-                $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+                Flux::toast(text: $e->getMessage(), variant: 'danger');
             }
         }
     }

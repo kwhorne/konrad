@@ -35,12 +35,7 @@ class InventoryDashboard extends Component
             ->whereHas('product', function ($q) {
                 $q->whereNotNull('reorder_point');
             })
-            ->get()
-            ->filter(function ($level) {
-                $available = $level->quantity_on_hand - $level->quantity_reserved;
-
-                return $available <= $level->product->reorder_point;
-            })
+            ->whereRaw('(quantity_on_hand - quantity_reserved) <= (SELECT reorder_point FROM products WHERE products.id = stock_levels.product_id)')
             ->count();
 
         // Recent stock transactions

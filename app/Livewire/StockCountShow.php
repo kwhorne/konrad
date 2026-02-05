@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\StockCount;
 use App\Models\StockCountLine;
 use App\Services\StockCountService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -43,9 +44,9 @@ class StockCountShow extends Component
         try {
             $service->start($this->stockCount);
             $this->stockCount->refresh();
-            $this->dispatch('toast', message: 'Telling startet', type: 'success');
+            Flux::toast(text: 'Telling startet', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -89,9 +90,9 @@ class StockCountShow extends Component
 
             $this->stockCount->refresh();
             $this->closeCountModal();
-            $this->dispatch('toast', message: 'Telling registrert', type: 'success');
+            Flux::toast(text: 'Telling registrert', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -111,7 +112,7 @@ class StockCountShow extends Component
         );
 
         $this->stockCount->refresh();
-        $this->dispatch('toast', message: 'Talt som forventet', type: 'success');
+        Flux::toast(text: 'Talt som forventet', variant: 'success');
     }
 
     public function complete(StockCountService $service)
@@ -121,9 +122,9 @@ class StockCountShow extends Component
         try {
             $service->complete($this->stockCount);
             $this->stockCount->refresh();
-            $this->dispatch('toast', message: 'Telling fullført', type: 'success');
+            Flux::toast(text: 'Telling fullført', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -134,9 +135,9 @@ class StockCountShow extends Component
         try {
             $service->post($this->stockCount);
             $this->stockCount->refresh();
-            $this->dispatch('toast', message: 'Telling bokført - lagerjusteringer opprettet', type: 'success');
+            Flux::toast(text: 'Telling bokført - lagerjusteringer opprettet', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -147,9 +148,9 @@ class StockCountShow extends Component
         try {
             $service->cancel($this->stockCount);
             $this->stockCount->refresh();
-            $this->dispatch('toast', message: 'Telling kansellert', type: 'success');
+            Flux::toast(text: 'Telling kansellert', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

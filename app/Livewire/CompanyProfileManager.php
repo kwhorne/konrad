@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Flux\Flux;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -87,7 +88,7 @@ class CompanyProfileManager extends Component
         $company = app('current.company');
 
         if (! $company || ! auth()->user()->canManage($company)) {
-            $this->dispatch('toast', message: 'Du har ikke tilgang til å endre selskapsinnstillinger.', variant: 'danger');
+            Flux::toast(text: 'Du har ikke tilgang til å endre selskapsinnstillinger.', variant: 'danger');
 
             return;
         }
@@ -149,7 +150,7 @@ class CompanyProfileManager extends Component
         $this->current_logo_path = $logoPath;
         $this->logo = null;
 
-        $this->dispatch('toast', message: 'Selskapsinnstillinger lagret', variant: 'success');
+        Flux::toast(text: 'Selskapsinnstillinger lagret', variant: 'success');
     }
 
     public function deleteLogo(): void
@@ -167,7 +168,7 @@ class CompanyProfileManager extends Component
             $company->update(['logo_path' => null]);
             $this->current_logo_path = null;
 
-            $this->dispatch('toast', message: 'Logo slettet', variant: 'success');
+            Flux::toast(text: 'Logo slettet', variant: 'success');
         }
     }
 

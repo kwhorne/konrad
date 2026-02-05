@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\AccountingSettings;
 use App\Models\Department;
+use Flux\Flux;
 use Livewire\Component;
 
 class AccountingSettingsManager extends Component
@@ -35,7 +36,7 @@ class AccountingSettingsManager extends Component
         }
 
         if (! auth()->user()->canManage($company)) {
-            $this->dispatch('toast', message: 'Du har ikke tilgang til a endre innstillinger.', variant: 'danger');
+            Flux::toast(text: 'Du har ikke tilgang til a endre innstillinger.', variant: 'danger');
 
             return;
         }
@@ -62,7 +63,7 @@ class AccountingSettingsManager extends Component
             'default_department_id' => $this->default_department_id ?: null,
         ]);
 
-        $this->dispatch('toast', message: 'Innstillinger lagret', variant: 'success');
+        Flux::toast(text: 'Innstillinger lagret', variant: 'success');
     }
 
     public function render()

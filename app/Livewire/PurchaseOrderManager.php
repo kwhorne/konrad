@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\PurchaseOrder;
 use App\Services\PurchaseOrderService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -29,9 +30,9 @@ class PurchaseOrderManager extends Component
 
         try {
             $service->approve($po);
-            $this->dispatch('toast', message: 'Innkjopsordre godkjent', type: 'success');
+            Flux::toast(text: 'Innkjopsordre godkjent', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -42,9 +43,9 @@ class PurchaseOrderManager extends Component
 
         try {
             $service->markAsSent($po);
-            $this->dispatch('toast', message: 'Innkjopsordre merket som sendt', type: 'success');
+            Flux::toast(text: 'Innkjopsordre merket som sendt', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -55,9 +56,9 @@ class PurchaseOrderManager extends Component
 
         try {
             $service->cancel($po);
-            $this->dispatch('toast', message: 'Innkjopsordre kansellert', type: 'success');
+            Flux::toast(text: 'Innkjopsordre kansellert', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

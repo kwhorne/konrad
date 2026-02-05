@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Account;
 use Database\Seeders\AccountSeeder;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -108,16 +109,16 @@ class AccountManager extends Component
 
             // Don't allow editing system accounts
             if ($account->is_system) {
-                $this->dispatch('toast', message: 'Systemkontoer kan ikke redigeres', type: 'error');
+                Flux::toast(text: 'Systemkontoer kan ikke redigeres', variant: 'danger');
 
                 return;
             }
 
             $account->update($data);
-            $this->dispatch('toast', message: 'Konto oppdatert', type: 'success');
+            Flux::toast(text: 'Konto oppdatert', variant: 'success');
         } else {
             Account::create($data);
-            $this->dispatch('toast', message: 'Konto opprettet', type: 'success');
+            Flux::toast(text: 'Konto opprettet', variant: 'success');
         }
 
         $this->showModal = false;
@@ -131,20 +132,20 @@ class AccountManager extends Component
 
         // Don't allow deleting system accounts
         if ($account->is_system) {
-            $this->dispatch('toast', message: 'Systemkontoer kan ikke slettes', type: 'error');
+            Flux::toast(text: 'Systemkontoer kan ikke slettes', variant: 'danger');
 
             return;
         }
 
         // Check if account has voucher lines
         if ($account->voucherLines()->exists()) {
-            $this->dispatch('toast', message: 'Kan ikke slette konto med posteringer', type: 'error');
+            Flux::toast(text: 'Kan ikke slette konto med posteringer', variant: 'danger');
 
             return;
         }
 
         $account->delete();
-        $this->dispatch('toast', message: 'Konto slettet', type: 'success');
+        Flux::toast(text: 'Konto slettet', variant: 'success');
     }
 
     public function confirmCreateNs4102(): void
@@ -162,7 +163,7 @@ class AccountManager extends Component
         $seeder = new AccountSeeder;
         $seeder->run();
 
-        $this->dispatch('toast', message: 'Norsk standard kontoplan (NS 4102) er opprettet', type: 'success');
+        Flux::toast(text: 'Norsk standard kontoplan (NS 4102) er opprettet', variant: 'success');
     }
 
     public function render()

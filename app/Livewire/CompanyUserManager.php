@@ -7,6 +7,7 @@ use App\Models\AccountingSettings;
 use App\Models\Company;
 use App\Models\User;
 use App\Services\CompanyService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\Validate;
@@ -62,7 +63,7 @@ class CompanyUserManager extends Component
         $company = app('current.company');
 
         if (! auth()->user()->canManage($company)) {
-            $this->dispatch('toast', message: 'Du har ikke tilgang til å invitere brukere.', variant: 'danger');
+            Flux::toast(text: 'Du har ikke tilgang til å invitere brukere.', variant: 'danger');
 
             return;
         }
@@ -84,10 +85,10 @@ class CompanyUserManager extends Component
                 ? 'Bruker opprettet og invitasjon sendt.'
                 : 'Bruker lagt til og invitasjon sendt.';
 
-            $this->dispatch('toast', message: $message, variant: 'success');
+            Flux::toast(text: $message, variant: 'success');
             $this->closeInviteModal();
         } catch (\Exception $e) {
-            $this->dispatch('toast', message: 'Kunne ikke invitere bruker: '.$e->getMessage(), variant: 'danger');
+            Flux::toast(text: 'Kunne ikke invitere bruker: '.$e->getMessage(), variant: 'danger');
         }
     }
 
@@ -117,7 +118,7 @@ class CompanyUserManager extends Component
         $company = app('current.company');
 
         if (! auth()->user()->canManage($company)) {
-            $this->dispatch('toast', message: 'Du har ikke tilgang til å endre roller.', variant: 'danger');
+            Flux::toast(text: 'Du har ikke tilgang til å endre roller.', variant: 'danger');
 
             return;
         }
@@ -133,7 +134,7 @@ class CompanyUserManager extends Component
         $roleUpdated = $companyService->updateUserRole($company, $user, $this->editingRole);
 
         if (! $roleUpdated) {
-            $this->dispatch('toast', message: 'Kunne ikke oppdatere rolle. Selskapet må ha minst én eier.', variant: 'danger');
+            Flux::toast(text: 'Kunne ikke oppdatere rolle. Selskapet må ha minst én eier.', variant: 'danger');
 
             return;
         }
@@ -145,7 +146,7 @@ class CompanyUserManager extends Component
             $companyService->updateUserDepartment($company, $user, $departmentId);
         }
 
-        $this->dispatch('toast', message: 'Bruker oppdatert.', variant: 'success');
+        Flux::toast(text: 'Bruker oppdatert.', variant: 'success');
         $this->closeEditRoleModal();
     }
 
@@ -166,7 +167,7 @@ class CompanyUserManager extends Component
         $company = app('current.company');
 
         if (! auth()->user()->canManage($company)) {
-            $this->dispatch('toast', message: 'Du har ikke tilgang til å fjerne brukere.', variant: 'danger');
+            Flux::toast(text: 'Du har ikke tilgang til å fjerne brukere.', variant: 'danger');
 
             return;
         }
@@ -181,7 +182,7 @@ class CompanyUserManager extends Component
 
         // Don't allow removing yourself
         if ($user->id === auth()->id()) {
-            $this->dispatch('toast', message: 'Du kan ikke fjerne deg selv fra selskapet.', variant: 'danger');
+            Flux::toast(text: 'Du kan ikke fjerne deg selv fra selskapet.', variant: 'danger');
             $this->cancelRemove();
 
             return;
@@ -190,9 +191,9 @@ class CompanyUserManager extends Component
         $companyService = app(CompanyService::class);
 
         if ($companyService->removeUser($company, $user)) {
-            $this->dispatch('toast', message: 'Bruker fjernet fra selskapet.', variant: 'success');
+            Flux::toast(text: 'Bruker fjernet fra selskapet.', variant: 'success');
         } else {
-            $this->dispatch('toast', message: 'Kunne ikke fjerne bruker. Eiere kan ikke fjernes.', variant: 'danger');
+            Flux::toast(text: 'Kunne ikke fjerne bruker. Eiere kan ikke fjernes.', variant: 'danger');
         }
 
         $this->cancelRemove();
@@ -203,7 +204,7 @@ class CompanyUserManager extends Component
         $company = app('current.company');
 
         if (! auth()->user()->canManage($company)) {
-            $this->dispatch('toast', message: 'Du har ikke tilgang til å sende invitasjoner.', variant: 'danger');
+            Flux::toast(text: 'Du har ikke tilgang til å sende invitasjoner.', variant: 'danger');
 
             return;
         }
@@ -211,7 +212,7 @@ class CompanyUserManager extends Component
         $user = $company->users()->find($userId);
 
         if (! $user) {
-            $this->dispatch('toast', message: 'Bruker ikke funnet.', variant: 'danger');
+            Flux::toast(text: 'Bruker ikke funnet.', variant: 'danger');
 
             return;
         }
@@ -219,7 +220,7 @@ class CompanyUserManager extends Component
         $role = $user->pivot->role ?? 'member';
         $this->sendInvitationEmail($user, $company, $role);
 
-        $this->dispatch('toast', message: 'Invitasjon sendt på nytt til '.$user->email, variant: 'success');
+        Flux::toast(text: 'Invitasjon sendt på nytt til '.$user->email, variant: 'success');
     }
 
     protected function sendInvitationEmail(User $user, Company $company, string $role): void

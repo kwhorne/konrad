@@ -253,7 +253,7 @@ describe('CompanyUserManager Department UI', function () {
             ->call('openEditRoleModal', $member->id)
             ->set('editingDepartmentId', $department->id)
             ->call('updateRole')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         $pivotDepartmentId = $company->users()
             ->wherePivot('user_id', $member->id)
@@ -307,7 +307,7 @@ describe('DepartmentManager Component', function () {
             ->set('name', 'Salg')
             ->set('description', 'Salgsavdelingen')
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         expect(Department::where('code', 'SAL')->exists())->toBeTrue();
     });
@@ -328,7 +328,7 @@ describe('DepartmentManager Component', function () {
             ->set('code', 'NEW')
             ->set('name', 'New Name')
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         expect($department->fresh()->code)->toBe('NEW')
             ->and($department->fresh()->name)->toBe('New Name');
@@ -343,7 +343,7 @@ describe('DepartmentManager Component', function () {
 
         Livewire::test(\App\Livewire\DepartmentManager::class)
             ->call('delete', $department->id)
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         expect(Department::find($department->id))->toBeNull();
     });
@@ -380,7 +380,7 @@ describe('AccountingSettingsManager Component', function () {
         Livewire::test(\App\Livewire\AccountingSettingsManager::class)
             ->set('departments_enabled', true)
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         $settings = AccountingSettings::forCompany($company->id);
         expect($settings->departments_enabled)->toBeTrue();
@@ -397,7 +397,7 @@ describe('AccountingSettingsManager Component', function () {
             ->set('departments_enabled', true)
             ->set('default_department_id', $department->id)
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         $settings = AccountingSettings::forCompany($company->id);
         expect($settings->default_department_id)->toBe($department->id);
@@ -419,7 +419,7 @@ describe('AccountingSettingsManager Component', function () {
         Livewire::test(\App\Livewire\AccountingSettingsManager::class)
             ->set('departments_enabled', false)
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         $settings = AccountingSettings::forCompany($company->id);
         expect($settings->departments_enabled)->toBeFalse()

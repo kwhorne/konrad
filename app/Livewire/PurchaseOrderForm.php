@@ -10,6 +10,7 @@ use App\Models\StockLocation;
 use App\Models\VatRate;
 use App\Rules\ExistsInCompany;
 use App\Services\PurchaseOrderService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -154,10 +155,10 @@ class PurchaseOrderForm extends Component
 
         if ($this->purchaseOrder) {
             $service->update($this->purchaseOrder, $data);
-            $this->dispatch('toast', message: 'Innkjopsordre oppdatert', type: 'success');
+            Flux::toast(text: 'Innkjopsordre oppdatert', variant: 'success');
         } else {
             $this->purchaseOrder = $service->create($data);
-            $this->dispatch('toast', message: 'Innkjopsordre opprettet. Legg til linjer.', type: 'success');
+            Flux::toast(text: 'Innkjopsordre opprettet. Legg til linjer.', variant: 'success');
         }
 
         $this->loadLines();
@@ -200,7 +201,7 @@ class PurchaseOrderForm extends Component
         $this->validate($this->lineRules());
 
         if (! $this->purchaseOrder) {
-            $this->dispatch('toast', message: 'Lagre innkjopsordren forst', type: 'error');
+            Flux::toast(text: 'Lagre innkjopsordren forst', variant: 'danger');
 
             return;
         }
@@ -218,10 +219,10 @@ class PurchaseOrderForm extends Component
 
         if ($this->editingLineId) {
             $service->updateLine($this->purchaseOrder, $this->editingLineId, $lineData);
-            $this->dispatch('toast', message: 'Linje oppdatert', type: 'success');
+            Flux::toast(text: 'Linje oppdatert', variant: 'success');
         } else {
             $service->addLine($this->purchaseOrder, $lineData);
-            $this->dispatch('toast', message: 'Linje lagt til', type: 'success');
+            Flux::toast(text: 'Linje lagt til', variant: 'success');
         }
 
         $this->loadLines();
@@ -234,7 +235,7 @@ class PurchaseOrderForm extends Component
         $service->removeLine($this->purchaseOrder, $lineId);
         $this->loadLines();
         $this->purchaseOrder->refresh();
-        $this->dispatch('toast', message: 'Linje slettet', type: 'success');
+        Flux::toast(text: 'Linje slettet', variant: 'success');
     }
 
     private function loadFromPurchaseOrder(): void

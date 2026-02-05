@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\AccountingSettings;
 use App\Models\Department;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -89,10 +90,10 @@ class DepartmentManager extends Component
         if ($this->editingId) {
             $department = Department::findOrFail($this->editingId);
             $department->update($data);
-            $this->dispatch('toast', message: 'Avdeling oppdatert', type: 'success');
+            Flux::toast(text: 'Avdeling oppdatert', variant: 'success');
         } else {
             Department::create($data);
-            $this->dispatch('toast', message: 'Avdeling opprettet', type: 'success');
+            Flux::toast(text: 'Avdeling opprettet', variant: 'success');
         }
 
         $this->showModal = false;
@@ -112,13 +113,13 @@ class DepartmentManager extends Component
             || $department->supplierInvoices()->exists();
 
         if ($inUse) {
-            $this->dispatch('toast', message: 'Kan ikke slette avdeling som er i bruk', type: 'error');
+            Flux::toast(text: 'Kan ikke slette avdeling som er i bruk', variant: 'danger');
 
             return;
         }
 
         $department->delete();
-        $this->dispatch('toast', message: 'Avdeling slettet', type: 'success');
+        Flux::toast(text: 'Avdeling slettet', variant: 'success');
     }
 
     public function render()

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
 use App\Services\StockService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -59,10 +60,10 @@ class StockAdjustmentManager extends Component
                 notes: $this->notes
             );
 
-            $this->dispatch('toast', message: 'Justering opprettet', type: 'success');
+            Flux::toast(text: 'Justering opprettet', variant: 'success');
             $this->reset(['product_id', 'stock_location_id', 'quantity', 'unit_cost', 'notes']);
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

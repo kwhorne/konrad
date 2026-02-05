@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\GoodsReceipt;
 use App\Services\GoodsReceiptService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
@@ -34,9 +35,9 @@ class GoodsReceiptShow extends Component
         try {
             $service->post($this->goodsReceipt);
             $this->goodsReceipt->refresh();
-            $this->dispatch('toast', message: 'Varemottak bokfort', type: 'success');
+            Flux::toast(text: 'Varemottak bokfort', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -47,9 +48,9 @@ class GoodsReceiptShow extends Component
         try {
             $service->reverse($this->goodsReceipt);
             $this->goodsReceipt->refresh();
-            $this->dispatch('toast', message: 'Varemottak reversert', type: 'success');
+            Flux::toast(text: 'Varemottak reversert', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -59,10 +60,10 @@ class GoodsReceiptShow extends Component
 
         try {
             $service->delete($this->goodsReceipt);
-            $this->dispatch('toast', message: 'Varemottak slettet', type: 'success');
+            Flux::toast(text: 'Varemottak slettet', variant: 'success');
             $this->redirect(route('purchasing.goods-receipts.index'), navigate: true);
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

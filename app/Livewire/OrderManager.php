@@ -14,6 +14,7 @@ use App\Rules\ExistsInCompany;
 use App\Services\ContactFormPopulator;
 use App\Services\DocumentConversionService;
 use App\Services\DocumentLineService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -255,14 +256,14 @@ class OrderManager extends Component
 
         if ($this->editingId) {
             $order->update($data);
-            $this->dispatch('toast', message: 'Ordren ble oppdatert', variant: 'success');
+            Flux::toast(text: 'Ordren ble oppdatert', variant: 'success');
             $this->closeModal();
         } else {
             $order = Order::create($data);
             $this->editingId = $order->id;
             $this->currentOrderId = $order->id;
             $this->loadOrderLines();
-            $this->dispatch('toast', message: 'Ordren ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+            Flux::toast(text: 'Ordren ble opprettet. Du kan nå legge til linjer.', variant: 'success');
         }
     }
 

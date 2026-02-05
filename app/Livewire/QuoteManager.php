@@ -14,6 +14,7 @@ use App\Rules\ExistsInCompany;
 use App\Services\ContactFormPopulator;
 use App\Services\DocumentConversionService;
 use App\Services\DocumentLineService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -241,14 +242,14 @@ class QuoteManager extends Component
 
         if ($this->editingId) {
             $quote->update($data);
-            $this->dispatch('toast', message: 'Tilbudet ble oppdatert', variant: 'success');
+            Flux::toast(text: 'Tilbudet ble oppdatert', variant: 'success');
             $this->closeModal();
         } else {
             $quote = Quote::create($data);
             $this->editingId = $quote->id;
             $this->currentQuoteId = $quote->id;
             $this->loadQuoteLines();
-            $this->dispatch('toast', message: 'Tilbudet ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+            Flux::toast(text: 'Tilbudet ble opprettet. Du kan nå legge til linjer.', variant: 'success');
         }
     }
 

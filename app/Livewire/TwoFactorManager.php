@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use Flux\Flux;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Actions\ConfirmTwoFactorAuthentication;
@@ -59,7 +60,7 @@ class TwoFactorManager extends Component
         $this->showRecoveryCodes = true;
         $this->confirmationCode = '';
 
-        $this->dispatch('toast', message: 'Tofaktorautentisering er nå aktivert', variant: 'success');
+        Flux::toast(text: 'Tofaktorautentisering er nå aktivert', variant: 'success');
     }
 
     public function cancelEnabling(): void
@@ -99,7 +100,7 @@ class TwoFactorManager extends Component
 
         $this->recoveryCodes = $user->fresh()->recoveryCodes();
 
-        $this->dispatch('toast', message: 'Gjenopprettingskoder er regenerert', variant: 'success');
+        Flux::toast(text: 'Gjenopprettingskoder er regenerert', variant: 'success');
     }
 
     public function startDisabling(): void
@@ -129,7 +130,7 @@ class TwoFactorManager extends Component
         $this->showDisableModal = false;
         $this->password = '';
 
-        $this->dispatch('toast', message: 'Tofaktorautentisering er deaktivert', variant: 'success');
+        Flux::toast(text: 'Tofaktorautentisering er deaktivert', variant: 'success');
     }
 
     public function cancelDisabling(): void

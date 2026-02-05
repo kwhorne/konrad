@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -102,10 +103,10 @@ class StockLocationManager extends Component
         if ($this->editingId) {
             $location = StockLocation::findOrFail($this->editingId);
             $location->update($data);
-            $this->dispatch('toast', message: 'Lokasjon oppdatert', type: 'success');
+            Flux::toast(text: 'Lokasjon oppdatert', variant: 'success');
         } else {
             StockLocation::create($data);
-            $this->dispatch('toast', message: 'Lokasjon opprettet', type: 'success');
+            Flux::toast(text: 'Lokasjon opprettet', variant: 'success');
         }
 
         $this->showModal = false;
@@ -119,13 +120,13 @@ class StockLocationManager extends Component
 
         // Check if location has stock
         if ($location->stockLevels()->where('quantity_on_hand', '>', 0)->exists()) {
-            $this->dispatch('toast', message: 'Kan ikke slette lokasjon med beholdning', type: 'error');
+            Flux::toast(text: 'Kan ikke slette lokasjon med beholdning', variant: 'danger');
 
             return;
         }
 
         $location->delete();
-        $this->dispatch('toast', message: 'Lokasjon slettet', type: 'success');
+        Flux::toast(text: 'Lokasjon slettet', variant: 'success');
     }
 
     public function render()

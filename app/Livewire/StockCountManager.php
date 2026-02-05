@@ -6,6 +6,7 @@ use App\Models\StockCount;
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
 use App\Services\StockCountService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -62,7 +63,7 @@ class StockCountManager extends Component
         );
 
         $this->closeCreateModal();
-        $this->dispatch('toast', message: 'Varetelling opprettet', type: 'success');
+        Flux::toast(text: 'Varetelling opprettet', variant: 'success');
 
         return $this->redirect(route('inventory.stock-counts.show', $stockCount), navigate: true);
     }
@@ -74,9 +75,9 @@ class StockCountManager extends Component
 
         try {
             $service->start($count);
-            $this->dispatch('toast', message: 'Telling startet', type: 'success');
+            Flux::toast(text: 'Telling startet', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -87,9 +88,9 @@ class StockCountManager extends Component
 
         try {
             $service->cancel($count);
-            $this->dispatch('toast', message: 'Telling kansellert', type: 'success');
+            Flux::toast(text: 'Telling kansellert', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

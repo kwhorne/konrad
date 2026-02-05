@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\GoodsReceipt;
 use App\Services\GoodsReceiptService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -29,9 +30,9 @@ class GoodsReceiptManager extends Component
 
         try {
             $service->post($receipt);
-            $this->dispatch('toast', message: 'Varemottak bokfort', type: 'success');
+            Flux::toast(text: 'Varemottak bokfort', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 
@@ -42,9 +43,9 @@ class GoodsReceiptManager extends Component
 
         try {
             $service->delete($receipt);
-            $this->dispatch('toast', message: 'Varemottak slettet', type: 'success');
+            Flux::toast(text: 'Varemottak slettet', variant: 'success');
         } catch (\InvalidArgumentException $e) {
-            $this->dispatch('toast', message: $e->getMessage(), type: 'error');
+            Flux::toast(text: $e->getMessage(), variant: 'danger');
         }
     }
 

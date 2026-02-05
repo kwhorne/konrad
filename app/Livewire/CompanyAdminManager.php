@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Company;
 use App\Models\Module;
 use App\Services\ModuleService;
+use Flux\Flux;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -41,7 +42,7 @@ class CompanyAdminManager extends Component
         $company->update(['is_active' => ! $company->is_active]);
 
         $status = $company->is_active ? 'aktivert' : 'deaktivert';
-        $this->dispatch('toast', message: "Selskap {$status}", variant: 'success');
+        Flux::toast(text: "Selskap {$status}", variant: 'success');
     }
 
     public function openModuleModal(int $companyId): void
@@ -91,7 +92,7 @@ class CompanyAdminManager extends Component
             }
         }
 
-        $this->dispatch('toast', message: 'Moduler oppdatert', variant: 'success');
+        Flux::toast(text: 'Moduler oppdatert', variant: 'success');
         $this->closeModuleModal();
     }
 

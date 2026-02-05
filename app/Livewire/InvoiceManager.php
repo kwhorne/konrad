@@ -16,6 +16,7 @@ use App\Rules\ExistsInCompany;
 use App\Services\ContactFormPopulator;
 use App\Services\DocumentLineService;
 use App\Services\InvoiceService;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -299,14 +300,14 @@ class InvoiceManager extends Component
 
         if ($this->editingId) {
             Invoice::findOrFail($this->editingId)->update($data);
-            $this->dispatch('toast', message: 'Fakturaen ble oppdatert', variant: 'success');
+            Flux::toast(text: 'Fakturaen ble oppdatert', variant: 'success');
             $this->closeModal();
         } else {
             $invoice = Invoice::create($data);
             $this->editingId = $invoice->id;
             $this->currentInvoiceId = $invoice->id;
             $this->loadInvoiceLines();
-            $this->dispatch('toast', message: 'Fakturaen ble opprettet. Du kan nå legge til linjer.', variant: 'success');
+            Flux::toast(text: 'Fakturaen ble opprettet. Du kan nå legge til linjer.', variant: 'success');
         }
     }
 

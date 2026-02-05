@@ -56,7 +56,7 @@ describe('CompanyProfileManager Component', function () {
             ->set('name', 'Updated Company Name')
             ->set('email', 'updated@example.com')
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         expect($company->fresh()->name)->toBe('Updated Company Name')
             ->and($company->fresh()->email)->toBe('updated@example.com');
@@ -77,7 +77,7 @@ describe('CompanyProfileManager Component', function () {
         Livewire::test(CompanyProfileManager::class)
             ->set('name', 'Manager Updated Name')
             ->call('save')
-            ->assertDispatched('toast');
+            ->assertDispatched('toast-show');
 
         expect($company->fresh()->name)->toBe('Manager Updated Name');
     });
@@ -99,7 +99,7 @@ describe('CompanyProfileManager Component', function () {
         Livewire::test(CompanyProfileManager::class)
             ->set('name', 'Should Not Change')
             ->call('save')
-            ->assertDispatched('toast', message: 'Du har ikke tilgang til å endre selskapsinnstillinger.', variant: 'danger');
+            ->assertDispatched('toast-show');
 
         expect($company->fresh()->name)->toBe($originalName);
     });

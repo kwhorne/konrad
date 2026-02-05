@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\TwoFactorIpWhitelist;
+use Flux\Flux;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -99,7 +100,7 @@ class TwoFactorIpWhitelistManager extends Component
             $message = 'IP-whitelist opprettet';
         }
 
-        $this->dispatch('toast', message: $message, variant: 'success');
+        Flux::toast(text: $message, variant: 'success');
         $this->closeModal();
     }
 
@@ -124,7 +125,7 @@ class TwoFactorIpWhitelistManager extends Component
         $entry = TwoFactorIpWhitelist::findOrFail($this->deletingEntryId);
         $entry->delete();
 
-        $this->dispatch('toast', message: 'IP-whitelist slettet', variant: 'success');
+        Flux::toast(text: 'IP-whitelist slettet', variant: 'success');
         $this->cancelDelete();
     }
 
@@ -134,7 +135,7 @@ class TwoFactorIpWhitelistManager extends Component
         $entry->update(['is_active' => ! $entry->is_active]);
 
         $status = $entry->is_active ? 'aktivert' : 'deaktivert';
-        $this->dispatch('toast', message: "IP-whitelist {$status}", variant: 'success');
+        Flux::toast(text: "IP-whitelist {$status}", variant: 'success');
     }
 
     protected function resetForm(): void
