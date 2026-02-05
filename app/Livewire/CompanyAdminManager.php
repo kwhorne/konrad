@@ -111,10 +111,14 @@ class CompanyAdminManager extends Component
             ->when($this->filterStatus === 'inactive', fn ($q) => $q->where('is_active', false))
             ->orderBy('name');
 
+        $stats = Company::withoutGlobalScopes()
+            ->selectRaw('COUNT(*) as total, SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active')
+            ->first();
+
         return view('livewire.company-admin-manager', [
             'companies' => $query->paginate(15),
-            'totalCompanies' => Company::withoutGlobalScopes()->count(),
-            'activeCompanies' => Company::withoutGlobalScopes()->where('is_active', true)->count(),
+            'totalCompanies' => $stats->total,
+            'activeCompanies' => $stats->active,
             'premiumModules' => Module::active()->premium()->ordered()->get(),
         ]);
     }

@@ -50,12 +50,12 @@ class ActivityManager extends Component
         ];
     }
 
-    public function mount($contactId)
+    public function mount($contactId): void
     {
         $this->contactId = $contactId;
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -74,13 +74,13 @@ class ActivityManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', Activity::class);
         $this->validate();
@@ -116,7 +116,7 @@ class ActivityManager extends Component
         $this->closeModal();
     }
 
-    public function toggleComplete($id)
+    public function toggleComplete($id): void
     {
         $activity = Activity::findOrFail($id);
         $this->authorize('update', $activity);
@@ -128,14 +128,14 @@ class ActivityManager extends Component
         }
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $activity = Activity::findOrFail($id);
         $this->authorize('delete', $activity);
         $activity->delete();
     }
 
-    public function setFilter($filter)
+    public function setFilter($filter): void
     {
         $this->filter = $filter;
         $this->resetPage();

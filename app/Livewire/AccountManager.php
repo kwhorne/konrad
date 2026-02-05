@@ -61,12 +61,12 @@ class AccountManager extends Component
         'account_class.required' => 'Kontoklasse er pakrevd.',
     ];
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function create()
+    public function create(): void
     {
         $this->reset(['editingId', 'account_number', 'name', 'description', 'account_class', 'account_type', 'vat_code', 'is_active']);
         $this->is_active = true;
@@ -74,7 +74,7 @@ class AccountManager extends Component
         $this->showModal = true;
     }
 
-    public function edit(int $id)
+    public function edit(int $id): void
     {
         $account = Account::findOrFail($id);
         $this->editingId = $account->id;
@@ -88,7 +88,7 @@ class AccountManager extends Component
         $this->showModal = true;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', Account::class);
 
@@ -125,7 +125,7 @@ class AccountManager extends Component
         $this->reset(['editingId', 'account_number', 'name', 'description', 'account_class', 'account_type', 'vat_code']);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $account = Account::findOrFail($id);
         $this->authorize('delete', $account);

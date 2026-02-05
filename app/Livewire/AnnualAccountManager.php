@@ -39,25 +39,25 @@ class AnnualAccountManager extends Component
         'createYear.unique' => 'Det finnes allerede et årsregnskap for dette året.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->createYear = now()->subYear()->year;
     }
 
-    public function openCreateModal()
+    public function openCreateModal(): void
     {
         $this->createYear = now()->subYear()->year;
         $this->cloneFromPrevious = false;
         $this->showCreateModal = true;
     }
 
-    public function closeCreateModal()
+    public function closeCreateModal(): void
     {
         $this->showCreateModal = false;
         $this->resetValidation();
     }
 
-    public function createAccount()
+    public function createAccount(): void
     {
         $this->authorize('create', AnnualAccount::class);
 
@@ -81,19 +81,19 @@ class AnnualAccountManager extends Component
         $this->viewAccount($annualAccount->id);
     }
 
-    public function viewAccount($id)
+    public function viewAccount($id): void
     {
         $this->viewingAccountId = $id;
         $this->showDetailModal = true;
     }
 
-    public function closeDetailModal()
+    public function closeDetailModal(): void
     {
         $this->showDetailModal = false;
         $this->viewingAccountId = null;
     }
 
-    public function refreshData($id)
+    public function refreshData($id): void
     {
         $annualAccount = AnnualAccount::findOrFail($id);
         $this->authorize('update', $annualAccount);
@@ -110,7 +110,7 @@ class AnnualAccountManager extends Component
         session()->flash('success', 'Regnskapsdata ble oppdatert.');
     }
 
-    public function validateAccount($id)
+    public function validateAccount($id): void
     {
         $annualAccount = AnnualAccount::findOrFail($id);
         $this->authorize('update', $annualAccount);
@@ -132,7 +132,7 @@ class AnnualAccountManager extends Component
         }
     }
 
-    public function approve($id)
+    public function approve($id): void
     {
         $annualAccount = AnnualAccount::findOrFail($id);
         $this->authorize('approve', $annualAccount);
@@ -149,7 +149,7 @@ class AnnualAccountManager extends Component
         session()->flash('success', 'Årsregnskapet er godkjent av styret.');
     }
 
-    public function markAsDraft($id)
+    public function markAsDraft($id): void
     {
         $annualAccount = AnnualAccount::findOrFail($id);
         $this->authorize('markAsDraft', $annualAccount);
@@ -164,7 +164,7 @@ class AnnualAccountManager extends Component
         session()->flash('success', 'Årsregnskapet ble satt tilbake til utkast.');
     }
 
-    public function submitToAltinn($id)
+    public function submitToAltinn($id): void
     {
         $annualAccount = AnnualAccount::findOrFail($id);
         $this->authorize('submitToAltinn', $annualAccount);
@@ -179,7 +179,7 @@ class AnnualAccountManager extends Component
         session()->flash('info', 'Altinn-innsending er ikke implementert ennå.');
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $annualAccount = AnnualAccount::findOrFail($id);
         $this->authorize('delete', $annualAccount);

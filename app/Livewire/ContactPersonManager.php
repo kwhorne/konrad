@@ -49,7 +49,7 @@ class ContactPersonManager extends Component
         'is_active' => 'boolean',
     ];
 
-    public function mount($contactId = null, $existingPersons = [])
+    public function mount($contactId = null, $existingPersons = []): void
     {
         $this->contactId = $contactId;
 
@@ -60,7 +60,7 @@ class ContactPersonManager extends Component
         }
     }
 
-    public function openModal($index = null)
+    public function openModal($index = null): void
     {
         if ($index !== null) {
             $this->editingIndex = $index;
@@ -81,13 +81,13 @@ class ContactPersonManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function savePerson()
+    public function savePerson(): void
     {
         $this->validate();
 
@@ -121,14 +121,14 @@ class ContactPersonManager extends Component
         $this->closeModal();
     }
 
-    public function deletePerson($index)
+    public function deletePerson($index): void
     {
         unset($this->persons[$index]);
         $this->persons = array_values($this->persons);
         $this->dispatch('persons-updated', persons: $this->persons);
     }
 
-    public function setPrimary($index)
+    public function setPrimary($index): void
     {
         foreach ($this->persons as $key => &$person) {
             $person['is_primary'] = ($key === $index);

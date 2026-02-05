@@ -15,7 +15,7 @@ class AccountingSettingsManager extends Component
 
     public ?int $default_department_id = null;
 
-    public function mount()
+    public function mount(): void
     {
         $company = app('current.company');
         if (! $company) {
@@ -28,7 +28,7 @@ class AccountingSettingsManager extends Component
         $this->default_department_id = $settings->default_department_id;
     }
 
-    public function save()
+    public function save(): void
     {
         $company = app('current.company');
         if (! $company) {

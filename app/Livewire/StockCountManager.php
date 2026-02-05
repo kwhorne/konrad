@@ -29,18 +29,18 @@ class StockCountManager extends Component
 
     public $create_description = '';
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function openCreateModal()
+    public function openCreateModal(): void
     {
         $this->reset(['create_location_id', 'create_description']);
         $this->showCreateModal = true;
     }
 
-    public function closeCreateModal()
+    public function closeCreateModal(): void
     {
         $this->showCreateModal = false;
     }
@@ -68,7 +68,7 @@ class StockCountManager extends Component
         return $this->redirect(route('inventory.stock-counts.show', $stockCount), navigate: true);
     }
 
-    public function startCount(int $countId, StockCountService $service)
+    public function startCount(int $countId, StockCountService $service): void
     {
         $count = StockCount::findOrFail($countId);
         $this->authorize('start', $count);
@@ -81,7 +81,7 @@ class StockCountManager extends Component
         }
     }
 
-    public function cancelCount(int $countId, StockCountService $service)
+    public function cancelCount(int $countId, StockCountService $service): void
     {
         $count = StockCount::findOrFail($countId);
         $this->authorize('cancel', $count);

@@ -77,22 +77,22 @@ class ShareholderManager extends Component
         'email.email' => 'Ugyldig e-postadresse.',
     ];
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterType()
+    public function updatedFilterType(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterActive()
+    public function updatedFilterActive(): void
     {
         $this->resetPage();
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -118,13 +118,13 @@ class ShareholderManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', Shareholder::class);
 
@@ -159,7 +159,7 @@ class ShareholderManager extends Component
         $this->closeModal();
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $shareholder = Shareholder::findOrFail($id);
         $this->authorize('delete', $shareholder);
@@ -175,7 +175,7 @@ class ShareholderManager extends Component
         session()->flash('success', 'Aksjonæren ble slettet.');
     }
 
-    public function toggleActive($id)
+    public function toggleActive($id): void
     {
         $shareholder = Shareholder::findOrFail($id);
         $this->authorize('update', $shareholder);
@@ -183,7 +183,7 @@ class ShareholderManager extends Component
         $shareholder->update(['is_active' => ! $shareholder->is_active]);
     }
 
-    private function resetForm()
+    private function resetForm(): void
     {
         $this->editingId = null;
         $this->shareholder_type = 'person';

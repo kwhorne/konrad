@@ -13,7 +13,7 @@ class ContractFileUpload extends Component
     #[Validate(['attachments.*' => 'file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png'])]
     public $attachments = [];
 
-    public function removeAttachment($index)
+    public function removeAttachment($index): void
     {
         $attachment = $this->attachments[$index];
         $attachment->delete();

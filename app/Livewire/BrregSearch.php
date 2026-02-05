@@ -17,7 +17,7 @@ class BrregSearch extends Component
 
     public $error = null;
 
-    public function search()
+    public function search(): void
     {
         $this->error = null;
         $this->results = [];
@@ -68,7 +68,7 @@ class BrregSearch extends Component
         $this->isSearching = false;
     }
 
-    public function selectCompany($index)
+    public function selectCompany($index): void
     {
         if (isset($this->results[$index])) {
             $company = $this->results[$index];
@@ -79,7 +79,7 @@ class BrregSearch extends Component
         }
     }
 
-    public function clearSearch()
+    public function clearSearch(): void
     {
         $this->query = '';
         $this->results = [];

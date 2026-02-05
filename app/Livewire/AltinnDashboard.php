@@ -20,18 +20,18 @@ class AltinnDashboard extends Component
 
     public $viewingSubmissionId = null;
 
-    public function mount()
+    public function mount(): void
     {
         $this->authorize('viewAny', AltinnSubmission::class);
         $this->selectedYear = now()->year;
     }
 
-    public function updatedSelectedYear()
+    public function updatedSelectedYear(): void
     {
         // Refresh data when year changes
     }
 
-    public function viewSubmission($id)
+    public function viewSubmission($id): void
     {
         $submission = AltinnSubmission::findOrFail($id);
         $this->authorize('view', $submission);
@@ -39,7 +39,7 @@ class AltinnDashboard extends Component
         $this->showSubmissionModal = true;
     }
 
-    public function closeSubmissionModal()
+    public function closeSubmissionModal(): void
     {
         $this->showSubmissionModal = false;
         $this->viewingSubmissionId = null;

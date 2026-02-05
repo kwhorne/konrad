@@ -70,7 +70,7 @@ class ShareClassManager extends Component
         'par_value.min' => 'Pålydende må være minst 0,01 kr.',
     ];
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -94,13 +94,13 @@ class ShareClassManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', ShareClass::class);
 
@@ -140,7 +140,7 @@ class ShareClassManager extends Component
         $this->closeModal();
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $shareClass = ShareClass::findOrFail($id);
         $this->authorize('delete', $shareClass);
@@ -156,7 +156,7 @@ class ShareClassManager extends Component
         session()->flash('success', 'Aksjeklassen ble slettet.');
     }
 
-    public function toggleActive($id)
+    public function toggleActive($id): void
     {
         $shareClass = ShareClass::findOrFail($id);
         $this->authorize('update', $shareClass);
@@ -164,7 +164,7 @@ class ShareClassManager extends Component
         $shareClass->update(['is_active' => ! $shareClass->is_active]);
     }
 
-    private function resetForm()
+    private function resetForm(): void
     {
         $this->editingId = null;
         $this->name = '';

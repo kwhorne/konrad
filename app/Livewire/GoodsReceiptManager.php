@@ -18,12 +18,12 @@ class GoodsReceiptManager extends Component
 
     public $filterStatus = '';
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function post(int $id, GoodsReceiptService $service)
+    public function post(int $id, GoodsReceiptService $service): void
     {
         $receipt = GoodsReceipt::findOrFail($id);
         $this->authorize('post', $receipt);
@@ -36,7 +36,7 @@ class GoodsReceiptManager extends Component
         }
     }
 
-    public function delete(int $id, GoodsReceiptService $service)
+    public function delete(int $id, GoodsReceiptService $service): void
     {
         $receipt = GoodsReceipt::findOrFail($id);
         $this->authorize('delete', $receipt);

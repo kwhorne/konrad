@@ -61,23 +61,23 @@ class TaxAdjustmentManager extends Component
         'tax_amount.required' => 'Skattemessig beløp er påkrevd.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->filterYear = now()->year;
         $this->fiscal_year = now()->year;
     }
 
-    public function updatedFilterYear()
+    public function updatedFilterYear(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterType()
+    public function updatedFilterType(): void
     {
         $this->resetPage();
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -98,13 +98,13 @@ class TaxAdjustmentManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', TaxAdjustment::class);
 
@@ -134,7 +134,7 @@ class TaxAdjustmentManager extends Component
         $this->closeModal();
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $adjustment = TaxAdjustment::findOrFail($id);
         $this->authorize('delete', $adjustment);

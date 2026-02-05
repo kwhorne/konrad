@@ -37,24 +37,24 @@ class ShareholderReportManager extends Component
         'createYear.unique' => 'Det finnes allerede en rapport for dette året.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->createYear = now()->subYear()->year;
     }
 
-    public function openCreateModal()
+    public function openCreateModal(): void
     {
         $this->createYear = now()->subYear()->year;
         $this->showCreateModal = true;
     }
 
-    public function closeCreateModal()
+    public function closeCreateModal(): void
     {
         $this->showCreateModal = false;
         $this->resetValidation();
     }
 
-    public function createReport()
+    public function createReport(): void
     {
         $this->authorize('create', ShareholderReport::class);
 
@@ -69,19 +69,19 @@ class ShareholderReportManager extends Component
         $this->viewReport($report->id);
     }
 
-    public function viewReport($id)
+    public function viewReport($id): void
     {
         $this->viewingReportId = $id;
         $this->showDetailModal = true;
     }
 
-    public function closeDetailModal()
+    public function closeDetailModal(): void
     {
         $this->showDetailModal = false;
         $this->viewingReportId = null;
     }
 
-    public function regenerateSnapshot($id)
+    public function regenerateSnapshot($id): void
     {
         $report = ShareholderReport::findOrFail($id);
         $this->authorize('update', $report);
@@ -96,7 +96,7 @@ class ShareholderReportManager extends Component
         session()->flash('success', 'Snapshot ble regenerert.');
     }
 
-    public function markAsReady($id)
+    public function markAsReady($id): void
     {
         $report = ShareholderReport::findOrFail($id);
         $this->authorize('markAsReady', $report);
@@ -111,7 +111,7 @@ class ShareholderReportManager extends Component
         session()->flash('success', 'Rapporten er nå klar for innsending.');
     }
 
-    public function markAsDraft($id)
+    public function markAsDraft($id): void
     {
         $report = ShareholderReport::findOrFail($id);
         $this->authorize('markAsDraft', $report);
@@ -126,7 +126,7 @@ class ShareholderReportManager extends Component
         session()->flash('success', 'Rapporten ble satt tilbake til utkast.');
     }
 
-    public function submitToAltinn($id)
+    public function submitToAltinn($id): void
     {
         $report = ShareholderReport::findOrFail($id);
         $this->authorize('submitToAltinn', $report);
@@ -141,7 +141,7 @@ class ShareholderReportManager extends Component
         session()->flash('info', 'Altinn-innsending er ikke implementert ennå.');
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $report = ShareholderReport::findOrFail($id);
         $this->authorize('delete', $report);

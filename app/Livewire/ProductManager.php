@@ -82,22 +82,22 @@ class ProductManager extends Component
         'price.numeric' => 'Pris må være et tall.',
     ];
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterGroup()
+    public function updatedFilterGroup(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterType()
+    public function updatedFilterType(): void
     {
         $this->resetPage();
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         if ($id) {
             $product = Product::findOrFail($id);
@@ -127,13 +127,13 @@ class ProductManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate();
 
@@ -169,7 +169,7 @@ class ProductManager extends Component
         $this->closeModal();
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $product = Product::findOrFail($id);
         $this->authorize('delete', $product);
@@ -178,7 +178,7 @@ class ProductManager extends Component
         session()->flash('success', 'Produktet ble slettet.');
     }
 
-    public function toggleActive($id)
+    public function toggleActive($id): void
     {
         $product = Product::findOrFail($id);
         $this->authorize('update', $product);
@@ -186,7 +186,7 @@ class ProductManager extends Component
         $product->update(['is_active' => ! $product->is_active]);
     }
 
-    private function resetForm()
+    private function resetForm(): void
     {
         $this->editingId = null;
         $this->name = '';

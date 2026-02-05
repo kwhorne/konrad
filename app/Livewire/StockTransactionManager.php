@@ -21,7 +21,7 @@ class StockTransactionManager extends Component
 
     public $dateTo = '';
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }

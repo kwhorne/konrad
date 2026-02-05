@@ -34,23 +34,23 @@ class TaxDepreciationManager extends Component
         ];
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->filterYear = now()->year;
     }
 
-    public function updatedFilterYear()
+    public function updatedFilterYear(): void
     {
         // Check if schedules exist for this year, if not, offer to initialize
     }
 
-    public function initializeYear()
+    public function initializeYear(): void
     {
         TaxDepreciationSchedule::initializeForYear($this->filterYear, auth()->id());
         session()->flash('success', "Saldogrupper for {$this->filterYear} ble opprettet.");
     }
 
-    public function openModal($id)
+    public function openModal($id): void
     {
         $this->resetForm();
         $this->editingId = $id;
@@ -66,13 +66,13 @@ class TaxDepreciationManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->validate();
 
@@ -88,7 +88,7 @@ class TaxDepreciationManager extends Component
         $this->closeModal();
     }
 
-    public function recalculateAll()
+    public function recalculateAll(): void
     {
         $schedules = TaxDepreciationSchedule::forYear($this->filterYear)->get();
 

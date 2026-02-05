@@ -48,12 +48,12 @@ class DepartmentManager extends Component
         'name.required' => 'Avdelingsnavn er pakrevd.',
     ];
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function create()
+    public function create(): void
     {
         $this->reset(['editingId', 'code', 'name', 'description', 'sort_order', 'is_active']);
         $this->is_active = true;
@@ -61,7 +61,7 @@ class DepartmentManager extends Component
         $this->showModal = true;
     }
 
-    public function edit(int $id)
+    public function edit(int $id): void
     {
         $department = Department::findOrFail($id);
         $this->editingId = $department->id;
@@ -73,7 +73,7 @@ class DepartmentManager extends Component
         $this->showModal = true;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', Department::class);
 
@@ -100,7 +100,7 @@ class DepartmentManager extends Component
         $this->reset(['editingId', 'code', 'name', 'description', 'sort_order']);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $department = Department::findOrFail($id);
         $this->authorize('delete', $department);

@@ -17,7 +17,7 @@ class StockLevelManager extends Component
 
     public $filterBelowReorder = false;
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }

@@ -44,12 +44,12 @@ class AnnualAccountNotesManager extends Component
         'content.required' => 'Innhold er påkrevd.',
     ];
 
-    public function mount($annualAccountId)
+    public function mount($annualAccountId): void
     {
         $this->annualAccountId = $annualAccountId;
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -71,13 +71,13 @@ class AnnualAccountNotesManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
 
@@ -119,7 +119,7 @@ class AnnualAccountNotesManager extends Component
         $this->closeModal();
     }
 
-    public function toggleVisibility($id)
+    public function toggleVisibility($id): void
     {
         $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
 
@@ -141,7 +141,7 @@ class AnnualAccountNotesManager extends Component
         $note->update(['is_visible' => ! $note->is_visible]);
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
 
@@ -164,7 +164,7 @@ class AnnualAccountNotesManager extends Component
         session()->flash('success', 'Noten ble slettet.');
     }
 
-    public function useTemplate($type)
+    public function useTemplate($type): void
     {
         $this->note_type = $type;
         $this->title = AnnualAccountNote::getDefaultTitle($type);

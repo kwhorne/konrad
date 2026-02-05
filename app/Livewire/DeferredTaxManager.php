@@ -58,18 +58,18 @@ class DeferredTaxManager extends Component
         'tax_value.required' => 'Skattemessig verdi er påkrevd.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->filterYear = now()->year;
         $this->fiscal_year = now()->year;
     }
 
-    public function updatedFilterYear()
+    public function updatedFilterYear(): void
     {
         $this->fiscal_year = $this->filterYear;
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -90,13 +90,13 @@ class DeferredTaxManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', DeferredTaxItem::class);
 
@@ -126,7 +126,7 @@ class DeferredTaxManager extends Component
         $this->closeModal();
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $item = DeferredTaxItem::findOrFail($id);
         $this->authorize('delete', $item);

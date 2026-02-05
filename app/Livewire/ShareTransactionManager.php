@@ -79,69 +79,69 @@ class ShareTransactionManager extends Component
         'to_shareholder_id.required' => 'Kjøpende aksjonær er påkrevd.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->transaction_date = now()->format('Y-m-d');
         $this->filterYear = now()->year;
     }
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterType()
+    public function updatedFilterType(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterYear()
+    public function updatedFilterYear(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterShareClass()
+    public function updatedFilterShareClass(): void
     {
         $this->resetPage();
     }
 
-    public function updatedTransactionType()
+    public function updatedTransactionType(): void
     {
         // Reset shareholder fields when transaction type changes
         $this->from_shareholder_id = '';
         $this->to_shareholder_id = '';
     }
 
-    public function updatedNumberOfShares()
+    public function updatedNumberOfShares(): void
     {
         $this->calculateTotal();
     }
 
-    public function updatedPricePerShare()
+    public function updatedPricePerShare(): void
     {
         $this->calculateTotal();
     }
 
-    private function calculateTotal()
+    private function calculateTotal(): void
     {
         if ($this->number_of_shares && $this->price_per_share) {
             $this->total_amount = $this->number_of_shares * $this->price_per_share;
         }
     }
 
-    public function openModal()
+    public function openModal(): void
     {
         $this->resetForm();
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', ShareTransaction::class);
 
@@ -204,7 +204,7 @@ class ShareTransactionManager extends Component
         }
     }
 
-    private function resetForm()
+    private function resetForm(): void
     {
         $this->transaction_type = 'issue';
         $this->transaction_date = now()->format('Y-m-d');

@@ -43,7 +43,7 @@ class StockAdjustmentManager extends Component
         'notes.required' => 'Begrunnelse er pakrevd.',
     ];
 
-    public function save(StockService $stockService)
+    public function save(StockService $stockService): void
     {
         $this->authorize('create', StockLocation::class);
         $this->validate();

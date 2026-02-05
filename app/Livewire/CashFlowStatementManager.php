@@ -82,7 +82,7 @@ class CashFlowStatementManager extends Component
         ];
     }
 
-    public function mount($annualAccountId)
+    public function mount($annualAccountId): void
     {
         $this->annualAccountId = $annualAccountId;
         $this->loadData();
@@ -118,19 +118,19 @@ class CashFlowStatementManager extends Component
         }
     }
 
-    public function openModal()
+    public function openModal(): void
     {
         $this->loadData();
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetValidation();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
 

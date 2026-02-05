@@ -57,12 +57,12 @@ class StockLocationManager extends Component
         'name.required' => 'Navn er pakrevd.',
     ];
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function create()
+    public function create(): void
     {
         $this->reset(['editingId', 'code', 'name', 'description', 'address', 'location_type', 'parent_id', 'is_active']);
         $this->is_active = true;
@@ -70,7 +70,7 @@ class StockLocationManager extends Component
         $this->showModal = true;
     }
 
-    public function edit(int $id)
+    public function edit(int $id): void
     {
         $location = StockLocation::findOrFail($id);
         $this->editingId = $location->id;
@@ -84,7 +84,7 @@ class StockLocationManager extends Component
         $this->showModal = true;
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', StockLocation::class);
         $this->validate();
@@ -113,7 +113,7 @@ class StockLocationManager extends Component
         $this->reset(['editingId', 'code', 'name', 'description', 'address', 'location_type', 'parent_id']);
     }
 
-    public function delete(int $id)
+    public function delete(int $id): void
     {
         $location = StockLocation::findOrFail($id);
         $this->authorize('delete', $location);

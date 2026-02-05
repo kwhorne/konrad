@@ -72,7 +72,7 @@ class DividendManager extends Component
         'amount_per_share.min' => 'Beløp per aksje må være større enn 0.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->filterYear = now()->year;
         $this->fiscal_year = now()->year;
@@ -81,17 +81,17 @@ class DividendManager extends Component
         $this->payment_date = now()->addDays(14)->format('Y-m-d');
     }
 
-    public function updatedFilterYear()
+    public function updatedFilterYear(): void
     {
         $this->resetPage();
     }
 
-    public function updatedFilterStatus()
+    public function updatedFilterStatus(): void
     {
         $this->resetPage();
     }
 
-    public function openModal($id = null)
+    public function openModal($id = null): void
     {
         $this->resetForm();
 
@@ -113,13 +113,13 @@ class DividendManager extends Component
         $this->showModal = true;
     }
 
-    public function closeModal()
+    public function closeModal(): void
     {
         $this->showModal = false;
         $this->resetForm();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->authorize('create', Dividend::class);
 
@@ -161,7 +161,7 @@ class DividendManager extends Component
         $this->closeModal();
     }
 
-    public function approve($id)
+    public function approve($id): void
     {
         $dividend = Dividend::findOrFail($id);
         $this->authorize('approve', $dividend);
@@ -170,7 +170,7 @@ class DividendManager extends Component
         session()->flash('success', 'Utbyttet ble godkjent.');
     }
 
-    public function markAsPaid($id)
+    public function markAsPaid($id): void
     {
         $dividend = Dividend::findOrFail($id);
         $this->authorize('markAsPaid', $dividend);
@@ -179,7 +179,7 @@ class DividendManager extends Component
         session()->flash('success', 'Utbyttet ble markert som utbetalt.');
     }
 
-    public function cancel($id)
+    public function cancel($id): void
     {
         $dividend = Dividend::findOrFail($id);
         $this->authorize('cancel', $dividend);
@@ -194,19 +194,19 @@ class DividendManager extends Component
         session()->flash('success', 'Utbyttet ble kansellert.');
     }
 
-    public function showDistribution($id)
+    public function showDistribution($id): void
     {
         $this->viewingDividendId = $id;
         $this->showDistributionModal = true;
     }
 
-    public function closeDistributionModal()
+    public function closeDistributionModal(): void
     {
         $this->showDistributionModal = false;
         $this->viewingDividendId = null;
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $dividend = Dividend::findOrFail($id);
         $this->authorize('delete', $dividend);
@@ -221,7 +221,7 @@ class DividendManager extends Component
         session()->flash('success', 'Utbyttevedtaket ble slettet.');
     }
 
-    private function resetForm()
+    private function resetForm(): void
     {
         $this->editingId = null;
         $this->fiscal_year = now()->year;

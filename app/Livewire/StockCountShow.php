@@ -37,7 +37,7 @@ class StockCountShow extends Component
         $this->authorize('view', $this->stockCount);
     }
 
-    public function startCount(StockCountService $service)
+    public function startCount(StockCountService $service): void
     {
         $this->authorize('start', $this->stockCount);
 
@@ -50,7 +50,7 @@ class StockCountShow extends Component
         }
     }
 
-    public function openCountModal(int $lineId)
+    public function openCountModal(int $lineId): void
     {
         $line = $this->stockCount->lines->find($lineId);
         if (! $line) {
@@ -63,13 +63,13 @@ class StockCountShow extends Component
         $this->showCountModal = true;
     }
 
-    public function closeCountModal()
+    public function closeCountModal(): void
     {
         $this->showCountModal = false;
         $this->reset(['countingLineId', 'counted_quantity', 'variance_reason']);
     }
 
-    public function saveCount(StockCountService $service)
+    public function saveCount(StockCountService $service): void
     {
         $this->validate([
             'counted_quantity' => 'required|numeric|min:0',
@@ -96,7 +96,7 @@ class StockCountShow extends Component
         }
     }
 
-    public function quickCount(int $lineId)
+    public function quickCount(int $lineId): void
     {
         $line = StockCountLine::findOrFail($lineId);
 
@@ -115,7 +115,7 @@ class StockCountShow extends Component
         Flux::toast(text: 'Talt som forventet', variant: 'success');
     }
 
-    public function complete(StockCountService $service)
+    public function complete(StockCountService $service): void
     {
         $this->authorize('complete', $this->stockCount);
 
@@ -128,7 +128,7 @@ class StockCountShow extends Component
         }
     }
 
-    public function post(StockCountService $service)
+    public function post(StockCountService $service): void
     {
         $this->authorize('post', $this->stockCount);
 
@@ -141,7 +141,7 @@ class StockCountShow extends Component
         }
     }
 
-    public function cancel(StockCountService $service)
+    public function cancel(StockCountService $service): void
     {
         $this->authorize('cancel', $this->stockCount);
 

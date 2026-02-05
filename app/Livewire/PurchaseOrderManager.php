@@ -18,12 +18,12 @@ class PurchaseOrderManager extends Component
 
     public $filterStatus = '';
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->resetPage();
     }
 
-    public function approve(int $id, PurchaseOrderService $service)
+    public function approve(int $id, PurchaseOrderService $service): void
     {
         $po = PurchaseOrder::findOrFail($id);
         $this->authorize('approve', $po);
@@ -36,7 +36,7 @@ class PurchaseOrderManager extends Component
         }
     }
 
-    public function markAsSent(int $id, PurchaseOrderService $service)
+    public function markAsSent(int $id, PurchaseOrderService $service): void
     {
         $po = PurchaseOrder::findOrFail($id);
         $this->authorize('markAsSent', $po);
@@ -49,7 +49,7 @@ class PurchaseOrderManager extends Component
         }
     }
 
-    public function cancel(int $id, PurchaseOrderService $service)
+    public function cancel(int $id, PurchaseOrderService $service): void
     {
         $po = PurchaseOrder::findOrFail($id);
         $this->authorize('cancel', $po);

@@ -37,24 +37,24 @@ class TaxReturnManager extends Component
         'createYear.unique' => 'Det finnes allerede en skattemelding for dette året.',
     ];
 
-    public function mount()
+    public function mount(): void
     {
         $this->createYear = now()->subYear()->year;
     }
 
-    public function openCreateModal()
+    public function openCreateModal(): void
     {
         $this->createYear = now()->subYear()->year;
         $this->showCreateModal = true;
     }
 
-    public function closeCreateModal()
+    public function closeCreateModal(): void
     {
         $this->showCreateModal = false;
         $this->resetValidation();
     }
 
-    public function createReturn()
+    public function createReturn(): void
     {
         $this->authorize('create', TaxReturn::class);
 
@@ -69,19 +69,19 @@ class TaxReturnManager extends Component
         $this->viewReturn($taxReturn->id);
     }
 
-    public function viewReturn($id)
+    public function viewReturn($id): void
     {
         $this->viewingReturnId = $id;
         $this->showDetailModal = true;
     }
 
-    public function closeDetailModal()
+    public function closeDetailModal(): void
     {
         $this->showDetailModal = false;
         $this->viewingReturnId = null;
     }
 
-    public function calculateTax($id)
+    public function calculateTax($id): void
     {
         $taxReturn = TaxReturn::findOrFail($id);
         $this->authorize('calculate', $taxReturn);
@@ -98,7 +98,7 @@ class TaxReturnManager extends Component
         session()->flash('success', 'Skatteberegning ble utført.');
     }
 
-    public function validateReturn($id)
+    public function validateReturn($id): void
     {
         $taxReturn = TaxReturn::findOrFail($id);
         $this->authorize('update', $taxReturn);
@@ -120,7 +120,7 @@ class TaxReturnManager extends Component
         }
     }
 
-    public function markAsReady($id)
+    public function markAsReady($id): void
     {
         $taxReturn = TaxReturn::findOrFail($id);
         $this->authorize('markAsReady', $taxReturn);
@@ -135,7 +135,7 @@ class TaxReturnManager extends Component
         session()->flash('success', 'Skattemeldingen er nå klar for innsending.');
     }
 
-    public function markAsDraft($id)
+    public function markAsDraft($id): void
     {
         $taxReturn = TaxReturn::findOrFail($id);
         $this->authorize('markAsDraft', $taxReturn);
@@ -150,7 +150,7 @@ class TaxReturnManager extends Component
         session()->flash('success', 'Skattemeldingen ble satt tilbake til utkast.');
     }
 
-    public function submitToAltinn($id)
+    public function submitToAltinn($id): void
     {
         $taxReturn = TaxReturn::findOrFail($id);
         $this->authorize('submitToAltinn', $taxReturn);
@@ -165,7 +165,7 @@ class TaxReturnManager extends Component
         session()->flash('info', 'Altinn-innsending er ikke implementert ennå.');
     }
 
-    public function delete($id)
+    public function delete($id): void
     {
         $taxReturn = TaxReturn::findOrFail($id);
         $this->authorize('delete', $taxReturn);
