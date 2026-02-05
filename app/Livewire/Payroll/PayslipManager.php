@@ -7,6 +7,7 @@ use App\Models\PayrollEntry;
 use App\Models\PayrollRun;
 use App\Models\User;
 use App\Services\Payroll\PayslipPdfService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PayslipManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public ?int $filterYear = null;
 
@@ -50,6 +51,7 @@ class PayslipManager extends Component
     public function downloadPayslip(int $entryId): StreamedResponse
     {
         $entry = PayrollEntry::findOrFail($entryId);
+        $this->authorize('downloadPayslip', $entry);
         $pdfService = app(PayslipPdfService::class);
 
         $password = $pdfService->getPasswordForEmployee($entry->user_id);
@@ -69,6 +71,7 @@ class PayslipManager extends Component
     public function sendPayslip(int $entryId): void
     {
         $entry = PayrollEntry::with(['user', 'payrollRun'])->findOrFail($entryId);
+        $this->authorize('sendPayslip', $entry);
         $pdfService = app(PayslipPdfService::class);
 
         $email = $pdfService->getEmailForEmployee($entry->user_id);
@@ -99,6 +102,8 @@ class PayslipManager extends Component
      */
     public function openSendModal(?int $runId = null): void
     {
+        $this->authorize('viewAny', PayrollEntry::class);
+
         $this->selectedRunId = $runId;
         $this->selectedEntries = [];
         $this->selectAll = false;
@@ -130,6 +135,8 @@ class PayslipManager extends Component
      */
     public function sendSelected(): void
     {
+        $this->authorize('viewAny', PayrollEntry::class);
+
         if (empty($this->selectedEntries)) {
             session()->flash('error', 'Ingen lønnsslipper valgt.');
 
@@ -189,6 +196,8 @@ class PayslipManager extends Component
      */
     public function sendAllForRun(int $runId): void
     {
+        $this->authorize('viewAny', PayrollEntry::class);
+
         $this->selectedEntries = PayrollEntry::where('payroll_run_id', $runId)
             ->pluck('id')
             ->toArray();

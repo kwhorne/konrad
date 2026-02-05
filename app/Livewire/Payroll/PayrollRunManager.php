@@ -5,12 +5,13 @@ namespace App\Livewire\Payroll;
 use App\Models\PayrollRun;
 use App\Services\Payroll\PayrollService;
 use Carbon\Carbon;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class PayrollRunManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public ?int $filterYear = null;
 
@@ -49,6 +50,8 @@ class PayrollRunManager extends Component
 
     public function createRun(): mixed
     {
+        $this->authorize('create', PayrollRun::class);
+
         $this->validate([
             'newYear' => 'required|integer|min:2020|max:2100',
             'newMonth' => 'required|integer|min:1|max:12',
@@ -86,6 +89,7 @@ class PayrollRunManager extends Component
     public function calculateRun(int $id): void
     {
         $run = PayrollRun::findOrFail($id);
+        $this->authorize('calculate', $run);
 
         if ($run->status !== PayrollRun::STATUS_DRAFT) {
             session()->flash('error', 'Kan kun beregne lønnskjøringer med status Utkast.');
@@ -102,6 +106,7 @@ class PayrollRunManager extends Component
     public function deleteRun(int $id): void
     {
         $run = PayrollRun::findOrFail($id);
+        $this->authorize('delete', $run);
 
         if (! $run->is_editable) {
             session()->flash('error', 'Kan ikke slette en godkjent eller utbetalt lønnskjøring.');
