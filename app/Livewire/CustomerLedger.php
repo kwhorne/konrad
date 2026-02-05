@@ -21,8 +21,20 @@ class CustomerLedger extends Component
         $this->resetPage();
     }
 
+    private const SORTABLE_COLUMNS = [
+        'invoice_number',
+        'invoice_date',
+        'due_date',
+        'total',
+        'balance',
+    ];
+
     public function sort(string $column): void
     {
+        if (! in_array($column, self::SORTABLE_COLUMNS)) {
+            return;
+        }
+
         if ($this->sortBy === $column) {
             $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {

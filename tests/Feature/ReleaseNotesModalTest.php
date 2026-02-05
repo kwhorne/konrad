@@ -54,3 +54,22 @@ test('release notes content is loaded from markdown file', function () {
         ->assertSet('showModal', true)
         ->assertSee('Konrad Office');
 });
+
+test('release notes strips raw HTML from markdown', function () {
+    // Temporarily override RELEASENOTES.md with malicious content
+    $path = base_path('RELEASENOTES.md');
+    $original = file_get_contents($path);
+
+    file_put_contents($path, "# Test\n\n<script>alert('xss')</script>\n\nSafe content");
+
+    $this->actingAs($this->user);
+
+    $component = Livewire::test(ReleaseNotesModal::class);
+    $releaseNotes = $component->get('releaseNotes');
+
+    expect($releaseNotes)->not->toContain('<script>')
+        ->and($releaseNotes)->toContain('Safe content');
+
+    // Restore original file
+    file_put_contents($path, $original);
+});

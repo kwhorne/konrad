@@ -31,7 +31,9 @@ class ReleaseNotesModal extends Component
 
         if (File::exists($path)) {
             $markdown = File::get($path);
-            $this->releaseNotes = Str::markdown($markdown);
+            $this->releaseNotes = Str::markdown($markdown, [
+                'html_input' => 'strip',
+            ]);
         } else {
             $this->releaseNotes = '<p>Ingen oppdateringer tilgjengelig.</p>';
         }
