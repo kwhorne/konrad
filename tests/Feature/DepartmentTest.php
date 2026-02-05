@@ -13,7 +13,7 @@ uses(RefreshDatabase::class);
 
 function createUserWithCompanyForDepartmentTest(string $role = 'owner'): array
 {
-    $user = User::factory()->create(['onboarding_completed' => true]);
+    $user = User::factory()->create(['onboarding_completed' => true, 'is_economy' => true]);
     $company = Company::factory()->withOwner($user)->create();
     $user->update(['current_company_id' => $company->id]);
 

@@ -4,11 +4,13 @@ namespace App\Livewire;
 
 use App\Models\PurchaseOrder;
 use App\Services\PurchaseOrderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class PurchaseOrderManager extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
 
     public $search = '';
@@ -23,6 +25,7 @@ class PurchaseOrderManager extends Component
     public function approve(int $id, PurchaseOrderService $service)
     {
         $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('approve', $po);
 
         try {
             $service->approve($po);
@@ -35,6 +38,7 @@ class PurchaseOrderManager extends Component
     public function markAsSent(int $id, PurchaseOrderService $service)
     {
         $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('markAsSent', $po);
 
         try {
             $service->markAsSent($po);
@@ -47,6 +51,7 @@ class PurchaseOrderManager extends Component
     public function cancel(int $id, PurchaseOrderService $service)
     {
         $po = PurchaseOrder::findOrFail($id);
+        $this->authorize('cancel', $po);
 
         try {
             $service->cancel($po);

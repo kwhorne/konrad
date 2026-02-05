@@ -4,10 +4,13 @@ namespace App\Livewire;
 
 use App\Models\AnnualAccount;
 use App\Models\CashFlowStatement;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class CashFlowStatementManager extends Component
 {
+    use AuthorizesRequests;
+
     public $annualAccountId;
 
     public $showModal = false;
@@ -129,6 +132,8 @@ class CashFlowStatementManager extends Component
 
     public function save()
     {
+        $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
+
         $this->validate();
 
         $annualAccount = AnnualAccount::findOrFail($this->annualAccountId);

@@ -10,12 +10,13 @@ use App\Models\CsvFormatMapping;
 use App\Models\Invoice;
 use App\Models\SupplierInvoice;
 use App\Services\BankReconciliationService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class BankReconciliationManager extends Component
 {
-    use WithFileUploads;
+    use AuthorizesRequests, WithFileUploads;
 
     public int $currentStep = 1;
 
@@ -107,6 +108,8 @@ class BankReconciliationManager extends Component
 
     public function uploadAndParse(BankReconciliationService $service): void
     {
+        $this->authorize('create', BankStatement::class);
+
         $this->validate([
             'uploadFile' => 'required|file|max:10240|mimes:csv,txt',
         ]);
@@ -349,6 +352,8 @@ class BankReconciliationManager extends Component
 
     public function finalizeReconciliation(BankReconciliationService $service): void
     {
+        $this->authorize('create', BankStatement::class);
+
         if (! $this->statement) {
             return;
         }

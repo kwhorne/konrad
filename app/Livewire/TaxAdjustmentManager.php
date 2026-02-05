@@ -5,12 +5,13 @@ namespace App\Livewire;
 use App\Models\Account;
 use App\Models\TaxAdjustment;
 use App\Rules\ExistsInCompany;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class TaxAdjustmentManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -105,6 +106,8 @@ class TaxAdjustmentManager extends Component
 
     public function save()
     {
+        $this->authorize('create', TaxAdjustment::class);
+
         $this->validate();
 
         $data = [
@@ -133,7 +136,10 @@ class TaxAdjustmentManager extends Component
 
     public function delete($id)
     {
-        TaxAdjustment::findOrFail($id)->delete();
+        $adjustment = TaxAdjustment::findOrFail($id);
+        $this->authorize('delete', $adjustment);
+
+        $adjustment->delete();
         session()->flash('success', 'Skatteforskjellen ble slettet.');
     }
 

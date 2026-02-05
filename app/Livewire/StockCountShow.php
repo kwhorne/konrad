@@ -5,10 +5,13 @@ namespace App\Livewire;
 use App\Models\StockCount;
 use App\Models\StockCountLine;
 use App\Services\StockCountService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class StockCountShow extends Component
 {
+    use AuthorizesRequests;
+
     public StockCount $stockCount;
 
     public $search = '';
@@ -30,10 +33,13 @@ class StockCountShow extends Component
             'stockLocation', 'creator', 'completer', 'poster',
             'lines.product',
         ])->findOrFail($stockCountId);
+        $this->authorize('view', $this->stockCount);
     }
 
     public function startCount(StockCountService $service)
     {
+        $this->authorize('start', $this->stockCount);
+
         try {
             $service->start($this->stockCount);
             $this->stockCount->refresh();
@@ -110,6 +116,8 @@ class StockCountShow extends Component
 
     public function complete(StockCountService $service)
     {
+        $this->authorize('complete', $this->stockCount);
+
         try {
             $service->complete($this->stockCount);
             $this->stockCount->refresh();
@@ -121,6 +129,8 @@ class StockCountShow extends Component
 
     public function post(StockCountService $service)
     {
+        $this->authorize('post', $this->stockCount);
+
         try {
             $service->post($this->stockCount);
             $this->stockCount->refresh();
@@ -132,6 +142,8 @@ class StockCountShow extends Component
 
     public function cancel(StockCountService $service)
     {
+        $this->authorize('cancel', $this->stockCount);
+
         try {
             $service->cancel($this->stockCount);
             $this->stockCount->refresh();

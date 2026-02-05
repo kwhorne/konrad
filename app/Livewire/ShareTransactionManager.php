@@ -7,12 +7,13 @@ use App\Models\Shareholder;
 use App\Models\ShareTransaction;
 use App\Rules\ExistsInCompany;
 use App\Services\ShareholderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class ShareTransactionManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -142,6 +143,8 @@ class ShareTransactionManager extends Component
 
     public function save()
     {
+        $this->authorize('create', ShareTransaction::class);
+
         $this->validate();
 
         $shareholderService = app(ShareholderService::class);

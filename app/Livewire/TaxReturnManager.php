@@ -4,11 +4,14 @@ namespace App\Livewire;
 
 use App\Models\TaxReturn;
 use App\Services\TaxCalculationService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class TaxReturnManager extends Component
 {
+    use AuthorizesRequests;
+
     public $showCreateModal = false;
 
     public $showDetailModal = false;
@@ -53,6 +56,8 @@ class TaxReturnManager extends Component
 
     public function createReturn()
     {
+        $this->authorize('create', TaxReturn::class);
+
         $this->validate();
 
         $taxService = app(TaxCalculationService::class);
@@ -79,6 +84,7 @@ class TaxReturnManager extends Component
     public function calculateTax($id)
     {
         $taxReturn = TaxReturn::findOrFail($id);
+        $this->authorize('calculate', $taxReturn);
 
         if (! $taxReturn->canBeEdited()) {
             session()->flash('error', 'Kan ikke beregne på nytt for innsendt skattemelding.');
@@ -95,6 +101,8 @@ class TaxReturnManager extends Component
     public function validateReturn($id)
     {
         $taxReturn = TaxReturn::findOrFail($id);
+        $this->authorize('update', $taxReturn);
+
         $taxService = app(TaxCalculationService::class);
 
         $result = $taxService->validateTaxReturn($taxReturn);
@@ -115,6 +123,7 @@ class TaxReturnManager extends Component
     public function markAsReady($id)
     {
         $taxReturn = TaxReturn::findOrFail($id);
+        $this->authorize('markAsReady', $taxReturn);
 
         if (! $taxReturn->isDraft()) {
             session()->flash('error', 'Kun utkast kan markeres som klar.');
@@ -129,6 +138,7 @@ class TaxReturnManager extends Component
     public function markAsDraft($id)
     {
         $taxReturn = TaxReturn::findOrFail($id);
+        $this->authorize('markAsDraft', $taxReturn);
 
         if ($taxReturn->isSubmitted()) {
             session()->flash('error', 'Kan ikke endre innsendt skattemelding.');
@@ -143,6 +153,7 @@ class TaxReturnManager extends Component
     public function submitToAltinn($id)
     {
         $taxReturn = TaxReturn::findOrFail($id);
+        $this->authorize('submitToAltinn', $taxReturn);
 
         if (! $taxReturn->canBeSubmitted()) {
             session()->flash('error', 'Skattemeldingen er ikke klar for innsending.');
@@ -157,6 +168,7 @@ class TaxReturnManager extends Component
     public function delete($id)
     {
         $taxReturn = TaxReturn::findOrFail($id);
+        $this->authorize('delete', $taxReturn);
 
         if ($taxReturn->isSubmitted()) {
             session()->flash('error', 'Kan ikke slette innsendt skattemelding.');

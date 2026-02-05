@@ -4,11 +4,14 @@ namespace App\Livewire;
 
 use App\Models\AnnualAccount;
 use App\Services\AnnualAccountService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class AnnualAccountManager extends Component
 {
+    use AuthorizesRequests;
+
     public $showCreateModal = false;
 
     public $showDetailModal = false;
@@ -56,6 +59,8 @@ class AnnualAccountManager extends Component
 
     public function createAccount()
     {
+        $this->authorize('create', AnnualAccount::class);
+
         $this->validate();
 
         $service = app(AnnualAccountService::class);
@@ -91,6 +96,7 @@ class AnnualAccountManager extends Component
     public function refreshData($id)
     {
         $annualAccount = AnnualAccount::findOrFail($id);
+        $this->authorize('update', $annualAccount);
 
         if (! $annualAccount->canBeEdited()) {
             session()->flash('error', 'Kan ikke oppdatere innsendt årsregnskap.');
@@ -107,6 +113,8 @@ class AnnualAccountManager extends Component
     public function validateAccount($id)
     {
         $annualAccount = AnnualAccount::findOrFail($id);
+        $this->authorize('update', $annualAccount);
+
         $service = app(AnnualAccountService::class);
 
         $result = $service->validate($annualAccount);
@@ -127,6 +135,7 @@ class AnnualAccountManager extends Component
     public function approve($id)
     {
         $annualAccount = AnnualAccount::findOrFail($id);
+        $this->authorize('approve', $annualAccount);
 
         if (! $annualAccount->isDraft()) {
             session()->flash('error', 'Kun utkast kan godkjennes.');
@@ -143,6 +152,7 @@ class AnnualAccountManager extends Component
     public function markAsDraft($id)
     {
         $annualAccount = AnnualAccount::findOrFail($id);
+        $this->authorize('markAsDraft', $annualAccount);
 
         if ($annualAccount->isSubmitted()) {
             session()->flash('error', 'Kan ikke endre innsendt årsregnskap.');
@@ -157,6 +167,7 @@ class AnnualAccountManager extends Component
     public function submitToAltinn($id)
     {
         $annualAccount = AnnualAccount::findOrFail($id);
+        $this->authorize('submitToAltinn', $annualAccount);
 
         if (! $annualAccount->canBeSubmitted()) {
             session()->flash('error', 'Årsregnskapet er ikke klar for innsending.');
@@ -171,6 +182,7 @@ class AnnualAccountManager extends Component
     public function delete($id)
     {
         $annualAccount = AnnualAccount::findOrFail($id);
+        $this->authorize('delete', $annualAccount);
 
         if ($annualAccount->isSubmitted()) {
             session()->flash('error', 'Kan ikke slette innsendt årsregnskap.');

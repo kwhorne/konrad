@@ -3,11 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\ShareClass;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class ShareClassManager extends Component
 {
+    use AuthorizesRequests;
+
     public $showModal = false;
 
     public $editingId = null;
@@ -99,6 +102,8 @@ class ShareClassManager extends Component
 
     public function save()
     {
+        $this->authorize('create', ShareClass::class);
+
         $this->validate();
 
         $restrictions = null;
@@ -138,6 +143,7 @@ class ShareClassManager extends Component
     public function delete($id)
     {
         $shareClass = ShareClass::findOrFail($id);
+        $this->authorize('delete', $shareClass);
 
         // Check if share class has holdings
         if ($shareClass->activeShareholdings()->exists()) {
@@ -153,6 +159,8 @@ class ShareClassManager extends Component
     public function toggleActive($id)
     {
         $shareClass = ShareClass::findOrFail($id);
+        $this->authorize('update', $shareClass);
+
         $shareClass->update(['is_active' => ! $shareClass->is_active]);
     }
 

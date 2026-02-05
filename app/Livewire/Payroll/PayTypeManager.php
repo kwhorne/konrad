@@ -3,11 +3,13 @@
 namespace App\Livewire\Payroll;
 
 use App\Models\PayType;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class PayTypeManager extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
 
     public string $search = '';
@@ -113,6 +115,7 @@ class PayTypeManager extends Component
 
     public function save(): void
     {
+        $this->authorize('create', PayType::class);
         $this->validate();
 
         $data = [
@@ -145,12 +148,15 @@ class PayTypeManager extends Component
     public function delete(int $id): void
     {
         $payType = PayType::findOrFail($id);
+        $this->authorize('delete', $payType);
         $payType->delete();
         session()->flash('success', 'Lønnsart slettet.');
     }
 
     public function seedDefaultPayTypes(): void
     {
+        $this->authorize('create', PayType::class);
+
         $company = app('current.company');
 
         $defaults = [

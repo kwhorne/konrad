@@ -4,10 +4,13 @@ namespace App\Livewire;
 
 use App\Models\AnnualAccount;
 use App\Models\AnnualAccountNote;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class AnnualAccountNotesManager extends Component
 {
+    use AuthorizesRequests;
+
     public $annualAccountId;
 
     public $showModal = false;
@@ -76,6 +79,8 @@ class AnnualAccountNotesManager extends Component
 
     public function save()
     {
+        $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
+
         $this->validate();
 
         $annualAccount = AnnualAccount::findOrFail($this->annualAccountId);
@@ -116,6 +121,8 @@ class AnnualAccountNotesManager extends Component
 
     public function toggleVisibility($id)
     {
+        $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
+
         $note = AnnualAccountNote::findOrFail($id);
 
         $annualAccount = AnnualAccount::findOrFail($this->annualAccountId);
@@ -136,6 +143,8 @@ class AnnualAccountNotesManager extends Component
 
     public function delete($id)
     {
+        $this->authorize('update', AnnualAccount::findOrFail($this->annualAccountId));
+
         $note = AnnualAccountNote::findOrFail($id);
 
         $annualAccount = AnnualAccount::findOrFail($this->annualAccountId);

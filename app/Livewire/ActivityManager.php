@@ -7,12 +7,14 @@ use App\Models\ActivityType;
 use App\Models\User;
 use App\Rules\ExistsInCompany;
 use App\Rules\UserInCompany;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class ActivityManager extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
 
     public $contactId;
@@ -80,6 +82,7 @@ class ActivityManager extends Component
 
     public function save()
     {
+        $this->authorize('create', Activity::class);
         $this->validate();
 
         $data = [
@@ -116,6 +119,7 @@ class ActivityManager extends Component
     public function toggleComplete($id)
     {
         $activity = Activity::findOrFail($id);
+        $this->authorize('update', $activity);
 
         if ($activity->is_completed) {
             $activity->markAsIncomplete();
@@ -126,7 +130,9 @@ class ActivityManager extends Component
 
     public function delete($id)
     {
-        Activity::findOrFail($id)->delete();
+        $activity = Activity::findOrFail($id);
+        $this->authorize('delete', $activity);
+        $activity->delete();
     }
 
     public function setFilter($filter)

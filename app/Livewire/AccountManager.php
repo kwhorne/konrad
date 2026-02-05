@@ -4,12 +4,13 @@ namespace App\Livewire;
 
 use App\Models\Account;
 use Database\Seeders\AccountSeeder;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class AccountManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -88,6 +89,8 @@ class AccountManager extends Component
 
     public function save()
     {
+        $this->authorize('create', Account::class);
+
         $this->validate();
 
         $data = [
@@ -124,6 +127,7 @@ class AccountManager extends Component
     public function delete(int $id)
     {
         $account = Account::findOrFail($id);
+        $this->authorize('delete', $account);
 
         // Don't allow deleting system accounts
         if ($account->is_system) {
@@ -150,6 +154,8 @@ class AccountManager extends Component
 
     public function createNs4102ChartOfAccounts(): void
     {
+        $this->authorize('create', Account::class);
+
         $this->showConfirmNs4102Modal = false;
 
         // Run the account seeder

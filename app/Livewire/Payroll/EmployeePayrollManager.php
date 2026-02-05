@@ -5,11 +5,13 @@ namespace App\Livewire\Payroll;
 use App\Models\EmployeePayrollSettings;
 use App\Models\User;
 use App\Services\Payroll\SkattekortService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class EmployeePayrollManager extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
 
     public string $search = '';
@@ -205,6 +207,7 @@ class EmployeePayrollManager extends Component
 
     public function save(): void
     {
+        $this->authorize('create', EmployeePayrollSettings::class);
         $this->validate();
 
         $data = [
@@ -257,6 +260,7 @@ class EmployeePayrollManager extends Component
     public function delete(int $id): void
     {
         $settings = EmployeePayrollSettings::findOrFail($id);
+        $this->authorize('delete', $settings);
         $settings->delete();
         session()->flash('success', 'Ansattoppsett slettet.');
     }
@@ -264,6 +268,7 @@ class EmployeePayrollManager extends Component
     public function fetchTaxCard(int $id): void
     {
         $settings = EmployeePayrollSettings::findOrFail($id);
+        $this->authorize('update', $settings);
 
         try {
             $service = app(SkattekortService::class);
@@ -291,6 +296,8 @@ class EmployeePayrollManager extends Component
 
     public function fetchAllTaxCards(): void
     {
+        $this->authorize('viewAny', EmployeePayrollSettings::class);
+
         try {
             $service = app(SkattekortService::class);
 

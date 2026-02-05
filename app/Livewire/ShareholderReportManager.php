@@ -4,11 +4,14 @@ namespace App\Livewire;
 
 use App\Models\ShareholderReport;
 use App\Services\ShareholderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class ShareholderReportManager extends Component
 {
+    use AuthorizesRequests;
+
     public $showCreateModal = false;
 
     public $showDetailModal = false;
@@ -53,6 +56,8 @@ class ShareholderReportManager extends Component
 
     public function createReport()
     {
+        $this->authorize('create', ShareholderReport::class);
+
         $this->validate();
 
         $shareholderService = app(ShareholderService::class);
@@ -79,6 +84,7 @@ class ShareholderReportManager extends Component
     public function regenerateSnapshot($id)
     {
         $report = ShareholderReport::findOrFail($id);
+        $this->authorize('update', $report);
 
         if (! $report->canBeEdited()) {
             session()->flash('error', 'Kan ikke regenerere snapshot for innsendt rapport.');
@@ -93,6 +99,7 @@ class ShareholderReportManager extends Component
     public function markAsReady($id)
     {
         $report = ShareholderReport::findOrFail($id);
+        $this->authorize('markAsReady', $report);
 
         if (! $report->isDraft()) {
             session()->flash('error', 'Kun utkast kan markeres som klar.');
@@ -107,6 +114,7 @@ class ShareholderReportManager extends Component
     public function markAsDraft($id)
     {
         $report = ShareholderReport::findOrFail($id);
+        $this->authorize('markAsDraft', $report);
 
         if ($report->isSubmitted()) {
             session()->flash('error', 'Kan ikke endre innsendt rapport.');
@@ -121,6 +129,7 @@ class ShareholderReportManager extends Component
     public function submitToAltinn($id)
     {
         $report = ShareholderReport::findOrFail($id);
+        $this->authorize('submitToAltinn', $report);
 
         if (! $report->canBeSubmitted()) {
             session()->flash('error', 'Rapporten er ikke klar for innsending.');
@@ -135,6 +144,7 @@ class ShareholderReportManager extends Component
     public function delete($id)
     {
         $report = ShareholderReport::findOrFail($id);
+        $this->authorize('delete', $report);
 
         if ($report->isSubmitted()) {
             session()->flash('error', 'Kan ikke slette innsendt rapport.');

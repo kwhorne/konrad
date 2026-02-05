@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Post;
 use App\Models\PostCategory;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -11,6 +12,7 @@ use Livewire\WithPagination;
 
 class PostManager extends Component
 {
+    use AuthorizesRequests;
     use WithFileUploads;
     use WithPagination;
 
@@ -136,6 +138,7 @@ class PostManager extends Component
 
     public function save(): void
     {
+        $this->authorize('create', Post::class);
         $this->validate();
 
         $data = [
@@ -171,13 +174,16 @@ class PostManager extends Component
 
     public function delete(int $id): void
     {
-        Post::findOrFail($id)->delete();
+        $post = Post::findOrFail($id);
+        $this->authorize('delete', $post);
+        $post->delete();
         session()->flash('success', 'Artikkelen ble slettet.');
     }
 
     public function togglePublished(int $id): void
     {
         $post = Post::findOrFail($id);
+        $this->authorize('update', $post);
         $post->update([
             'is_published' => ! $post->is_published,
             'published_at' => ! $post->is_published ? now() : $post->published_at,
@@ -208,6 +214,8 @@ class PostManager extends Component
 
     public function createCategory(): void
     {
+        $this->authorize('create', Post::class);
+
         $this->validate([
             'newCategoryName' => 'required|string|max:255|unique:post_categories,name',
         ], [

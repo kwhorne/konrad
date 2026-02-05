@@ -9,10 +9,13 @@ use App\Models\PurchaseOrder;
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
 use App\Services\GoodsReceiptService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class GoodsReceiptForm extends Component
 {
+    use AuthorizesRequests;
+
     public ?PurchaseOrder $purchaseOrder = null;
 
     public ?GoodsReceipt $goodsReceipt = null;
@@ -112,6 +115,7 @@ class GoodsReceiptForm extends Component
 
     public function save(GoodsReceiptService $service): void
     {
+        $this->authorize('create', GoodsReceipt::class);
         $this->validate();
 
         if ($this->purchaseOrder) {

@@ -6,11 +6,13 @@ use App\Models\StockCount;
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
 use App\Services\StockCountService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class StockCountManager extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
 
     public $search = '';
@@ -44,6 +46,8 @@ class StockCountManager extends Component
 
     public function createCount(StockCountService $service)
     {
+        $this->authorize('create', StockCount::class);
+
         $this->validate([
             'create_location_id' => ['required', new ExistsInCompany('stock_locations')],
         ], [
@@ -66,6 +70,7 @@ class StockCountManager extends Component
     public function startCount(int $countId, StockCountService $service)
     {
         $count = StockCount::findOrFail($countId);
+        $this->authorize('start', $count);
 
         try {
             $service->start($count);
@@ -78,6 +83,7 @@ class StockCountManager extends Component
     public function cancelCount(int $countId, StockCountService $service)
     {
         $count = StockCount::findOrFail($countId);
+        $this->authorize('cancel', $count);
 
         try {
             $service->cancel($count);

@@ -6,12 +6,13 @@ use App\Models\Dividend;
 use App\Models\ShareClass;
 use App\Rules\ExistsInCompany;
 use App\Services\ShareholderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class DividendManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -120,6 +121,8 @@ class DividendManager extends Component
 
     public function save()
     {
+        $this->authorize('create', Dividend::class);
+
         $this->validate();
 
         $shareholderService = app(ShareholderService::class);
@@ -161,6 +164,8 @@ class DividendManager extends Component
     public function approve($id)
     {
         $dividend = Dividend::findOrFail($id);
+        $this->authorize('approve', $dividend);
+
         $dividend->markAsApproved();
         session()->flash('success', 'Utbyttet ble godkjent.');
     }
@@ -168,6 +173,8 @@ class DividendManager extends Component
     public function markAsPaid($id)
     {
         $dividend = Dividend::findOrFail($id);
+        $this->authorize('markAsPaid', $dividend);
+
         $dividend->markAsPaid();
         session()->flash('success', 'Utbyttet ble markert som utbetalt.');
     }
@@ -175,6 +182,7 @@ class DividendManager extends Component
     public function cancel($id)
     {
         $dividend = Dividend::findOrFail($id);
+        $this->authorize('cancel', $dividend);
 
         if (! $dividend->canBeCancelled()) {
             session()->flash('error', 'Kan ikke kansellere dette utbyttet.');
@@ -201,6 +209,7 @@ class DividendManager extends Component
     public function delete($id)
     {
         $dividend = Dividend::findOrFail($id);
+        $this->authorize('delete', $dividend);
 
         if ($dividend->isPaid()) {
             session()->flash('error', 'Kan ikke slette utbetalt utbytte.');

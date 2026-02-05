@@ -5,10 +5,13 @@ namespace App\Livewire;
 use App\Models\Account;
 use App\Models\DeferredTaxItem;
 use App\Rules\ExistsInCompany;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class DeferredTaxManager extends Component
 {
+    use AuthorizesRequests;
+
     public $showModal = false;
 
     public $editingId = null;
@@ -95,6 +98,8 @@ class DeferredTaxManager extends Component
 
     public function save()
     {
+        $this->authorize('create', DeferredTaxItem::class);
+
         $this->validate();
 
         $data = [
@@ -123,7 +128,10 @@ class DeferredTaxManager extends Component
 
     public function delete($id)
     {
-        DeferredTaxItem::findOrFail($id)->delete();
+        $item = DeferredTaxItem::findOrFail($id);
+        $this->authorize('delete', $item);
+
+        $item->delete();
         session()->flash('success', 'Utsatt skatt-posten ble slettet.');
     }
 

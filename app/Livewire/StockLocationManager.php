@@ -4,11 +4,13 @@ namespace App\Livewire;
 
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class StockLocationManager extends Component
 {
+    use AuthorizesRequests;
     use WithPagination;
 
     public $showModal = false;
@@ -83,6 +85,7 @@ class StockLocationManager extends Component
 
     public function save()
     {
+        $this->authorize('create', StockLocation::class);
         $this->validate();
 
         $data = [
@@ -112,6 +115,7 @@ class StockLocationManager extends Component
     public function delete(int $id)
     {
         $location = StockLocation::findOrFail($id);
+        $this->authorize('delete', $location);
 
         // Check if location has stock
         if ($location->stockLevels()->where('quantity_on_hand', '>', 0)->exists()) {

@@ -4,12 +4,13 @@ namespace App\Livewire;
 
 use App\Models\AccountingSettings;
 use App\Models\Department;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class DepartmentManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -73,6 +74,8 @@ class DepartmentManager extends Component
 
     public function save()
     {
+        $this->authorize('create', Department::class);
+
         $this->validate();
 
         $data = [
@@ -99,6 +102,7 @@ class DepartmentManager extends Component
     public function delete(int $id)
     {
         $department = Department::findOrFail($id);
+        $this->authorize('delete', $department);
 
         // Check if department is in use
         $inUse = $department->voucherLines()->exists()

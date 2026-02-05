@@ -5,12 +5,13 @@ namespace App\Livewire;
 use App\Models\Contact;
 use App\Models\Shareholder;
 use App\Rules\ExistsInCompany;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class ShareholderManager extends Component
 {
-    use WithPagination;
+    use AuthorizesRequests, WithPagination;
 
     public $showModal = false;
 
@@ -125,6 +126,8 @@ class ShareholderManager extends Component
 
     public function save()
     {
+        $this->authorize('create', Shareholder::class);
+
         $this->validate();
 
         $data = [
@@ -159,6 +162,7 @@ class ShareholderManager extends Component
     public function delete($id)
     {
         $shareholder = Shareholder::findOrFail($id);
+        $this->authorize('delete', $shareholder);
 
         // Check if shareholder has active holdings
         if ($shareholder->activeShareholdings()->exists()) {
@@ -174,6 +178,8 @@ class ShareholderManager extends Component
     public function toggleActive($id)
     {
         $shareholder = Shareholder::findOrFail($id);
+        $this->authorize('update', $shareholder);
+
         $shareholder->update(['is_active' => ! $shareholder->is_active]);
     }
 

@@ -10,10 +10,13 @@ use App\Models\StockLocation;
 use App\Models\VatRate;
 use App\Rules\ExistsInCompany;
 use App\Services\PurchaseOrderService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class PurchaseOrderForm extends Component
 {
+    use AuthorizesRequests;
+
     public ?PurchaseOrder $purchaseOrder = null;
 
     // Form fields
@@ -135,6 +138,7 @@ class PurchaseOrderForm extends Component
 
     public function save(PurchaseOrderService $service): void
     {
+        $this->authorize('create', PurchaseOrder::class);
         $this->validate();
 
         $data = [

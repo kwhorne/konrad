@@ -7,13 +7,14 @@ use App\Models\Contact;
 use App\Models\IncomingVoucher;
 use App\Rules\ExistsInCompany;
 use App\Services\IncomingVoucherService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class IncomingVoucherManager extends Component
 {
-    use WithFileUploads, WithPagination;
+    use AuthorizesRequests, WithFileUploads, WithPagination;
 
     public string $search = '';
 
@@ -85,6 +86,8 @@ class IncomingVoucherManager extends Component
 
     public function uploadVouchers(IncomingVoucherService $service): void
     {
+        $this->authorize('create', IncomingVoucher::class);
+
         $this->validate([
             'uploadFiles' => 'required|array|min:1',
             'uploadFiles.*' => 'file|max:'.config('voucher.max_file_size', 10240).'|mimes:pdf,jpg,jpeg,png,gif,webp',
@@ -147,6 +150,8 @@ class IncomingVoucherManager extends Component
 
     public function attest(IncomingVoucherService $service): void
     {
+        $this->authorize('attest', $this->selectedVoucher);
+
         if (! $this->selectedVoucher) {
             return;
         }
@@ -175,6 +180,8 @@ class IncomingVoucherManager extends Component
 
     public function approve(IncomingVoucherService $service): void
     {
+        $this->authorize('approve', $this->selectedVoucher);
+
         if (! $this->selectedVoucher) {
             return;
         }
@@ -207,6 +214,8 @@ class IncomingVoucherManager extends Component
 
     public function reject(IncomingVoucherService $service): void
     {
+        $this->authorize('reject', $this->selectedVoucher);
+
         if (! $this->selectedVoucher) {
             return;
         }
@@ -230,6 +239,7 @@ class IncomingVoucherManager extends Component
     public function reParse(int $id, IncomingVoucherService $service): void
     {
         $voucher = IncomingVoucher::findOrFail($id);
+        $this->authorize('update', $voucher);
 
         if ($service->reParse($voucher)) {
             session()->flash('success', 'Bilaget blir tolket på nytt.');
@@ -241,6 +251,7 @@ class IncomingVoucherManager extends Component
     public function delete(int $id, IncomingVoucherService $service): void
     {
         $voucher = IncomingVoucher::findOrFail($id);
+        $this->authorize('delete', $voucher);
 
         if ($service->delete($voucher)) {
             session()->flash('success', 'Bilaget ble slettet.');

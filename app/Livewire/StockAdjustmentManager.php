@@ -6,10 +6,13 @@ use App\Models\Product;
 use App\Models\StockLocation;
 use App\Rules\ExistsInCompany;
 use App\Services\StockService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class StockAdjustmentManager extends Component
 {
+    use AuthorizesRequests;
+
     public $product_id = '';
 
     public $stock_location_id = '';
@@ -41,6 +44,7 @@ class StockAdjustmentManager extends Component
 
     public function save(StockService $stockService)
     {
+        $this->authorize('create', StockLocation::class);
         $this->validate();
 
         $product = Product::findOrFail($this->product_id);
