@@ -54,9 +54,6 @@
                         required
                         autofocus
                     />
-                    @error('email')
-                        <flux:text class="text-red-500 text-sm">{{ $message }}</flux:text>
-                    @enderror
 
                     <flux:field>
                         <div class="flex justify-between mb-2">
@@ -69,9 +66,6 @@
                             placeholder="Ditt passord"
                             required
                         />
-                        @error('password')
-                            <flux:text class="text-red-500 text-sm">{{ $message }}</flux:text>
-                        @enderror
                     </flux:field>
 
                     <flux:checkbox name="remember" label="Husk meg i 30 dager" />
@@ -82,7 +76,7 @@
                 </form>
 
                 <flux:subheading class="text-center">
-                    Trenger du tilgang? <flux:link href="mailto:post@konradoffice.no">Kontakt oss</flux:link>
+                    Trenger du tilgang? <flux:link href="{{ route('contact') }}">Kontakt oss</flux:link>
                 </flux:subheading>
             </div>
         </div>
