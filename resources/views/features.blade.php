@@ -430,10 +430,10 @@
                 Start en gratis prøveperiode og se selv hva Konrad Office kan gjøre for din bedrift. Ingen betalingskort kreves.
             </p>
             <div class="flex flex-wrap justify-center gap-4">
-                <flux:button href="{{ route('order') }}" variant="primary" size="lg">
+                <flux:button href="{{ route('order') }}" variant="primary">
                     Prøv gratis i 30 dager
                 </flux:button>
-                <flux:button href="{{ route('pricing') }}" variant="ghost" size="lg">
+                <flux:button href="{{ route('pricing') }}" variant="ghost">
                     Se priser
                 </flux:button>
             </div>
