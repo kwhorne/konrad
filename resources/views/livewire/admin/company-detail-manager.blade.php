@@ -9,85 +9,143 @@
 
         {{-- Info tab --}}
         <flux:tab.panel name="info" class="pt-6">
-            <div class="space-y-6">
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <flux:field class="md:col-span-2">
-                        <flux:label>Selskapsnavn</flux:label>
-                        <flux:input wire:model="name" />
-                        <flux:error name="name" />
-                    </flux:field>
+            <div class="flex gap-8 items-start">
+                {{-- Main form (2/3) --}}
+                <div class="min-w-0 flex-[2] space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <flux:field class="col-span-2">
+                            <flux:label>Selskapsnavn</flux:label>
+                            <flux:input wire:model="name" />
+                            <flux:error name="name" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>Org.nr</flux:label>
-                        <flux:input wire:model="organizationNumber" />
-                        <flux:error name="organizationNumber" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>Org.nr</flux:label>
+                            <flux:input wire:model="organizationNumber" placeholder="f.eks. 123 456 789" />
+                            <flux:error name="organizationNumber" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>MVA-nr</flux:label>
-                        <flux:input wire:model="vatNumber" />
-                        <flux:error name="vatNumber" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>MVA-nr</flux:label>
+                            <flux:input wire:model="vatNumber" placeholder="f.eks. NO123456789MVA" />
+                            <flux:error name="vatNumber" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>E-post</flux:label>
-                        <flux:input wire:model="email" type="email" />
-                        <flux:error name="email" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>E-post</flux:label>
+                            <flux:input wire:model="email" type="email" />
+                            <flux:error name="email" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>Faktura-e-post</flux:label>
-                        <flux:input wire:model="billingEmail" type="email" placeholder="Bruker vanlig e-post hvis tom" />
-                        <flux:error name="billingEmail" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>Faktura-e-post</flux:label>
+                            <flux:input wire:model="billingEmail" type="email" placeholder="Bruker vanlig e-post hvis tom" />
+                            <flux:error name="billingEmail" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>Telefon</flux:label>
-                        <flux:input wire:model="phone" />
-                        <flux:error name="phone" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>Telefon</flux:label>
+                            <flux:input wire:model="phone" type="tel" />
+                            <flux:error name="phone" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>Nettside</flux:label>
-                        <flux:input wire:model="website" />
-                        <flux:error name="website" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>Nettside</flux:label>
+                            <flux:input wire:model="website" type="url" placeholder="https://" />
+                            <flux:error name="website" />
+                        </flux:field>
 
-                    <flux:field class="md:col-span-2">
-                        <flux:label>Adresse</flux:label>
-                        <flux:input wire:model="address" />
-                        <flux:error name="address" />
-                    </flux:field>
+                        <flux:field class="col-span-2">
+                            <flux:label>Adresse</flux:label>
+                            <flux:input wire:model="address" />
+                            <flux:error name="address" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>Postnr</flux:label>
-                        <flux:input wire:model="postalCode" />
-                        <flux:error name="postalCode" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>Postnummer</flux:label>
+                            <flux:input wire:model="postalCode" />
+                            <flux:error name="postalCode" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>By</flux:label>
-                        <flux:input wire:model="city" />
-                        <flux:error name="city" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>By</flux:label>
+                            <flux:input wire:model="city" />
+                            <flux:error name="city" />
+                        </flux:field>
 
-                    <flux:field>
-                        <flux:label>Land</flux:label>
-                        <flux:input wire:model="country" />
-                        <flux:error name="country" />
-                    </flux:field>
+                        <flux:field>
+                            <flux:label>Land</flux:label>
+                            <flux:input wire:model="country" />
+                            <flux:error name="country" />
+                        </flux:field>
+                    </div>
 
-                    <flux:field>
-                        <flux:label>Status</flux:label>
-                        <div class="flex items-center gap-3">
-                            <flux:switch wire:model="isActive" />
-                            <flux:text>{{ $isActive ? 'Aktiv' : 'Inaktiv' }}</flux:text>
-                        </div>
-                    </flux:field>
+                    <div class="flex justify-end">
+                        <flux:button wire:click="save" variant="primary">Lagre endringer</flux:button>
+                    </div>
                 </div>
 
-                <div class="flex justify-end">
-                    <flux:button wire:click="save" variant="primary">Lagre endringer</flux:button>
+                {{-- Side panel (1/3) --}}
+                <div class="w-72 shrink-0 space-y-4">
+                    {{-- Status --}}
+                    <flux:card class="p-4">
+                        <flux:text class="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 uppercase mb-3">Status</flux:text>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <flux:text class="font-medium">{{ $isActive ? 'Aktiv' : 'Inaktiv' }}</flux:text>
+                                <flux:text class="text-sm text-zinc-500">{{ $isActive ? 'Selskapet har tilgang til plattformen' : 'Tilgang er sperret' }}</flux:text>
+                            </div>
+                            <flux:switch wire:model="isActive" />
+                        </div>
+                    </flux:card>
+
+                    {{-- Meta --}}
+                    <flux:card class="p-4">
+                        <flux:text class="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 uppercase mb-3">Detaljer</flux:text>
+                        <dl class="space-y-2">
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Selskaps-ID</dt>
+                                <dd class="text-sm font-mono font-medium text-zinc-700 dark:text-zinc-300">#{{ $company->id }}</dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Opprettet</dt>
+                                <dd class="text-sm text-zinc-700 dark:text-zinc-300">{{ $company->created_at->format('d.m.Y') }}</dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Oppdatert</dt>
+                                <dd class="text-sm text-zinc-700 dark:text-zinc-300">{{ $company->updated_at->format('d.m.Y') }}</dd>
+                            </div>
+                        </dl>
+                    </flux:card>
+
+                    {{-- Overview --}}
+                    <flux:card class="p-4">
+                        <flux:text class="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 uppercase mb-3">Oversikt</flux:text>
+                        <dl class="space-y-2">
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Brukere</dt>
+                                <dd class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{{ $company->users->count() }}</dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Aktive moduler</dt>
+                                <dd class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                    {{ $companyModules->filter(fn($cm) => $cm->isActive())->count() }}
+                                </dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Månedlig kostnad</dt>
+                                <dd class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                                    {{ number_format($totalMonthlyOre / 100, 0, ',', ' ') }} kr/mnd
+                                </dd>
+                            </div>
+                            <div class="flex justify-between gap-2">
+                                <dt class="text-sm text-zinc-500 shrink-0">Utestående</dt>
+                                <dd class="text-sm font-medium {{ $outstandingOre > 0 ? 'text-red-600 dark:text-red-400' : 'text-zinc-700 dark:text-zinc-300' }}">
+                                    {{ number_format($outstandingOre / 100, 0, ',', ' ') }} kr
+                                </dd>
+                            </div>
+                        </dl>
+                    </flux:card>
                 </div>
             </div>
         </flux:tab.panel>
