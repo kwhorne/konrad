@@ -167,9 +167,11 @@
 
                     <!-- CTA -->
                     <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-10">
-                        <flux:button href="{{ route('login') }}" variant="primary" class="px-8">
-                            <flux:icon.arrow-right-end-on-rectangle class="w-5 h-5 mr-2" />
-                            Logg inn
+                        <flux:button href="{{ route('order') }}" variant="primary" class="px-8">
+                            Prøv gratis i 30 dager
+                        </flux:button>
+                        <flux:button href="{{ route('pricing') }}" variant="ghost" class="px-8">
+                            Se priser
                         </flux:button>
                     </div>
 
@@ -1009,11 +1011,13 @@
                 Klar til å ta kontroll over bedriften?
             </h2>
             <p class="text-xl text-indigo-100 mb-8">
-                Logg inn for å komme i gang med Konrad Office.
+                Start en gratis prøveperiode og se hva Konrad Office kan gjøre for deg — ingen betalingskort kreves.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <flux:button href="{{ route('login') }}" variant="primary" class="px-8 py-3 bg-white text-indigo-600 hover:bg-gray-50 border-white">
-                    <flux:icon.arrow-right-end-on-rectangle class="w-5 h-5 mr-2" />
+                <flux:button href="{{ route('order') }}" variant="primary" class="px-8 bg-white! text-indigo-600! hover:bg-zinc-50!">
+                    Prøv gratis i 30 dager
+                </flux:button>
+                <flux:button href="{{ route('login') }}" variant="ghost" class="px-8 text-white! border-white/40! hover:bg-white/10!">
                     Logg inn
                 </flux:button>
             </div>
