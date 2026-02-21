@@ -25,6 +25,14 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Fortify::requestPasswordResetLinkView(function () {
+            return view('auth.forgot-password');
+        });
+
+        Fortify::resetPasswordView(function (Request $request) {
+            return view('auth.reset-password', ['request' => $request]);
+        });
+
         // Custom views for 2FA
         Fortify::twoFactorChallengeView(function () {
             return view('auth.two-factor-challenge');

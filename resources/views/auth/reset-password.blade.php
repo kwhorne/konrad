@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <title>Logg inn - Konrad Office</title>
-    <meta name="description" content="Logg inn på Konrad Office - ditt komplette forretningssystem">
+    <title>Nytt passord - Konrad Office</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
@@ -18,16 +17,11 @@
 
         {{-- Left side - Brand panel --}}
         <div class="flex-1 max-lg:hidden relative overflow-hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900">
-
-            {{-- Background texture --}}
             <div class="absolute inset-0">
                 <div class="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
                 <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
             </div>
-
             <div class="relative h-full flex flex-col justify-between p-12">
-
-                {{-- Logo --}}
                 <a href="{{ route('welcome') }}" class="flex items-center gap-3">
                     <svg class="h-9 w-9 shrink-0" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M 0.0,139.5 L 0.5,120.0 C 1.0,100.5 2.0,61.5 13.7,41.0 C 25.3,20.5 47.7,18.5 69.2,19.0 C 90.7,19.5 111.3,22.5 132.0,26.0 L 152.7,29.5 L 152.8,66.5 C 152.8,86.8 152.8,127.3 152.8,147.7 L 152.8,188.0 L 132.2,188.0 C 111.5,188.0 70.0,188.0 49.0,188.0 C 28.0,188.0 27.5,188.0 18.3,174.0 C 9.2,160.0 0.8,132.0 0.4,118.0 C 0.0,104.0 0.0,104.0 0.0,139.5 Z" fill="#6b9bc4" fill-rule="evenodd"/>
@@ -36,43 +30,15 @@
                     </svg>
                     <span class="text-xl font-bold text-white">Konrad Office</span>
                 </a>
-
-                {{-- Center content --}}
-                <div class="space-y-8">
-                    <div>
-                        <h2 class="text-3xl xl:text-4xl font-bold text-white leading-tight">
-                            Et komplett<br>forretningssystem<br>for norske bedrifter.
-                        </h2>
-                        <p class="text-indigo-200/80 mt-4 text-lg leading-relaxed">
-                            Salg, fakturering, regnskap, prosjekter og mer — samlet på ett sted.
-                        </p>
-                    </div>
-
-                    <div class="space-y-3">
-                        @foreach([
-                            'Norsk regelverk innebygd',
-                            'Faktura og regnskap i samme system',
-                            'Prosjekt- og kontraktstyring',
-                            'Support på norsk',
-                        ] as $point)
-                        <div class="flex items-center gap-3 text-sm text-indigo-100/90">
-                            <div class="w-5 h-5 bg-indigo-500/30 rounded-full flex items-center justify-center shrink-0">
-                                <svg class="w-3 h-3 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                            </div>
-                            {{ $point }}
-                        </div>
-                        @endforeach
-                    </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-white leading-tight">Velg et nytt passord</h2>
+                    <p class="text-indigo-200/80 mt-4 leading-relaxed">Bruk et sterkt passord du ikke bruker andre steder.</p>
                 </div>
-
-                {{-- Bottom --}}
                 <p class="text-xs text-indigo-300/50">© {{ date('Y') }} Konrad Office AS</p>
             </div>
         </div>
 
-        {{-- Right side - Login form --}}
+        {{-- Right side --}}
         <div class="flex-1 flex justify-center items-center p-8 bg-white dark:bg-zinc-900">
             <div class="w-full max-w-sm space-y-8">
 
@@ -89,46 +55,53 @@
                 </div>
 
                 <div>
-                    <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Velkommen tilbake</h1>
-                    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Logg inn for å fortsette</p>
+                    <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Velg nytt passord</h1>
+                    <p class="text-zinc-500 dark:text-zinc-400 mt-1">Fyll inn e-postadressen din og velg et nytt passord.</p>
                 </div>
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                <form method="POST" action="{{ route('password.update') }}" class="space-y-5">
                     @csrf
+                    <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
                     <flux:input
                         name="email"
                         type="email"
                         label="E-postadresse"
-                        value="{{ old('email') }}"
+                        value="{{ old('email', $request->email) }}"
                         placeholder="din@epost.no"
                         required
                         autofocus
                     />
+                    @error('email')
+                        <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
 
-                    <flux:field>
-                        <div class="flex justify-between mb-2">
-                            <flux:label>Passord</flux:label>
-                            <a href="{{ route('password.request') }}" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors">Glemt passord?</a>
-                        </div>
-                        <flux:input
-                            name="password"
-                            type="password"
-                            placeholder="Ditt passord"
-                            required
-                        />
-                    </flux:field>
+                    <flux:input
+                        name="password"
+                        type="password"
+                        label="Nytt passord"
+                        placeholder="Minst 8 tegn"
+                        required
+                    />
+                    @error('password')
+                        <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
 
-                    <flux:checkbox name="remember" label="Husk meg i 30 dager" />
+                    <flux:input
+                        name="password_confirmation"
+                        type="password"
+                        label="Bekreft passord"
+                        placeholder="Gjenta passordet"
+                        required
+                    />
 
                     <flux:button type="submit" variant="primary" class="w-full">
-                        Logg inn
+                        Lagre nytt passord
                     </flux:button>
                 </form>
 
                 <p class="text-center text-sm text-zinc-500 dark:text-zinc-400">
-                    Ny kunde?
-                    <a href="{{ route('contact') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Ta kontakt med oss</a>
+                    <a href="{{ route('login') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">Tilbake til innlogging</a>
                 </p>
             </div>
         </div>

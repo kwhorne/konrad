@@ -144,6 +144,7 @@ return [
     */
 
     'features' => [
+        Features::resetPasswords(),
         // Only enable 2FA - we have our own auth system
         Features::twoFactorAuthentication([
             'confirm' => true,
