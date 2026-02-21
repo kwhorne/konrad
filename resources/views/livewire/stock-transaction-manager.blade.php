@@ -25,6 +25,49 @@
         </div>
     </div>
 
+    {{-- Summary strip --}}
+    <div class="grid grid-cols-3 gap-3 mb-5">
+        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 p-4">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium tracking-wide text-zinc-500 dark:text-zinc-400 uppercase">Transaksjoner</p>
+                    <p class="mt-2 text-2xl font-bold text-zinc-900 dark:text-white">{{ number_format($totals->total_count ?? 0, 0, ',', ' ') }}</p>
+                </div>
+                <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center shrink-0">
+                    <flux:icon.arrow-path class="w-4.5 h-4.5 text-blue-600 dark:text-blue-400" />
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 p-4">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium tracking-wide text-zinc-500 dark:text-zinc-400 uppercase">Netto antall</p>
+                    @php $netQty = $totals->total_quantity ?? 0; @endphp
+                    <p class="mt-2 text-2xl font-bold {{ $netQty >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                        {{ $netQty >= 0 ? '+' : '' }}{{ number_format($netQty, 2, ',', ' ') }}
+                    </p>
+                </div>
+                <div class="w-9 h-9 rounded-lg bg-green-50 dark:bg-green-950/50 flex items-center justify-center shrink-0">
+                    <flux:icon.archive-box class="w-4.5 h-4.5 text-green-600 dark:text-green-400" />
+                </div>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 p-4">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs font-medium tracking-wide text-zinc-500 dark:text-zinc-400 uppercase">Netto beløp</p>
+                    @php $netAmt = $totals->total_amount ?? 0; @endphp
+                    <p class="mt-2 text-2xl font-bold {{ $netAmt >= 0 ? 'text-zinc-900 dark:text-white' : 'text-red-600 dark:text-red-400' }}">
+                        {{ number_format($netAmt, 2, ',', ' ') }}
+                    </p>
+                </div>
+                <div class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center shrink-0">
+                    <flux:icon.currency-dollar class="w-4.5 h-4.5 text-indigo-600 dark:text-indigo-400" />
+                </div>
+            </div>
+        </div>
+    </div>
+
     <flux:card class="bg-white dark:bg-zinc-900 shadow-lg border border-zinc-200 dark:border-zinc-700">
         <div class="p-6">
             @if($transactions->count() > 0)
