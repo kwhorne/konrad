@@ -121,6 +121,8 @@ ROBOTS;
 
 > Konrad Office er et komplett norsk forretningssystem (SaaS) for små og mellomstore bedrifter (SMB). Systemet samler fakturering, regnskap, lønn, lager, prosjektstyring, timeregistrering og aksjonærregister i én løsning. Skreddersydd for norske AS og ENK med 1–50 ansatte.
 
+- Nettside: https://konradoffice.no
+
 ## Hva er Konrad Office?
 
 Konrad Office er en moderne nettbasert plattform som erstatter behovet for separate systemer for regnskap, lønn, lager og prosjektstyring. Systemet er bygget spesifikt for norske bedrifter og oppfyller alle norske lovkrav innen bokføring, lønn og rapportering.

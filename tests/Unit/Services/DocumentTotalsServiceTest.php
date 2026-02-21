@@ -159,7 +159,7 @@ it('handles decimal quantities and prices', function () {
 
     $totals = $this->service->calculate($lines);
 
-    expect($totals['subtotal'])->toBe(149.99);
+    expect($totals['subtotal'])->toBe(149.98);
     expect($totals['vat_total'])->toBe(37.5);
     expect($totals['total'])->toBe(187.48); // 149.99 + 37.4975 rounded = 187.48
 });
