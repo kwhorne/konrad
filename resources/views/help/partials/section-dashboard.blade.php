@@ -17,13 +17,28 @@
 
         <flux:accordion transition class="border-t border-zinc-200 dark:border-zinc-700 pt-4">
             <flux:accordion.item>
+                <flux:accordion.heading class="text-base font-medium">KPI-strip øverst</flux:accordion.heading>
+                <flux:accordion.content>
+                    <div class="prose prose-zinc dark:prose-invert max-w-none text-sm">
+                        <p>Økonomi- og adminbrukere ser fire nøkkeltallskort øverst på dashbordet:</p>
+                        <ul>
+                            <li><strong>Timer denne uken</strong> - Egne timer med timeliste-status</li>
+                            <li><strong>Utestående</strong> - Sum av ubetalte fakturaer</li>
+                            <li><strong>Forfalt</strong> - Forfalte fakturaer med antall (rødt ved avvik)</li>
+                            <li><strong>Bilag / Prosjekter / Tilbud</strong> - Det mest relevante fjerde kortet basert på hva som er aktivt</li>
+                        </ul>
+                    </div>
+                </flux:accordion.content>
+            </flux:accordion.item>
+
+            <flux:accordion.item>
                 <flux:accordion.heading class="text-base font-medium">Rollebasert innhold</flux:accordion.heading>
                 <flux:accordion.content>
                     <div class="prose prose-zinc dark:prose-invert max-w-none text-sm">
                         <p>Dashboardet tilpasser seg automatisk basert på din brukerrolle:</p>
                         <ul>
-                            <li><strong>Alle brukere</strong> - Ser egne timer denne uken og timeliste-status</li>
-                            <li><strong>Økonomi og admin</strong> - Ser økonomiske nøkkeltall, forfalte fakturaer og bilag i innboks</li>
+                            <li><strong>Alle brukere</strong> - Ser egne timer og timeliste-status</li>
+                            <li><strong>Økonomi og admin</strong> - Ser KPI-strip, forfalte fakturaer, bilag i innboks og timesedler til godkjenning</li>
                             <li><strong>Salg</strong> - Ser aktive tilbud og åpne ordrer</li>
                             <li><strong>Prosjekt</strong> - Ser aktive prosjekter og åpne arbeidsordrer</li>
                         </ul>
@@ -32,14 +47,14 @@
             </flux:accordion.item>
 
             <flux:accordion.item>
-                <flux:accordion.heading class="text-base font-medium">Mine timer denne uken</flux:accordion.heading>
+                <flux:accordion.heading class="text-base font-medium">Snarveier</flux:accordion.heading>
                 <flux:accordion.content>
                     <div class="prose prose-zinc dark:prose-invert max-w-none text-sm">
-                        <p>Alle brukere ser et kort med timer registrert denne uken. Kortet viser:</p>
+                        <p>I høyre kolonne finner du et rutenett med snarveier til de vanligste funksjonene:</p>
                         <ul>
-                            <li>Antall timer ført</li>
-                            <li>Status på timelisten (utkast, sendt, godkjent)</li>
-                            <li>Direktelink til timeregistrering</li>
+                            <li>Timer, Ny faktura, Prosjekter, Økonomi, Aktiviteter og CRM</li>
+                            <li>Ikontilene får en fargeaksentuert hover-effekt</li>
+                            <li>Tilgjengelige snarveier tilpasses din rolle</li>
                         </ul>
                     </div>
                 </flux:accordion.content>
@@ -51,7 +66,7 @@
                     <flux:callout variant="info" icon="light-bulb" class="not-prose">
                         <flux:callout.heading>Tips</flux:callout.heading>
                         <flux:callout.text>
-                            Bruk snarveiene nederst på dashbordet for rask tilgang til de vanligste funksjonene.
+                            Fakturaene i høyre kolonne er klikkbare — klikk direkte på en faktura for å åpne den. KPI-kortene øverst gir deg umiddelbar oversikt over økonomisk status uten å navigere videre.
                         </flux:callout.text>
                     </flux:callout>
                 </flux:accordion.content>

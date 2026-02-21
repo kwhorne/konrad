@@ -46,6 +46,22 @@
             </flux:accordion.item>
 
             <flux:accordion.item>
+                <flux:accordion.heading class="text-base font-medium">Opprette varegruppe direkte fra produktskjemaet</flux:accordion.heading>
+                <flux:accordion.content>
+                    <div class="prose prose-zinc dark:prose-invert max-w-none text-sm">
+                        <p>Du trenger ikke forlate produktskjemaet for å opprette en ny varegruppe:</p>
+                        <ol>
+                            <li>Åpne produktskjemaet (nytt eller rediger eksisterende)</li>
+                            <li>Klikk <strong>Ny gruppe</strong> ved siden av Varegruppe-feltet</li>
+                            <li>Skriv inn gruppenavnet — koden genereres automatisk</li>
+                            <li>Klikk <strong>Opprett</strong></li>
+                        </ol>
+                        <p>Den nye gruppen velges automatisk for produktet.</p>
+                    </div>
+                </flux:accordion.content>
+            </flux:accordion.item>
+
+            <flux:accordion.item>
                 <flux:accordion.heading class="text-base font-medium">MVA-satser</flux:accordion.heading>
                 <flux:accordion.content>
                     <div class="prose prose-zinc dark:prose-invert max-w-none text-sm">

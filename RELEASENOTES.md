@@ -1,5 +1,53 @@
 # Hva er nytt i Konrad Office
 
+## Versjon 1.5.1
+**Dato:** 21. februar 2026
+
+### Redesignet dashboard
+
+Dashbordet er gjennomgående redesignet med et mer profesjonelt og oversiktlig utseende.
+
+- **KPI-strip øverst** - Fire nøkkeltallskort vises øverst: Timer denne uken, Utestående, Forfalt og Bilag/Prosjekter/Tilbud — avhengig av rolle
+- **Ny layout** - Innholdet er delt i 3/5 + 2/5 kolonner for bedre bruk av plassen
+- **Snarveier som ikontiles** - Hurtigkoblinger vises nå som et rutenett av ikontiles med fargeaksentuering ved hover
+- **Fakturaliste med klikk** - Siste fakturaer er nå klikkbare og fører direkte til fakturaen
+- **Renere fargepalett** - Bedre kontraster, subtile skygger og konsekvent mørk modus-støtte
+
+### Administrasjonspanel: selskapsdetaljer
+
+Ny detaljside for hvert selskap i adminpanelet med fire faner.
+
+- **Informasjon** - Redigerbart skjema med 2/3 + 1/3 layout. Høyre panel viser selskaps-ID, opprettelsesdato og nøkkeltall (brukere, moduler, kostnad, utestående)
+- **Brukere** - Tabell over alle brukere med rolle og innmeldingsdato
+- **Moduler & Fakturering** - Oversikt over aktive moduler med aktivert dato og utløpsdato
+- **Faktura** - Komplett kundereskontro med opprettelse, sending og betaling av fakturaer
+
+### Fakturering per selskap (admin)
+
+- **Faktura-e-post** - Bedrifter kan ha en separat e-postadresse for fakturamottak
+- **Plattformfakturaer** - Opprett fakturaer til bedrifter direkte fra adminpanelet
+- **PDF-generering** - Fakturaer genereres som profesjonelle PDF-dokumenter med Konrad Office-logo og betalingsinformasjon
+- **Send på e-post** - Send faktura med PDF-vedlegg via Resend til faktura-e-post
+- **Kundereskontro** - Full oversikt over alle fakturaer per bedrift med status (betalt/utestående/forfalt)
+- **Linjer fra moduler** - Fakturalinjer hentes automatisk fra aktive moduler og priser
+
+### Vareregister: opprett varegruppe inline
+
+- **Ny gruppe direkte fra feltet** - Klikk «Ny gruppe» ved siden av Varegruppe-feltet i produktskjemaet
+- **Automatisk kode** - Koden genereres automatisk fra gruppenavnet mens du skriver
+- **Velges automatisk** - Den nye gruppen velges automatisk etter opprettelse
+
+### Feilrettinger
+
+- **Altinn-dashboard** - Fikset PHP-syntaksfeil i kompilert view ved bruk av `@if` inne i Flux-komponenters class-attributt
+- **Mine aktiviteter** - Fikset «Route not defined»-feil for `activities.edit` som ikke eksisterer
+
+### Tips
+
+Utforsk det nye dashbordet ved å navigere til **Dashboard** i sidemenyen. For admin-brukere: gå til **/admin/companies** og klikk på et selskap for å se den nye detaljsiden med fakturaoversikt. I vareregisteret kan du nå opprette nye varegrupper direkte fra produktskjemaet uten å forlate siden.
+
+---
+
 ## Versjon 1.5.0
 **Dato:** 4. februar 2026
 
