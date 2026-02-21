@@ -23,6 +23,7 @@ Route::view('/priser', 'pricing')->name('pricing');
 Route::view('/kontakt', 'contact')->name('contact');
 Route::view('/om-oss', 'about')->name('about');
 Route::view('/bestill', 'order')->name('order');
+Route::view('/funksjoner', 'features')->name('features');
 
 // Blog routes
 Route::get('/innsikt', [BlogController::class, 'index'])->name('blog.index');
