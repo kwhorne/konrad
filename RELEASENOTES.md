@@ -3,48 +3,21 @@
 ## Versjon 1.5.1
 **Dato:** 21. februar 2026
 
-### Redesignet dashboard
+### Nytt dashboard
 
 Dashbordet er gjennomgående redesignet med et mer profesjonelt og oversiktlig utseende.
 
-- **KPI-strip øverst** - Fire nøkkeltallskort vises øverst: Timer denne uken, Utestående, Forfalt og Bilag/Prosjekter/Tilbud — avhengig av rolle
-- **Ny layout** - Innholdet er delt i 3/5 + 2/5 kolonner for bedre bruk av plassen
-- **Snarveier som ikontiles** - Hurtigkoblinger vises nå som et rutenett av ikontiles med fargeaksentuering ved hover
-- **Fakturaliste med klikk** - Siste fakturaer er nå klikkbare og fører direkte til fakturaen
-- **Renere fargepalett** - Bedre kontraster, subtile skygger og konsekvent mørk modus-støtte
+- **Nøkkeltall øverst** - Se timer denne uken, utestående beløp, forfalte fakturaer og bilag/prosjekter samlet øverst på siden
+- **Snarveier som ikontiles** - Hurtigkoblinger til Timer, Ny faktura, Prosjekter, Økonomi og mer vises som et oversiktlig rutenett
+- **Fakturaliste med klikk** - Klikk direkte på en faktura i oversikten for å åpne den
 
-### Administrasjonspanel: selskapsdetaljer
+### Bedre vareregister
 
-Ny detaljside for hvert selskap i adminpanelet med fire faner.
-
-- **Informasjon** - Redigerbart skjema med 2/3 + 1/3 layout. Høyre panel viser selskaps-ID, opprettelsesdato og nøkkeltall (brukere, moduler, kostnad, utestående)
-- **Brukere** - Tabell over alle brukere med rolle og innmeldingsdato
-- **Moduler & Fakturering** - Oversikt over aktive moduler med aktivert dato og utløpsdato
-- **Faktura** - Komplett kundereskontro med opprettelse, sending og betaling av fakturaer
-
-### Fakturering per selskap (admin)
-
-- **Faktura-e-post** - Bedrifter kan ha en separat e-postadresse for fakturamottak
-- **Plattformfakturaer** - Opprett fakturaer til bedrifter direkte fra adminpanelet
-- **PDF-generering** - Fakturaer genereres som profesjonelle PDF-dokumenter med Konrad Office-logo og betalingsinformasjon
-- **Send på e-post** - Send faktura med PDF-vedlegg via Resend til faktura-e-post
-- **Kundereskontro** - Full oversikt over alle fakturaer per bedrift med status (betalt/utestående/forfalt)
-- **Linjer fra moduler** - Fakturalinjer hentes automatisk fra aktive moduler og priser
-
-### Vareregister: opprett varegruppe inline
-
-- **Ny gruppe direkte fra feltet** - Klikk «Ny gruppe» ved siden av Varegruppe-feltet i produktskjemaet
-- **Automatisk kode** - Koden genereres automatisk fra gruppenavnet mens du skriver
-- **Velges automatisk** - Den nye gruppen velges automatisk etter opprettelse
-
-### Feilrettinger
-
-- **Altinn-dashboard** - Fikset PHP-syntaksfeil i kompilert view ved bruk av `@if` inne i Flux-komponenters class-attributt
-- **Mine aktiviteter** - Fikset «Route not defined»-feil for `activities.edit` som ikke eksisterer
+- **Opprett varegruppe direkte fra produktskjemaet** - Klikk «Ny gruppe» ved Varegruppe-feltet, skriv inn navn, og gruppen opprettes og velges automatisk — uten å forlate skjemaet
 
 ### Tips
 
-Utforsk det nye dashbordet ved å navigere til **Dashboard** i sidemenyen. For admin-brukere: gå til **/admin/companies** og klikk på et selskap for å se den nye detaljsiden med fakturaoversikt. I vareregisteret kan du nå opprette nye varegrupper direkte fra produktskjemaet uten å forlate siden.
+Åpne **Dashboard** for å se det nye utseendet. I **Produkter**, prøv å opprette en ny varegruppe direkte fra «Ny gruppe»-lenken ved siden av Varegruppe-feltet når du oppretter eller redigerer et produkt.
 
 ---
 
