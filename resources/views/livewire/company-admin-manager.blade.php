@@ -81,6 +81,11 @@
                                 @if($company->email)
                                     <flux:text class="text-sm">{{ $company->email }}</flux:text>
                                 @endif
+                                @if($company->billing_email)
+                                    <flux:text class="text-sm text-violet-600 dark:text-violet-400">
+                                        <span title="Faktura-e-post">{{ $company->billing_email }}</span>
+                                    </flux:text>
+                                @endif
                                 @if($company->phone)
                                     <flux:text class="text-sm text-zinc-500">{{ $company->phone }}</flux:text>
                                 @endif

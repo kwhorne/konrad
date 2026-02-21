@@ -25,6 +25,7 @@ class Company extends Model
         'phone',
         'email',
         'website',
+        'billing_email',
         'bank_name',
         'bank_account',
         'iban',
@@ -135,6 +136,14 @@ class Company extends Model
     }
 
     /**
+     * Get the effective billing email, falling back to the main email.
+     */
+    public function getEffectiveBillingEmailAttribute(): ?string
+    {
+        return $this->billing_email ?: $this->email;
+    }
+
+    /**
      * Get the formatted organization number (XXX XXX XXX).
      */
     public function getFormattedOrganizationNumberAttribute(): string
@@ -195,6 +204,14 @@ class Company extends Model
     public function accountingSettings(): HasOne
     {
         return $this->hasOne(AccountingSettings::class);
+    }
+
+    /**
+     * Get all platform invoices (Konrad billing) for this company.
+     */
+    public function platformInvoices(): HasMany
+    {
+        return $this->hasMany(PlatformInvoice::class);
     }
 
     /**

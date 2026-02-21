@@ -4,6 +4,7 @@ use App\Livewire\Admin\CompanyDetailManager;
 use App\Models\Company;
 use App\Models\CompanyModule;
 use App\Models\Module;
+use App\Models\PlatformInvoice;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -124,6 +125,80 @@ describe('CompanyDetailManager Component', function () {
         expect($companyModule)->not->toBeNull()
             ->and($companyModule->is_enabled)->toBeTrue()
             ->and($companyModule->expires_at->format('Y-m-d'))->toBe('2030-12-31');
+    });
+
+    test('can create an invoice', function () {
+        $admin = createAdminForDetailTest();
+        $adminCompany = Company::factory()->create();
+        $adminCompany->users()->attach($admin->id, ['role' => 'owner', 'is_default' => true, 'joined_at' => now()]);
+
+        $company = Company::factory()->create();
+
+        $this->actingAs($admin);
+
+        Livewire::test(CompanyDetailManager::class, ['companyId' => $company->id])
+            ->call('openInvoiceModal')
+            ->set('invoiceDescription', 'Månedlig lisens mars 2026')
+            ->set('invoiceAmount', '299')
+            ->set('invoiceDueDate', now()->addDays(14)->format('Y-m-d'))
+            ->call('createInvoice')
+            ->assertSet('showInvoiceModal', false)
+            ->assertHasNoErrors();
+
+        $invoice = PlatformInvoice::where('company_id', $company->id)->first();
+        expect($invoice)->not->toBeNull()
+            ->and($invoice->description)->toBe('Månedlig lisens mars 2026')
+            ->and($invoice->amount)->toBe(29900)
+            ->and($invoice->invoice_number)->toStartWith('KON-');
+    });
+
+    test('can mark invoice as paid', function () {
+        $admin = createAdminForDetailTest();
+        $adminCompany = Company::factory()->create();
+        $adminCompany->users()->attach($admin->id, ['role' => 'owner', 'is_default' => true, 'joined_at' => now()]);
+
+        $company = Company::factory()->create();
+        $invoice = PlatformInvoice::factory()->create(['company_id' => $company->id]);
+
+        $this->actingAs($admin);
+
+        Livewire::test(CompanyDetailManager::class, ['companyId' => $company->id])
+            ->call('markAsPaid', $invoice->id);
+
+        expect($invoice->fresh()->isPaid())->toBeTrue();
+    });
+
+    test('can mark invoice as unpaid', function () {
+        $admin = createAdminForDetailTest();
+        $adminCompany = Company::factory()->create();
+        $adminCompany->users()->attach($admin->id, ['role' => 'owner', 'is_default' => true, 'joined_at' => now()]);
+
+        $company = Company::factory()->create();
+        $invoice = PlatformInvoice::factory()->paid()->create(['company_id' => $company->id]);
+
+        $this->actingAs($admin);
+
+        Livewire::test(CompanyDetailManager::class, ['companyId' => $company->id])
+            ->call('markAsUnpaid', $invoice->id);
+
+        expect($invoice->fresh()->isPaid())->toBeFalse();
+    });
+
+    test('invoice validates required fields', function () {
+        $admin = createAdminForDetailTest();
+        $adminCompany = Company::factory()->create();
+        $adminCompany->users()->attach($admin->id, ['role' => 'owner', 'is_default' => true, 'joined_at' => now()]);
+
+        $company = Company::factory()->create();
+
+        $this->actingAs($admin);
+
+        Livewire::test(CompanyDetailManager::class, ['companyId' => $company->id])
+            ->call('openInvoiceModal')
+            ->set('invoiceDescription', '')
+            ->set('invoiceAmount', '')
+            ->call('createInvoice')
+            ->assertHasErrors(['invoiceDescription', 'invoiceAmount']);
     });
 
     test('company detail page is accessible', function () {

@@ -1,15 +1,17 @@
 <div>
-    <flux:tabs>
-        <flux:tab name="info">Informasjon</flux:tab>
-        <flux:tab name="users">Brukere</flux:tab>
-        <flux:tab name="modules">Moduler & Fakturering</flux:tab>
-        <flux:tab name="stripe">Stripe</flux:tab>
+    <flux:tab.group>
+        <flux:tabs>
+            <flux:tab name="info">Informasjon</flux:tab>
+            <flux:tab name="users">Brukere</flux:tab>
+            <flux:tab name="modules">Moduler & Fakturering</flux:tab>
+            <flux:tab name="billing">Faktura</flux:tab>
+        </flux:tabs>
 
         {{-- Info tab --}}
-        <flux:tab.panel name="info">
-            <div class="mt-6 space-y-6">
+        <flux:tab.panel name="info" class="pt-6">
+            <div class="space-y-6">
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <flux:field>
+                    <flux:field class="md:col-span-2">
                         <flux:label>Selskapsnavn</flux:label>
                         <flux:input wire:model="name" />
                         <flux:error name="name" />
@@ -34,6 +36,12 @@
                     </flux:field>
 
                     <flux:field>
+                        <flux:label>Faktura-e-post</flux:label>
+                        <flux:input wire:model="billingEmail" type="email" placeholder="Bruker vanlig e-post hvis tom" />
+                        <flux:error name="billingEmail" />
+                    </flux:field>
+
+                    <flux:field>
                         <flux:label>Telefon</flux:label>
                         <flux:input wire:model="phone" />
                         <flux:error name="phone" />
@@ -45,25 +53,23 @@
                         <flux:error name="website" />
                     </flux:field>
 
-                    <flux:field>
+                    <flux:field class="md:col-span-2">
                         <flux:label>Adresse</flux:label>
                         <flux:input wire:model="address" />
                         <flux:error name="address" />
                     </flux:field>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <flux:field>
-                            <flux:label>Postnr</flux:label>
-                            <flux:input wire:model="postalCode" />
-                            <flux:error name="postalCode" />
-                        </flux:field>
+                    <flux:field>
+                        <flux:label>Postnr</flux:label>
+                        <flux:input wire:model="postalCode" />
+                        <flux:error name="postalCode" />
+                    </flux:field>
 
-                        <flux:field>
-                            <flux:label>By</flux:label>
-                            <flux:input wire:model="city" />
-                            <flux:error name="city" />
-                        </flux:field>
-                    </div>
+                    <flux:field>
+                        <flux:label>By</flux:label>
+                        <flux:input wire:model="city" />
+                        <flux:error name="city" />
+                    </flux:field>
 
                     <flux:field>
                         <flux:label>Land</flux:label>
@@ -87,52 +93,50 @@
         </flux:tab.panel>
 
         {{-- Users tab --}}
-        <flux:tab.panel name="users">
-            <div class="mt-6">
-                <flux:table>
-                    <flux:table.columns>
-                        <flux:table.column>Navn</flux:table.column>
-                        <flux:table.column>E-post</flux:table.column>
-                        <flux:table.column>Rolle</flux:table.column>
-                        <flux:table.column>Ble med</flux:table.column>
-                    </flux:table.columns>
-                    <flux:table.rows>
-                        @forelse($company->users as $user)
-                            <flux:table.row wire:key="user-{{ $user->id }}">
-                                <flux:table.cell>
-                                    <flux:text class="font-medium">{{ $user->name }}</flux:text>
-                                </flux:table.cell>
-                                <flux:table.cell>
-                                    <flux:text class="text-sm">{{ $user->email }}</flux:text>
-                                </flux:table.cell>
-                                <flux:table.cell>
-                                    <flux:badge color="{{ $user->pivot->role === 'owner' ? 'yellow' : 'zinc' }}">
-                                        {{ ucfirst($user->pivot->role) }}
-                                    </flux:badge>
-                                </flux:table.cell>
-                                <flux:table.cell>
-                                    <flux:text class="text-sm text-zinc-500">
-                                        {{ $user->pivot->joined_at ? \Carbon\Carbon::parse($user->pivot->joined_at)->format('d.m.Y') : '—' }}
-                                    </flux:text>
-                                </flux:table.cell>
-                            </flux:table.row>
-                        @empty
-                            <flux:table.row>
-                                <flux:table.cell colspan="4" class="text-center py-8">
-                                    <flux:text class="text-zinc-400">Ingen brukere</flux:text>
-                                </flux:table.cell>
-                            </flux:table.row>
-                        @endforelse
-                    </flux:table.rows>
-                </flux:table>
-            </div>
+        <flux:tab.panel name="users" class="pt-6">
+            <flux:table>
+                <flux:table.columns>
+                    <flux:table.column>Navn</flux:table.column>
+                    <flux:table.column>E-post</flux:table.column>
+                    <flux:table.column>Rolle</flux:table.column>
+                    <flux:table.column>Ble med</flux:table.column>
+                </flux:table.columns>
+                <flux:table.rows>
+                    @forelse($company->users as $user)
+                        <flux:table.row wire:key="user-{{ $user->id }}">
+                            <flux:table.cell>
+                                <flux:text class="font-medium">{{ $user->name }}</flux:text>
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                <flux:text class="text-sm">{{ $user->email }}</flux:text>
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                <flux:badge color="{{ $user->pivot->role === 'owner' ? 'yellow' : 'zinc' }}">
+                                    {{ ucfirst($user->pivot->role) }}
+                                </flux:badge>
+                            </flux:table.cell>
+                            <flux:table.cell>
+                                <flux:text class="text-sm text-zinc-500">
+                                    {{ $user->pivot->joined_at ? \Carbon\Carbon::parse($user->pivot->joined_at)->format('d.m.Y') : '—' }}
+                                </flux:text>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @empty
+                        <flux:table.row>
+                            <flux:table.cell colspan="4" class="text-center py-8">
+                                <flux:text class="text-zinc-400">Ingen brukere</flux:text>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @endforelse
+                </flux:table.rows>
+            </flux:table>
         </flux:tab.panel>
 
         {{-- Modules & Billing tab --}}
-        <flux:tab.panel name="modules">
-            <div class="mt-6 space-y-6">
-                <div class="flex items-center justify-between">
-                    <flux:card class="bg-white dark:bg-zinc-900 flex-1 mr-4">
+        <flux:tab.panel name="modules" class="pt-6">
+            <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <flux:card class="bg-white dark:bg-zinc-900 flex-1">
                         <div class="flex items-center gap-4">
                             <div class="p-3 rounded-xl bg-green-100 dark:bg-green-900/30">
                                 <flux:icon.banknotes class="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -156,13 +160,17 @@
                         <flux:table.column>Aktivert av</flux:table.column>
                         <flux:table.column>Aktivert</flux:table.column>
                         <flux:table.column>Utløper</flux:table.column>
-                        <flux:table.column>Stripe-status</flux:table.column>
                     </flux:table.columns>
                     <flux:table.rows>
                         @forelse($companyModules as $cm)
                             <flux:table.row wire:key="cm-{{ $cm->id }}">
                                 <flux:table.cell>
-                                    <flux:text class="font-medium">{{ $cm->module?->name ?? '—' }}</flux:text>
+                                    <div>
+                                        <flux:text class="font-medium">{{ $cm->module?->name ?? '—' }}</flux:text>
+                                        @if($cm->module?->price_monthly)
+                                            <flux:text class="text-sm text-zinc-500">{{ $cm->module->price_formatted }}</flux:text>
+                                        @endif
+                                    </div>
                                 </flux:table.cell>
                                 <flux:table.cell>
                                     @if($cm->isActive())
@@ -186,19 +194,10 @@
                                         {{ $cm->expires_at?->format('d.m.Y') ?? '—' }}
                                     </flux:text>
                                 </flux:table.cell>
-                                <flux:table.cell>
-                                    @if($cm->stripe_subscription_status)
-                                        <flux:badge color="{{ $cm->stripe_subscription_status === 'active' ? 'green' : 'yellow' }}">
-                                            {{ $cm->stripe_subscription_status }}
-                                        </flux:badge>
-                                    @else
-                                        <flux:text class="text-sm text-zinc-400">—</flux:text>
-                                    @endif
-                                </flux:table.cell>
                             </flux:table.row>
                         @empty
                             <flux:table.row>
-                                <flux:table.cell colspan="6" class="text-center py-8">
+                                <flux:table.cell colspan="5" class="text-center py-8">
                                     <flux:text class="text-zinc-400">Ingen moduler aktivert</flux:text>
                                 </flux:table.cell>
                             </flux:table.row>
@@ -208,69 +207,171 @@
             </div>
         </flux:tab.panel>
 
-        {{-- Stripe tab --}}
-        <flux:tab.panel name="stripe">
-            <div class="mt-6 space-y-6">
-                <flux:card class="bg-white dark:bg-zinc-900">
-                    <flux:heading size="lg" level="3" class="mb-4">Betalingsinformasjon</flux:heading>
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div>
-                            <flux:text class="text-sm text-zinc-500 mb-1">Stripe ID</flux:text>
-                            <flux:text class="font-mono text-sm">{{ $company->stripe_id ?? '—' }}</flux:text>
-                        </div>
-                        <div>
-                            <flux:text class="text-sm text-zinc-500 mb-1">Betalingsmetode</flux:text>
-                            <flux:text class="text-sm">{{ $company->pm_type ? strtoupper($company->pm_type) : '—' }}</flux:text>
-                        </div>
-                        <div>
-                            <flux:text class="text-sm text-zinc-500 mb-1">Kortnummer (siste 4)</flux:text>
-                            <flux:text class="font-mono text-sm">{{ $company->pm_last_four ? '•••• '.$company->pm_last_four : '—' }}</flux:text>
-                        </div>
-                    </div>
-                </flux:card>
+        {{-- Billing tab --}}
+        <flux:tab.panel name="billing" class="pt-6">
+            <div class="space-y-6">
+                {{-- Summary cards --}}
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                    <flux:card class="bg-white dark:bg-zinc-900">
+                        <flux:text class="text-sm text-zinc-500 mb-1">Faktura-e-post</flux:text>
+                        <flux:text class="font-medium">{{ $company->effective_billing_email ?? '—' }}</flux:text>
+                        @if(!$company->billing_email)
+                            <flux:text class="text-xs text-zinc-400 mt-1">Ingen separat faktura-e-post</flux:text>
+                        @endif
+                    </flux:card>
 
-                @if($subscriptions->isNotEmpty())
                     <flux:card class="bg-white dark:bg-zinc-900">
-                        <flux:heading size="lg" level="3" class="mb-4">Abonnementer</flux:heading>
-                        <flux:table>
-                            <flux:table.columns>
-                                <flux:table.column>Navn</flux:table.column>
-                                <flux:table.column>Stripe ID</flux:table.column>
-                                <flux:table.column>Status</flux:table.column>
-                                <flux:table.column>Opprettet</flux:table.column>
-                            </flux:table.columns>
-                            <flux:table.rows>
-                                @foreach($subscriptions as $subscription)
-                                    <flux:table.row wire:key="sub-{{ $subscription->id }}">
-                                        <flux:table.cell>
-                                            <flux:text class="font-medium">{{ $subscription->name }}</flux:text>
-                                        </flux:table.cell>
-                                        <flux:table.cell>
-                                            <flux:text class="font-mono text-sm">{{ $subscription->stripe_id }}</flux:text>
-                                        </flux:table.cell>
-                                        <flux:table.cell>
-                                            <flux:badge color="{{ $subscription->stripe_status === 'active' ? 'green' : 'yellow' }}">
-                                                {{ $subscription->stripe_status }}
-                                            </flux:badge>
-                                        </flux:table.cell>
-                                        <flux:table.cell>
-                                            <flux:text class="text-sm text-zinc-500">
-                                                {{ $subscription->created_at->format('d.m.Y') }}
-                                            </flux:text>
-                                        </flux:table.cell>
-                                    </flux:table.row>
-                                @endforeach
-                            </flux:table.rows>
-                        </flux:table>
+                        <flux:text class="text-sm text-zinc-500 mb-1">Utestående</flux:text>
+                        <flux:heading size="xl" class="{{ $outstandingOre > 0 ? 'text-red-600 dark:text-red-400' : '' }}">
+                            {{ number_format($outstandingOre / 100, 0, ',', ' ') }} kr
+                        </flux:heading>
                     </flux:card>
-                @else
+
                     <flux:card class="bg-white dark:bg-zinc-900">
-                        <flux:text class="text-zinc-400">Ingen Stripe-abonnementer</flux:text>
+                        <flux:text class="text-sm text-zinc-500 mb-1">Månedlig beløp (moduler)</flux:text>
+                        <flux:heading size="xl">{{ number_format($totalMonthlyOre / 100, 0, ',', ' ') }} kr/mnd</flux:heading>
                     </flux:card>
-                @endif
+                </div>
+
+                {{-- Invoice list --}}
+                <flux:card class="bg-white dark:bg-zinc-900">
+                    <div class="flex items-center justify-between mb-4">
+                        <flux:heading size="lg" level="3">Fakturaer</flux:heading>
+                        <flux:button wire:click="openInvoiceModal" variant="primary" size="sm" icon="plus">
+                            Ny faktura
+                        </flux:button>
+                    </div>
+
+                    <flux:table>
+                        <flux:table.columns>
+                            <flux:table.column>Fakturanr.</flux:table.column>
+                            <flux:table.column>Beskrivelse</flux:table.column>
+                            <flux:table.column>Beløp</flux:table.column>
+                            <flux:table.column>Forfallsdato</flux:table.column>
+                            <flux:table.column>Status</flux:table.column>
+                            <flux:table.column>Sendt</flux:table.column>
+                            <flux:table.column>Betalt</flux:table.column>
+                            <flux:table.column></flux:table.column>
+                        </flux:table.columns>
+                        <flux:table.rows>
+                            @forelse($invoices as $invoice)
+                                <flux:table.row wire:key="inv-{{ $invoice->id }}">
+                                    <flux:table.cell>
+                                        <flux:text class="font-mono text-sm">{{ $invoice->invoice_number }}</flux:text>
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        <flux:text class="text-sm">{{ $invoice->description }}</flux:text>
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        <flux:text class="font-medium">{{ $invoice->amount_formatted }}</flux:text>
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        <flux:text class="text-sm {{ $invoice->isOverdue() ? 'text-red-600 dark:text-red-400 font-medium' : 'text-zinc-500' }}">
+                                            {{ $invoice->due_date->format('d.m.Y') }}
+                                        </flux:text>
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        @if($invoice->isPaid())
+                                            <flux:badge color="green">Betalt</flux:badge>
+                                        @elseif($invoice->isOverdue())
+                                            <flux:badge color="red">Forfalt</flux:badge>
+                                        @else
+                                            <flux:badge color="yellow">Utestående</flux:badge>
+                                        @endif
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        <flux:text class="text-sm text-zinc-500">
+                                            {{ $invoice->sent_at?->format('d.m.Y') ?? '—' }}
+                                        </flux:text>
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        <flux:text class="text-sm text-zinc-500">
+                                            {{ $invoice->paid_at?->format('d.m.Y') ?? '—' }}
+                                        </flux:text>
+                                    </flux:table.cell>
+                                    <flux:table.cell>
+                                        <flux:dropdown>
+                                            <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
+                                            <flux:menu>
+                                                <flux:menu.item
+                                                    wire:click="sendInvoice({{ $invoice->id }})"
+                                                    wire:loading.attr="disabled"
+                                                    icon="paper-airplane"
+                                                >
+                                                    Send på e-post
+                                                </flux:menu.item>
+                                                <flux:menu.separator />
+                                                @if($invoice->isPaid())
+                                                    <flux:menu.item wire:click="markAsUnpaid({{ $invoice->id }})" icon="x-circle">
+                                                        Angre betalt
+                                                    </flux:menu.item>
+                                                @else
+                                                    <flux:menu.item wire:click="markAsPaid({{ $invoice->id }})" icon="check-circle">
+                                                        Merk betalt
+                                                    </flux:menu.item>
+                                                @endif
+                                            </flux:menu>
+                                        </flux:dropdown>
+                                    </flux:table.cell>
+                                </flux:table.row>
+                            @empty
+                                <flux:table.row>
+                                    <flux:table.cell colspan="7" class="text-center py-8">
+                                        <flux:text class="text-zinc-400">Ingen fakturaer registrert</flux:text>
+                                    </flux:table.cell>
+                                </flux:table.row>
+                            @endforelse
+                        </flux:table.rows>
+                    </flux:table>
+                </flux:card>
             </div>
         </flux:tab.panel>
-    </flux:tabs>
+    </flux:tab.group>
+
+    {{-- Create Invoice Modal --}}
+    <flux:modal wire:model="showInvoiceModal" name="create-invoice-modal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Ny faktura</flux:heading>
+                <flux:text class="text-zinc-500 dark:text-zinc-400 mt-1">
+                    Opprett faktura for {{ $name }}
+                </flux:text>
+            </div>
+
+            <div class="space-y-4">
+                <flux:field>
+                    <flux:label>Beskrivelse</flux:label>
+                    <flux:textarea wire:model="invoiceDescription" rows="2" placeholder="f.eks. Månedlig lisens — Konrad Office, mars 2026" />
+                    <flux:error name="invoiceDescription" />
+                </flux:field>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <flux:field>
+                        <flux:label>Beløp (kr)</flux:label>
+                        <flux:input wire:model="invoiceAmount" type="number" min="1" step="0.01" placeholder="0" />
+                        <flux:error name="invoiceAmount" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label>Forfallsdato</flux:label>
+                        <flux:input wire:model="invoiceDueDate" type="date" />
+                        <flux:error name="invoiceDueDate" />
+                    </flux:field>
+                </div>
+
+                <flux:field>
+                    <flux:label>Notater (internt)</flux:label>
+                    <flux:textarea wire:model="invoiceNotes" rows="2" placeholder="Valgfrie interne notater..." />
+                    <flux:error name="invoiceNotes" />
+                </flux:field>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <flux:button wire:click="closeInvoiceModal" variant="ghost">Avbryt</flux:button>
+                <flux:button wire:click="createInvoice" variant="primary">Opprett faktura</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 
     {{-- Module Management Modal --}}
     <flux:modal wire:model="showModuleModal" name="module-detail-modal">

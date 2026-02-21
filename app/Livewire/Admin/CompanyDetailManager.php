@@ -2,13 +2,16 @@
 
 namespace App\Livewire\Admin;
 
+use App\Mail\PlatformInvoiceMail;
 use App\Models\Company;
 use App\Models\CompanyModule;
 use App\Models\Module;
+use App\Models\PlatformInvoice;
 use App\Services\ModuleService;
 use Carbon\Carbon;
 use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class CompanyDetailManager extends Component
@@ -36,6 +39,8 @@ class CompanyDetailManager extends Component
 
     public string $email = '';
 
+    public string $billingEmail = '';
+
     public string $website = '';
 
     public bool $isActive = true;
@@ -48,6 +53,17 @@ class CompanyDetailManager extends Component
 
     /** @var array<int, string> */
     public array $moduleExpiries = [];
+
+    // Invoice form
+    public bool $showInvoiceModal = false;
+
+    public string $invoiceDescription = '';
+
+    public string $invoiceAmount = '';
+
+    public string $invoiceDueDate = '';
+
+    public string $invoiceNotes = '';
 
     public function mount(int $companyId): void
     {
@@ -67,6 +83,7 @@ class CompanyDetailManager extends Component
         $this->country = $company->country ?? '';
         $this->phone = $company->phone ?? '';
         $this->email = $company->email ?? '';
+        $this->billingEmail = $company->billing_email ?? '';
         $this->website = $company->website ?? '';
         $this->isActive = (bool) $company->is_active;
     }
@@ -83,6 +100,7 @@ class CompanyDetailManager extends Component
             'country' => ['nullable', 'string', 'max:100'],
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['nullable', 'email', 'max:255'],
+            'billingEmail' => ['nullable', 'email', 'max:255'],
             'website' => ['nullable', 'url', 'max:255'],
         ]);
 
@@ -97,6 +115,7 @@ class CompanyDetailManager extends Component
             'country' => $this->country,
             'phone' => $this->phone,
             'email' => $this->email,
+            'billing_email' => $this->billingEmail ?: null,
             'website' => $this->website,
             'is_active' => $this->isActive,
         ]);
@@ -106,7 +125,6 @@ class CompanyDetailManager extends Component
 
     public function openModuleModal(): void
     {
-        $company = Company::withoutGlobalScopes()->findOrFail($this->companyId);
         $modules = Module::active()->premium()->ordered()->get();
         $companyModules = CompanyModule::where('company_id', $this->companyId)->get()->keyBy('module_id');
 
@@ -155,6 +173,97 @@ class CompanyDetailManager extends Component
         $this->closeModuleModal();
     }
 
+    public function openInvoiceModal(): void
+    {
+        // Pre-fill description and amount from active modules
+        $companyModules = CompanyModule::where('company_id', $this->companyId)
+            ->with('module')
+            ->get()
+            ->filter(fn ($cm) => $cm->isActive() && $cm->module?->price_monthly > 0);
+
+        if ($companyModules->isNotEmpty()) {
+            $lines = $companyModules->map(fn ($cm) => $cm->module->name)->join(', ');
+            $month = now()->isoFormat('MMMM YYYY');
+            $this->invoiceDescription = "Månedlig lisens — {$lines}, {$month}";
+            $this->invoiceAmount = number_format(
+                $companyModules->sum(fn ($cm) => $cm->module->price_monthly) / 100,
+                2, '.', ''
+            );
+        } else {
+            $this->invoiceDescription = '';
+            $this->invoiceAmount = '';
+        }
+
+        $this->invoiceDueDate = now()->addDays(14)->format('Y-m-d');
+        $this->invoiceNotes = '';
+        $this->showInvoiceModal = true;
+    }
+
+    public function closeInvoiceModal(): void
+    {
+        $this->showInvoiceModal = false;
+    }
+
+    public function createInvoice(): void
+    {
+        $this->validate([
+            'invoiceDescription' => ['required', 'string', 'max:500'],
+            'invoiceAmount' => ['required', 'numeric', 'min:1'],
+            'invoiceDueDate' => ['required', 'date'],
+            'invoiceNotes' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        PlatformInvoice::create([
+            'company_id' => $this->companyId,
+            'invoice_number' => PlatformInvoice::generateInvoiceNumber(),
+            'description' => $this->invoiceDescription,
+            'amount' => (int) round((float) str_replace(',', '.', $this->invoiceAmount) * 100),
+            'due_date' => $this->invoiceDueDate,
+            'sent_at' => now(),
+            'notes' => $this->invoiceNotes ?: null,
+        ]);
+
+        Flux::toast(text: 'Faktura opprettet', variant: 'success');
+        $this->closeInvoiceModal();
+    }
+
+    public function markAsPaid(int $invoiceId): void
+    {
+        $invoice = PlatformInvoice::where('company_id', $this->companyId)->findOrFail($invoiceId);
+        $invoice->update(['paid_at' => now()]);
+
+        Flux::toast(text: 'Faktura markert som betalt', variant: 'success');
+    }
+
+    public function sendInvoice(int $invoiceId): void
+    {
+        $invoice = PlatformInvoice::where('company_id', $this->companyId)
+            ->with('company')
+            ->findOrFail($invoiceId);
+
+        $recipient = $invoice->company->effective_billing_email;
+
+        if (! $recipient) {
+            Flux::toast(text: 'Ingen e-postadresse registrert på selskapet', variant: 'danger');
+
+            return;
+        }
+
+        Mail::to($recipient)->send(new PlatformInvoiceMail($invoice));
+
+        $invoice->update(['sent_at' => now()]);
+
+        Flux::toast(text: "Faktura sendt til {$recipient}", variant: 'success');
+    }
+
+    public function markAsUnpaid(int $invoiceId): void
+    {
+        $invoice = PlatformInvoice::where('company_id', $this->companyId)->findOrFail($invoiceId);
+        $invoice->update(['paid_at' => null]);
+
+        Flux::toast(text: 'Faktura markert som ubetalt', variant: 'warning');
+    }
+
     public function render(): \Illuminate\View\View
     {
         $company = Company::withoutGlobalScopes()
@@ -169,16 +278,21 @@ class CompanyDetailManager extends Component
             ->filter(fn ($cm) => $cm->isActive())
             ->sum(fn ($cm) => $cm->module?->price_monthly ?? 0);
 
-        $subscriptions = $company->subscriptions ?? collect();
-
         $premiumModules = Module::active()->premium()->ordered()->get();
+
+        $invoices = PlatformInvoice::where('company_id', $this->companyId)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $outstandingOre = $invoices->filter(fn ($i) => ! $i->isPaid())->sum('amount');
 
         return view('livewire.admin.company-detail-manager', compact(
             'company',
             'companyModules',
             'totalMonthlyOre',
-            'subscriptions',
             'premiumModules',
+            'invoices',
+            'outstandingOre',
         ));
     }
 }
