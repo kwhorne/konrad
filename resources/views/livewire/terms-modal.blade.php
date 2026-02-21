@@ -1,109 +1,98 @@
 <div>
     <flux:modal name="terms-modal" variant="flyout" class="w-full max-w-2xl">
-        <div class="max-h-[80vh] overflow-y-auto">
-            <div>
-                <flux:heading size="lg">Vilkar for bruk</flux:heading>
-                <flux:text class="mt-2">Betingelser for bruk av Konrad Office.</flux:text>
+        <div class="flex flex-col h-full">
+
+            <!-- Header -->
+            <div class="flex items-start gap-4 pb-6 border-b border-zinc-200 dark:border-zinc-700">
+                <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center shrink-0">
+                    <flux:icon.document-text class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold text-zinc-900 dark:text-white">Vilkår for bruk</h2>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Betingelser for bruk av Konrad Office.</p>
+                </div>
             </div>
 
-            <flux:separator />
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto py-6 space-y-6">
 
-            <div class="space-y-4">
-                {{-- 1. Aksept --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">1. Aksept av vilkar</flux:heading>
-                    <flux:text size="sm">
-                        Ved a registrere deg for eller bruke Konrad Office aksepterer du disse bruksvilkarene.
-                        Dersom du ikke aksepterer vilkarene, ma du ikke bruke tjenesten.
-                    </flux:text>
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">1. Aksept av vilkår</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Ved å registrere deg for eller bruke Konrad Office aksepterer du disse bruksvilkårene.
+                        Dersom du ikke aksepterer vilkårene, må du ikke bruke tjenesten.
+                    </p>
                 </div>
 
-                {{-- 2. Tjenesten --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">2. Beskrivelse av tjenesten</flux:heading>
-                    <flux:text size="sm" class="mb-2">
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">2. Beskrivelse av tjenesten</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed mb-3">
                         Konrad Office er et komplett forretningssystem som hjelper bedrifter med:
-                    </flux:text>
-                    <ul class="text-sm text-zinc-600 dark:text-zinc-400 space-y-1">
-                        <li class="flex items-center gap-2">
-                            <flux:icon.check class="w-4 h-4 text-green-600" />
-                            Salg, tilbud, ordrer og fakturaer
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <flux:icon.check class="w-4 h-4 text-green-600" />
-                            Regnskap med norsk kontoplan
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <flux:icon.check class="w-4 h-4 text-green-600" />
-                            Kontakter og prosjekter
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <flux:icon.check class="w-4 h-4 text-green-600" />
-                            Kontrakter og eiendeler
-                        </li>
-                    </ul>
+                    </p>
+                    <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-xl p-4 space-y-2">
+                        @foreach(['Salg, tilbud, ordrer og fakturaer', 'Regnskap med norsk kontoplan', 'Kontakter og prosjekter', 'Kontrakter og eiendeler'] as $item)
+                        <div class="flex items-center gap-2.5 text-sm text-zinc-600 dark:text-zinc-400">
+                            <flux:icon.check-circle class="w-4 h-4 text-emerald-500 shrink-0" />
+                            {{ $item }}
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
 
-                {{-- 3. Bruker --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">3. Brukerregistrering</flux:heading>
-                    <flux:text size="sm">
-                        Du ma oppgi korrekte opplysninger ved registrering og er ansvarlig for a beskytte
-                        ditt brukernavn og passord. Du ma vare minst 18 ar for a bruke tjenesten.
-                    </flux:text>
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">3. Brukerregistrering</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Du må oppgi korrekte opplysninger ved registrering og er ansvarlig for å beskytte
+                        ditt brukernavn og passord. Du må være minst 18 år for å bruke tjenesten.
+                    </p>
                 </div>
 
-                {{-- 4. Personvern --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">4. Personvern</flux:heading>
-                    <flux:text size="sm">
-                        Vi behandler personopplysninger i henhold til var personvernerklaring.
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">4. Personvern</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Vi behandler personopplysninger i henhold til vår personvernerklæring.
                         Vi deler ikke dine data med tredjeparter uten ditt samtykke.
-                    </flux:text>
+                    </p>
                 </div>
 
-                {{-- 5. Bruk --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">5. Tillatt og forbudt bruk</flux:heading>
-                    <flux:text size="sm">
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">5. Tillatt og forbudt bruk</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
                         Tjenesten skal kun brukes til lovlige forretningsformål. Det er forbudt å
                         bruke tjenesten til ulovlige aktiviteter, forsøke uautorisert tilgang,
                         eller distribuere skadelig programvare.
-                    </flux:text>
+                    </p>
                 </div>
 
-                {{-- 6. Ansvar --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">6. Ansvarsfraskrivelse</flux:heading>
-                    <flux:text size="sm">
-                        Vi garanterer ikke at tjenesten alltid vil vare tilgjengelig eller feilfri.
-                        Vart ansvar er begrenset til det maksimale tillatt under norsk lov.
-                    </flux:text>
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">6. Ansvarsfraskrivelse</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Vi garanterer ikke at tjenesten alltid vil være tilgjengelig eller feilfri.
+                        Vårt ansvar er begrenset til det maksimale tillatt under norsk lov.
+                    </p>
                 </div>
 
-                {{-- 7. Gjeldende lov --}}
-                <div>
-                    <flux:heading size="sm" class="mb-2">7. Gjeldende lov</flux:heading>
-                    <flux:text size="sm">
-                        Disse vilkarene er underlagt norsk lov. Tvister behandles ved norske domstoler.
-                    </flux:text>
+                <div class="space-y-1.5">
+                    <h3 class="text-sm font-semibold text-zinc-900 dark:text-white">7. Gjeldende lov</h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        Disse vilkårene er underlagt norsk lov. Tvister behandles ved norske domstoler.
+                    </p>
                 </div>
 
-                {{-- Kontakt --}}
-                <div class="bg-zinc-50 dark:bg-zinc-700/50 rounded-lg p-3">
-                    <flux:text size="sm">
-                        Spørsmål? Kontakt oss på
-                        <a href="mailto:post@konradoffice.no" class="text-indigo-600 dark:text-indigo-400 hover:underline">post@konradoffice.no</a>
-                    </flux:text>
+                <div class="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/30 rounded-xl p-4">
+                    <p class="text-sm text-indigo-800 dark:text-indigo-300">
+                        Spørsmål om vilkårene? Ta kontakt på
+                        <a href="mailto:post@konradoffice.no" class="font-medium hover:underline">post@konradoffice.no</a>
+                    </p>
                 </div>
             </div>
 
-            <flux:separator />
-
-            <div class="flex justify-between items-center">
-                <flux:text size="sm" class="text-zinc-500">Sist oppdatert: {{ now()->format('d.m.Y') }}</flux:text>
-                <flux:button variant="primary" x-on:click="$flux.modal('terms-modal').close()">Lukk</flux:button>
+            <!-- Footer -->
+            <div class="pt-5 border-t border-zinc-200 dark:border-zinc-700 flex justify-between items-center">
+                <span class="text-xs text-zinc-400 dark:text-zinc-500">Sist oppdatert: {{ now()->format('d.m.Y') }}</span>
+                <flux:button variant="primary" size="sm" x-on:click="$flux.modal('terms-modal').close()">Lukk</flux:button>
             </div>
+
         </div>
     </flux:modal>
 </div>
