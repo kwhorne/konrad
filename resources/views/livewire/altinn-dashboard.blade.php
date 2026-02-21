@@ -109,18 +109,29 @@
             @if (count($upcomingDeadlines) > 0)
                 <div class="space-y-3">
                     @foreach ($upcomingDeadlines as $deadline)
+                        @php
+                            $urgencyBg = match($deadline['urgency']) {
+                                'critical' => 'bg-red-100 dark:bg-red-900/50',
+                                'high'     => 'bg-amber-100 dark:bg-amber-900/50',
+                                'medium'   => 'bg-yellow-100 dark:bg-yellow-900/50',
+                                default    => 'bg-blue-100 dark:bg-blue-900/50',
+                            };
+                            $urgencyIcon = match($deadline['urgency']) {
+                                'critical' => 'text-red-600 dark:text-red-400',
+                                'high'     => 'text-amber-600 dark:text-amber-400',
+                                'medium'   => 'text-yellow-600 dark:text-yellow-400',
+                                default    => 'text-blue-600 dark:text-blue-400',
+                            };
+                            $urgencyDays = match($deadline['urgency']) {
+                                'critical' => 'text-red-600 dark:text-red-400',
+                                'high'     => 'text-amber-600 dark:text-amber-400',
+                                default    => 'text-zinc-500 dark:text-zinc-400',
+                            };
+                        @endphp
                         <div class="flex items-center justify-between p-3 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg flex items-center justify-center
-                                    @if ($deadline['urgency'] === 'critical') bg-red-100 dark:bg-red-900/50
-                                    @elseif ($deadline['urgency'] === 'high') bg-amber-100 dark:bg-amber-900/50
-                                    @elseif ($deadline['urgency'] === 'medium') bg-yellow-100 dark:bg-yellow-900/50
-                                    @else bg-blue-100 dark:bg-blue-900/50 @endif">
-                                    <flux:icon.calendar class="w-5 h-5
-                                        @if ($deadline['urgency'] === 'critical') text-red-600 dark:text-red-400
-                                        @elseif ($deadline['urgency'] === 'high') text-amber-600 dark:text-amber-400
-                                        @elseif ($deadline['urgency'] === 'medium') text-yellow-600 dark:text-yellow-400
-                                        @else text-blue-600 dark:text-blue-400 @endif" />
+                                <div class="w-10 h-10 rounded-lg flex items-center justify-center {{ $urgencyBg }}">
+                                    <flux:icon.calendar class="w-5 h-5 {{ $urgencyIcon }}" />
                                 </div>
                                 <div>
                                     <flux:text class="font-medium text-zinc-900 dark:text-white">{{ $deadline['name'] }}</flux:text>
@@ -132,10 +143,7 @@
                             <div class="flex items-center gap-3">
                                 <div class="text-right">
                                     <flux:text class="font-medium text-zinc-900 dark:text-white">{{ $deadline['deadline']->format('d.m.Y') }}</flux:text>
-                                    <flux:text class="text-sm
-                                        @if ($deadline['urgency'] === 'critical') text-red-600 dark:text-red-400
-                                        @elseif ($deadline['urgency'] === 'high') text-amber-600 dark:text-amber-400
-                                        @else text-zinc-500 dark:text-zinc-400 @endif">
+                                    <flux:text class="text-sm {{ $urgencyDays }}">
                                         {{ $deadline['days_until'] }} dager igjen
                                     </flux:text>
                                 </div>
