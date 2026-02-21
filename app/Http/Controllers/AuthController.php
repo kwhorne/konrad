@@ -11,6 +11,7 @@ use App\Models\Timesheet;
 use App\Models\TwoFactorIpWhitelist;
 use App\Models\User;
 use App\Models\WorkOrder;
+use App\Services\AdminAnalyticsService;
 use App\Services\TimesheetService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -242,13 +243,16 @@ class AuthController extends Controller
         return view('admin.users');
     }
 
-    public function adminAnalytics()
+    public function adminAnalytics(AdminAnalyticsService $analyticsService)
     {
-        $totalUsers = User::count();
-        $adminUsers = User::where('is_admin', true)->count();
-        $recentUsers = User::where('created_at', '>=', now()->subDays(7))->count();
+        $metrics = $analyticsService->getMetrics();
 
-        return view('admin.analytics', compact('totalUsers', 'adminUsers', 'recentUsers'));
+        return view('admin.analytics', $metrics);
+    }
+
+    public function adminCompanyDetail(int $company)
+    {
+        return view('admin.company-detail', ['companyId' => $company]);
     }
 
     public function adminSystem()

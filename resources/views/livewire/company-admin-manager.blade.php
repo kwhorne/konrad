@@ -37,6 +37,10 @@
                 <flux:select.option value="active">Aktive</flux:select.option>
                 <flux:select.option value="inactive">Inaktive</flux:select.option>
             </flux:select>
+
+            <flux:button wire:click="openCreateModal" variant="primary" icon="plus">
+                Nytt selskap
+            </flux:button>
         </div>
     </div>
 
@@ -59,7 +63,9 @@
                     <flux:table.row wire:key="company-{{ $company->id }}">
                         <flux:table.cell>
                             <div>
-                                <flux:text class="font-medium">{{ $company->name }}</flux:text>
+                                <a href="{{ route('admin.company-detail', $company->id) }}" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+                                    {{ $company->name }}
+                                </a>
                                 @if($company->city)
                                     <flux:text class="text-sm text-zinc-500">{{ $company->city }}</flux:text>
                                 @endif
@@ -86,12 +92,9 @@
                         </flux:table.cell>
 
                         <flux:table.cell>
-                            @php
-                                $enabledModules = $company->enabledModules()->where('is_premium', true)->get();
-                            @endphp
-                            @if($enabledModules->count() > 0)
+                            @if($company->enabledModules->count() > 0)
                                 <div class="flex flex-wrap gap-1">
-                                    @foreach($enabledModules as $module)
+                                    @foreach($company->enabledModules as $module)
                                         <flux:badge color="violet" size="sm">{{ $module->name }}</flux:badge>
                                     @endforeach
                                 </div>
@@ -117,6 +120,9 @@
                                 <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" />
 
                                 <flux:menu>
+                                    <flux:menu.item href="{{ route('admin.company-detail', $company->id) }}" icon="eye">
+                                        Vis detaljer
+                                    </flux:menu.item>
                                     <flux:menu.item wire:click="openModuleModal({{ $company->id }})" icon="puzzle-piece">
                                         Administrer moduler
                                     </flux:menu.item>
@@ -175,6 +181,73 @@
             <div class="flex justify-end gap-3">
                 <flux:button wire:click="closeModuleModal" variant="ghost">Avbryt</flux:button>
                 <flux:button wire:click="saveModules" variant="primary">Lagre endringer</flux:button>
+            </div>
+        </div>
+    </flux:modal>
+
+    {{-- Create Company Modal --}}
+    <flux:modal wire:model="showCreateModal" name="create-company-modal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Nytt selskap</flux:heading>
+                <flux:text class="text-zinc-500 dark:text-zinc-400 mt-1">
+                    Opprett et nytt selskap i systemet
+                </flux:text>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <flux:field class="md:col-span-2">
+                    <flux:label>Selskapsnavn *</flux:label>
+                    <flux:input wire:model="createName" placeholder="Selskap AS" />
+                    <flux:error name="createName" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Org.nr</flux:label>
+                    <flux:input wire:model="createOrganizationNumber" placeholder="123456789" />
+                    <flux:error name="createOrganizationNumber" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>E-post</flux:label>
+                    <flux:input wire:model="createEmail" type="email" placeholder="post@selskap.no" />
+                    <flux:error name="createEmail" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Telefon</flux:label>
+                    <flux:input wire:model="createPhone" placeholder="+47 000 00 000" />
+                    <flux:error name="createPhone" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Adresse</flux:label>
+                    <flux:input wire:model="createAddress" placeholder="Gateadresse 1" />
+                    <flux:error name="createAddress" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Postnr</flux:label>
+                    <flux:input wire:model="createPostalCode" placeholder="0001" />
+                    <flux:error name="createPostalCode" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>By</flux:label>
+                    <flux:input wire:model="createCity" placeholder="Oslo" />
+                    <flux:error name="createCity" />
+                </flux:field>
+
+                <flux:field>
+                    <flux:label>Land</flux:label>
+                    <flux:input wire:model="createCountry" placeholder="Norge" />
+                    <flux:error name="createCountry" />
+                </flux:field>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <flux:button wire:click="closeCreateModal" variant="ghost">Avbryt</flux:button>
+                <flux:button wire:click="createCompany" variant="primary">Opprett selskap</flux:button>
             </div>
         </div>
     </flux:modal>

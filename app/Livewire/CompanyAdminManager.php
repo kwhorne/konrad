@@ -26,6 +26,25 @@ class CompanyAdminManager extends Component
     /** @var array<int, bool> */
     public array $moduleStates = [];
 
+    // Create company form
+    public bool $showCreateModal = false;
+
+    public string $createName = '';
+
+    public string $createOrganizationNumber = '';
+
+    public string $createEmail = '';
+
+    public string $createPhone = '';
+
+    public string $createAddress = '';
+
+    public string $createCity = '';
+
+    public string $createPostalCode = '';
+
+    public string $createCountry = 'Norge';
+
     public function updatedSearch(): void
     {
         $this->resetPage();
@@ -96,10 +115,64 @@ class CompanyAdminManager extends Component
         $this->closeModuleModal();
     }
 
+    public function openCreateModal(): void
+    {
+        $this->resetCreateForm();
+        $this->showCreateModal = true;
+    }
+
+    public function closeCreateModal(): void
+    {
+        $this->showCreateModal = false;
+        $this->resetCreateForm();
+    }
+
+    public function resetCreateForm(): void
+    {
+        $this->createName = '';
+        $this->createOrganizationNumber = '';
+        $this->createEmail = '';
+        $this->createPhone = '';
+        $this->createAddress = '';
+        $this->createCity = '';
+        $this->createPostalCode = '';
+        $this->createCountry = 'Norge';
+    }
+
+    public function createCompany(): void
+    {
+        $this->validate([
+            'createName' => ['required', 'string', 'max:255'],
+            'createOrganizationNumber' => ['nullable', 'string', 'max:20'],
+            'createEmail' => ['nullable', 'email', 'max:255'],
+            'createPhone' => ['nullable', 'string', 'max:50'],
+            'createAddress' => ['nullable', 'string', 'max:255'],
+            'createCity' => ['nullable', 'string', 'max:100'],
+            'createPostalCode' => ['nullable', 'string', 'max:20'],
+            'createCountry' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        Company::create([
+            'name' => $this->createName,
+            'organization_number' => $this->createOrganizationNumber ?: fake()->unique()->numerify('#########'),
+            'email' => $this->createEmail,
+            'phone' => $this->createPhone,
+            'address' => $this->createAddress,
+            'city' => $this->createCity,
+            'postal_code' => $this->createPostalCode,
+            'country' => $this->createCountry ?: 'Norge',
+            'is_active' => true,
+        ]);
+
+        Flux::toast(text: 'Selskap opprettet', variant: 'success');
+        $this->closeCreateModal();
+    }
+
     public function render()
     {
         $query = Company::withoutGlobalScopes()
             ->withCount('users')
+            ->with(['enabledModules' => fn ($q) => $q->where('is_premium', true)])
             ->when($this->search, function ($q) {
                 $q->where(function ($q) {
                     $q->where('name', 'like', '%'.$this->search.'%')

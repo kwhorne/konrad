@@ -191,6 +191,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/analytics', [AuthController::class, 'adminAnalytics'])->name('analytics');
             Route::get('/system', [AuthController::class, 'adminSystem'])->name('system');
             Route::view('/companies', 'admin.companies')->name('companies');
+            Route::get('/companies/{company}', [AuthController::class, 'adminCompanyDetail'])->name('company-detail');
             Route::view('/modules', 'admin.modules')->name('modules');
             Route::view('/two-factor-whitelist', 'admin.two-factor-whitelist')->name('two-factor-whitelist');
             Route::get('/help', [AuthController::class, 'adminHelp'])->name('help');
