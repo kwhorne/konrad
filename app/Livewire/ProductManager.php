@@ -7,7 +7,9 @@ use App\Models\ProductGroup;
 use App\Models\ProductType;
 use App\Models\Unit;
 use App\Rules\ExistsInCompany;
+use Flux\Flux;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -46,6 +48,13 @@ class ProductManager extends Component
     public $sort_order = 0;
 
     public $is_active = true;
+
+    // Inline new group form
+    public bool $showNewGroupForm = false;
+
+    public string $newGroupName = '';
+
+    public string $newGroupCode = '';
 
     protected function rules(): array
     {
@@ -186,6 +195,48 @@ class ProductManager extends Component
         $product->update(['is_active' => ! $product->is_active]);
     }
 
+    public function updatedNewGroupName(string $value): void
+    {
+        $this->newGroupCode = strtoupper(Str::slug($value, ''));
+    }
+
+    public function openNewGroupForm(): void
+    {
+        $this->showNewGroupForm = true;
+        $this->newGroupName = '';
+        $this->newGroupCode = '';
+    }
+
+    public function cancelNewGroup(): void
+    {
+        $this->showNewGroupForm = false;
+        $this->newGroupName = '';
+        $this->newGroupCode = '';
+        $this->resetValidation(['newGroupName', 'newGroupCode']);
+    }
+
+    public function createGroup(): void
+    {
+        $companyId = auth()->user()->current_company_id;
+
+        $this->validate([
+            'newGroupName' => ['required', 'string', 'max:255'],
+            'newGroupCode' => ['required', 'string', 'max:50', Rule::unique('product_groups', 'code')->where('company_id', $companyId)],
+        ]);
+
+        $group = ProductGroup::create([
+            'name' => $this->newGroupName,
+            'code' => $this->newGroupCode,
+            'is_active' => true,
+            'sort_order' => 0,
+        ]);
+
+        $this->product_group_id = $group->id;
+
+        $this->cancelNewGroup();
+        Flux::toast(text: 'Varegruppe opprettet', variant: 'success');
+    }
+
     private function resetForm(): void
     {
         $this->editingId = null;
@@ -199,6 +250,9 @@ class ProductManager extends Component
         $this->cost_price = '';
         $this->sort_order = 0;
         $this->is_active = true;
+        $this->showNewGroupForm = false;
+        $this->newGroupName = '';
+        $this->newGroupCode = '';
         $this->resetValidation();
     }
 

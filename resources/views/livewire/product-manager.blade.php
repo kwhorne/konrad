@@ -195,16 +195,48 @@
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Varegruppe</flux:label>
-                    <flux:select wire:model="product_group_id">
-                        <option value="">Ingen gruppe</option>
-                        @foreach($productGroups as $group)
-                            <option value="{{ $group->id }}">{{ $group->name }}</option>
-                        @endforeach
-                    </flux:select>
-                    @error('product_group_id')
-                        <flux:error>{{ $message }}</flux:error>
-                    @enderror
+                    <div class="flex items-center justify-between">
+                        <flux:label>Varegruppe</flux:label>
+                        @if(!$showNewGroupForm)
+                            <button
+                                type="button"
+                                wire:click="openNewGroupForm"
+                                class="flex items-center gap-1 text-xs text-violet-600 hover:text-violet-800 dark:text-violet-400 dark:hover:text-violet-300"
+                            >
+                                <flux:icon.plus class="size-3" />
+                                Ny gruppe
+                            </button>
+                        @endif
+                    </div>
+
+                    @if(!$showNewGroupForm)
+                        <flux:select wire:model="product_group_id">
+                            <option value="">Ingen gruppe</option>
+                            @foreach($productGroups as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </flux:select>
+                        @error('product_group_id')
+                            <flux:error>{{ $message }}</flux:error>
+                        @enderror
+                    @else
+                        <div class="space-y-3 rounded-lg border border-violet-200 bg-violet-50 p-3 dark:border-violet-800 dark:bg-violet-950/30">
+                            <flux:field>
+                                <flux:label class="text-sm">Gruppenavn *</flux:label>
+                                <flux:input wire:model.live="newGroupName" placeholder="f.eks. Materiell" />
+                                @error('newGroupName') <flux:error>{{ $message }}</flux:error> @enderror
+                            </flux:field>
+                            <flux:field>
+                                <flux:label class="text-sm">Kode *</flux:label>
+                                <flux:input wire:model="newGroupCode" placeholder="f.eks. MATERIELL" class="font-mono" />
+                                @error('newGroupCode') <flux:error>{{ $message }}</flux:error> @enderror
+                            </flux:field>
+                            <div class="flex gap-2 pt-1">
+                                <flux:button wire:click="createGroup" variant="primary" size="sm">Opprett</flux:button>
+                                <flux:button wire:click="cancelNewGroup" variant="ghost" size="sm">Avbryt</flux:button>
+                            </div>
+                        </div>
+                    @endif
                 </flux:field>
 
                 <flux:field>
