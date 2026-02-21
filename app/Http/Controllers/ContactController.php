@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contact;
-use App\Models\User;
 use App\Rules\UserInCompany;
 use App\Services\ContactService;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +30,7 @@ class ContactController extends Controller
 
     public function create(): View
     {
-        $users = User::all();
+        $users = app('current.company')->users()->orderBy('name')->get();
 
         return view('contacts.create', compact('users'));
     }
@@ -69,7 +68,7 @@ class ContactController extends Controller
     public function edit(Contact $contact): View
     {
         $contact->load(['contactPersons', 'accountManager', 'creator']);
-        $users = User::all();
+        $users = app('current.company')->users()->orderBy('name')->get();
 
         return view('contacts.edit', compact('contact', 'users'));
     }

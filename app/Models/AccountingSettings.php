@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\CompanyScope;
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AccountingSettings extends Model
 {
-    use HasFactory;
+    use BelongsToCompany, HasFactory;
 
     protected $fillable = [
         'company_id',
@@ -22,11 +24,6 @@ class AccountingSettings extends Model
         'require_department_on_vouchers' => 'boolean',
     ];
 
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
-    }
-
     public function defaultDepartment(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'default_department_id');
@@ -34,12 +31,12 @@ class AccountingSettings extends Model
 
     public static function forCompany(int $companyId): ?self
     {
-        return static::where('company_id', $companyId)->first();
+        return static::withoutGlobalScope(CompanyScope::class)->where('company_id', $companyId)->first();
     }
 
     public static function getOrCreate(int $companyId): self
     {
-        return static::firstOrCreate(
+        return static::withoutGlobalScope(CompanyScope::class)->firstOrCreate(
             ['company_id' => $companyId],
             [
                 'departments_enabled' => false,

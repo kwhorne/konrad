@@ -286,13 +286,14 @@ class UserManager extends Component
 
     public function render()
     {
-        $query = User::query()
+        $company = app('current.company');
+        $query = $company->users()
             ->with('companies')
             ->when($this->search, function ($q) {
                 $q->where(function ($q) {
-                    $q->where('name', 'like', '%'.$this->search.'%')
-                        ->orWhere('email', 'like', '%'.$this->search.'%')
-                        ->orWhere('phone', 'like', '%'.$this->search.'%');
+                    $q->where('users.name', 'like', '%'.$this->search.'%')
+                        ->orWhere('users.email', 'like', '%'.$this->search.'%')
+                        ->orWhere('users.phone', 'like', '%'.$this->search.'%');
                 });
             })
             ->when($this->filterStatus === 'active', fn ($q) => $q->where('is_active', true)->whereNull('invitation_token'))
@@ -302,13 +303,13 @@ class UserManager extends Component
             ->when($this->filterRole === 'economy', fn ($q) => $q->where('is_economy', true))
             ->when($this->filterRole === 'payroll', fn ($q) => $q->where('is_payroll', true))
             ->when($this->filterRole === 'user', fn ($q) => $q->where('is_admin', false)->where('is_economy', false)->where('is_payroll', false))
-            ->orderBy('name');
+            ->orderBy('users.name');
 
         return view('livewire.user-manager', [
             'users' => $query->paginate(15),
-            'totalUsers' => User::count(),
-            'activeUsers' => User::where('is_active', true)->count(),
-            'pendingInvitations' => User::whereNotNull('invitation_token')->whereNull('invitation_accepted_at')->count(),
+            'totalUsers' => $company->users()->count(),
+            'activeUsers' => $company->users()->where('is_active', true)->count(),
+            'pendingInvitations' => $company->users()->whereNotNull('invitation_token')->whereNull('invitation_accepted_at')->count(),
         ]);
     }
 }

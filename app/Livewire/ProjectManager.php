@@ -10,7 +10,6 @@ use App\Models\ProjectAttachment;
 use App\Models\ProjectLine;
 use App\Models\ProjectStatus;
 use App\Models\ProjectType;
-use App\Models\User;
 use App\Rules\ExistsInCompany;
 use App\Rules\UserInCompany;
 use App\Services\ProjectService;
@@ -433,7 +432,7 @@ class ProjectManager extends Component
             'projectStatuses' => ProjectStatus::active()->ordered()->get(),
             'contacts' => Contact::active()->ordered()->get(),
             'products' => Product::active()->ordered()->get(),
-            'users' => User::where('is_active', true)->orderBy('name')->get(),
+            'users' => app('current.company')->users()->where('is_active', true)->orderBy('users.name')->get(),
         ]);
     }
 }

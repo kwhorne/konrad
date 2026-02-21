@@ -10,10 +10,17 @@ class DividendPolicy
     /**
      * Admins can do everything.
      */
-    public function before(User $user, string $ability): ?bool
+    public function before(User $user, string $ability, mixed $model = null): ?bool
     {
         if ($user->is_admin) {
             return true;
+        }
+
+        if (is_object($model) && isset($model->company_id) && app()->bound('current.company')) {
+            $company = app('current.company');
+            if ($company && $model->company_id !== $company->id) {
+                return false;
+            }
         }
 
         return null;

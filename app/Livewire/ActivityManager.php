@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Activity;
 use App\Models\ActivityType;
-use App\Models\User;
 use App\Rules\ExistsInCompany;
 use App\Rules\UserInCompany;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -171,7 +170,7 @@ class ActivityManager extends Component
         return view('livewire.activity-manager', [
             'activities' => $activities,
             'activityTypes' => ActivityType::active()->ordered()->get(),
-            'users' => User::all(),
+            'users' => app('current.company')->users()->orderBy('name')->get(),
             'stats' => [
                 'total' => Activity::where('contact_id', $this->contactId)->count(),
                 'pending' => Activity::where('contact_id', $this->contactId)->pending()->count(),
