@@ -1,358 +1,317 @@
 <x-layouts.app title="Rediger eiendel">
-    <div class="min-h-screen bg-zinc-50 dark:bg-zinc-800">
+    <div class="min-h-screen bg-zinc-100 dark:bg-zinc-950">
         <x-app-sidebar current="assets" />
         <x-app-header current="assets" />
 
-        <flux:main class="bg-zinc-50 dark:bg-zinc-800">
-            <div class="mb-8">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
-                        <flux:icon.cube class="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-                    </div>
-                    <div>
-                        <flux:heading size="xl" level="1" class="text-zinc-900 dark:text-white">
-                            Rediger eiendel
-                        </flux:heading>
-                        <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
-                            {{ $asset->asset_number }} - {{ $asset->title }}
-                        </flux:text>
-                    </div>
+        <flux:main class="bg-zinc-100 dark:bg-zinc-950">
+
+            {{-- Header --}}
+            <div class="mb-6 flex items-center gap-4">
+                <flux:button href="{{ route('assets.index') }}" variant="ghost" icon="arrow-left" size="sm" />
+                <div>
+                    <h1 class="text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">{{ $asset->title }}</h1>
+                    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-mono">{{ $asset->asset_number }}</p>
+                </div>
+                <div class="ml-auto flex items-center gap-2">
+                    <flux:badge color="{{ $asset->status_badge_color }}">{{ $asset->status_label }}</flux:badge>
+                    <flux:badge color="{{ $asset->condition_badge_color }}" variant="pill">{{ $asset->condition_label }}</flux:badge>
                 </div>
             </div>
+
+            @if(session('success'))
+                <div class="mb-4 flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20 px-4 py-3">
+                    <flux:icon.check-circle class="h-4 w-4 text-green-600 dark:text-green-400 shrink-0" />
+                    <p class="text-sm font-medium text-green-800 dark:text-green-200">{{ session('success') }}</p>
+                </div>
+            @endif
 
             <form method="POST" action="{{ route('assets.update', $asset) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 space-y-8">
-                        <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                            <div class="bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-950/20 dark:to-cyan-950/20 px-8 py-6 border-b border-zinc-200 dark:border-zinc-700">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-white dark:bg-zinc-800 rounded-lg flex items-center justify-center shadow-sm">
-                                        <flux:icon.information-circle class="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                    </div>
-                                    <div>
-                                        <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white">
-                                            Grunnleggende informasjon
-                                        </flux:heading>
-                                        <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Tittel, beskrivelse og identifikasjon
-                                        </flux:text>
-                                    </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+                    {{-- Left: main content (2/3) --}}
+                    <div class="lg:col-span-2 space-y-5">
+
+                        {{-- Grunnleggende informasjon --}}
+                        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 overflow-hidden">
+                            <div class="flex items-center gap-3 px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                                <div class="w-7 h-7 rounded-lg bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center">
+                                    <flux:icon.information-circle class="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                                </div>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white">Grunnleggende informasjon</p>
+                            </div>
+                            <div class="p-6 space-y-5">
+                                <flux:field>
+                                    <flux:label>Tittel *</flux:label>
+                                    <flux:input name="title" value="{{ old('title', $asset->title) }}" required />
+                                    @error('title') <flux:error>{{ $message }}</flux:error> @enderror
+                                </flux:field>
+
+                                <flux:field>
+                                    <flux:label>Beskrivelse</flux:label>
+                                    <flux:textarea name="description" rows="3">{{ old('description', $asset->description) }}</flux:textarea>
+                                    @error('description') <flux:error>{{ $message }}</flux:error> @enderror
+                                </flux:field>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <flux:field>
+                                        <flux:label>Serienummer</flux:label>
+                                        <flux:input name="serial_number" value="{{ old('serial_number', $asset->serial_number) }}" />
+                                        @error('serial_number') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
+                                    <flux:field>
+                                        <flux:label>Modell</flux:label>
+                                        <flux:input name="asset_model" value="{{ old('asset_model', $asset->asset_model) }}" />
+                                        @error('asset_model') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
                                 </div>
                             </div>
-                            <div class="p-8">
-                                <div class="space-y-6">
-                                    <flux:field>
-                                        <flux:label for="title">Tittel</flux:label>
-                                        <flux:input id="title" name="title" type="text" value="{{ old('title', $asset->title) }}" required />
-                                        @error('title')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
-                                    </flux:field>
+                        </div>
 
-                                    <flux:field>
-                                        <flux:label for="description">Beskrivelse</flux:label>
-                                        <flux:textarea id="description" name="description" rows="3">{{ old('description', $asset->description) }}</flux:textarea>
-                                        @error('description')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
-                                    </flux:field>
-
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <flux:field>
-                                            <flux:label for="serial_number">Serienummer</flux:label>
-                                            <flux:input id="serial_number" name="serial_number" type="text" value="{{ old('serial_number', $asset->serial_number) }}" />
-                                            @error('serial_number')
-                                                <flux:error>{{ $message }}</flux:error>
-                                            @enderror
-                                        </flux:field>
-
-                                        <flux:field>
-                                            <flux:label for="asset_model">Eiendelsmodell</flux:label>
-                                            <flux:input id="asset_model" name="asset_model" type="text" value="{{ old('asset_model', $asset->asset_model) }}" />
-                                            @error('asset_model')
-                                                <flux:error>{{ $message }}</flux:error>
-                                            @enderror
-                                        </flux:field>
-                                    </div>
+                        {{-- Kjøpsinformasjon --}}
+                        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 overflow-hidden">
+                            <div class="flex items-center gap-3 px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                                <div class="w-7 h-7 rounded-lg bg-green-50 dark:bg-green-950/50 flex items-center justify-center">
+                                    <flux:icon.banknotes class="w-4 h-4 text-green-600 dark:text-green-400" />
                                 </div>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white">Kjøpsinformasjon</p>
                             </div>
-                        </flux:card>
-
-                        <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                            <div class="bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-950/20 dark:to-cyan-950/20 px-8 py-6 border-b border-zinc-200 dark:border-zinc-700">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-white dark:bg-zinc-800 rounded-lg flex items-center justify-center shadow-sm">
-                                        <flux:icon.banknotes class="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                    </div>
-                                    <div>
-                                        <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white">
-                                            Kjøpsinformasjon
-                                        </flux:heading>
-                                        <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Pris, leverandør og faktura
-                                        </flux:text>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-8">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="p-6 space-y-5">
+                                <div class="grid grid-cols-3 gap-4">
                                     <flux:field>
-                                        <flux:label for="purchase_price">Kjøpspris</flux:label>
-                                        <flux:input id="purchase_price" name="purchase_price" type="number" step="0.01" value="{{ old('purchase_price', $asset->purchase_price) }}" />
-                                        @error('purchase_price')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Kjøpspris</flux:label>
+                                        <flux:input name="purchase_price" type="number" step="0.01" value="{{ old('purchase_price', $asset->purchase_price) }}" />
+                                        @error('purchase_price') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
-
                                     <flux:field>
-                                        <flux:label for="currency">Valuta</flux:label>
-                                        <flux:select id="currency" name="currency">
+                                        <flux:label>Valuta</flux:label>
+                                        <flux:select name="currency">
                                             <option value="NOK" @selected(old('currency', $asset->currency) == 'NOK')>NOK</option>
                                             <option value="EUR" @selected(old('currency', $asset->currency) == 'EUR')>EUR</option>
                                             <option value="USD" @selected(old('currency', $asset->currency) == 'USD')>USD</option>
                                             <option value="SEK" @selected(old('currency', $asset->currency) == 'SEK')>SEK</option>
                                             <option value="DKK" @selected(old('currency', $asset->currency) == 'DKK')>DKK</option>
                                         </flux:select>
-                                        @error('currency')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        @error('currency') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
-
                                     <flux:field>
-                                        <flux:label for="purchase_date">Kjøpsdato</flux:label>
-                                        <flux:input id="purchase_date" name="purchase_date" type="date" value="{{ old('purchase_date', $asset->purchase_date?->format('Y-m-d')) }}" />
-                                        @error('purchase_date')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Kjøpsdato</flux:label>
+                                        <flux:input name="purchase_date" type="date" value="{{ old('purchase_date', $asset->purchase_date?->format('Y-m-d')) }}" />
+                                        @error('purchase_date') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
                                 </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                <div class="grid grid-cols-2 gap-4">
                                     <flux:field>
-                                        <flux:label for="supplier">Leverandør</flux:label>
-                                        <flux:input id="supplier" name="supplier" type="text" value="{{ old('supplier', $asset->supplier) }}" />
-                                        @error('supplier')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Leverandør</flux:label>
+                                        <flux:input name="supplier" value="{{ old('supplier', $asset->supplier) }}" />
+                                        @error('supplier') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
-
                                     <flux:field>
-                                        <flux:label for="manufacturer">Produsent</flux:label>
-                                        <flux:input id="manufacturer" name="manufacturer" type="text" value="{{ old('manufacturer', $asset->manufacturer) }}" />
-                                        @error('manufacturer')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Produsent</flux:label>
+                                        <flux:input name="manufacturer" value="{{ old('manufacturer', $asset->manufacturer) }}" />
+                                        @error('manufacturer') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
-
                                     <flux:field>
-                                        <flux:label for="invoice_number">Fakturanummer</flux:label>
-                                        <flux:input id="invoice_number" name="invoice_number" type="text" value="{{ old('invoice_number', $asset->invoice_number) }}" />
-                                        @error('invoice_number')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Fakturanummer</flux:label>
+                                        <flux:input name="invoice_number" value="{{ old('invoice_number', $asset->invoice_number) }}" />
+                                        @error('invoice_number') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
-
                                     <flux:field>
-                                        <flux:label for="invoice_date">Fakturadato</flux:label>
-                                        <flux:input id="invoice_date" name="invoice_date" type="date" value="{{ old('invoice_date', $asset->invoice_date?->format('Y-m-d')) }}" />
-                                        @error('invoice_date')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Fakturadato</flux:label>
+                                        <flux:input name="invoice_date" type="date" value="{{ old('invoice_date', $asset->invoice_date?->format('Y-m-d')) }}" />
+                                        @error('invoice_date') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
                                 </div>
                             </div>
-                        </flux:card>
+                        </div>
 
-                        <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                            <div class="bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-950/20 dark:to-cyan-950/20 px-8 py-6 border-b border-zinc-200 dark:border-zinc-700">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-white dark:bg-zinc-800 rounded-lg flex items-center justify-center shadow-sm">
-                                        <flux:icon.map-pin class="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                    </div>
-                                    <div>
-                                        <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white">
-                                            Lokasjon og organisering
-                                        </flux:heading>
-                                        <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Plassering og tilhørighet
-                                        </flux:text>
-                                    </div>
+                        {{-- Lokasjon og organisering --}}
+                        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 overflow-hidden">
+                            <div class="flex items-center gap-3 px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                                <div class="w-7 h-7 rounded-lg bg-cyan-50 dark:bg-cyan-950/50 flex items-center justify-center">
+                                    <flux:icon.map-pin class="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                                </div>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white">Lokasjon og organisering</p>
+                            </div>
+                            <div class="p-6">
+                                <div class="grid grid-cols-3 gap-4">
+                                    <flux:field>
+                                        <flux:label>Lokasjon</flux:label>
+                                        <flux:input name="location" value="{{ old('location', $asset->location) }}" />
+                                        @error('location') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
+                                    <flux:field>
+                                        <flux:label>Avdeling</flux:label>
+                                        <flux:input name="department" value="{{ old('department', $asset->department) }}" />
+                                        @error('department') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
+                                    <flux:field>
+                                        <flux:label>Gruppe</flux:label>
+                                        <flux:input name="group" value="{{ old('group', $asset->group) }}" />
+                                        @error('group') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
+                                    <flux:field>
+                                        <flux:label>Forsikringsnummer</flux:label>
+                                        <flux:input name="insurance_number" value="{{ old('insurance_number', $asset->insurance_number) }}" />
+                                        @error('insurance_number') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
                                 </div>
                             </div>
-                            <div class="p-8">
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <flux:field>
-                                        <flux:label for="location">Lokasjon</flux:label>
-                                        <flux:input id="location" name="location" type="text" value="{{ old('location', $asset->location) }}" />
-                                        @error('location')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
-                                    </flux:field>
+                        </div>
 
-                                    <flux:field>
-                                        <flux:label for="department">Avdeling</flux:label>
-                                        <flux:input id="department" name="department" type="text" value="{{ old('department', $asset->department) }}" />
-                                        @error('department')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
-                                    </flux:field>
-
-                                    <flux:field>
-                                        <flux:label for="group">Gruppe</flux:label>
-                                        <flux:input id="group" name="group" type="text" value="{{ old('group', $asset->group) }}" />
-                                        @error('group')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
-                                    </flux:field>
+                        {{-- Ansvarlig og notater --}}
+                        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 overflow-hidden">
+                            <div class="flex items-center gap-3 px-6 py-4 border-b border-zinc-100 dark:border-zinc-800">
+                                <div class="w-7 h-7 rounded-lg bg-violet-50 dark:bg-violet-950/50 flex items-center justify-center">
+                                    <flux:icon.users class="w-4 h-4 text-violet-600 dark:text-violet-400" />
                                 </div>
+                                <p class="text-sm font-semibold text-zinc-900 dark:text-white">Ansvarlig og vedlegg</p>
+                            </div>
+                            <div class="p-6 space-y-5">
+                                <flux:field>
+                                    <flux:label>Ansvarlig person</flux:label>
+                                    <flux:select name="responsible_user_id">
+                                        <option value="">Ingen ansvarlig</option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}" @selected(old('responsible_user_id', $asset->responsible_user_id) == $user->id)>
+                                                {{ $user->name }}
+                                            </option>
+                                        @endforeach
+                                    </flux:select>
+                                    @error('responsible_user_id') <flux:error>{{ $message }}</flux:error> @enderror
+                                </flux:field>
 
-                                <flux:field class="mt-6">
-                                    <flux:label for="insurance_number">Forsikringsnummer</flux:label>
-                                    <flux:input id="insurance_number" name="insurance_number" type="text" value="{{ old('insurance_number', $asset->insurance_number) }}" />
-                                    @error('insurance_number')
-                                        <flux:error>{{ $message }}</flux:error>
-                                    @enderror
+                                @livewire('contract-file-upload')
+
+                                <flux:field>
+                                    <flux:label>Notater</flux:label>
+                                    <flux:editor
+                                        name="notes"
+                                        toolbar="heading | bold italic underline | bullet ordered | link"
+                                    >{{ old('notes', $asset->notes) }}</flux:editor>
+                                    @error('notes') <flux:error>{{ $message }}</flux:error> @enderror
                                 </flux:field>
                             </div>
-                        </flux:card>
+                        </div>
+                    </div>
 
-                        <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                            <div class="bg-gradient-to-r from-indigo-50 to-cyan-50 dark:from-indigo-950/20 dark:to-cyan-950/20 px-8 py-6 border-b border-zinc-200 dark:border-zinc-700">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-white dark:bg-zinc-800 rounded-lg flex items-center justify-center shadow-sm">
-                                        <flux:icon.users class="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
-                                    </div>
-                                    <div>
-                                        <flux:heading size="lg" level="2" class="text-zinc-900 dark:text-white">
-                                            Ansvarlig og vedlegg
-                                        </flux:heading>
-                                        <flux:text class="text-sm text-zinc-600 dark:text-zinc-400">
-                                            Tilordning og dokumenter
-                                        </flux:text>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-8">
-                                <div class="space-y-6">
+                    {{-- Right: sidebar (1/3) --}}
+                    <div class="space-y-5">
+
+                        {{-- Status & tilstand --}}
+                        <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/80 dark:border-zinc-800 p-5 sticky top-5 space-y-5">
+                            <div>
+                                <p class="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 uppercase mb-4">Status & tilstand</p>
+                                <div class="space-y-4">
                                     <flux:field>
-                                        <flux:label for="responsible_user_id">Ansvarlig person</flux:label>
-                                        <flux:select id="responsible_user_id" name="responsible_user_id">
-                                            <option value="">Velg ansvarlig</option>
-                                            @foreach($users as $user)
-                                                <option value="{{ $user->id }}" @selected(old('responsible_user_id', $asset->responsible_user_id) == $user->id)>{{ $user->name }}</option>
-                                            @endforeach
+                                        <flux:label>Status</flux:label>
+                                        <flux:select name="status" required>
+                                            <option value="available"   @selected(old('status', $asset->status) == 'available')>Tilgjengelig</option>
+                                            <option value="in_use"      @selected(old('status', $asset->status) == 'in_use')>I bruk</option>
+                                            <option value="maintenance" @selected(old('status', $asset->status) == 'maintenance')>Vedlikehold</option>
+                                            <option value="retired"     @selected(old('status', $asset->status) == 'retired')>Utfaset</option>
+                                            <option value="lost"        @selected(old('status', $asset->status) == 'lost')>Tapt</option>
+                                            <option value="sold"        @selected(old('status', $asset->status) == 'sold')>Solgt</option>
                                         </flux:select>
-                                        @error('responsible_user_id')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        @error('status') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
-
-                                    @livewire('contract-file-upload')
 
                                     <flux:field>
-                                        <flux:label for="notes">Notater</flux:label>
-                                        <flux:editor
-                                            name="notes"
-                                            toolbar="heading | bold italic underline | bullet ordered | link"
-                                        >{{ old('notes', $asset->notes) }}</flux:editor>
-                                        @error('notes')
-                                            <flux:error>{{ $message }}</flux:error>
-                                        @enderror
+                                        <flux:label>Tilstand</flux:label>
+                                        <flux:select name="condition" required>
+                                            <option value="excellent" @selected(old('condition', $asset->condition) == 'excellent')>Utmerket</option>
+                                            <option value="good"      @selected(old('condition', $asset->condition) == 'good')>God</option>
+                                            <option value="fair"      @selected(old('condition', $asset->condition) == 'fair')>Akseptabel</option>
+                                            <option value="poor"      @selected(old('condition', $asset->condition) == 'poor')>Dårlig</option>
+                                            <option value="broken"    @selected(old('condition', $asset->condition) == 'broken')>Ødelagt</option>
+                                        </flux:select>
+                                        @error('condition') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
+
+                                    <flux:checkbox name="is_active" value="1" :checked="old('is_active', $asset->is_active)">
+                                        Aktiv eiendel
+                                    </flux:checkbox>
+                                </div>
+                            </div>
+
+                            <flux:separator variant="subtle" />
+
+                            {{-- Garanti --}}
+                            <div>
+                                <p class="text-xs font-semibold tracking-wide text-zinc-500 dark:text-zinc-400 uppercase mb-4">Garanti</p>
+                                @if($asset->warranty_until)
+                                    @php
+                                        $ws = $asset->warranty_status;
+                                        $wsColor = match($ws) { 'active' => 'green', 'expiring_soon' => 'amber', default => 'red' };
+                                        $wsLabel = match($ws) { 'active' => 'Aktiv', 'expiring_soon' => 'Utløper snart', default => 'Utløpt' };
+                                    @endphp
+                                    <flux:badge color="{{ $wsColor }}" class="mb-4">{{ $wsLabel }}</flux:badge>
+                                @endif
+                                <div class="space-y-4">
+                                    <flux:field>
+                                        <flux:label>Garanti fra</flux:label>
+                                        <flux:input name="warranty_from" type="date" value="{{ old('warranty_from', $asset->warranty_from?->format('Y-m-d')) }}" />
+                                        @error('warranty_from') <flux:error>{{ $message }}</flux:error> @enderror
+                                    </flux:field>
+                                    <flux:field>
+                                        <flux:label>Garanti til</flux:label>
+                                        <flux:input name="warranty_until" type="date" value="{{ old('warranty_until', $asset->warranty_until?->format('Y-m-d')) }}" />
+                                        @error('warranty_until') <flux:error>{{ $message }}</flux:error> @enderror
                                     </flux:field>
                                 </div>
                             </div>
-                        </flux:card>
-                    </div>
 
-                    <div class="lg:col-span-1 space-y-6">
-                        <flux:card class="bg-white dark:bg-zinc-900 shadow-sm border border-zinc-200 dark:border-zinc-700 sticky top-6">
-                            <div class="p-6 space-y-6">
-                                <div>
-                                    <flux:heading size="lg" level="3" class="text-zinc-900 dark:text-white mb-4">
-                                        Status & Tilstand
-                                    </flux:heading>
+                            <flux:separator variant="subtle" />
 
-                                    <div class="space-y-4">
-                                        <flux:field>
-                                            <flux:label for="status">Status</flux:label>
-                                            <flux:select id="status" name="status" required>
-                                                <option value="available" @selected(old('status', $asset->status) == 'available')>Tilgjengelig</option>
-                                                <option value="in_use" @selected(old('status', $asset->status) == 'in_use')>I bruk</option>
-                                                <option value="maintenance" @selected(old('status', $asset->status) == 'maintenance')>Vedlikehold</option>
-                                                <option value="retired" @selected(old('status', $asset->status) == 'retired')>Utfaset</option>
-                                                <option value="lost" @selected(old('status', $asset->status) == 'lost')>Tapt</option>
-                                                <option value="sold" @selected(old('status', $asset->status) == 'sold')>Solgt</option>
-                                            </flux:select>
-                                            @error('status')
-                                                <flux:error>{{ $message }}</flux:error>
-                                            @enderror
-                                        </flux:field>
-
-                                        <flux:field>
-                                            <flux:label for="condition">Tilstand</flux:label>
-                                            <flux:select id="condition" name="condition" required>
-                                                <option value="good" @selected(old('condition', $asset->condition) == 'good')>God</option>
-                                                <option value="excellent" @selected(old('condition', $asset->condition) == 'excellent')>Utmerket</option>
-                                                <option value="fair" @selected(old('condition', $asset->condition) == 'fair')>Akseptabel</option>
-                                                <option value="poor" @selected(old('condition', $asset->condition) == 'poor')>Dårlig</option>
-                                                <option value="broken" @selected(old('condition', $asset->condition) == 'broken')>Ødelagt</option>
-                                            </flux:select>
-                                            @error('condition')
-                                                <flux:error>{{ $message }}</flux:error>
-                                            @enderror
-                                        </flux:field>
-
-                                        <flux:checkbox id="is_active" name="is_active" value="1" :checked="old('is_active', $asset->is_active)">
-                                            Aktiv eiendel
-                                        </flux:checkbox>
+                            {{-- Metadata --}}
+                            <dl class="space-y-2 text-sm">
+                                @if($asset->creator)
+                                    <div class="flex justify-between">
+                                        <dt class="text-zinc-500 dark:text-zinc-400">Opprettet av</dt>
+                                        <dd class="text-zinc-700 dark:text-zinc-300">{{ $asset->creator->name }}</dd>
                                     </div>
+                                @endif
+                                <div class="flex justify-between">
+                                    <dt class="text-zinc-500 dark:text-zinc-400">Opprettet</dt>
+                                    <dd class="text-zinc-700 dark:text-zinc-300">{{ $asset->created_at->format('d.m.Y') }}</dd>
                                 </div>
-
-                                <flux:separator variant="subtle" />
-
-                                <div>
-                                    <flux:heading size="lg" level="3" class="text-zinc-900 dark:text-white mb-4">
-                                        Garanti
-                                    </flux:heading>
-
-                                    <div class="space-y-4">
-                                        <flux:field>
-                                            <flux:label for="warranty_from">Garanti fra</flux:label>
-                                            <flux:input id="warranty_from" name="warranty_from" type="date" value="{{ old('warranty_from', $asset->warranty_from?->format('Y-m-d')) }}" />
-                                            @error('warranty_from')
-                                                <flux:error>{{ $message }}</flux:error>
-                                            @enderror
-                                        </flux:field>
-
-                                        <flux:field>
-                                            <flux:label for="warranty_until">Garanti til</flux:label>
-                                            <flux:input id="warranty_until" name="warranty_until" type="date" value="{{ old('warranty_until', $asset->warranty_until?->format('Y-m-d')) }}" />
-                                            @error('warranty_until')
-                                                <flux:error>{{ $message }}</flux:error>
-                                            @enderror
-                                        </flux:field>
-                                    </div>
+                                <div class="flex justify-between">
+                                    <dt class="text-zinc-500 dark:text-zinc-400">Oppdatert</dt>
+                                    <dd class="text-zinc-700 dark:text-zinc-300">{{ $asset->updated_at->format('d.m.Y') }}</dd>
                                 </div>
+                            </dl>
+
+                            <flux:separator variant="subtle" />
+
+                            {{-- Actions --}}
+                            <div class="space-y-2">
+                                <flux:button type="submit" variant="primary" class="w-full" icon="check">
+                                    Lagre endringer
+                                </flux:button>
+                                <flux:button href="{{ route('assets.index') }}" variant="ghost" class="w-full">
+                                    Avbryt
+                                </flux:button>
                             </div>
-                        </flux:card>
-                    </div>
-                </div>
 
-                <div class="flex items-center justify-between mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-700">
-                    <flux:button href="{{ route('assets.show', $asset) }}" variant="ghost" class="px-6 py-3">
-                        <flux:icon.arrow-left class="w-5 h-5 mr-2" />
-                        Avbryt
-                    </flux:button>
-                    <flux:button type="submit" variant="primary" class="px-8 py-3">
-                        <flux:icon.check class="w-5 h-5 mr-2" />
-                        Oppdater eiendel
-                    </flux:button>
+                            <flux:separator variant="subtle" />
+
+                            {{-- Delete --}}
+                            <form method="POST" action="{{ route('assets.destroy', $asset) }}"
+                                  onsubmit="return confirm('Er du sikker på at du vil slette denne eiendelen?')">
+                                @csrf
+                                @method('DELETE')
+                                <flux:button type="submit" variant="ghost" class="w-full text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30" icon="trash">
+                                    Slett eiendel
+                                </flux:button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </form>
-        </flux:main>
 
+        </flux:main>
     </div>
 </x-layouts.app>

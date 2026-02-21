@@ -107,15 +107,13 @@ class AssetController extends Controller
 
         $asset = Asset::create($validated);
 
-        return redirect()->route('assets.show', $asset)
+        return redirect()->route('assets.edit', $asset)
             ->with('success', 'Eiendel opprettet!');
     }
 
-    public function show(Asset $asset)
+    public function show(Asset $asset): \Illuminate\Http\RedirectResponse
     {
-        $asset->load(['creator', 'responsibleUser']);
-
-        return view('assets.show', compact('asset'));
+        return redirect()->route('assets.edit', $asset);
     }
 
     public function edit(Asset $asset)
@@ -175,7 +173,7 @@ class AssetController extends Controller
 
         $asset->update($validated);
 
-        return redirect()->route('assets.show', $asset)
+        return redirect()->route('assets.index')
             ->with('success', 'Eiendel oppdatert!');
     }
 
