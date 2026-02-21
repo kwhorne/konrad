@@ -78,7 +78,7 @@
         <!-- Bottom -->
         <div class="border-t border-zinc-200 dark:border-zinc-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
             <p class="text-zinc-600 dark:text-zinc-400 text-sm">
-                &copy; {{ date('Y') }} Konrad Office. Alle rettigheter reservert.
+                &copy; {{ date('Y') }} Konrad Office AS. Alle rettigheter reservert.
             </p>
             <div class="flex items-center gap-6 mt-4 md:mt-0">
                 <button
