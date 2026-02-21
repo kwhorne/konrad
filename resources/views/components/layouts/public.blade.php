@@ -78,7 +78,7 @@
 </head>
 <body class="min-h-screen bg-white dark:bg-zinc-900 font-sans antialiased">
     <!-- Navigation -->
-    <nav class="border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm sticky top-0 z-50">
+    <nav x-data="{ mobileOpen: false }" class="border-b border-zinc-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
@@ -98,7 +98,7 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Desktop Navigation Links -->
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('welcome') }}#modules" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                         Moduler
@@ -120,27 +120,98 @@
                     </a>
                 </div>
 
-                <!-- Auth Links -->
-                <div class="flex items-center space-x-3">
+                <!-- Right side: dark mode + auth (desktop) + hamburger (mobile) -->
+                <div class="flex items-center gap-2">
                     <!-- Dark Mode Toggle -->
-                    <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" variant="subtle" square class="group" aria-label="Toggle dark mode">
+                    <flux:button x-data x-on:click="$flux.dark = ! $flux.dark" variant="subtle" square aria-label="Toggle dark mode">
                         <flux:icon.sun x-show="$flux.dark" variant="mini" class="text-zinc-500 dark:text-white" />
                         <flux:icon.moon x-show="! $flux.dark" variant="mini" class="text-zinc-500 dark:text-white" />
                     </flux:button>
 
-                    @auth
-                        <flux:button href="{{ route('dashboard') }}" variant="primary" size="sm">
-                            Dashboard
-                        </flux:button>
-                    @else
-                        <flux:button href="{{ route('login') }}" variant="ghost" size="sm">
-                            Logg inn
-                        </flux:button>
-                        <flux:button href="{{ route('order') }}" variant="primary" size="sm">
-                            Kom i gang
-                        </flux:button>
-                    @endauth
+                    <!-- Desktop Auth Buttons -->
+                    <div class="hidden md:flex items-center gap-2">
+                        @auth
+                            <flux:button href="{{ route('dashboard') }}" variant="primary" size="sm">
+                                Dashboard
+                            </flux:button>
+                        @else
+                            <flux:button href="{{ route('login') }}" variant="ghost" size="sm">
+                                Logg inn
+                            </flux:button>
+                            <flux:button href="{{ route('order') }}" variant="primary" size="sm">
+                                Kom i gang
+                            </flux:button>
+                        @endauth
+                    </div>
+
+                    <!-- Hamburger Button (mobile only) -->
+                    <button
+                        x-on:click="mobileOpen = !mobileOpen"
+                        class="md:hidden p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                        aria-label="Toggle menu"
+                    >
+                        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg x-show="mobileOpen" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div
+            x-show="mobileOpen"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 -translate-y-2"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 -translate-y-2"
+            class="md:hidden border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900"
+        >
+            <div class="px-4 py-4 space-y-1">
+                <a href="{{ route('welcome') }}#modules" x-on:click="mobileOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors font-medium">
+                    <flux:icon.squares-2x2 class="w-5 h-5 text-zinc-400" />
+                    Moduler
+                </a>
+                <a href="{{ route('features') }}" x-on:click="mobileOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors font-medium">
+                    <flux:icon.bolt class="w-5 h-5 text-zinc-400" />
+                    Funksjoner
+                </a>
+                <a href="{{ route('pricing') }}" x-on:click="mobileOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors font-medium">
+                    <flux:icon.tag class="w-5 h-5 text-zinc-400" />
+                    Priser
+                </a>
+                <a href="{{ route('blog.index') }}" x-on:click="mobileOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors font-medium">
+                    <flux:icon.newspaper class="w-5 h-5 text-zinc-400" />
+                    Innsikt
+                </a>
+                <a href="{{ route('contact') }}" x-on:click="mobileOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors font-medium">
+                    <flux:icon.chat-bubble-left-right class="w-5 h-5 text-zinc-400" />
+                    Kontakt
+                </a>
+                <a href="{{ route('about') }}" x-on:click="mobileOpen = false" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors font-medium">
+                    <flux:icon.information-circle class="w-5 h-5 text-zinc-400" />
+                    Om oss
+                </a>
+            </div>
+
+            <div class="px-4 pb-4 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex flex-col gap-2">
+                @auth
+                    <flux:button href="{{ route('dashboard') }}" variant="primary" class="w-full justify-center">
+                        Dashboard
+                    </flux:button>
+                @else
+                    <flux:button href="{{ route('order') }}" variant="primary" class="w-full justify-center">
+                        Kom i gang gratis
+                    </flux:button>
+                    <flux:button href="{{ route('login') }}" variant="ghost" class="w-full justify-center">
+                        Logg inn
+                    </flux:button>
+                @endauth
             </div>
         </div>
     </nav>
