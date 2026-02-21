@@ -1,224 +1,108 @@
-<x-layouts.public title="Bestill - Konrad Office">
-    <!-- Order Header -->
-    <section class="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto">
-                <h1 class="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white mb-6">
-                    Kom i gang med Konrad Office
-                </h1>
-                <p class="text-xl text-zinc-600 dark:text-zinc-400">
-                    Fyll ut skjemaet under, så tar vi kontakt for å sette opp din konto.
-                </p>
+<x-layouts.public
+    title="Bestill - Konrad Office AS"
+    description="Start din gratis prøveperiode med Konrad Office. Fyll ut skjemaet, så setter vi opp kontoen din — ingen betalingskort kreves."
+>
+    <!-- Hero -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 dark:from-zinc-950 dark:via-zinc-900 dark:to-indigo-950/20 py-16 lg:py-20">
+        <div class="absolute inset-0 -z-10 overflow-hidden">
+            <div class="absolute -top-40 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-indigo-100/60 to-transparent dark:from-indigo-900/20 dark:to-transparent rounded-full blur-3xl"></div>
+        </div>
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-sm font-medium mb-6">
+                <flux:icon.check-circle class="w-4 h-4 mr-2" />
+                Gratis prøveperiode · Ingen betalingskort
             </div>
+            <h1 class="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white mb-5 leading-tight">
+                Kom i gang med Konrad Office
+            </h1>
+            <p class="text-xl text-zinc-600 dark:text-zinc-400">
+                Fyll ut skjemaet, så setter vi opp kontoen din og sender deg innloggingsinformasjon innen én virkedag.
+            </p>
         </div>
     </section>
 
-    <!-- Order Form Section -->
-    <section class="py-16 lg:py-24 bg-white dark:bg-zinc-900">
+    <!-- Form section -->
+    <section class="py-16 lg:py-20 bg-white dark:bg-zinc-900">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
-                <!-- Form -->
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
+
+                <!-- Order form (3/5) -->
                 <div class="lg:col-span-3">
                     <div class="bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 p-8 shadow-sm">
-                        <h2 class="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
-                            Bestillingsskjema
-                        </h2>
-
-                        <form action="#" method="POST" class="space-y-6">
-                            @csrf
-
-                            <!-- Plan Selection -->
-                            <flux:field>
-                                <flux:label>Velg plan</flux:label>
-                                <flux:select name="plan" required>
-                                    <flux:select.option value="" disabled :selected="!request('plan')">Velg en plan</flux:select.option>
-                                    <flux:select.option value="basis" :selected="request('plan') === 'basis'">Basis - 380,- / mnd</flux:select.option>
-                                    <flux:select.option value="pro" :selected="request('plan') === 'pro'">Pro - 890,- / mnd</flux:select.option>
-                                    <flux:select.option value="premium" :selected="request('plan') === 'premium'">Premium - 1 890,- / mnd</flux:select.option>
-                                </flux:select>
-                            </flux:field>
-
-                            <flux:separator />
-
-                            <h3 class="text-lg font-medium text-zinc-900 dark:text-white">Firmainformasjon</h3>
-
-                            <!-- Company Name -->
-                            <flux:input
-                                name="company_name"
-                                label="Firmanavn"
-                                placeholder="Ditt firma AS"
-                                required
-                            />
-
-                            <!-- Organization Number -->
-                            <flux:input
-                                name="org_number"
-                                label="Organisasjonsnummer"
-                                placeholder="123 456 789"
-                                required
-                            />
-
-                            <!-- Address -->
-                            <flux:input
-                                name="address"
-                                label="Adresse"
-                                placeholder="Gateadresse 123"
-                                required
-                            />
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <!-- Postal Code -->
-                                <flux:input
-                                    name="postal_code"
-                                    label="Postnummer"
-                                    placeholder="0123"
-                                    required
-                                />
-
-                                <!-- City -->
-                                <flux:input
-                                    name="city"
-                                    label="Poststed"
-                                    placeholder="Oslo"
-                                    required
-                                />
-                            </div>
-
-                            <flux:separator />
-
-                            <h3 class="text-lg font-medium text-zinc-900 dark:text-white">Kontaktperson</h3>
-
-                            <!-- Contact Person -->
-                            <flux:input
-                                name="contact_name"
-                                label="Navn"
-                                placeholder="Ola Nordmann"
-                                required
-                            />
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <!-- Email -->
-                                <flux:input
-                                    name="email"
-                                    type="email"
-                                    label="E-post"
-                                    placeholder="ola@firma.no"
-                                    required
-                                />
-
-                                <!-- Phone -->
-                                <flux:input
-                                    name="phone"
-                                    type="tel"
-                                    label="Telefon"
-                                    placeholder="+47 123 45 678"
-                                    required
-                                />
-                            </div>
-
-                            <flux:separator />
-
-                            <!-- Comments -->
-                            <flux:textarea
-                                name="comments"
-                                label="Kommentarer (valgfritt)"
-                                placeholder="Har du spesielle ønsker eller spørsmål? Skriv dem her..."
-                                rows="3"
-                            />
-
-                            <!-- Terms -->
-                            <div class="flex items-start gap-3">
-                                <flux:checkbox name="terms" required />
-                                <p class="text-sm text-zinc-600 dark:text-zinc-300">
-                                    Jeg godtar <button type="button" x-data x-on:click="$flux.modal('terms-modal').show()" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">vilkårene</button> og <button type="button" x-data x-on:click="$flux.modal('privacy-modal').show()" class="text-indigo-600 dark:text-indigo-400 hover:underline font-medium">personvernerklæringen</button>
-                                </p>
-                            </div>
-
-                            <flux:button type="submit" variant="primary" class="w-full">
-                                Send bestilling
-                            </flux:button>
-                        </form>
+                        <h2 class="text-2xl font-bold text-zinc-900 dark:text-white mb-2">Bestillingsskjema</h2>
+                        <p class="text-zinc-500 dark:text-zinc-400 mb-8">Alle felt merket med * er påkrevd.</p>
+                        <livewire:public-order-form />
                     </div>
                 </div>
 
-                <!-- How it works -->
+                <!-- Sidebar (2/5) -->
                 <div class="lg:col-span-2">
-                    <div class="sticky top-20 lg:top-24">
-                        <h2 class="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
-                            Slik fungerer det
-                        </h2>
+                    <div class="sticky top-20 lg:top-24 space-y-6">
 
-                        <div class="space-y-8">
-                            <div class="flex gap-4">
-                                <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-semibold text-indigo-600 dark:text-indigo-400">1</span>
+                        <!-- How it works -->
+                        <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-700/50 p-6">
+                            <h3 class="font-semibold text-zinc-900 dark:text-white mb-5">Slik fungerer det</h3>
+                            <div class="space-y-5">
+                                @foreach([
+                                    ['step' => '1', 'title' => 'Send bestilling', 'desc' => 'Fyll ut skjemaet med informasjon om bedriften og valgt plan.'],
+                                    ['step' => '2', 'title' => 'Vi tar kontakt', 'desc' => 'En av oss kontakter deg innen én virkedag for å gå gjennom behovene dine.'],
+                                    ['step' => '3', 'title' => 'Konto settes opp', 'desc' => 'Vi klargjør systemet og sender innloggingsinformasjon på e-post.'],
+                                ] as $item)
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 bg-indigo-600 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold mt-0.5">{{ $item['step'] }}</div>
+                                    <div>
+                                        <div class="font-medium text-zinc-900 dark:text-white text-sm">{{ $item['title'] }}</div>
+                                        <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{{ $item['desc'] }}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 class="font-medium text-zinc-900 dark:text-white mb-1">Send bestilling</h3>
-                                    <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                                        Fyll ut skjemaet med informasjon om din bedrift og ønsket plan.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex gap-4">
-                                <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-semibold text-indigo-600 dark:text-indigo-400">2</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium text-zinc-900 dark:text-white mb-1">Vi tar kontakt</h3>
-                                    <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                                        En av våre rådgivere kontakter deg innen 1-2 virkedager for å gå gjennom dine behov.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex gap-4">
-                                <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-semibold text-indigo-600 dark:text-indigo-400">3</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-medium text-zinc-900 dark:text-white mb-1">Oppsett av konto</h3>
-                                    <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                                        Vi setter opp kontoen din og sender deg innloggingsinformasjon via e-post.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="flex gap-4">
-                                <div class="flex-shrink-0 w-8 h-8 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center">
-                                    <flux:icon.check class="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                                </div>
-                                <div>
-                                    <h3 class="font-medium text-zinc-900 dark:text-white mb-1">Kom i gang</h3>
-                                    <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                                        Logg inn og begynn å bruke Konrad Office. Vi er tilgjengelige for support om du trenger hjelp.
-                                    </p>
+                                @endforeach
+                                <div class="flex items-start gap-3">
+                                    <div class="w-7 h-7 bg-emerald-500 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                                        <flux:icon.check class="w-4 h-4 text-white" />
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-zinc-900 dark:text-white text-sm">Kom i gang</div>
+                                        <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">Logg inn og ta systemet i bruk. Vi er tilgjengelige for support.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Contact info -->
-                        <div class="mt-10 p-6 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-                            <h3 class="font-medium text-zinc-900 dark:text-white mb-3">Har du spørsmål?</h3>
-                            <p class="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-                                Ta gjerne kontakt med oss før du bestiller.
-                            </p>
-                            <div class="space-y-2 text-sm">
-                                <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                                    <flux:icon.phone class="w-4 h-4" />
-                                    <span>+47 55 61 20 50</span>
+                        <!-- Trust -->
+                        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-emerald-100 dark:border-emerald-800/30 p-6">
+                            <div class="space-y-3">
+                                @foreach([
+                                    'Gratis prøveperiode — ingen betalingskort',
+                                    'Ingen bindingstid',
+                                    'Support på norsk',
+                                    'Norsk regelverk innebygd',
+                                ] as $point)
+                                <div class="flex items-center gap-2.5 text-sm text-emerald-800 dark:text-emerald-300">
+                                    <flux:icon.check-circle class="w-4 h-4 text-emerald-500 shrink-0" />
+                                    {{ $point }}
                                 </div>
-                                <div class="flex items-center gap-2">
-                                    <flux:icon.envelope class="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
-                                    <a href="mailto:post@konradoffice.no" class="text-indigo-600 dark:text-indigo-400 hover:underline">
-                                        post@konradoffice.no
-                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Contact -->
+                        <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl border border-zinc-100 dark:border-zinc-700/50 p-6">
+                            <h3 class="font-semibold text-zinc-900 dark:text-white mb-3">Har du spørsmål?</h3>
+                            <p class="text-sm text-zinc-500 dark:text-zinc-400 mb-4">Ta gjerne kontakt med oss før du bestiller.</p>
+                            <div class="space-y-2.5 text-sm">
+                                <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                                    <flux:icon.phone class="w-4 h-4 shrink-0" />
+                                    <a href="tel:+4755612050" class="hover:text-zinc-900 dark:hover:text-white transition-colors">+47 55 61 20 50</a>
+                                </div>
+                                <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                                    <flux:icon.envelope class="w-4 h-4 shrink-0" />
+                                    <a href="mailto:post@konradoffice.no" class="text-indigo-600 dark:text-indigo-400 hover:underline">post@konradoffice.no</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
