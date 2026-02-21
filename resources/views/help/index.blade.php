@@ -65,6 +65,7 @@
                             <option value="arbeidsordrer">Arbeidsordrer</option>
                             <option value="timeregistrering">Timeregistrering</option>
                             <option value="salg">Salg</option>
+                            <option value="lager">Lager</option>
                             <option value="okonomi">Økonomi</option>
                             <option value="lonn">Lønn</option>
                             <option value="selskapsanalyse">Selskapsanalyse</option>
@@ -156,6 +157,28 @@
                                                    :class="activeSection === 'salg' ? 'text-green-600 dark:text-green-400 font-medium' : 'text-zinc-600 dark:text-zinc-400'"
                                                    class="block py-1.5 text-sm hover:text-green-600 dark:hover:text-green-400 transition-colors">
                                                     Salg
+                                                </a>
+                                            </nav>
+                                        </flux:accordion.content>
+                                    </flux:accordion.item>
+
+                                    {{-- Lager & Innkjøp --}}
+                                    <flux:accordion.item>
+                                        <flux:accordion.heading class="text-sm font-medium py-2">
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-6 h-6 bg-cyan-100 dark:bg-cyan-900/30 rounded flex items-center justify-center">
+                                                    <flux:icon.archive-box class="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+                                                </div>
+                                                <span class="text-zinc-900 dark:text-white">Lager & Innkjøp</span>
+                                            </div>
+                                        </flux:accordion.heading>
+                                        <flux:accordion.content>
+                                            <nav class="space-y-0.5 pl-8">
+                                                <a href="#lager" @click.prevent="scrollToSection('lager')"
+                                                   x-show="!searchQuery || 'lager beholdning varetelling innkjøp bestilling'.includes(searchQuery.toLowerCase())"
+                                                   :class="activeSection === 'lager' ? 'text-cyan-600 dark:text-cyan-400 font-medium' : 'text-zinc-600 dark:text-zinc-400'"
+                                                   class="block py-1.5 text-sm hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
+                                                    Lager
                                                 </a>
                                             </nav>
                                         </flux:accordion.content>
@@ -345,6 +368,7 @@
                     @include('help.partials.section-mine-aktiviteter')
                     @include('help.partials.section-kontakter')
                     @include('help.partials.section-produkter')
+                    @include('help.partials.section-lager')
                     @include('help.partials.section-prosjekter')
                     @include('help.partials.section-arbeidsordrer')
                     @include('help.partials.section-timeregistrering')
