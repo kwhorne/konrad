@@ -216,7 +216,7 @@
 
             <!-- Trust indicators -->
             <div class="mt-16 text-center">
-                <div class="inline-flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-zinc-600 dark:text-zinc-400">
+                <div class="inline-flex flex-wrap justify-center gap-x-4 sm:gap-x-8 gap-y-3 text-sm text-zinc-600 dark:text-zinc-400">
                     <div class="flex items-center gap-2">
                         <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
                         Ubegrenset antall brukere

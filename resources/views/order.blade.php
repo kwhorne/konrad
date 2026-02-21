@@ -143,7 +143,7 @@
 
                 <!-- How it works -->
                 <div class="lg:col-span-2">
-                    <div class="sticky top-24">
+                    <div class="sticky top-20 lg:top-24">
                         <h2 class="text-xl font-semibold text-zinc-900 dark:text-white mb-6">
                             Slik fungerer det
                         </h2>

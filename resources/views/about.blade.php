@@ -196,8 +196,8 @@
                 </div>
 
                 <!-- Visual -->
-                <div class="order-1 lg:order-2 flex justify-center">
-                    <div class="relative w-72 h-72">
+                <div class="order-1 lg:order-2 flex justify-center px-8 sm:px-0">
+                    <div class="relative w-56 h-56 sm:w-72 sm:h-72">
                         <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 to-orange-100 dark:from-indigo-900/30 dark:to-orange-900/30 rounded-full"></div>
                         <div class="absolute inset-0 flex items-center justify-center">
                             <svg class="h-44 w-auto opacity-90" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
