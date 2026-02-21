@@ -30,12 +30,12 @@
                 <h3 class="text-sm font-semibold text-zinc-900 dark:text-white mb-4">Produkt</h3>
                 <ul class="space-y-3">
                     <li>
-                        <a href="#modules" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        <a href="{{ route('welcome') }}#modules" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             Moduler
                         </a>
                     </li>
                     <li>
-                        <a href="#features" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+                        <a href="{{ route('features') }}" class="text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
                             Funksjoner
                         </a>
                     </li>
