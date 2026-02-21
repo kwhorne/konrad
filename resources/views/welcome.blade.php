@@ -28,156 +28,206 @@
     <script type="application/ld+json">{!! json_encode($softwareSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endpush
     <!-- Hero Section -->
-    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-            <div class="text-center">
-                <!-- Logo -->
-                <div class="mb-8 flex justify-center">
-                    <svg class="h-20 w-auto" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M 0.0,139.5 L 0.5,120.0 C 1.0,100.5 2.0,61.5 13.7,41.0 C 25.3,20.5 47.7,18.5 69.2,19.0 C 90.7,19.5 111.3,22.5 132.0,26.0 L 152.7,29.5 L 152.8,66.5 C 152.8,86.8 152.8,127.3 152.8,147.7 L 152.8,188.0 L 132.2,188.0 C 111.5,188.0 70.0,188.0 49.0,188.0 C 28.0,188.0 27.5,188.0 18.3,174.0 C 9.2,160.0 0.8,132.0 0.4,118.0 C 0.0,104.0 0.0,104.0 0.0,139.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
-                        <path d="M 152.7,29.5 L 173.3,33.0 C 194.0,36.5 235.3,43.5 256.0,70.0 C 276.7,96.5 277.0,142.5 276.8,165.0 L 276.5,188.0 L 255.5,188.0 C 234.5,188.0 192.5,188.0 171.5,188.0 L 150.5,188.0 L 150.8,147.7 C 151.2,107.3 152.0,86.8 152.3,66.5 C 152.5,46.2 152.5,46.0 152.7,29.5 Z" class="fill-[#87c8b8] dark:fill-[#a8ddd0]" fill-rule="evenodd"/>
-                        <path d="M 0.0,139.5 C 0.0,104.0 0.0,104.0 0.4,118.0 C 0.8,132.0 9.2,160.0 18.3,174.0 C 27.5,188.0 28.0,188.0 49.0,188.0 C 70.0,188.0 111.5,188.0 132.2,188.0 L 152.8,188.0 L 152.8,210.0 C 152.8,222.0 152.5,244.0 152.2,258.5 C 151.8,273.0 151.5,282.5 120.0,275.0 C 88.5,267.5 25.8,243.0 12.0,221.8 C -1.8,200.7 0.2,183.0 0.8,165.2 C 1.5,147.5 0.0,139.5 0.0,139.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
-                    </svg>
-                </div>
-
-                <!-- Badge -->
-                <div class="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium mb-8">
-                    <flux:icon.building-office class="w-4 h-4 mr-2" />
-                    Jobb smart, effektivt og dokumentert
-                </div>
-
-                <!-- Main Heading -->
-                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-bold text-zinc-900 dark:text-white mb-6">
-                    Alt du trenger
-                    <span class="bg-gradient-to-r from-indigo-600 to-orange-500 bg-clip-text text-transparent">
-                        samlet i ett system
-                    </span>
-                </h1>
-
-                <!-- Subtitle -->
-                <p class="text-xl text-zinc-600 dark:text-zinc-400 max-w-3xl mx-auto mb-12">
-                    Konrad Office er et komplett forretningssystem med salg, lager/innkjøp, fakturering, regnskap,
-                    lønn, prosjektstyring, timeregistrering og intelligent selskapsanalyse. Enkelt, oversiktlig og effektivt.
-                </p>
-
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <flux:button href="{{ route('login') }}" variant="primary" class="px-8 py-3">
-                        <flux:icon.arrow-right-end-on-rectangle class="w-5 h-5 mr-2" />
-                        Logg inn
-                    </flux:button>
-                </div>
-            </div>
+    <section class="relative bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 dark:from-zinc-950 dark:via-zinc-900 dark:to-indigo-950/20">
+        <!-- Background decorations -->
+        <div class="absolute inset-0 -z-10 overflow-hidden">
+            <div class="absolute -top-40 right-0 w-[700px] h-[700px] bg-gradient-to-bl from-indigo-100/70 via-purple-50/30 to-transparent dark:from-indigo-900/20 dark:via-purple-900/10 dark:to-transparent rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-[500px] h-[500px] bg-gradient-to-tr from-orange-100/50 to-transparent dark:from-orange-900/10 dark:to-transparent rounded-full blur-3xl"></div>
         </div>
 
-        <!-- Background decoration -->
-        <div class="absolute inset-0 -z-10">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-r from-indigo-200/20 to-orange-200/20 dark:from-indigo-900/10 dark:to-orange-900/10 rounded-full blur-3xl"></div>
-        </div>
-    </section>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-    <!-- Social Proof / Testimonials -->
-    <section class="py-16 bg-white dark:bg-zinc-900 border-b border-zinc-100 dark:border-zinc-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <p class="text-sm font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-4">
-                    Betrodd av norske bedrifter
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Testimonial 1 -->
-                <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-8">
-                    <div class="flex gap-1 mb-4">
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
+                <!-- Left: Text content -->
+                <div class="text-center lg:text-left">
+                    <!-- Logo -->
+                    <div class="mb-8 flex justify-center lg:justify-start">
+                        <svg class="h-14 w-auto" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 0.0,139.5 L 0.5,120.0 C 1.0,100.5 2.0,61.5 13.7,41.0 C 25.3,20.5 47.7,18.5 69.2,19.0 C 90.7,19.5 111.3,22.5 132.0,26.0 L 152.7,29.5 L 152.8,66.5 C 152.8,86.8 152.8,127.3 152.8,147.7 L 152.8,188.0 L 132.2,188.0 C 111.5,188.0 70.0,188.0 49.0,188.0 C 28.0,188.0 27.5,188.0 18.3,174.0 C 9.2,160.0 0.8,132.0 0.4,118.0 C 0.0,104.0 0.0,104.0 0.0,139.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
+                            <path d="M 152.7,29.5 L 173.3,33.0 C 194.0,36.5 235.3,43.5 256.0,70.0 C 276.7,96.5 277.0,142.5 276.8,165.0 L 276.5,188.0 L 255.5,188.0 C 234.5,188.0 192.5,188.0 171.5,188.0 L 150.5,188.0 L 150.8,147.7 C 151.2,107.3 152.0,86.8 152.3,66.5 C 152.5,46.2 152.5,46.0 152.7,29.5 Z" class="fill-[#87c8b8] dark:fill-[#a8ddd0]" fill-rule="evenodd"/>
+                            <path d="M 0.0,139.5 C 0.0,104.0 0.0,104.0 0.4,118.0 C 0.8,132.0 9.2,160.0 18.3,174.0 C 27.5,188.0 28.0,188.0 49.0,188.0 C 70.0,188.0 111.5,188.0 132.2,188.0 L 152.8,188.0 L 152.8,210.0 C 152.8,222.0 152.5,244.0 152.2,258.5 C 151.8,273.0 151.5,282.5 120.0,275.0 C 88.5,267.5 25.8,243.0 12.0,221.8 C -1.8,200.7 0.2,183.0 0.8,165.2 C 1.5,147.5 0.0,139.5 0.0,139.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
+                        </svg>
                     </div>
-                    <blockquote class="text-zinc-700 dark:text-zinc-300 mb-6">
-                        "Konrad Office har forenklet hverdagen vår betydelig. Vi har full oversikt over tilbud, ordrer og fakturaer i ett system. Slipper å bruke tid på manuelle oppgaver."
-                    </blockquote>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                            KH
+
+                    <!-- Badge -->
+                    <div class="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium mb-6">
+                        <flux:icon.building-office class="w-4 h-4 mr-2" />
+                        Skreddersydd for norske SMB-bedrifter
+                    </div>
+
+                    <!-- Heading -->
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight">
+                        Alt du trenger
+                        <span class="bg-gradient-to-r from-indigo-600 to-orange-500 bg-clip-text text-transparent">
+                            samlet i ett system
+                        </span>
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-8 max-w-lg mx-auto lg:mx-0">
+                        Konrad Office samler regnskap, lønn, fakturering, lager og prosjektstyring i ett enkelt system — bygget for norske bedrifter.
+                    </p>
+
+                    <!-- CTA -->
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-10">
+                        <flux:button href="{{ route('login') }}" variant="primary" class="px-8">
+                            <flux:icon.arrow-right-end-on-rectangle class="w-5 h-5 mr-2" />
+                            Logg inn
+                        </flux:button>
+                    </div>
+
+                    <!-- Trust row -->
+                    <div class="flex flex-wrap gap-5 justify-center lg:justify-start text-sm text-zinc-500 dark:text-zinc-400">
+                        <div class="flex items-center gap-2">
+                            <flux:icon.check-circle class="w-4 h-4 text-green-500 shrink-0" />
+                            <span>14 moduler</span>
                         </div>
-                        <div>
-                            <div class="font-semibold text-zinc-900 dark:text-white">Kristian Hansen</div>
-                            <div class="text-sm text-zinc-500 dark:text-zinc-400">Daglig leder, Hansen Elektro AS</div>
+                        <div class="flex items-center gap-2">
+                            <flux:icon.check-circle class="w-4 h-4 text-green-500 shrink-0" />
+                            <span>Norsk kontoplan NS&nbsp;4102</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <flux:icon.check-circle class="w-4 h-4 text-green-500 shrink-0" />
+                            <span>A-melding og MVA</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Testimonial 2 -->
-                <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-8">
-                    <div class="flex gap-1 mb-4">
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                    </div>
-                    <blockquote class="text-zinc-700 dark:text-zinc-300 mb-6">
-                        "Prosjektstyring og timeregistrering fungerer utmerket. Vi sparer flere timer i uken på administrasjon, og regnskapet er alltid oppdatert."
-                    </blockquote>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full flex items-center justify-center text-white font-semibold">
-                            MB
-                        </div>
-                        <div>
-                            <div class="font-semibold text-zinc-900 dark:text-white">Mari Bergström</div>
-                            <div class="text-sm text-zinc-500 dark:text-zinc-400">Økonomiansvarlig, Fjordtech Solutions</div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Right: Dashboard mockup -->
+                <div class="relative lg:px-10 lg:py-14">
+                    <!-- Glow behind mockup -->
+                    <div class="absolute inset-4 bg-gradient-to-br from-indigo-400/25 to-orange-400/20 dark:from-indigo-500/20 dark:to-orange-500/15 rounded-3xl blur-2xl"></div>
 
-                <!-- Testimonial 3 -->
-                <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-8">
-                    <div class="flex gap-1 mb-4">
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                        <flux:icon.star class="w-5 h-5 text-amber-400 fill-amber-400" />
-                    </div>
-                    <blockquote class="text-zinc-700 dark:text-zinc-300 mb-6">
-                        "Endelig et norsk system som faktisk forstår hvordan vi jobber. Kontraktsregisteret og eiendelsmodulen er gull verdt for oss."
-                    </blockquote>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-rose-500 rounded-full flex items-center justify-center text-white font-semibold">
-                            OL
+                    <!-- App frame -->
+                    <div class="relative bg-white dark:bg-zinc-800 rounded-2xl shadow-2xl border border-zinc-200/80 dark:border-zinc-700/80 overflow-hidden">
+                        <!-- Browser chrome -->
+                        <div class="flex items-center gap-3 px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
+                            <div class="flex gap-1.5 shrink-0">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                            <div class="flex-1 bg-white dark:bg-zinc-800 rounded-md px-3 py-1 flex items-center gap-2 max-w-xs">
+                                <div class="w-2 h-2 rounded-full bg-green-400 shrink-0"></div>
+                                <span class="text-xs text-zinc-400 dark:text-zinc-500 truncate">konrad.app/dashboard</span>
+                            </div>
                         </div>
-                        <div>
-                            <div class="font-semibold text-zinc-900 dark:text-white">Ole Larsen</div>
-                            <div class="text-sm text-zinc-500 dark:text-zinc-400">Eier, Larsen Bygg & Vedlikehold</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Company logos / trust badges -->
-            <div class="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-700">
-                <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 text-zinc-400 dark:text-zinc-500">
-                    <div class="flex items-center gap-2">
-                        <flux:icon.building-office-2 class="w-5 h-5" />
-                        <span class="font-medium">Hansen Elektro AS</span>
+                        <!-- Dashboard body -->
+                        <div class="p-4 bg-zinc-50 dark:bg-zinc-900">
+                            <!-- Dashboard header -->
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <div class="text-sm font-semibold text-zinc-900 dark:text-white">God morgen, Ole</div>
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400">Februar 2025 · 3 ventende oppgaver</div>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shrink-0">O</div>
+                            </div>
+
+                            <!-- Stat cards -->
+                            <div class="grid grid-cols-3 gap-2.5 mb-3">
+                                <div class="bg-white dark:bg-zinc-800 rounded-xl p-3 border border-zinc-100 dark:border-zinc-700">
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-1">Omsetning</div>
+                                    <div class="text-sm font-bold text-zinc-900 dark:text-white">842 500</div>
+                                    <div class="text-xs text-green-500 font-medium mt-0.5">↑ 12%</div>
+                                </div>
+                                <div class="bg-white dark:bg-zinc-800 rounded-xl p-3 border border-zinc-100 dark:border-zinc-700">
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-1">Fakturaer</div>
+                                    <div class="text-sm font-bold text-zinc-900 dark:text-white">24</div>
+                                    <div class="text-xs text-amber-500 font-medium mt-0.5">4 åpne</div>
+                                </div>
+                                <div class="bg-white dark:bg-zinc-800 rounded-xl p-3 border border-zinc-100 dark:border-zinc-700">
+                                    <div class="text-xs text-zinc-500 dark:text-zinc-400 mb-1">Prosjekter</div>
+                                    <div class="text-sm font-bold text-zinc-900 dark:text-white">8</div>
+                                    <div class="text-xs text-indigo-500 font-medium mt-0.5">3 aktive</div>
+                                </div>
+                            </div>
+
+                            <!-- Area chart -->
+                            <div class="bg-white dark:bg-zinc-800 rounded-xl p-3.5 border border-zinc-100 dark:border-zinc-700 mb-3">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Inntekter siste 6 mnd</span>
+                                    <span class="text-xs text-zinc-400 dark:text-zinc-500">NOK</span>
+                                </div>
+                                <svg viewBox="0 0 280 60" class="w-full h-12" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
+                                            <stop offset="100%" stop-color="#6366f1" stop-opacity="0"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path d="M0,48 L46,38 L92,42 L138,24 L184,28 L230,10 L280,14 L280,60 L0,60 Z" fill="url(#areaGrad)"/>
+                                    <path d="M0,48 L46,38 L92,42 L138,24 L184,28 L230,10 L280,14" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="230" cy="10" r="3" fill="#6366f1"/>
+                                    <circle cx="280" cy="14" r="3" fill="#6366f1"/>
+                                </svg>
+                                <div class="flex justify-between text-xs text-zinc-400 dark:text-zinc-500 mt-1">
+                                    <span>Sep</span><span>Okt</span><span>Nov</span><span>Des</span><span>Jan</span><span>Feb</span>
+                                </div>
+                            </div>
+
+                            <!-- Recent invoices -->
+                            <div class="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
+                                <div class="px-3.5 py-2 border-b border-zinc-100 dark:border-zinc-700">
+                                    <span class="text-xs font-semibold text-zinc-700 dark:text-zinc-300">Siste fakturaer</span>
+                                </div>
+                                <div class="divide-y divide-zinc-50 dark:divide-zinc-700/50">
+                                    <div class="flex items-center justify-between px-3.5 py-2">
+                                        <div>
+                                            <div class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Hansen Elektro AS</div>
+                                            <div class="text-xs text-zinc-400 dark:text-zinc-500">FKT-2025-0142</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-xs font-semibold text-zinc-900 dark:text-white">45 000 kr</div>
+                                            <div class="inline-flex px-1.5 py-0.5 rounded text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Betalt</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between px-3.5 py-2">
+                                        <div>
+                                            <div class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Fjordtech Solutions</div>
+                                            <div class="text-xs text-zinc-400 dark:text-zinc-500">FKT-2025-0141</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-xs font-semibold text-zinc-900 dark:text-white">28 750 kr</div>
+                                            <div class="inline-flex px-1.5 py-0.5 rounded text-xs bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">Åpen</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center justify-between px-3.5 py-2">
+                                        <div>
+                                            <div class="text-xs font-medium text-zinc-800 dark:text-zinc-200">Nordvik Consulting</div>
+                                            <div class="text-xs text-zinc-400 dark:text-zinc-500">FKT-2025-0140</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-xs font-semibold text-zinc-900 dark:text-white">12 200 kr</div>
+                                            <div class="inline-flex px-1.5 py-0.5 rounded text-xs bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">Betalt</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <flux:icon.building-office-2 class="w-5 h-5" />
-                        <span class="font-medium">Fjordtech Solutions</span>
+
+                    <!-- Floating card: Lønn -->
+                    <div class="absolute -left-10 bottom-20 bg-white dark:bg-zinc-800 rounded-2xl shadow-xl border border-zinc-100 dark:border-zinc-700 p-4 w-44 hidden lg:block">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <div class="w-8 h-8 bg-lime-100 dark:bg-lime-900/30 rounded-lg flex items-center justify-center shrink-0">
+                                <flux:icon.banknotes class="w-4 h-4 text-lime-600 dark:text-lime-400" />
+                            </div>
+                            <div class="text-xs font-semibold text-zinc-800 dark:text-zinc-200">Lønn kjørt</div>
+                        </div>
+                        <div class="text-base font-bold text-zinc-900 dark:text-white">5 ansatte</div>
+                        <div class="text-xs text-zinc-500 dark:text-zinc-400">Februar 2025</div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <flux:icon.building-office-2 class="w-5 h-5" />
-                        <span class="font-medium">Larsen Bygg & Vedlikehold</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <flux:icon.building-office-2 class="w-5 h-5" />
-                        <span class="font-medium">Nordvik Consulting</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <flux:icon.building-office-2 class="w-5 h-5" />
-                        <span class="font-medium">Bergen Regnskap</span>
+
+                    <!-- Floating card: AI -->
+                    <div class="absolute -right-8 top-20 bg-white dark:bg-zinc-800 rounded-2xl shadow-xl border border-zinc-100 dark:border-zinc-700 p-4 w-52 hidden lg:block">
+                        <div class="flex items-center gap-2.5 mb-2">
+                            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-100 to-pink-100 dark:from-fuchsia-900/30 dark:to-pink-900/30 rounded-lg flex items-center justify-center shrink-0">
+                                <flux:icon.sparkles class="w-4 h-4 text-fuchsia-600 dark:text-fuchsia-400" />
+                            </div>
+                            <div class="text-xs font-semibold text-zinc-800 dark:text-zinc-200">AI-analyse</div>
+                        </div>
+                        <div class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">Likviditeten er god. 3 fakturaer forfaller denne uken.</div>
                     </div>
                 </div>
             </div>
@@ -785,116 +835,5 @@
         </div>
     </section>
 
-    {{-- Social Proof Notification - Flies in from left --}}
-    <div x-data="{
-        show: false,
-        currentIndex: 0,
-        notifications: [
-            { name: 'Kristian Hansen', initials: 'KH', location: 'Bergen', action: 'startet med', product: 'Pro-planen', time: 'For 2 minutter siden' },
-            { name: 'Mari Bergström', initials: 'MB', location: 'Oslo', action: 'oppgraderte til', product: 'Premium', time: 'For 5 minutter siden' },
-            { name: 'Ole Larsen', initials: 'OL', location: 'Trondheim', action: 'registrerte seg for', product: 'Basis-planen', time: 'For 8 minutter siden' },
-            { name: 'Ingrid Solberg', initials: 'IS', location: 'Stavanger', action: 'startet med', product: 'Pro-planen', time: 'For 12 minutter siden' },
-            { name: 'Erik Nordvik', initials: 'EN', location: 'Tromsø', action: 'oppgraderte til', product: 'Premium', time: 'For 15 minutter siden' },
-            { name: 'Camilla Vik', initials: 'CV', location: 'Kristiansand', action: 'registrerte seg for', product: 'Pro-planen', time: 'For 18 minutter siden' },
-            { name: 'Anders Moen', initials: 'AM', location: 'Drammen', action: 'startet med', product: 'Basis-planen', time: 'For 22 minutter siden' },
-            { name: 'Silje Haugen', initials: 'SH', location: 'Ålesund', action: 'oppgraderte til', product: 'Premium', time: 'For 25 minutter siden' },
-        ],
-        get notification() {
-            return this.notifications[this.currentIndex];
-        },
-        showNotification() {
-            this.show = true;
-            setTimeout(() => {
-                this.show = false;
-                this.currentIndex = (this.currentIndex + 1) % this.notifications.length;
-            }, 5000);
-        },
-        init() {
-            setTimeout(() => this.showNotification(), 4000);
-            setInterval(() => {
-                if (!this.show) {
-                    this.showNotification();
-                }
-            }, 30000);
-        }
-    }"
-    x-show="show"
-    x-transition:enter="transition ease-out duration-500"
-    x-transition:enter-start="opacity-0 -translate-x-full"
-    x-transition:enter-end="opacity-100 translate-x-0"
-    x-transition:leave="transition ease-in duration-300"
-    x-transition:leave-start="opacity-100 translate-x-0"
-    x-transition:leave-end="opacity-0 -translate-x-full"
-    class="fixed bottom-6 left-6 z-50 max-w-sm"
-    style="display: none;">
-        <div class="relative group">
-            {{-- Glow effect --}}
-            <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-orange-500 rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition-opacity duration-500"></div>
-
-            {{-- Card --}}
-            <div class="relative bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-zinc-200/50 dark:border-zinc-700/50 overflow-hidden">
-                {{-- Top accent bar --}}
-                <div class="h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-orange-500"></div>
-
-                <div class="p-4">
-                    <div class="flex items-start gap-4">
-                        {{-- Avatar --}}
-                        <div class="relative shrink-0">
-                            <div class="w-11 h-11 rounded-full bg-gradient-to-br from-indigo-500 to-orange-500 text-white font-bold flex items-center justify-center text-sm shadow-lg" x-text="notification.initials"></div>
-                            {{-- Online indicator --}}
-                            <div class="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-white dark:border-zinc-900 flex items-center justify-center">
-                                <flux:icon.check class="w-2.5 h-2.5 text-white" />
-                            </div>
-                        </div>
-
-                        {{-- Content --}}
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-start justify-between gap-2">
-                                <div class="flex-1">
-                                    {{-- Name --}}
-                                    <div class="flex items-center gap-1.5 mb-0.5">
-                                        <span class="font-semibold text-zinc-900 dark:text-white text-sm" x-text="notification.name"></span>
-                                    </div>
-
-                                    {{-- Location --}}
-                                    <div class="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400 mb-2">
-                                        <flux:icon.map-pin class="w-3 h-3" />
-                                        <span x-text="notification.location + ', Norge'"></span>
-                                    </div>
-
-                                    {{-- Action --}}
-                                    <div class="inline-flex items-center gap-2 px-2.5 py-1 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-500/10 dark:to-emerald-500/10 rounded-full">
-                                        <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                                        <span class="text-xs text-green-700 dark:text-green-400">
-                                            <span x-text="notification.action"></span> <span class="font-semibold" x-text="notification.product"></span>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {{-- Close button --}}
-                                <button
-                                    @click="show = false"
-                                    class="shrink-0 p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 dark:hover:text-zinc-300 dark:hover:bg-zinc-800 transition-all">
-                                    <flux:icon.x-mark class="w-4 h-4" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Footer --}}
-                    <div class="mt-3 pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
-                        <div class="flex items-center gap-1.5 text-xs text-zinc-400 dark:text-zinc-500">
-                            <flux:icon.clock class="w-3 h-3" />
-                            <span x-text="notification.time"></span>
-                        </div>
-                        <div class="flex items-center gap-1 text-xs text-zinc-400 dark:text-zinc-500">
-                            <div class="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
-                            <span>Live</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </x-layouts.public>

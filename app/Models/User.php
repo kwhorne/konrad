@@ -336,6 +336,10 @@ class User extends Authenticatable
      */
     public function isLockedForTwoFactor(): bool
     {
+        if (app()->isLocal()) {
+            return false;
+        }
+
         return $this->two_factor_locked_at !== null;
     }
 
@@ -389,6 +393,10 @@ class User extends Authenticatable
      */
     public function shouldBeLocked(): bool
     {
+        if (app()->isLocal()) {
+            return false;
+        }
+
         if ($this->hasTwoFactorEnabled()) {
             return false;
         }
