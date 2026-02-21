@@ -16,7 +16,10 @@
     <title>{{ $title }}</title>
     <meta name="description" content="{{ $description }}">
     <meta name="robots" content="index, follow">
+    <meta name="keywords" content="forretningssystem Norge, norsk regnskapssystem, fakturering SMB, lønnssystem A-melding, prosjektstyring, lagerstyring, aksjonærregister, Konrad Office">
     <link rel="canonical" href="{{ $canonical ?? request()->url() }}">
+    <link rel="alternate" hreflang="nb" href="{{ $canonical ?? request()->url() }}">
+    <link rel="alternate" hreflang="x-default" href="{{ $canonical ?? request()->url() }}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="{{ $type }}">

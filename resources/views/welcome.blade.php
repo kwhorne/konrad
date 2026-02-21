@@ -5,27 +5,124 @@
 >
     @php
         $softwareSchema = [
-            "@context" => "https://schema.org",
-            "@type" => "SoftwareApplication",
-            "name" => "Konrad Office",
-            "applicationCategory" => "BusinessApplication",
-            "operatingSystem" => "Web",
-            "description" => "Komplett forretningssystem med salg, lager, innkjøp, fakturering, regnskap, lønn, prosjektstyring, timeregistrering og intelligent selskapsanalyse for norske bedrifter",
-            "offers" => [
-                "@type" => "Offer",
-                "price" => "399",
-                "priceCurrency" => "NOK",
-                "priceValidUntil" => now()->addYear()->format('Y-m-d')
+            '@context' => 'https://schema.org',
+            '@type' => 'SoftwareApplication',
+            'name' => 'Konrad Office',
+            'applicationCategory' => 'BusinessApplication',
+            'applicationSubCategory' => 'AccountingSoftware',
+            'operatingSystem' => 'Web',
+            'url' => url('/'),
+            'inLanguage' => 'nb-NO',
+            'description' => 'Komplett norsk forretningssystem med fakturering, regnskap, lønn, lager, prosjektstyring, timeregistrering og aksjonærregister. Skreddersydd for norske SMB-bedrifter med støtte for A-melding, MVA og norsk kontoplan NS 4102.',
+            'featureList' => [
+                'Fakturering med norsk MVA',
+                'Regnskap med kontoplan NS 4102',
+                'Lønn med A-melding og skattetrekk',
+                'Lagerstyring med innkjøpsordrer og varemottak',
+                'Prosjektstyring med timeregistrering',
+                'Aksjonærregister og aksjebok',
+                'Kontraktstyring med fornyelsesvarsel',
+                'Eiendelsstyring',
+                'Arbeidsordrer',
+                'AI-drevet selskapsanalyse',
             ],
-            "aggregateRating" => [
-                "@type" => "AggregateRating",
-                "ratingValue" => "4.8",
-                "reviewCount" => "50"
-            ]
+            'offers' => [
+                '@type' => 'Offer',
+                'url' => url('/priser'),
+                'price' => '399',
+                'priceCurrency' => 'NOK',
+                'priceValidUntil' => now()->addYear()->format('Y-m-d'),
+            ],
+        ];
+
+        $websiteSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => 'Konrad Office',
+            'url' => url('/'),
+            'inLanguage' => 'nb-NO',
+            'description' => 'Komplett forretningssystem for norske SMB-bedrifter',
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Konrad Office',
+            ],
+        ];
+
+        $faqSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'FAQPage',
+            'mainEntity' => [
+                [
+                    '@type' => 'Question',
+                    'name' => 'Hva er Konrad Office?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Konrad Office er et komplett norsk forretningssystem for små og mellomstore bedrifter. Det samler fakturering, regnskap, lønn, lager, prosjektstyring, timeregistrering og aksjonærregister i én løsning — uten behov for separate systemer.',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Hvem passer Konrad Office for?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Konrad Office er skreddersydd for norske AS og ENK med 1–50 ansatte. Systemet passer spesielt godt for bedrifter innen handel, bygg og anlegg, konsulentvirksomhet og tjenesteyting som ønsker ett samlet system for hele driften.',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Støtter Konrad Office A-melding og lønn?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Ja. Lønnssystemet i Konrad Office håndterer full lønnskjøring med skattetrekk, feriepenger, arbeidsgiveravgift (AGA) og innsending av A-melding til Skatteetaten — alt i henhold til norske regler og frister.',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Hvilken kontoplan bruker regnskapssystemet?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Konrad Office bruker norsk standard kontoplan NS 4102 med automatisk bilagsføring, MVA-rapportering og støtte for SAF-T-eksport. Systemet håndterer alle norske MVA-satser (25 %, 15 %, 12 % og 0 %).',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Er aksjonærregister inkludert?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Ja. Konrad Office inkluderer et komplett aksjonærregister med aksjebok, transaksjonshistorikk, kapitalendringer, utbytteberegning og skattemessig skjermingsfradrag.',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Har Konrad Office kunstig intelligens (AI)?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Ja. Konrad Office inkluderer AI-drevet selskapsanalyse som gir innsikt i likviditet, lønnsomhet og nøkkeltall, samt intelligente aktivitetsforslag som prioriterer dine viktigste oppgaver.',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Hva koster Konrad Office?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Konrad Office tilbyr modulbasert prissetting fra 399 kr per måned. Du betaler kun for de modulene du bruker. Se prissiden for detaljert oversikt over alle pakker og tilleggstjenester.',
+                    ],
+                ],
+                [
+                    '@type' => 'Question',
+                    'name' => 'Kan jeg prøve Konrad Office gratis?',
+                    'acceptedAnswer' => [
+                        '@type' => 'Answer',
+                        'text' => 'Ja. Du kan starte en gratis prøveperiode uten betalingskort. Gå til bestillingssiden for å opprette din konto og utforske systemet på egen hånd.',
+                    ],
+                ],
+            ],
         ];
     @endphp
     @push('jsonld')
     <script type="application/ld+json">{!! json_encode($softwareSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json">{!! json_encode($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    <script type="application/ld+json">{!! json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
     @endpush
     <!-- Hero Section -->
     <section class="relative bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 dark:from-zinc-950 dark:via-zinc-900 dark:to-indigo-950/20">
@@ -814,6 +911,94 @@
                     <div class="text-zinc-600 dark:text-zinc-400">Tilgjengelig</div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 bg-white dark:bg-zinc-900">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+                    Ofte stilte spørsmål
+                </h2>
+                <p class="text-lg text-zinc-600 dark:text-zinc-400">
+                    Alt du lurer på om Konrad Office
+                </p>
+            </div>
+
+            <flux:accordion exclusive>
+                <flux:accordion.item>
+                    <flux:accordion.heading>Hva er Konrad Office?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Konrad Office er et komplett norsk forretningssystem for små og mellomstore bedrifter. Det samler fakturering, regnskap, lønn, lager, prosjektstyring, timeregistrering og aksjonærregister i én løsning — uten behov for separate systemer.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Hvem passer Konrad Office for?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Systemet er skreddersydd for norske AS og ENK med 1–50 ansatte. Det passer spesielt godt for bedrifter innen handel, bygg og anlegg, konsulentvirksomhet og tjenesteyting som ønsker ett samlet system for hele driften.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Støtter systemet A-melding og lønn?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Ja. Lønnssystemet håndterer full lønnskjøring med skattetrekk, feriepenger, arbeidsgiveravgift (AGA) og innsending av A-melding til Skatteetaten — alt i henhold til norske regler og frister.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Hvilken kontoplan bruker regnskapssystemet?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Konrad Office bruker norsk standard kontoplan NS 4102 med automatisk bilagsføring og MVA-rapportering. Systemet håndterer alle norske MVA-satser (25&nbsp;%, 15&nbsp;%, 12&nbsp;% og 0&nbsp;%).
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Er aksjonærregister inkludert?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Ja. Konrad Office inkluderer et komplett aksjonærregister med aksjebok, transaksjonshistorikk, kapitalendringer, utbytteberegning og skattemessig skjermingsfradrag.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Har Konrad Office kunstig intelligens (AI)?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Ja. Konrad Office inkluderer AI-drevet selskapsanalyse som gir innsikt i likviditet, lønnsomhet og nøkkeltall, samt intelligente aktivitetsforslag som prioriterer dine viktigste oppgaver automatisk.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Hva koster Konrad Office?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Konrad Office tilbyr modulbasert prissetting fra 399&nbsp;kr per måned. Du betaler kun for de modulene du bruker. <a href="{{ route('pricing') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">Se prissiden</a> for detaljert oversikt.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+
+                <flux:accordion.item>
+                    <flux:accordion.heading>Kan jeg prøve Konrad Office gratis?</flux:accordion.heading>
+                    <flux:accordion.content>
+                        <p class="text-zinc-600 dark:text-zinc-400">
+                            Ja. Du kan starte en gratis prøveperiode uten betalingskort. Gå til <a href="{{ route('order') }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">bestillingssiden</a> for å opprette din konto og utforske systemet på egen hånd.
+                        </p>
+                    </flux:accordion.content>
+                </flux:accordion.item>
+            </flux:accordion>
         </div>
     </section>
 

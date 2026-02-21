@@ -4,6 +4,7 @@
     {{-- Static Pages --}}
     <url>
         <loc>{{ url('/') }}</loc>
+        <lastmod>{{ now()->toW3cString() }}</lastmod>
         <changefreq>weekly</changefreq>
         <priority>1.0</priority>
     </url>

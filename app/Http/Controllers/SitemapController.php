@@ -85,6 +85,24 @@ Disallow: /admin/
 Disallow: /app/
 Disallow: /login
 
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /login
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /login
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /app/
+Disallow: /login
+
 # Sitemap and LLMs.txt
 Sitemap: {$sitemapUrl}
 LLMs-Txt: {$llmsTxtUrl}
@@ -96,50 +114,157 @@ ROBOTS;
 
     public function llmsTxt(): Response
     {
-        $content = <<<'LLMS'
+        $baseUrl = url('/');
+
+        $content = <<<LLMS
 # Konrad Office
 
-> Konrad Office er et komplett norsk forretningssystem for små og mellomstore bedrifter.
+> Konrad Office er et komplett norsk forretningssystem (SaaS) for små og mellomstore bedrifter (SMB). Systemet samler fakturering, regnskap, lønn, lager, prosjektstyring, timeregistrering og aksjonærregister i én løsning. Skreddersydd for norske AS og ENK med 1–50 ansatte.
 
-## Om Konrad Office
+## Hva er Konrad Office?
 
-Konrad Office er en moderne SaaS-plattform som tilbyr:
+Konrad Office er en moderne nettbasert plattform som erstatter behovet for separate systemer for regnskap, lønn, lager og prosjektstyring. Systemet er bygget spesifikt for norske bedrifter og oppfyller alle norske lovkrav innen bokføring, lønn og rapportering.
 
-- **Fakturering**: Opprett og send profesjonelle fakturaer med norsk MVA-håndtering
-- **Regnskap**: Komplett regnskapssystem med bilagsføring og rapporter
-- **Prosjektstyring**: Planlegg og følg opp prosjekter med timeregistrering
-- **Kontraktshåndtering**: Administrer kontrakter og avtaler
-- **Kontakter/CRM**: Hold oversikt over kunder og leverandører
-- **Lønn**: Norsk lønnssystem med A-melding, skattetrekk og feriepenger
-- **Aksjonærregister**: Oversikt over aksjer og eierforhold
+## Moduler og funksjoner
+
+### Salg og fakturering
+- Tilbud med godkjenningsflyt og konvertering til ordre
+- Ordrebehandling med varesporing
+- Fakturering med norsk MVA (25 %, 15 %, 12 % og 0 %)
+- PDF-generering av profesjonelle tilbud, ordrer og fakturaer
+- Betalingssporing og purringer
+
+### Regnskap
+- Norsk standard kontoplan NS 4102
+- Bilagsføring og automatisk bokføring fra fakturaer
+- Leverandørfakturaer og innkommende bilag
+- Kunde- og leverandørreskontro
+- MVA-rapportering og SAF-T-eksport
+- Årsoppgjør med noter og årsregnskap
+
+### Lønn
+- Full lønnskjøring for fast- og timelønte ansatte
+- Automatisk skattetrekk basert på skattekort
+- Feriepengeopptjening og utbetaling
+- Arbeidsgiveravgift (AGA) beregning
+- A-melding til Skatteetaten
+- Lønnsslipper i PDF
+- Ansattregister med stillinger og lønnstrinn
+
+### Lager og innkjøp
+- Lagerbeholdning med lokasjoner og lagerplasser
+- Innkjøpsordrer til leverandører
+- Varemottak og avvikshåndtering
+- Varetelling med avviksrapport
+- Lagertransaksjoner og historikk
+
+### Prosjekter og timer
+- Prosjektstyring med budsjett og fremdrift
+- Timeregistrering per prosjekt og aktivitet
+- Ukelister og godkjenningsflyt
+- Timerapporter og lønnsgrunnlag
+- Kobling mellom timer og fakturering
+
+### Arbeidsordrer
+- Ordresystem med 8 statuser og prioriteter
+- Tildeling til ansvarlig medarbeider
+- Timeregistrering direkte på arbeidsordre
+- Kobling til kunder og produkter
+
+### Kontakter (CRM)
+- Kunde- og leverandørregister
+- Aktivitetslogg per kontakt
+- Organisasjonsnummer-oppslag
+- Kontaktpersoner og kommunikasjonshistorikk
+
+### Kontrakter
+- Kontraktsoversikt med leverandører og kunder
+- Fornyelsesvarsel
+- Dokumenthåndtering
+- Kontraktstyper og kategorier
+
+### Eiendeler
+- Register over maskiner, utstyr og inventar
+- Eiendelskategorier og lokasjoner
+- Vedlikeholdsplan og historikk
+
+### Aksjonærregister og årsoppgjør
+- Komplett aksjebok med eierstruktur
+- Aksjetransaksjoner (kjøp, salg, emisjon, splitt)
+- Kapitalendringer og generalforsamlinger
+- Utbytteberegning og -utbetaling
+- Skattemessig skjermingsfradrag
+- Årsregnskap med noter
+- AI-drevet selskapsanalyse (likviditet, lønnsomhet, nøkkeltall)
+
+### Mine aktiviteter (AI)
+- Intelligente prioriteringsforslag basert på ventende oppgaver
+- Arbeidsmengde-score
+- Personlige notater og påminnelser
+
+## Norske lovkrav som støttes
+
+- Bokføringsloven og regnskapsloven
+- Norsk standard kontoplan NS 4102
+- MVA-rapportering til Skatteetaten
+- A-melding (ansatte, lønn, skattetrekk)
+- SAF-T-eksport for revisjon
+- Aksjeloven (aksjonærregister)
 
 ## Målgruppe
 
-- Norske AS og ENK
-- Små og mellomstore bedrifter (1-50 ansatte)
-- Bedrifter som ønsker et integrert forretningssystem
+- Norske aksjeselskap (AS)
+- Enkeltpersonforetak (ENK)
+- Bedrifter med 1–50 ansatte
+- Bransjer: handel, bygg/anlegg, konsulent, tjenesteyting, håndverk
+- Bedrifter som ønsker ett integrert system fremfor mange separate løsninger
 
-## Nøkkelfunksjoner
+## Prissetting
 
-- Skreddersydd for norske krav (MVA, A-melding, SAF-T)
-- Modulbasert - betal kun for det du bruker
-- Moderne og brukervennlig grensesnitt
-- Integrasjoner med norske banker og offentlige registre
+- Modulbasert prissetting fra 399 kr/mnd
+- Betaler kun for modulene du bruker
+- Gratis prøveperiode uten betalingskort
+- Detaljer: {$baseUrl}priser
 
-## Kontakt
+## Ofte stilte spørsmål
 
-- Nettside: https://konradoffice.no
-- E-post: kontakt@konradoffice.no
+**Hva er Konrad Office?**
+Konrad Office er et komplett norsk forretningssystem som samler fakturering, regnskap, lønn, lager, prosjektstyring og aksjonærregister i én løsning.
+
+**Hvem passer Konrad Office for?**
+Norske AS og ENK med 1–50 ansatte som ønsker ett samlet system for hele driften.
+
+**Støtter systemet A-melding?**
+Ja. Lønnssystemet håndterer skattetrekk, feriepenger, AGA og innsending av A-melding til Skatteetaten.
+
+**Hvilken kontoplan brukes?**
+Norsk standard kontoplan NS 4102 med støtte for alle norske MVA-satser.
+
+**Er aksjonærregister inkludert?**
+Ja. Komplett aksjebok med transaksjoner, kapitalendringer, utbytte og skjermingsfradrag.
+
+**Har systemet AI?**
+Ja. AI-drevet selskapsanalyse og intelligente aktivitetsforslag er inkludert.
+
+**Hva koster det?**
+Fra 399 kr/mnd med modulbasert prissetting. Gratis prøveperiode tilgjengelig.
 
 ## Offentlige sider
 
-- Forside: /
-- Priser: /priser
-- Om oss: /om-oss
-- Kontakt: /kontakt
-- Blogg/Innsikt: /innsikt
-- Personvern: /personvern
-- Vilkår: /vilkar
+- Forside: {$baseUrl}
+- Moduler og funksjoner: {$baseUrl}#modules
+- Priser: {$baseUrl}priser
+- Om oss: {$baseUrl}om-oss
+- Kontakt: {$baseUrl}kontakt
+- Blogg/Innsikt: {$baseUrl}innsikt
+- Bestill / Prøv gratis: {$baseUrl}bestill
+- Personvern: {$baseUrl}personvern
+- Vilkår: {$baseUrl}vilkar
+
+## Kontakt
+
+- E-post: kontakt@konradoffice.no
+- Support: support@konradoffice.no
 LLMS;
 
         return response($content, 200)
