@@ -1,71 +1,106 @@
-<x-layouts.public title="Om oss - Konrad Office">
-    <!-- Hero Section -->
-    <section class="py-16 lg:py-24 bg-gradient-to-br from-indigo-50 via-white to-orange-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-800">
+<x-layouts.public
+    title="Om oss - Konrad Office AS"
+    description="Konrad Office AS er et norsk teknologiselskap som bygger fremtidens forretningssystem for norske SMB-bedrifter. Lær om vårt oppdrag, verdier og hva som gjør oss annerledes."
+>
+    <!-- Hero -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-indigo-50/40 dark:from-zinc-950 dark:via-zinc-900 dark:to-indigo-950/20 py-20 lg:py-32">
+        <div class="absolute inset-0 -z-10 overflow-hidden">
+            <div class="absolute -top-40 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-indigo-100/60 to-transparent dark:from-indigo-900/20 dark:to-transparent rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-gradient-to-tr from-orange-100/40 to-transparent dark:from-orange-900/10 dark:to-transparent rounded-full blur-3xl"></div>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-sm font-medium mb-8">
+                <flux:icon.building-office-2 class="w-4 h-4 mr-2" />
+                Konrad Office AS
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mb-6 leading-tight">
+                Vi bygger fremtidens<br>
+                <span class="bg-gradient-to-r from-indigo-600 to-orange-500 bg-clip-text text-transparent">forretningssystem for Norge</span>
+            </h1>
+            <p class="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+                Konrad Office AS er et norsk teknologiselskap med ett klart oppdrag: å gi norske bedrifter et forretningssystem som faktisk forstår hvordan de jobber.
+            </p>
+        </div>
+    </section>
+
+    <!-- Mission statement -->
+    <section class="py-16 bg-indigo-600 dark:bg-indigo-700">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <flux:icon.sparkles class="w-10 h-10 text-indigo-200 mx-auto mb-6" />
+            <blockquote class="text-2xl sm:text-3xl font-semibold text-white leading-relaxed">
+                "Norske bedrifter fortjener et system bygget for norske forhold — ikke en oversatt utenlandsk løsning."
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Story -->
+    <section class="py-20 lg:py-28 bg-white dark:bg-zinc-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto">
-                <h1 class="text-4xl sm:text-5xl font-bold text-zinc-900 dark:text-white mb-6">
-                    Om oss
-                </h1>
-                <p class="text-xl text-zinc-600 dark:text-zinc-400">
-                    Bak Konrad Office står mennesker som brenner for å gjøre hverdagen enklere for norske bedrifter.
-                </p>
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-8">
+                        Hvorfor vi bygde<br>Konrad Office
+                    </h2>
+                    <div class="space-y-6 text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                        <p>
+                            Altfor mange norske bedrifter kaster bort verdifull tid på systemer som ikke snakker sammen. Regneark for lønn, et annet program for regnskap, et tredje for prosjekter — og ingen av dem integrert.
+                        </p>
+                        <p>
+                            Vi startet Konrad Office AS fordi vi så et tydelig gap: de eksisterende løsningene var enten for dyre og kompliserte for SMB-bedrifter, eller for enkle til å dekke reelle behov. Ingen var bygget fra bunnen av for norske forhold.
+                        </p>
+                        <p>
+                            Konrad Office er resultatet av et enkelt spørsmål: <em>Hva ville det perfekte forretningssystemet for en norsk bedrift sett ut?</em> Svaret er det du finner her.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-br from-indigo-50 to-indigo-100/50 dark:from-indigo-900/20 dark:to-indigo-900/10 rounded-2xl p-8 border border-indigo-100 dark:border-indigo-800/30">
+                        <div class="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">14</div>
+                        <div class="text-zinc-700 dark:text-zinc-300 font-medium">Integrerte moduler</div>
+                        <div class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Fra salg til årsoppgjør</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-900/20 dark:to-orange-900/10 rounded-2xl p-8 border border-orange-100 dark:border-orange-800/30">
+                        <div class="text-4xl font-bold text-orange-500 dark:text-orange-400 mb-2">100%</div>
+                        <div class="text-zinc-700 dark:text-zinc-300 font-medium">Norsk</div>
+                        <div class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Grensesnitt og lovverk</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-emerald-50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-900/10 rounded-2xl p-8 border border-emerald-100 dark:border-emerald-800/30">
+                        <div class="text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">NS&nbsp;4102</div>
+                        <div class="text-zinc-700 dark:text-zinc-300 font-medium">Norsk kontoplan</div>
+                        <div class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Innebygd fra starten</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-900/20 dark:to-purple-900/10 rounded-2xl p-8 border border-purple-100 dark:border-purple-800/30">
+                        <div class="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">24/7</div>
+                        <div class="text-zinc-700 dark:text-zinc-300 font-medium">Alltid tilgjengelig</div>
+                        <div class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Fra alle enheter</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Story Section -->
-    <section class="py-16 lg:py-24 bg-white dark:bg-zinc-900">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="prose prose-lg dark:prose-invert max-w-none">
-                <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-8">
-                    Vår historie
-                </h2>
-
-                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-6">
-                    Konrad Office ble født ut av en enkel observasjon: Altfor mange norske bedrifter bruker
-                    unødvendig mye tid på administrative oppgaver som burde gå av seg selv. Regneark som
-                    ikke snakker sammen, fakturaer som forsvinner i e-postboksen, og kontrakter som glemmes
-                    i en skuff.
-                </p>
-
-                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-6">
-                    Vi tror på at teknologi skal jobbe for deg, ikke mot deg. Derfor har vi bygget et system
-                    som samler alt du trenger på ett sted &ndash; fra det første tilbudet til den siste
-                    fakturaen, og alt imellom.
-                </p>
-
-                <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-6">
-                    Navnet vårt er en hyllest til de som jobber hardt hver dag for å bygge noe verdifullt.
-                    Konrad er den pålitelige hjelperen som alltid er der når du trenger ham &ndash; stille,
-                    effektiv og grundig.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Values Section -->
-    <section class="py-16 lg:py-24 bg-zinc-50 dark:bg-zinc-800/50">
+    <!-- Values -->
+    <section class="py-20 lg:py-28 bg-zinc-50 dark:bg-zinc-800/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
                     Det vi tror på
                 </h2>
                 <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
-                    Våre verdier styrer alt vi gjør &ndash; fra hvordan vi bygger produktet til hvordan vi møter kundene våre.
+                    Verdiene våre er ikke ord på en vegg. De styrer hver beslutning vi tar — fra design til support.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
                     <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6">
                         <flux:icon.heart class="w-7 h-7 text-white" />
                     </div>
-                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
-                        Enkelhet først
-                    </h3>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">Enkelhet fremfor alt</h3>
                     <p class="text-zinc-600 dark:text-zinc-400">
-                        Et godt verktøy skal være intuitivt å bruke. Vi designer for mennesker, ikke maskiner.
-                        Hvis noe føles komplisert, har vi ikke gjort jobben vår godt nok.
+                        Et godt verktøy skal være intuitivt å bruke. Vi designer for mennesker — ikke for systemarkitekter. Hvis noe føles komplisert, har vi ikke gjort jobben vår godt nok.
                     </p>
                 </div>
 
@@ -73,12 +108,9 @@
                     <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6">
                         <flux:icon.shield-check class="w-7 h-7 text-white" />
                     </div>
-                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
-                        Tillit og trygghet
-                    </h3>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">Tillit og trygghet</h3>
                     <p class="text-zinc-600 dark:text-zinc-400">
-                        Dine data er dine. Vi behandler dem med respekt og sikkerhet. Du skal alltid
-                        vite hvor dataene dine er og hvem som har tilgang.
+                        Dine data er dine. Vi behandler dem med respekt og bevarer dem sikkert. Du skal alltid vite nøyaktig hvor dataene dine er og hvem som har tilgang.
                     </p>
                 </div>
 
@@ -86,88 +118,202 @@
                     <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-rose-500 rounded-2xl flex items-center justify-center mb-6">
                         <flux:icon.users class="w-7 h-7 text-white" />
                     </div>
-                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">
-                        Nærhet til kunden
-                    </h3>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">Nærhet til kunden</h3>
                     <p class="text-zinc-600 dark:text-zinc-400">
-                        Vi lytter til de som bruker produktet vårt. Mange av funksjonene i Konrad Office
-                        kommer direkte fra tilbakemeldinger fra kundene våre.
+                        Vi lytter aktivt til de som bruker systemet. Mange av funksjonene i Konrad Office AS kom direkte fra tilbakemeldinger fra bedrifter som deg.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mb-6">
+                        <flux:icon.flag class="w-7 h-7 text-white" />
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">Norsk fra bunnen</h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Vi er ikke en oversatt internasjonal løsning. Konrad Office AS er bygget fra grunnen for norsk lovverk, norsk arbeidsmetodikk og norske brukere.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div class="w-14 h-14 bg-gradient-to-br from-lime-500 to-green-500 rounded-2xl flex items-center justify-center mb-6">
+                        <flux:icon.bolt class="w-7 h-7 text-white" />
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">Kontinuerlig forbedring</h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Vi er aldri fornøyde med godt nok. Systemet forbedres løpende basert på bruksmønstre, tilbakemeldinger og endringer i norsk lovverk.
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-zinc-900 rounded-2xl p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                    <div class="w-14 h-14 bg-gradient-to-br from-fuchsia-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6">
+                        <flux:icon.sparkles class="w-7 h-7 text-white" />
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-900 dark:text-white mb-3">Intelligent teknologi</h3>
+                    <p class="text-zinc-600 dark:text-zinc-400">
+                        Vi bruker moderne teknologi og kunstig intelligens til å gi innsikt og automatisere rutineoppgaver — slik at du kan fokusere på det som faktisk skaper verdi.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Norwegian Focus Section -->
-    <section class="py-16 lg:py-24 bg-white dark:bg-zinc-900">
+    <!-- Norwegian compliance -->
+    <section class="py-20 lg:py-28 bg-white dark:bg-zinc-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
-                    <h2 class="text-3xl font-bold text-zinc-900 dark:text-white mb-6">
-                        Laget for norske bedrifter
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <!-- Compliance list -->
+                <div class="order-2 lg:order-1">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-6">
+                        <flux:icon.check-badge class="w-4 h-4 mr-1.5" />
+                        Norsk lovkrav innebygd
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-6">
+                        Bygget for norsk lovverk og norsk praksis
                     </h2>
-                    <p class="text-zinc-600 dark:text-zinc-400 text-lg mb-6">
-                        Vi vet at norske bedrifter har egne behov. NS 4102-kontoplan, norske MVA-regler,
-                        forfallsdatoer som passer med norsk praksis &ndash; alt dette er innebygd fra starten av.
-                    </p>
-                    <p class="text-zinc-600 dark:text-zinc-400 text-lg mb-6">
-                        Ingen oversatte grensesnitt som føles fremmed. Ingen funksjoner som ikke gir mening
-                        i en norsk kontekst. Bare et system som forstår hvordan du jobber.
+                    <p class="text-lg text-zinc-600 dark:text-zinc-400 mb-10">
+                        Vi holder oss kontinuerlig oppdatert på endringer i norsk lovverk — fra Skatteetaten til Brønnøysundregistrene. Du kan stole på at systemet alltid er i samsvar med gjeldende regler.
                     </p>
 
-                    <div class="flex flex-wrap gap-4">
-                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
-                            <span>Norsk kontoplan (NS 4102)</span>
+                    <div class="space-y-4">
+                        @foreach([
+                            ['icon' => 'document-text', 'title' => 'Bokføringsloven og regnskapsloven', 'desc' => 'Korrekt bilagsføring og oppbevaring etter norske krav'],
+                            ['icon' => 'calculator', 'title' => 'Norsk standard kontoplan NS 4102', 'desc' => 'Med alle relevante kontoer og grupperinger'],
+                            ['icon' => 'banknotes', 'title' => 'A-melding til Skatteetaten', 'desc' => 'Automatisk generering og innsending av lønnsopplysninger'],
+                            ['icon' => 'receipt-percent', 'title' => 'MVA-rapportering', 'desc' => 'Alle norske MVA-satser og SAF-T-eksport'],
+                            ['icon' => 'building-library', 'title' => 'Aksjeloven', 'desc' => 'Komplett aksjonærregister og generalforsamlingsprotokoll'],
+                        ] as $item)
+                        <div class="flex items-start gap-4 p-4 rounded-xl bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 dark:border-zinc-800">
+                            <div class="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                                <flux:icon :icon="$item['icon']" class="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                            </div>
+                            <div>
+                                <div class="font-semibold text-zinc-900 dark:text-white text-sm">{{ $item['title'] }}</div>
+                                <div class="text-sm text-zinc-500 dark:text-zinc-400">{{ $item['desc'] }}</div>
+                            </div>
                         </div>
-                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
-                            <span>Norske MVA-satser</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
-                            <span>Fullt norsk grensesnitt</span>
-                        </div>
-                        <div class="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                            <flux:icon.check-circle class="w-5 h-5 text-emerald-500" />
-                            <span>Norsk support</span>
-                        </div>
+                        @endforeach
                     </div>
                 </div>
 
-                <div class="relative">
-                    <div class="aspect-square bg-gradient-to-br from-indigo-100 to-orange-100 dark:from-indigo-900/30 dark:to-orange-900/30 rounded-3xl flex items-center justify-center">
-                        <svg class="h-48 w-auto opacity-80" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M 0.0,139.5 L 0.5,120.0 L 2.0,120.5 L 1.5,119.0 L 4.0,116.5 L 7.0,115.5 L 17.0,115.5 L 16.5,114.0 L 20.5,112.0 L 22.5,107.0 L 25.5,95.0 L 15.0,83.5 L 12.5,83.0 L 13.5,79.0 L 15.0,81.5 L 16.5,79.0 L 15.5,76.0 L 17.5,75.0 L 17.0,73.5 L 11.5,80.0 L 14.5,72.0 L 17.5,71.0 L 16.5,69.0 L 21.5,63.0 L 20.5,62.0 L 23.5,60.0 L 22.5,59.0 L 25.0,56.5 L 26.5,58.0 L 25.0,60.5 L 31.0,58.5 L 33.0,59.5 L 36.0,57.5 L 38.0,59.5 L 45.0,59.5 L 47.0,57.5 L 48.5,59.0 L 47.0,61.5 L 49.5,59.0 L 48.5,56.0 L 54.0,50.5 L 55.5,52.0 L 54.5,54.0 L 56.0,54.5 L 60.5,50.0 L 61.5,47.0 L 58.0,45.5 L 65.5,45.0 L 63.0,39.5 L 62.0,42.5 L 59.5,41.0 L 56.5,32.0 L 57.0,26.5 L 55.5,27.0 L 55.5,34.0 L 57.5,37.0 L 56.5,40.0 L 53.5,32.0 L 53.5,26.0 L 55.0,24.5 L 59.0,22.5 L 57.5,25.0 L 59.5,26.0 L 59.0,27.5 L 61.5,26.0 L 59.5,22.0 L 61.0,20.5 L 65.0,18.5 L 71.0,19.5 L 71.0,16.5 L 74.0,20.5 L 77.0,21.5 L 77.5,20.0 L 75.5,19.0 L 77.5,18.0 L 72.0,16.5 L 71.5,15.0 L 75.0,12.5 L 78.0,12.5 L 80.0,15.5 L 81.5,15.0 L 81.5,18.0 L 84.5,19.0 L 83.5,20.0 L 86.0,20.5 L 91.5,26.0 L 91.0,27.5 L 97.0,27.5 L 98.0,24.5 L 107.0,21.5 L 109.5,22.0 L 105.5,24.0 L 107.0,25.5 L 111.0,25.5 L 110.5,23.0 L 112.5,19.0 L 111.0,19.5 L 110.5,17.0 L 112.0,14.5 L 113.5,16.0 L 113.5,21.0 L 115.5,21.0 L 114.5,15.0 L 111.5,12.0 L 113.5,12.0 L 112.5,9.0 L 114.5,7.0 L 114.5,2.0 L 116.0,0.5 L 131.0,1.5 L 134.0,4.5 L 138.0,3.5 L 138.5,5.0 L 136.0,6.5 L 129.0,5.5 L 129.0,3.5 L 121.5,5.0 L 124.5,7.0 L 121.5,9.0 L 125.5,12.0 L 121.5,13.0 L 123.0,14.5 L 127.5,13.0 L 123.5,19.0 L 120.5,20.0 L 121.0,21.5 L 116.5,21.0 L 118.0,23.5 L 121.5,23.0 L 119.5,25.0 L 118.5,31.0 L 117.0,32.5 L 116.0,30.5 L 114.5,35.0 L 116.5,38.0 L 116.5,48.0 L 115.0,49.5 L 114.0,45.5 L 113.0,48.5 L 108.5,49.0 L 109.0,50.5 L 113.0,51.5 L 107.0,51.5 L 106.0,53.5 L 104.0,52.5 L 95.0,57.5 L 92.5,55.0 L 96.0,55.5 L 95.0,53.5 L 91.0,52.5 L 91.0,55.5 L 88.0,53.5 L 87.5,55.0 L 91.0,58.5 L 93.5,58.0 L 89.0,61.5 L 87.0,58.5 L 83.0,58.5 L 84.5,61.0 L 83.5,62.0 L 85.0,61.5 L 85.5,63.0 L 82.0,65.5 L 80.5,65.0 L 81.0,63.5 L 79.0,63.5 L 78.5,65.0 L 80.5,67.0 L 76.0,70.5 L 74.0,69.5 L 72.5,71.0 L 72.0,72.5 L 74.5,72.0 L 66.0,81.5 L 63.5,80.0 L 64.5,81.0 L 63.5,82.0 L 65.5,83.0 L 62.5,87.0 L 61.0,88.5 L 58.0,85.5 L 54.5,89.0 L 54.5,92.0 L 57.5,95.0 L 54.5,95.0 L 56.5,96.0 L 55.0,100.5 L 53.0,97.5 L 52.0,98.5 L 50.5,97.0 L 50.5,100.0 L 52.5,100.0 L 52.5,109.0 L 49.5,108.0 L 51.5,112.0 L 49.5,120.0 L 48.0,116.5 L 46.0,121.5 L 45.5,119.0 L 43.5,118.0 L 43.5,125.0 L 46.0,127.5 L 49.5,124.0 L 48.5,137.0 L 47.0,138.5 L 45.5,136.0 L 45.5,147.0 L 47.5,147.0 L 48.0,143.5 L 50.5,147.0 L 50.5,151.0 L 54.5,161.0 L 53.5,162.0 L 55.5,164.0 L 54.0,166.5 L 51.5,167.0 L 54.5,168.0 L 52.5,169.0 L 54.0,171.5 L 55.0,170.5 L 56.0,172.5 L 57.0,169.5 L 58.5,171.0 L 57.5,172.0 L 59.5,172.0 L 58.5,178.0 L 61.0,175.5 L 64.5,180.0 L 62.5,182.0 L 63.0,184.5 L 60.5,183.0 L 63.0,185.5 L 66.0,181.5 L 66.5,184.0 L 71.5,188.0 L 70.5,189.0 L 73.5,190.0 L 73.0,191.5 L 71.0,190.5 L 69.0,193.5 L 68.0,190.5 L 65.5,194.0 L 68.0,193.5 L 69.0,195.5 L 72.0,194.5 L 75.0,197.5 L 77.5,196.0 L 72.5,194.0 L 75.0,191.5 L 81.5,197.0 L 80.0,199.5 L 77.0,200.5 L 75.0,198.5 L 73.5,201.0 L 81.0,200.5 L 83.0,202.5 L 82.5,200.0 L 85.0,199.5 L 95.5,206.0 L 91.5,209.0 L 95.5,210.0 L 93.0,211.5 L 97.0,211.5 L 98.5,210.0 L 97.5,208.0 L 99.0,207.5 L 100.5,209.0 L 100.0,211.5 L 102.0,208.5 L 104.5,210.0 L 104.0,211.5 L 111.0,211.5 L 111.5,214.0 L 110.0,215.5 L 112.0,215.5 L 115.0,212.5 L 116.5,216.0 L 115.5,221.0 L 117.5,225.0 L 116.5,229.0 L 118.5,231.0 L 117.0,233.5 L 116.0,230.5 L 113.5,232.0 L 117.0,236.5 L 118.0,233.5 L 120.5,238.0 L 120.5,240.0 L 118.0,241.5 L 118.0,237.5 L 116.0,237.5 L 115.5,240.0 L 118.0,242.5 L 122.0,241.5 L 123.5,246.0 L 122.0,244.5 L 121.5,246.0 L 126.5,248.0 L 130.5,253.0 L 130.0,255.5 L 134.0,255.5 L 132.5,257.0 L 134.0,258.5 L 137.0,257.5 L 143.0,260.5 L 143.5,262.0 L 140.5,264.0 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
-                            <path d="M 282.0,161.5 L 274.0,160.5 L 274.0,157.5 L 269.0,156.5 L 264.5,157.0 L 268.0,159.5 L 262.0,157.5 L 252.5,148.0 L 252.5,146.0 L 255.5,143.0 L 252.5,144.0 L 251.5,136.0 L 250.0,139.5 L 248.5,137.0 L 249.5,124.0 L 251.0,121.5 L 252.0,127.5 L 254.0,121.5 L 256.0,127.5 L 255.5,121.0 L 258.5,115.0 L 253.0,119.5 L 252.5,118.0 L 258.0,111.5 L 269.0,105.5 L 276.0,105.5 L 280.0,107.5 L 283.0,107.5 L 285.0,105.5 L 290.0,107.5 L 290.0,109.5 L 293.0,109.5 L 292.5,111.0 L 294.0,110.5 L 296.5,113.0 L 295.5,116.0 L 297.0,117.5 L 298.5,116.0 L 297.0,113.5 L 300.5,116.0 L 301.5,119.0 L 298.0,118.5 L 297.5,120.0 L 299.0,119.5 L 300.0,121.5 L 302.0,119.5 L 305.5,127.0 L 304.5,143.0 L 302.0,147.5 L 300.5,144.0 L 301.5,143.0 L 299.5,142.0 L 299.0,139.5 L 297.5,141.0 L 299.5,143.0 L 297.5,144.0 L 298.5,147.0 L 295.5,149.0 L 299.0,148.5 L 300.0,146.5 L 301.5,148.0 L 300.5,150.0 L 292.0,157.5 L 290.5,157.0 L 291.0,154.5 L 290.0,156.5 L 282.0,154.5 L 281.0,158.5 L 284.0,157.5 L 284.0,159.5 L 288.5,159.0 L 282.0,161.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
-                            <path d="M 117.5,264.0 L 117.5,262.0 L 116.0,263.5 L 115.5,261.0 L 113.5,260.0 L 114.5,256.0 L 112.5,255.0 L 109.5,242.0 L 105.0,242.5 L 96.0,239.5 L 98.5,238.0 L 95.0,235.5 L 93.0,235.5 L 79.0,250.5 L 73.0,250.5 L 72.5,249.0 L 75.5,248.0 L 74.0,245.5 L 71.0,245.5 L 71.5,248.0 L 70.0,248.5 L 59.5,241.0 L 62.5,240.0 L 61.5,238.0 L 63.0,236.5 L 65.5,237.0 L 61.5,234.0 L 62.0,232.5 L 60.5,234.0 L 62.5,236.0 L 57.5,238.0 L 59.0,240.5 L 54.5,239.0 L 53.5,233.0 L 57.0,224.5 L 56.5,232.0 L 58.0,236.5 L 60.5,230.0 L 58.5,226.0 L 59.0,224.5 L 60.5,225.0 L 59.5,222.0 L 57.5,223.0 L 58.5,218.0 L 52.5,212.0 L 54.0,209.5 L 55.5,213.0 L 59.0,215.5 L 60.5,213.0 L 59.0,214.5 L 58.0,211.5 L 56.5,212.0 L 57.5,207.0 L 56.0,206.5 L 55.0,209.5 L 53.0,205.5 L 53.5,207.0 L 51.5,209.0 L 52.5,210.0 L 51.0,210.5 L 48.5,207.0 L 49.0,203.5 L 47.0,205.5 L 43.0,203.5 L 39.0,205.5 L 35.0,204.5 L 35.5,206.0 L 33.0,207.5 L 26.0,208.5 L 17.5,197.0 L 20.5,197.0 L 13.5,190.0 L 15.5,189.0 L 15.5,187.0 L 14.0,185.5 L 11.5,186.0 L 12.5,181.0 L 15.0,178.5 L 18.0,179.5 L 16.5,178.0 L 22.0,172.5 L 23.0,173.5 L 22.5,172.0 L 25.5,169.0 L 23.5,164.0 L 24.5,163.0 L 22.5,161.0 L 24.0,157.5 L 25.0,159.5 L 26.5,158.0 L 26.5,154.0 L 24.5,152.0 L 25.5,148.0 L 23.5,149.0 L 24.5,156.0 L 23.0,157.5 L 21.5,155.0 L 23.5,155.0 L 20.5,153.0 L 21.0,151.5 L 13.0,147.5 L 11.0,149.5 L 4.0,147.5 L 5.5,146.0 L 4.5,140.0 L 3.0,141.5 L 0.0,140.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
-                            <path d="M 259.0,250.5 L 246.0,250.5 L 236.0,245.5 L 232.5,242.0 L 234.5,236.0 L 233.0,237.5 L 230.0,233.5 L 228.5,235.0 L 231.5,237.0 L 229.0,238.5 L 226.5,235.0 L 228.5,231.0 L 227.0,229.5 L 225.5,232.0 L 226.5,233.0 L 225.0,233.5 L 221.5,229.0 L 223.5,227.0 L 220.0,223.5 L 221.0,227.5 L 217.5,225.0 L 219.5,220.0 L 217.5,221.0 L 217.0,223.5 L 209.5,215.0 L 210.5,212.0 L 209.0,213.5 L 205.5,210.0 L 207.5,208.0 L 206.0,205.5 L 204.5,206.0 L 206.5,207.0 L 204.5,209.0 L 202.5,206.0 L 204.5,204.0 L 200.5,200.0 L 201.5,199.0 L 199.5,196.0 L 201.5,195.0 L 198.0,194.5 L 195.0,190.5 L 192.5,191.0 L 193.0,194.5 L 190.5,192.0 L 191.5,190.0 L 190.0,190.5 L 185.5,186.0 L 186.0,183.5 L 194.0,183.5 L 200.0,180.5 L 207.0,180.5 L 208.0,178.5 L 205.0,180.5 L 202.5,180.0 L 213.0,173.5 L 219.0,166.5 L 222.0,171.5 L 224.5,170.0 L 219.5,166.0 L 222.0,161.5 L 225.5,165.0 L 223.5,163.0 L 225.5,161.0 L 223.0,161.5 L 222.5,160.0 L 227.0,149.5 L 226.5,155.0 L 228.0,153.5 L 230.0,155.5 L 231.5,155.0 L 227.5,148.0 L 228.0,140.5 L 230.5,142.0 L 230.5,149.0 L 232.0,148.5 L 234.5,151.0 L 232.5,152.0 L 232.5,155.0 L 234.0,153.5 L 236.0,155.5 L 239.0,155.5 L 238.0,152.5 L 241.5,155.0 L 241.5,157.0 L 245.5,160.0 L 243.5,161.0 L 249.5,165.0 L 245.5,168.0 L 250.5,169.0 L 248.5,170.0 L 250.5,171.0 L 249.5,175.0 L 254.0,175.5 L 255.0,171.5 L 256.5,174.0 L 255.5,176.0 L 258.0,174.5 L 260.5,177.0 L 260.5,182.0 L 262.0,182.5 L 263.0,180.5 L 266.5,185.0 L 265.5,186.0 L 267.0,185.5 L 269.5,188.0 L 267.5,189.0 L 268.5,191.0 L 266.5,195.0 L 268.5,194.0 L 267.5,193.0 L 270.0,188.5 L 279.5,199.0 L 276.5,202.0 L 280.0,200.5 L 284.5,208.0 L 283.5,211.0 L 286.5,216.0 L 286.5,223.0 L 283.5,224.0 L 282.5,227.0 L 284.5,230.0 L 281.5,237.0 L 275.0,243.5 L 272.0,243.5 L 270.0,247.5 L 262.0,247.5 L 262.5,249.0 L 259.0,250.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
-                            <path d="M 224.0,129.5 L 222.5,125.0 L 214.0,113.5 L 211.0,112.5 L 208.0,108.5 L 202.0,107.5 L 201.0,105.5 L 198.0,105.5 L 196.0,102.5 L 194.5,103.0 L 195.5,100.0 L 192.5,94.0 L 186.5,85.0 L 183.5,83.0 L 185.5,79.0 L 189.5,77.0 L 191.5,74.0 L 190.5,73.0 L 206.5,55.0 L 207.5,52.0 L 213.5,47.0 L 212.5,46.0 L 215.5,45.0 L 214.5,44.0 L 218.5,41.0 L 217.5,40.0 L 226.5,31.0 L 225.5,30.0 L 232.0,22.5 L 234.0,23.5 L 233.5,22.0 L 237.0,18.5 L 238.0,19.5 L 239.0,17.5 L 245.0,14.5 L 260.0,13.5 L 261.0,15.5 L 266.0,15.5 L 270.0,18.5 L 271.0,17.5 L 278.0,23.5 L 281.5,27.0 L 285.5,35.0 L 285.5,55.0 L 278.5,67.0 L 272.5,72.0 L 273.5,73.0 L 271.0,75.5 L 269.5,75.0 L 270.5,76.0 L 263.5,85.0 L 237.5,114.0 L 229.5,125.0 L 228.0,123.5 L 228.5,126.0 L 224.0,129.5 Z" class="fill-[#87c8b8] dark:fill-[#a8ddd0]" fill-rule="evenodd"/>
-                            <path d="M 189.0,170.5 L 82.0,169.5 L 81.0,167.5 L 79.0,168.5 L 73.0,164.5 L 65.5,156.0 L 65.5,152.0 L 63.5,151.0 L 62.5,145.0 L 63.5,136.0 L 67.5,128.0 L 74.0,121.5 L 83.5,118.0 L 84.5,111.0 L 88.0,106.5 L 90.5,106.0 L 90.5,103.0 L 95.0,99.5 L 115.0,99.5 L 126.0,86.5 L 136.0,81.5 L 156.0,80.5 L 164.0,83.5 L 165.0,85.5 L 166.0,84.5 L 168.5,87.0 L 166.5,89.0 L 167.0,90.5 L 169.0,89.5 L 170.0,91.5 L 170.0,87.5 L 174.5,91.0 L 182.5,104.0 L 181.5,106.0 L 183.5,107.0 L 182.0,109.5 L 181.0,108.5 L 179.5,110.0 L 180.0,113.5 L 182.5,112.0 L 183.0,109.5 L 186.0,116.5 L 197.0,118.5 L 204.0,124.5 L 205.0,123.5 L 206.5,125.0 L 205.5,126.0 L 207.0,125.5 L 209.5,129.0 L 208.5,130.0 L 210.5,131.0 L 212.5,136.0 L 212.5,147.0 L 210.5,152.0 L 211.5,153.0 L 208.5,159.0 L 205.0,160.5 L 205.5,162.0 L 201.0,166.5 L 198.5,165.0 L 199.0,163.5 L 197.0,165.5 L 193.0,165.5 L 194.5,169.0 L 189.0,170.5 Z" class="fill-[#87c8b8] dark:fill-[#a8ddd0]" fill-rule="evenodd"/>
-                            <path d="M 174.0,73.5 L 152.0,66.5 L 130.5,69.0 L 130.5,37.0 L 135.5,25.0 L 148.0,14.5 L 156.0,12.5 L 165.0,12.5 L 172.0,14.5 L 180.0,19.5 L 187.5,28.0 L 190.5,36.0 L 189.5,52.0 L 186.5,58.0 L 174.0,73.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
-                            <path d="M 166.0,251.5 L 151.0,250.5 L 142.0,245.5 L 134.5,237.0 L 130.5,225.0 L 131.0,183.5 L 167.0,183.5 L 187.5,207.0 L 190.5,214.0 L 190.5,228.0 L 188.5,234.0 L 179.0,245.5 L 166.0,251.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
-                        </svg>
+                <!-- Visual -->
+                <div class="order-1 lg:order-2 flex justify-center">
+                    <div class="relative w-72 h-72">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 to-orange-100 dark:from-indigo-900/30 dark:to-orange-900/30 rounded-full"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg class="h-44 w-auto opacity-90" viewBox="0 0 307 265" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 0.0,139.5 L 0.5,120.0 C 1.0,100.5 2.0,61.5 13.7,41.0 C 25.3,20.5 47.7,18.5 69.2,19.0 C 90.7,19.5 111.3,22.5 132.0,26.0 L 152.7,29.5 L 152.8,66.5 C 152.8,86.8 152.8,127.3 152.8,147.7 L 152.8,188.0 L 132.2,188.0 C 111.5,188.0 70.0,188.0 49.0,188.0 C 28.0,188.0 27.5,188.0 18.3,174.0 C 9.2,160.0 0.8,132.0 0.4,118.0 C 0.0,104.0 0.0,104.0 0.0,139.5 Z" class="fill-[#457ba7] dark:fill-[#6b9bc4]" fill-rule="evenodd"/>
+                                <path d="M 152.7,29.5 L 173.3,33.0 C 194.0,36.5 235.3,43.5 256.0,70.0 C 276.7,96.5 277.0,142.5 276.8,165.0 L 276.5,188.0 L 255.5,188.0 C 234.5,188.0 192.5,188.0 171.5,188.0 L 150.5,188.0 L 150.8,147.7 C 151.2,107.3 152.0,86.8 152.3,66.5 C 152.5,46.2 152.5,46.0 152.7,29.5 Z" class="fill-[#87c8b8] dark:fill-[#a8ddd0]" fill-rule="evenodd"/>
+                                <path d="M 0.0,139.5 C 0.0,104.0 0.0,104.0 0.4,118.0 C 0.8,132.0 9.2,160.0 18.3,174.0 C 27.5,188.0 28.0,188.0 49.0,188.0 C 70.0,188.0 111.5,188.0 132.2,188.0 L 152.8,188.0 L 152.8,210.0 C 152.8,222.0 152.5,244.0 152.2,258.5 C 151.8,273.0 151.5,282.5 120.0,275.0 C 88.5,267.5 25.8,243.0 12.0,221.8 C -1.8,200.7 0.2,183.0 0.8,165.2 C 1.5,147.5 0.0,139.5 0.0,139.5 Z" class="fill-[#f2a35a] dark:fill-[#f5b97a]" fill-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <!-- Floating badges -->
+                        <div class="absolute -top-4 -right-4 bg-white dark:bg-zinc-800 rounded-xl shadow-lg border border-zinc-100 dark:border-zinc-700 px-3 py-2 text-xs font-semibold text-zinc-800 dark:text-zinc-200">
+                            A-melding ✓
+                        </div>
+                        <div class="absolute -bottom-4 -left-4 bg-white dark:bg-zinc-800 rounded-xl shadow-lg border border-zinc-100 dark:border-zinc-700 px-3 py-2 text-xs font-semibold text-zinc-800 dark:text-zinc-200">
+                            NS 4102 ✓
+                        </div>
+                        <div class="absolute top-1/2 -right-8 -translate-y-1/2 bg-white dark:bg-zinc-800 rounded-xl shadow-lg border border-zinc-100 dark:border-zinc-700 px-3 py-2 text-xs font-semibold text-zinc-800 dark:text-zinc-200">
+                            SAF-T ✓
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-16 lg:py-24 bg-gradient-to-r from-indigo-600 to-orange-500">
+    <!-- What makes us different -->
+    <section class="py-20 lg:py-28 bg-zinc-50 dark:bg-zinc-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+                    Hva gjør oss annerledes?
+                </h2>
+                <p class="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+                    Det finnes mange systemer. Her er hvorfor norske bedrifter velger Konrad Office.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="flex gap-5">
+                    <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center shrink-0">
+                        <flux:icon.puzzle-piece class="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-zinc-900 dark:text-white mb-2">Alt i ett — uten kompromisser</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">Ikke et regnskapssystem med halvferdige tilleggsmoduler. Alle 14 moduler er fullverdige og dypt integrert med hverandre.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center shrink-0">
+                        <flux:icon.currency-dollar class="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-zinc-900 dark:text-white mb-2">Modulbasert pris — ingen overraskelser</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">Du betaler kun for modulene du faktisk bruker. Ingen skjulte avgifter, ingen bindingstid du ikke har bedt om.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center shrink-0">
+                        <flux:icon.device-phone-mobile class="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-zinc-900 dark:text-white mb-2">Moderne og lynrask</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">Bygget med moderne teknologi for umiddelbar respons. Fungerer like godt på mobil som på PC — uten app-nedlasting.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-12 h-12 bg-fuchsia-100 dark:bg-fuchsia-900/30 rounded-xl flex items-center justify-center shrink-0">
+                        <flux:icon.sparkles class="w-6 h-6 text-fuchsia-600 dark:text-fuchsia-400" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-zinc-900 dark:text-white mb-2">AI innebygd — ikke tilkoblet</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">Kunstig intelligens er vevd inn i selve systemet, ikke et dyrt tillegg. Fra selskapsanalyse til aktivitetsforslag.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-xl flex items-center justify-center shrink-0">
+                        <flux:icon.chat-bubble-left-right class="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-zinc-900 dark:text-white mb-2">Norsk support</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">Støtte på norsk fra folk som kjenner norsk regelverk og praksis. Ikke et internasjonalt callsenter.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-5">
+                    <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center shrink-0">
+                        <flux:icon.arrow-trending-up class="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-zinc-900 dark:text-white mb-2">Vokser med bedriften din</h3>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">Start med det du trenger i dag og legg til moduler etter hvert som bedriften din vokser og behovene endrer seg.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 bg-gradient-to-r from-indigo-600 to-orange-500">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
-                Bli med på reisen
+                Klar til å prøve Konrad Office AS?
             </h2>
-            <p class="text-xl text-indigo-100 mb-8">
-                Vi gleder oss til å hjelpe din bedrift med å jobbe smartere.
+            <p class="text-xl text-indigo-100 mb-10 max-w-2xl mx-auto">
+                Tusenvis av norske bedrifter har allerede tatt steget. Start din gratis prøveperiode i dag — ingen betalingskort kreves.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <flux:button href="{{ route('contact') }}" variant="primary" class="px-8 py-3 bg-white text-indigo-600 hover:bg-gray-50 border-white">
-                    Ta kontakt
+                <flux:button href="{{ route('order') }}" variant="primary" class="px-8 bg-white! text-indigo-600! hover:bg-zinc-50! border-white!">
+                    <flux:icon.arrow-right class="w-5 h-5 mr-2" />
+                    Start gratis prøveperiode
                 </flux:button>
-                <flux:button href="{{ route('pricing') }}" variant="ghost" class="px-8 py-3 text-white border-white/30 hover:bg-white/10">
-                    Se priser
+                <flux:button href="{{ route('contact') }}" variant="ghost" class="px-8 text-white! border-white/30! hover:bg-white/10!">
+                    Ta kontakt med oss
                 </flux:button>
             </div>
         </div>
