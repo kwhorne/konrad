@@ -254,7 +254,6 @@
                                             'invoice' => 'invoices.edit',
                                             'work_order' => 'work-orders.edit',
                                             'project' => 'projects.edit',
-                                            'activity' => 'activities.edit',
                                         ];
                                         $color = $priorityColors[$suggestion['priority'] ?? 'medium'] ?? 'zinc';
                                     @endphp
